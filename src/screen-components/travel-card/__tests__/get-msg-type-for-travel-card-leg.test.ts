@@ -34,6 +34,7 @@ const makeSituation = (
 const makeLeg = (overrides: Partial<Leg> = {}): Leg =>
   ({
     mode: 'bus',
+    serviceJourney: {id: 'ATB:ServiceJourney:1'},
     expectedStartTime: atSeconds(0),
     expectedEndTime: atSeconds(600),
     fromPlace: {quay: null},
@@ -146,8 +147,8 @@ describe('getMsgTypeForTravelCardLeg', () => {
       expect(getMsgTypeForTravelCardLeg(makeLegPair(120), 1)).toBeUndefined();
     });
 
-    it('returns undefined for a zero wait time', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(0), 1)).toBeUndefined();
+    it('returns info for a transfer that leaves the instant you arrive', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(0), 1)).toBe('info');
     });
 
     it('returns undefined for a negative wait time', () => {
@@ -160,17 +161,50 @@ describe('getMsgTypeForTravelCardLeg', () => {
   });
 
   describe('foot legs', () => {
+    const footLeg = {
+      mode: 'foot',
+      serviceJourney: null,
+    } as unknown as Partial<Leg>;
+
     it('returns undefined for a foot leg even with short wait from the previous leg', () => {
-      const legs = makeLegPair(120, {mode: 'foot'} as Partial<Leg>);
+      const legs = makeLegPair(120, footLeg);
       expect(getMsgTypeForTravelCardLeg(legs, 1)).toBeUndefined();
     });
 
     it('returns the leg-specific notification for a foot leg', () => {
       const legs = makeLegPair(120, {
-        mode: 'foot',
+        ...footLeg,
         situations: [makeSituation({reportType: ReportType.Incident})],
-      } as Partial<Leg>);
+      });
       expect(getMsgTypeForTravelCardLeg(legs, 1)).toBe('warning');
+    });
+
+    it('returns undefined for the first service, reached by walking from the origin', () => {
+      const legs = [
+        makeLeg({
+          ...footLeg,
+          expectedStartTime: atSeconds(-300),
+          expectedEndTime: atSeconds(0),
+        }),
+        makeLeg({expectedStartTime: atSeconds(0)}),
+      ];
+      expect(getMsgTypeForTravelCardLeg(legs, 1)).toBeUndefined();
+    });
+
+    it('returns info boarding a service after a walk between two stops', () => {
+      const legs = [
+        makeLeg({
+          expectedStartTime: atSeconds(0),
+          expectedEndTime: atSeconds(600),
+        }),
+        makeLeg({
+          ...footLeg,
+          expectedStartTime: atSeconds(600),
+          expectedEndTime: atSeconds(660),
+        }),
+        makeLeg({expectedStartTime: atSeconds(660)}),
+      ];
+      expect(getMsgTypeForTravelCardLeg(legs, 2)).toBe('info');
     });
   });
 

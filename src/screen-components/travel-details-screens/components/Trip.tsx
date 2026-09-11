@@ -19,6 +19,7 @@ import {
   nextDisplayedDeparture,
   withinZoneIds,
 } from '../utils';
+import {isTransferInto} from '@atb/modules/trip-patterns';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
@@ -251,7 +252,9 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
       next.expectedStartTime,
     );
 
-    const mustWaitForNextLeg = waitTimeInSeconds > 0;
+    const mustWaitForNextLeg = isTransferInto(legs, index + 1)
+      ? waitTimeInSeconds >= 0
+      : waitTimeInSeconds > 0;
     return {
       mustWaitForNextLeg,
       waitTimeInSeconds,

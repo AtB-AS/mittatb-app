@@ -4,30 +4,53 @@ import {hasShortWaitTime} from '../utils';
 
 describe('Short wait time evaluator', () => {
   const nowDate = Date.now();
+  const serviceJourney = {id: 'ATB:ServiceJourney:1'};
+
   const Leg1: Leg = {
     expectedStartTime: nowDate,
     expectedEndTime: addMinutes(nowDate, 5),
+    serviceJourney,
   } as Leg;
 
   const Leg2: Leg = {
     expectedStartTime: addMinutes(nowDate, 6),
     expectedEndTime: addMinutes(nowDate, 10),
+    serviceJourney,
   } as Leg;
 
   const Leg3: Leg = {
     expectedStartTime: addMinutes(nowDate, 9),
     expectedEndTime: addMinutes(nowDate, 10),
+    serviceJourney,
   } as Leg;
 
   const Leg4: Leg = {
     expectedStartTime: addMinutes(nowDate, 15),
     expectedEndTime: addMinutes(nowDate, 20),
+    serviceJourney,
   } as Leg;
 
   const weirdLeg: Leg = {
     expectedStartTime: 'non parsable string',
     expectedEndTime: {weird: true},
+    serviceJourney,
   } as Leg;
+
+  /** A walk that ends the instant the following leg departs, as Entur reports it. */
+  const walkEndingAt = (minutes: number): Leg =>
+    ({
+      mode: 'foot',
+      expectedStartTime: addMinutes(nowDate, minutes - 4),
+      expectedEndTime: addMinutes(nowDate, minutes),
+    }) as Leg;
+
+  /** A service departing the instant the previous leg arrives. */
+  const flushTransitAt = (minutes: number): Leg =>
+    ({
+      expectedStartTime: addMinutes(nowDate, minutes),
+      expectedEndTime: addMinutes(nowDate, minutes + 5),
+      serviceJourney,
+    }) as Leg;
 
   it('catches a short wait', () => {
     const isShortWait = hasShortWaitTime([Leg1, Leg2]);
@@ -52,5 +75,25 @@ describe('Short wait time evaluator', () => {
   it('passes on weird data', () => {
     const isShortWait = hasShortWaitTime([weirdLeg, weirdLeg]);
     expect(isShortWait).toBe(false);
+  });
+
+  it('catches a transfer that leaves the instant you arrive', () => {
+    const isShortWait = hasShortWaitTime([Leg1, flushTransitAt(5)]);
+    expect(isShortWait).toBe(true);
+  });
+
+  it('passes on walking to the first stop, which Entur reports as flush', () => {
+    const isShortWait = hasShortWaitTime([walkEndingAt(0), Leg1]);
+    expect(isShortWait).toBe(false);
+  });
+
+  it('passes on walking to the destination', () => {
+    const isShortWait = hasShortWaitTime([Leg1, walkEndingAt(9)]);
+    expect(isShortWait).toBe(false);
+  });
+
+  it('catches a short wait after a walk between two stops', () => {
+    const legs = [Leg1, walkEndingAt(6), flushTransitAt(6)];
+    expect(hasShortWaitTime(legs)).toBe(true);
   });
 });
