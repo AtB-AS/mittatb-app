@@ -89,7 +89,8 @@ export const ActiveShmoSheet = ({
     mapViewRef,
   );
 
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
+  const {isShmoDeepIntegrationEnabled, isShmoPauseButtonEnabled} =
+    useFeatureTogglesContext();
 
   const isPaused = activeBooking?.state === ShmoBookingState.PAUSED;
 
@@ -155,6 +156,18 @@ export const ActiveShmoSheet = ({
     logEvent,
     sendShmoBookingEvent,
   ]);
+
+  const pauseShmoBooking = useCallback(async () => {
+    if (activeBooking?.bookingId) {
+      const pauseEvent: ShmoBookingEvent = {
+        event: ShmoBookingEventType.PAUSE,
+      };
+      await sendShmoBookingEvent({
+        bookingId: activeBooking.bookingId,
+        shmoBookingEvent: pauseEvent,
+      });
+    }
+  }, [activeBooking?.bookingId, sendShmoBookingEvent]);
 
   const showEndAlert = async () => {
     Alert.alert(
@@ -332,6 +345,20 @@ export const ActiveShmoSheet = ({
                     />
                   ) : (
                     !isPaused && endButton
+                  )}
+
+                  {isShmoPauseButtonEnabled && !isPaused && (
+                    <Button
+                      mode="secondary"
+                      backgroundColor={theme.color.background.neutral[1]}
+                      active={false}
+                      disabled={sendShmoBookingEventIsLoading}
+                      expanded={true}
+                      type="large"
+                      accessibilityRole="button"
+                      onPress={pauseShmoBooking}
+                      text="Pause"
+                    />
                   )}
 
                   <SupportButton navigateToSupport={navigateSupportCallback} />

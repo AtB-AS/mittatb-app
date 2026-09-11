@@ -54,6 +54,7 @@ export type RemoteConfig = {
   enable_server_time: boolean;
   enable_shmo_deep_integration: boolean;
   enable_shmo_deep_integration_citybike: boolean;
+  enable_shmo_pause_button: boolean;
   enable_show_cancelled_departures: boolean;
   enable_show_valid_time_info: boolean;
   enable_surface_view_map: boolean;
@@ -137,6 +138,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_server_time: true,
   enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
+  enable_shmo_pause_button: false,
   enable_show_cancelled_departures: false,
   enable_show_valid_time_info: true,
   enable_surface_view_map: true,
@@ -296,6 +298,9 @@ export function getConfig(): RemoteConfig {
   const enable_shmo_deep_integration_citybike =
     values['enable_shmo_deep_integration_citybike']?.asBoolean() ??
     defaultRemoteConfig.enable_shmo_deep_integration_citybike;
+  const enable_shmo_pause_button =
+    values['enable_shmo_pause_button']?.asBoolean() ??
+    defaultRemoteConfig.enable_shmo_pause_button;
   const enable_show_cancelled_departures =
     values['enable_show_cancelled_departures']?.asBoolean() ??
     defaultRemoteConfig.enable_show_cancelled_departures;
@@ -446,6 +451,7 @@ export function getConfig(): RemoteConfig {
     enable_server_time,
     enable_shmo_deep_integration,
     enable_shmo_deep_integration_citybike,
+    enable_shmo_pause_button,
     enable_show_cancelled_departures,
     enable_show_valid_time_info,
     enable_surface_view_map,
