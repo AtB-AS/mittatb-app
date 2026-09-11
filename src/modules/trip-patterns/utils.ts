@@ -18,21 +18,14 @@ export function significantWaitTime(seconds: number): boolean {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
 
-const SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS = 120;
+const SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS = 180;
 /**
  * Whether a wait time is short enough to warn the user about a tight
- * transfer — between 0 and 119 seconds (< 2 min).
- *
- * Zero counts. The planner only returns itineraries it considers feasible, so a
- * connection leaving the instant you arrive is a tight transfer rather than an
- * impossible one, and `getTransferRisk` deliberately leaves it unflagged.
- *
- * This is a threshold only. Callers must first establish that the gap is a real
- * transfer, with `isTransferInto` — otherwise the zero-second gap Entur reports
- * on a leading or trailing walk reads as a tight transfer.
+ * transfer — between 0 and 180 seconds (<= 3 min). Only counts transfer between
+ * transit, so walk legs must not be counted.
  */
 export function isShortWaitTime(seconds: number): boolean {
-  return seconds >= 0 && seconds < SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS;
+  return seconds >= 0 && seconds <= SHORT_TRANSFER_TIME_LIMIT_IN_SECONDS;
 }
 
 /**

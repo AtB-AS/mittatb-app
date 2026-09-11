@@ -32,12 +32,12 @@ describe('isShortWaitTime', () => {
     expect(isShortWaitTime(31)).toBe(true);
   });
 
-  it('should be true for 119 seconds (just under the 2-min boundary)', () => {
-    expect(isShortWaitTime(119)).toBe(true);
+  it('should be true for 180 seconds (the 3-min boundary, inclusive)', () => {
+    expect(isShortWaitTime(180)).toBe(true);
   });
 
-  it('should be false for 120 seconds (stated as an exact duration)', () => {
-    expect(isShortWaitTime(120)).toBe(false);
+  it('should be false for 181 seconds (stated as an exact duration)', () => {
+    expect(isShortWaitTime(181)).toBe(false);
   });
 
   it('should be false for negative values', () => {
