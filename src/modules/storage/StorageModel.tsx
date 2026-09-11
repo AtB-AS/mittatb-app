@@ -5,6 +5,7 @@ export enum StorageModelKeysEnum {
   PreviousPaymentMethods = '@ATB_previous_payment_methods',
   ScooterConsent = '@ATB_scooter_consent',
   BicycleConsent = '@ATB_bicycle_consent',
+  PendingFinishedBooking = '@ATB_pending_finished_booking',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
