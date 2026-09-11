@@ -139,12 +139,12 @@ describe('getMsgTypeForTravelCardLeg', () => {
       expect(getMsgTypeForTravelCardLeg(makeLegPair(1), 1)).toBe('info');
     });
 
-    it('returns info just under the short transfer time limit (119s)', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(119), 1)).toBe('info');
+    it('returns info at the short transfer time limit (180s)', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(180), 1)).toBe('info');
     });
 
-    it('returns undefined at the short transfer time limit (120s)', () => {
-      expect(getMsgTypeForTravelCardLeg(makeLegPair(120), 1)).toBeUndefined();
+    it('returns undefined just past the short transfer time limit (181s)', () => {
+      expect(getMsgTypeForTravelCardLeg(makeLegPair(181), 1)).toBeUndefined();
     });
 
     it('returns info for a transfer that leaves the instant you arrive', () => {
