@@ -64,6 +64,7 @@ export {
   CUSTOM_SCAN_ZOOM_LEVEL,
 } from './utils';
 export {MapStateActionType} from './mapStateReducer.ts';
+export {clearPendingFinishedBooking} from './pending-finished-booking';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';
 export {MapButtons} from './components/MapButtons.tsx';
 export {TariffZoneLinesAndLabels} from './components/TariffZoneLinesAndLabels';

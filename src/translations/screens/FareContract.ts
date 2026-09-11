@@ -62,6 +62,7 @@ const FareContractTexts = {
         `Trip ended ${dateTime ?? ''}`,
         `Tur avsluttet ${dateTime ?? ''}`,
       ),
+    tripCancelled: _('Tur kansellert', 'Trip cancelled', 'Tur kansellert'),
   },
   details: {
     header: {

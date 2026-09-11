@@ -37,6 +37,7 @@ import {useWindowDimensions} from 'react-native';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
+import {useFinishedBookingDetection} from './hooks/use-finished-booking-detection';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 
@@ -84,6 +85,8 @@ export const MapBottomSheets = ({
   const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeBooking} = useActiveShmoBookingQuery(isFocusedAndActive);
   const {bottomSheetMapRef} = useBottomSheetContext();
+
+  useFinishedBookingDetection(isFocusedAndActive, dispatchMapState);
 
   const {height: screenHeight} = useWindowDimensions();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
