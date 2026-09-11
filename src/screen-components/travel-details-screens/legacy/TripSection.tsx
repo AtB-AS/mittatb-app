@@ -330,11 +330,12 @@ export const LegacyTripSection: React.FC<TripSectionProps> = ({
         {onPressShowLive && serviceJourneyPolyline ? (
           <TripRow>
             <Button
+              mode="secondary"
               type="small"
               expanded={false}
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-              interactiveColor={theme.color.interactive[3]}
+              interactiveColor={theme.color.interactive[2]}
               onPress={() => onPressShowLive(serviceJourneyPolyline)}
             />
           </TripRow>
@@ -539,7 +540,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[3];
+  const interactiveColor = theme.color.interactive[2];
 
   if (id === AUTHORITY) return null;
   if (!url) {
@@ -566,7 +567,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           )}
           leftIcon={{svg: ExternalLink}}
           onPress={() => url && openUrl(url)}
-          mode="primary"
+          mode="secondary"
           type="small"
           expanded={false}
           interactiveColor={interactiveColor}
