@@ -898,6 +898,7 @@ type WalkSectionProps = {
 const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const {theme} = useThemeContext();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   const humanizedDistance = useHumanizeDistance(leg.distance);
   const durationText = secondsToDuration(leg.duration ?? 0, language);
@@ -910,11 +911,14 @@ const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
       accessibilityLabel={a11yLabel}
     >
       <View style={style.transportLine}>
-        <ThemeIcon
-          size="normal"
-          svg={WalkFill}
-          accessibilityLabel={t(getTranslatedModeName('foot'))}
-        />
+        <View style={style.walkIconBox}>
+          <ThemeIcon
+            size="normal"
+            svg={WalkFill}
+            color={theme.color.transport.walk.primary}
+            accessibilityLabel={t(getTranslatedModeName('foot'))}
+          />
+        </View>
         <ThemeText typography="body__s" type="secondary">
           {isWalkTimeOfSignificance && humanizedDistance
             ? t(
@@ -1055,6 +1059,11 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: theme.spacing.small,
+  },
+  walkIconBox: {
+    padding: theme.spacing.small,
+    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.transport.walk.primary.background,
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacing.xSmall,

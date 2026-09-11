@@ -111,11 +111,13 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
     <TripRow
       dimensionOverrides={dimensionOverrides}
       rowLabel={
-        <ThemeIcon
-          svg={icon}
-          size="large"
-          color={emphasisColor ?? legColor.secondary.background}
-        />
+        <View style={style.iconBox}>
+          <ThemeIcon
+            svg={icon}
+            size="normal"
+            color={emphasisColor ?? legColor.secondary.background}
+          />
+        </View>
       }
     >
       <View style={style.message}>
@@ -161,5 +163,10 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   message: {
     rowGap: theme.spacing.xSmall,
+  },
+  iconBox: {
+    padding: theme.spacing.small,
+    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.transport.walk.primary.background,
   },
 }));
