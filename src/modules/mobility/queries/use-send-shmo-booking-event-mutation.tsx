@@ -25,6 +25,8 @@ export const useSendShmoBookingEventMutation = () => {
 
     onSuccess: (data: ShmoBooking, arg: BookingEventArgs) => {
       switch (arg.shmoBookingEvent.event) {
+        case ShmoBookingEventType.PAUSE:
+        case ShmoBookingEventType.RESUME:
         case ShmoBookingEventType.START_FINISHING:
           queryClient.setQueryData(
             getActiveShmoBookingQueryKey(acceptLanguage),

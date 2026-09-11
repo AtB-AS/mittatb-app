@@ -142,6 +142,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_shmo_deep_integration_citybike',
   },
   {
+    name: 'isShmoPauseButtonEnabled',
+    remoteConfigKey: 'enable_shmo_pause_button',
+  },
+  {
     name: 'isShowCancelledDeparturesEnabled',
     remoteConfigKey: 'enable_show_cancelled_departures',
   },

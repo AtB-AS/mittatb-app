@@ -1,7 +1,10 @@
 import React, {RefObject, useCallback, useEffect} from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  MobilityTexts,
+  ShmoWarnings,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {Alert, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
@@ -42,6 +45,7 @@ import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
 import {EndManualTripCard} from '../EndManualTripCard';
 import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
+import {Unlock} from '@atb/assets/svg/mono-icons/mobility';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -85,7 +89,10 @@ export const ActiveShmoSheet = ({
     mapViewRef,
   );
 
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
+  const {isShmoDeepIntegrationEnabled, isShmoPauseButtonEnabled} =
+    useFeatureTogglesContext();
+
+  const isPaused = activeBooking?.state === ShmoBookingState.PAUSED;
 
   useEffect(() => {
     if (activeBooking === null) {
@@ -128,6 +135,40 @@ export const ActiveShmoSheet = ({
     sendShmoBookingEvent,
   ]);
 
+  const resumeShmoBooking = useCallback(async () => {
+    if (activeBooking?.bookingId) {
+      const resumeEvent: ShmoBookingEvent = {
+        event: ShmoBookingEventType.RESUME,
+      };
+      await sendShmoBookingEvent({
+        bookingId: activeBooking.bookingId,
+        shmoBookingEvent: resumeEvent,
+      });
+
+      logEvent('Mobility', 'Shmo booking resume', {
+        operatorId: activeBooking.asset.operator.id,
+        bookingId: activeBooking.bookingId,
+      });
+    }
+  }, [
+    activeBooking?.asset.operator.id,
+    activeBooking?.bookingId,
+    logEvent,
+    sendShmoBookingEvent,
+  ]);
+
+  const pauseShmoBooking = useCallback(async () => {
+    if (activeBooking?.bookingId) {
+      const pauseEvent: ShmoBookingEvent = {
+        event: ShmoBookingEventType.PAUSE,
+      };
+      await sendShmoBookingEvent({
+        bookingId: activeBooking.bookingId,
+        shmoBookingEvent: pauseEvent,
+      });
+    }
+  }, [activeBooking?.bookingId, sendShmoBookingEvent]);
+
   const showEndAlert = async () => {
     Alert.alert(
       t(MobilityTexts.trip.button.end),
@@ -146,6 +187,33 @@ export const ActiveShmoSheet = ({
       ],
     );
   };
+
+  const endButtonProps = isPaused
+    ? {
+        mode: 'secondary' as const,
+        backgroundColor: theme.color.background.neutral[1],
+        text: t(MobilityTexts.trip.button.end),
+      }
+    : {
+        mode: 'primary' as const,
+        text: sendShmoBookingEventIsLoading
+          ? t(MobilityTexts.trip.button.endLoading)
+          : t(MobilityTexts.trip.button.end),
+      };
+
+  const endButton = (
+    <Button
+      {...endButtonProps}
+      active={false}
+      disabled={sendShmoBookingEventIsLoading}
+      interactiveColor={theme.color.interactive.destructive}
+      expanded={true}
+      type="large"
+      accessibilityRole="button"
+      onPress={showEndAlert}
+      loading={sendShmoBookingEventIsLoading}
+    />
+  );
 
   return (
     <MapBottomSheet
@@ -225,6 +293,16 @@ export const ActiveShmoSheet = ({
                       </View>
                     </View>
                   )}
+                  {isPaused && (
+                    <MessageInfoBox
+                      type="error"
+                      message={t(
+                        ShmoWarnings.bookingPaused(
+                          activeBooking.asset.formFactor ?? undefined,
+                        ),
+                      )}
+                    />
+                  )}
                   {warningMessage && (
                     <MessageInfoText type="warning" message={warningMessage} />
                   )}
@@ -237,6 +315,28 @@ export const ActiveShmoSheet = ({
                       )}
                     />
                   )}
+                  {isPaused && (
+                    <View style={styles.pausedButtonsRow}>
+                      <View style={styles.pausedButton}>
+                        <Button
+                          mode="primary"
+                          active={false}
+                          disabled={sendShmoBookingEventIsLoading}
+                          expanded={true}
+                          type="large"
+                          accessibilityRole="button"
+                          onPress={resumeShmoBooking}
+                          loading={sendShmoBookingEventIsLoading}
+                          rightIcon={{svg: Unlock}}
+                          text={t(MobilityTexts.trip.button.resume)}
+                        />
+                      </View>
+                      {activeBooking.asset.formFactor !==
+                        FormFactor.Bicycle && (
+                        <View style={styles.pausedButton}>{endButton}</View>
+                      )}
+                    </View>
+                  )}
                   {activeBooking.asset.formFactor === FormFactor.Bicycle ? (
                     <EndManualTripCard
                       title={t(MobilityTexts.cityBike.endManualTrip.title)}
@@ -244,21 +344,20 @@ export const ActiveShmoSheet = ({
                       image={<ThemedCityBikeStation height={54} width={90} />}
                     />
                   ) : (
+                    !isPaused && endButton
+                  )}
+
+                  {isShmoPauseButtonEnabled && !isPaused && (
                     <Button
-                      mode="primary"
+                      mode="secondary"
+                      backgroundColor={theme.color.background.neutral[1]}
                       active={false}
                       disabled={sendShmoBookingEventIsLoading}
-                      interactiveColor={theme.color.interactive.destructive}
                       expanded={true}
                       type="large"
                       accessibilityRole="button"
-                      onPress={showEndAlert}
-                      loading={sendShmoBookingEventIsLoading}
-                      text={
-                        sendShmoBookingEventIsLoading
-                          ? t(MobilityTexts.trip.button.endLoading)
-                          : t(MobilityTexts.trip.button.end)
-                      }
+                      onPress={pauseShmoBooking}
+                      text="Pause"
                     />
                   )}
 
@@ -306,6 +405,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       alignItems: 'center',
     },
     geofencingZoneWarningText: {
+      flex: 1,
+    },
+    pausedButtonsRow: {
+      flexDirection: 'row',
+      gap: theme.spacing.small,
+    },
+    pausedButton: {
       flex: 1,
     },
   };

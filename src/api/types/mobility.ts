@@ -388,6 +388,8 @@ export type InitShmoOneStopBookingRequestBody = z.infer<
 >;
 
 export enum ShmoBookingEventType {
+  PAUSE = 'PAUSE',
+  RESUME = 'RESUME',
   START_FINISHING = 'START_FINISHING',
   FINISH = 'FINISH',
 }
@@ -477,12 +479,18 @@ export type SendSupportRequestBody = z.infer<
   typeof SendSupportRequestBodySchema
 >;
 
+type PauseEvent = {event: ShmoBookingEventType.PAUSE};
+type ResumeEvent = {event: ShmoBookingEventType.RESUME};
 type StartFinishingEvent = {event: ShmoBookingEventType.START_FINISHING};
 type FinishEvent = {
   event: ShmoBookingEventType.FINISH;
 } & z.infer<typeof ShmoImageFileSchema>;
 
-export type ShmoBookingEvent = StartFinishingEvent | FinishEvent;
+export type ShmoBookingEvent =
+  | PauseEvent
+  | ResumeEvent
+  | StartFinishingEvent
+  | FinishEvent;
 
 export type AssetFromQrCodeResponse = z.infer<typeof AssetSchema>;
 
