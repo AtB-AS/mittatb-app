@@ -77,7 +77,9 @@ export const Trip: React.FC<TripProps> = ({
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
 
-  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
+  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern, {
+    keepEndpointWalks: true,
+  });
 
   const isFocusedAndActive = useIsFocusedAndActive();
 
