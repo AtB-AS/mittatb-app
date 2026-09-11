@@ -30,7 +30,7 @@ type ButtonModeAwareProps =
   | {mode?: 'primary'}
   | {
       mode: Exclude<ButtonMode, 'primary'>;
-      backgroundColor: ContrastColor;
+      backgroundColor?: ContrastColor;
     };
 
 export type ButtonProps = {
@@ -225,6 +225,11 @@ const getButtonColors = (
     ? props.interactiveColor
     : theme.color.interactive[0];
 
+  const transparentContrastColor: ContrastColor = {
+    background: 'transparent',
+    foreground: theme.color.foreground.dynamic,
+  };
+
   switch (props.mode) {
     case 'primary':
     case undefined:
@@ -236,20 +241,24 @@ const getButtonColors = (
           ? interactiveColor.outline.background
           : interactiveColor.default.background,
       };
-    case 'secondary':
+    case 'secondary': {
+      const backgroundColor = props.backgroundColor ?? transparentContrastColor;
       return {
         mainContrastColor: props.active
           ? interactiveColor.active
-          : props.backgroundColor,
+          : backgroundColor,
         borderColorValue: props.active
           ? interactiveColor.outline.background
-          : props.backgroundColor.foreground.primary,
+          : backgroundColor.foreground.primary,
       };
-    case 'tertiary':
+    }
+    case 'tertiary': {
+      const backgroundColor = props.backgroundColor ?? transparentContrastColor;
       return {
-        mainContrastColor: props.backgroundColor,
-        borderColorValue: props.backgroundColor.background,
+        mainContrastColor: backgroundColor,
+        borderColorValue: backgroundColor.background,
       };
+    }
   }
 };
 

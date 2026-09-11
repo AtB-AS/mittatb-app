@@ -62,9 +62,10 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
               TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
             )}
             onPress={() => openUrl(`tel:${bookingPhone}`)}
+            mode="secondary"
             type="small"
             expanded={false}
-            interactiveColor={theme.color.interactive[3]}
+            interactiveColor={theme.color.interactive[2]}
             leftIcon={{svg: Phone}}
           />
         </View>

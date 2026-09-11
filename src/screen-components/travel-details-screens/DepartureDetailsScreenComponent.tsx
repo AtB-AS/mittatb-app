@@ -113,7 +113,7 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[1];
+  const interactiveColor = theme.color.interactive[2];
   const ctaColor = theme.color.interactive[0];
   const backgroundColor = theme.color.background.neutral[1];
   const themeColor = theme.color.background.neutral[1];
@@ -337,6 +337,7 @@ export const DepartureDetailsScreenComponent = ({
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
                     <Button
+                      mode="secondary"
                       type="small"
                       expanded={true}
                       leftIcon={{svg: Map}}
@@ -849,7 +850,7 @@ const FavoriteButton = ({
         expanded={false}
         leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
         text={t(FavoriteDeparturesTexts.favoriteButton)}
-        interactiveColor={theme.color.interactive['1']}
+        interactiveColor={theme.color.interactive['0']}
         accessibilityLabel={
           existingFavorite &&
           (existingFavorite.destinationDisplay

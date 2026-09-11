@@ -23,7 +23,7 @@ export function Toggle({
 }: Props) {
   const [checked, setChecked] = useState(value);
   const {theme} = useThemeContext();
-  const interactiveColorValue = interactiveColor ?? theme.color.interactive[1];
+  const interactiveColorValue = interactiveColor ?? theme.color.interactive[2];
   const backgroundColor = theme.color.background.neutral[3].background;
   const fontScale = useFontScale();
   const scale = Math.min(1.5, Math.max(fontScale, 1));
