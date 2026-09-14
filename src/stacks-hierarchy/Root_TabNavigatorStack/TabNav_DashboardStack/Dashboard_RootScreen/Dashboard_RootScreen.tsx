@@ -11,10 +11,7 @@ import {
   useFavoritesContext,
 } from '@atb/modules/favorites';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
-import {
-  SelectableLocationType,
-  useLocationSearchValue,
-} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {SelectableLocationType} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
@@ -346,12 +343,9 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation = useLocationSearchValue(route, 'fromLocation');
-  const searchedToLocation = useLocationSearchValue(route, 'toLocation');
-
   return useUpdatedLocation(
-    searchedFromLocation,
-    searchedToLocation,
+    route.params?.fromLocation,
+    route.params?.toLocation,
     memoedCurrentLocation,
     favorites,
   );

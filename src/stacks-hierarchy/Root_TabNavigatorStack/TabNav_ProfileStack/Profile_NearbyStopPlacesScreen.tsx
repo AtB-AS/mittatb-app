@@ -1,6 +1,6 @@
 import {
   usePendingLocationSearchStore,
-  useOnlySingleLocation,
+  toSingleLocation,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import React, {useCallback, useEffect} from 'react';
 import {ProfileScreenProps} from './navigation-types';
@@ -15,7 +15,7 @@ const RESULT_KEY = 'Profile_NearbyStopPlacesScreen--location';
 type Props = ProfileScreenProps<'Profile_NearbyStopPlacesScreen'>;
 
 export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
-  const fromLocation = useOnlySingleLocation(route, 'location');
+  const fromLocation = toSingleLocation(route.params?.location);
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad(navigation);
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
