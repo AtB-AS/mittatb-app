@@ -6,6 +6,7 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -103,7 +104,11 @@ export const FinishedShmoSheet = ({
                   <Section>
                     <GenericSectionItem>
                       <ThemeText typography="heading__m">
-                        {t(FareContractTexts.shmoDetails.tripEnded())}
+                        {t(
+                          shmoBooking.state === ShmoBookingState.CANCELLED
+                            ? FareContractTexts.shmoDetails.tripCancelled
+                            : FareContractTexts.shmoDetails.tripEnded(),
+                        )}
                       </ThemeText>
                     </GenericSectionItem>
 
