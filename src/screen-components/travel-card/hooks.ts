@@ -18,16 +18,18 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
   const {t} = useTranslation();
   const {theme} = useThemeContext();
 
-  let from = tripPattern.legs[0];
-  let fromName = from.fromPlace.name;
+  const firstLeg = tripPattern.legs[0];
   const to = tripPattern.legs[tripPattern.legs.length - 1];
   const toName = to.toPlace.name ?? '';
-  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+  let from = firstLeg;
+  if (firstLeg.mode === 'foot' && tripPattern.legs[1]) {
     from = tripPattern.legs[1];
-    fromName = getQuayName(from.fromPlace.quay);
-  } else if (tripPattern.legs[0].mode !== 'foot') {
-    fromName = getQuayName(from.fromPlace.quay);
   }
+
+  let fromName =
+    firstLeg.mode === 'foot'
+      ? firstLeg.fromPlace.name
+      : getQuayName(firstLeg.fromPlace.quay);
 
   const startLegIsFlexibleTransport = isLineFlexibleTransport(from.line);
   const transportName = t(getTranslatedModeName(from.mode));

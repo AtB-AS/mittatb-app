@@ -246,14 +246,28 @@ function isSignificantFootLegWalkOrWaitTime(leg: Leg, nextLeg?: Leg) {
   return mustWait || mustWalk;
 }
 
-export function getFilteredLegsByWalkOrWaitTime(tripPattern: TripPattern) {
-  if (!!tripPattern?.legs?.length) {
-    return tripPattern.legs.filter((leg, i) =>
-      isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
-    );
-  } else {
-    return [];
-  }
+type LegFilterOptions = {
+  /**
+   * Keep the first and last leg however short they are. A walk at either end of
+   * the trip is what names where you actually start and end. Short walks
+   * *between* services stay filtered.
+   *
+   * false/turned off by default.
+   */
+  keepEndpointWalks?: boolean;
+};
+
+export function getFilteredLegsByWalkOrWaitTime(
+  tripPattern: TripPattern,
+  {keepEndpointWalks = false}: LegFilterOptions = {},
+) {
+  const legs = tripPattern?.legs;
+  if (!legs?.length) return [];
+
+  return legs.filter((leg, i) => {
+    if (keepEndpointWalks && (i === 0 || i === legs.length - 1)) return true;
+    return isSignificantFootLegWalkOrWaitTime(leg, legs[i + 1]);
+  });
 }
 
 export function canSellCollabTicket(tripPattern: TripPattern) {
