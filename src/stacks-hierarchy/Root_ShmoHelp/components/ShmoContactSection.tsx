@@ -76,15 +76,9 @@ export const ShmoContactSection = ({
           />
         )}
 
-        <LinkSectionItem
-          text={t(ShmoHelpTexts.contactForm)}
-          rightIcon={{svg: ArrowRight}}
-          onPress={onContactFormPress}
-        />
-
         {!!contactInfo?.chatUrl && (
           <LinkSectionItem
-            text={t(ShmoHelpTexts.chatInBrowser)}
+            text={t(ShmoHelpTexts.chatWithOperator(operatorName))}
             rightIcon={{svg: ExternalLink}}
             onPress={() => openUrl(contactInfo.chatUrl!)}
           />
@@ -105,6 +99,12 @@ export const ShmoContactSection = ({
             onPress={() => openUrl(contactInfo.websiteUrl!)}
           />
         )}
+
+        <LinkSectionItem
+          text={t(ShmoHelpTexts.contactForm)}
+          rightIcon={{svg: ArrowRight}}
+          onPress={onContactFormPress}
+        />
       </Section>
     </>
   );
