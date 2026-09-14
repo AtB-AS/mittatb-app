@@ -136,6 +136,7 @@ export const isActiveTripBooking = (
   booking: ShmoBooking | null | undefined,
 ): boolean =>
   booking?.state === ShmoBookingState.IN_USE ||
+  booking?.state === ShmoBookingState.PAUSED ||
   booking?.state === ShmoBookingState.FINISHING;
 
 export const isActiveBikeTripBooking = (
