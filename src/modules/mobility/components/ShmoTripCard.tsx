@@ -45,7 +45,8 @@ export const ShmoTripCard = ({
       <ShmoTripDetailsSectionItem
         startDateTime={shmoBooking?.departureTime ?? new Date()}
         endDateTime={
-          shmoBooking?.state === ShmoBookingState.IN_USE
+          shmoBooking?.state === ShmoBookingState.IN_USE ||
+          shmoBooking?.state === ShmoBookingState.PAUSED
             ? new Date(serverNow)
             : new Date(shmoBooking?.arrivalTime ?? '')
         }
