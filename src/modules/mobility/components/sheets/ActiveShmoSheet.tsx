@@ -296,11 +296,7 @@ export const ActiveShmoSheet = ({
                   {isPaused && (
                     <MessageInfoBox
                       type="error"
-                      message={t(
-                        ShmoWarnings.bookingPaused(
-                          activeBooking.asset.formFactor ?? undefined,
-                        ),
-                      )}
+                      message={t(ShmoWarnings.bookingPaused)}
                     />
                   )}
                   {warningMessage && (

@@ -451,7 +451,7 @@ export const MobilityTexts = {
       end: _('Avslutt tur', 'End trip', 'Avslutt tur'),
       endLoading: _('Avslutter tur', 'Ending trip', 'Avsluttar tur'),
       finishTrip: _('Lukk', 'Close', 'Lukk'),
-      resume: _('Lås opp', 'Unlock', 'Lås opp'),
+      resume: _('Fortsett', 'Resume', 'Hald fram'),
     },
     endAlert: {
       header: _(
@@ -692,29 +692,11 @@ export const GeofencingZoneExtraExplanations = {
 };
 
 export const ShmoWarnings = {
-  bookingPaused: (formFactor?: FormFactor) => {
-    switch (formFactor) {
-      case FormFactor.Scooter:
-      case FormFactor.ScooterStanding:
-        return _(
-          'Elsparkesykkelen har låst seg',
-          'The scooter has locked itself',
-          'Elsparkesykkelen har låst seg',
-        );
-      case FormFactor.Bicycle:
-        return _(
-          'Sykkelen har låst seg',
-          'The bike has locked itself',
-          'Sykkelen har låst seg',
-        );
-      default:
-        return _(
-          'Kjøretøyet har låst seg',
-          'The vehicle has locked itself',
-          'Køyretøyet har låst seg',
-        );
-    }
-  },
+  bookingPaused: _(
+    'Det har oppstått en feil og turen er satt på pause. Trykk på knappen for å fortsette turen.',
+    'An error has occurred and the trip is paused. Press the button to manually resume the trip.',
+    'Det har oppstått ein feil og turen er sett på pause. Trykk på knappen for å halde fram turen.',
+  ),
   vehicleDisabled: _(
     'Dette kjøretøyet er ikke tilgjengelig akkurat nå',
     'This vehicle is not available right now',
