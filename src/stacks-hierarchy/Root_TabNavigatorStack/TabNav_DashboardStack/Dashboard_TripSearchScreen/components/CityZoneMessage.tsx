@@ -18,7 +18,6 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -29,10 +28,10 @@ import {openInAppBrowser} from '@atb/modules/in-app-browser';
 type ActionButton = {
   id: string;
   text: string;
-  interactiveColor: InteractiveColor;
   icon?: (props: SvgProps) => React.JSX.Element;
   accessibilityHint?: string;
   onPress: () => void;
+  secondary?: boolean;
 };
 
 export type CityZoneMessageProps = {
@@ -102,8 +101,8 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
               <Button
                 expanded={false}
                 key={actionButton.id}
+                mode={actionButton.secondary ? 'secondary' : 'primary'}
                 type="small"
-                interactiveColor={actionButton.interactiveColor}
                 text={actionButton.text}
                 onPress={actionButton.onPress}
                 accessibilityLabel={actionButton.text}
@@ -134,9 +133,6 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
 
 const useActionButtons = (cityZone?: CityZone) => {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
-  const interactiveAccentColor = theme.color.interactive[3];
   const analytics = useAnalyticsContext();
 
   if (!cityZone) {
@@ -150,7 +146,6 @@ const useActionButtons = (cityZone?: CityZone) => {
       id: `book_online_action`,
       text: t(CityBoxMessageTexts.actionButtons.bookOnline),
       icon: ExternalLink,
-      interactiveColor: interactiveColor,
       accessibilityHint: t(dictionary.appNavigation.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'Book online url opened', {
@@ -168,7 +163,6 @@ const useActionButtons = (cityZone?: CityZone) => {
       id: `book_by_phone_action`,
       icon: Phone,
       text: t(CityBoxMessageTexts.actionButtons.bookByPhone),
-      interactiveColor: interactiveColor,
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForPhone),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'Book by phone url opened', {
@@ -186,7 +180,7 @@ const useActionButtons = (cityZone?: CityZone) => {
       id: `more_info_action`,
       icon: ExternalLink,
       text: t(CityBoxMessageTexts.actionButtons.moreInfo),
-      interactiveColor: interactiveAccentColor,
+      secondary: true,
       accessibilityHint: t(dictionary.appNavigation.a11yHintForExternalContent),
       onPress: () => {
         analytics.logEvent('Flexible transport', 'More info url opened', {

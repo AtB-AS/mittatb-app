@@ -25,7 +25,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[3];
+  const interactiveColor = theme.color.interactive[2];
 
   return (
     <View
@@ -53,7 +53,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
             expanded={false}
             interactiveColor={interactiveColor}
             text={buttonProps.text}
-            mode="primary"
+            mode="secondary"
             onPress={buttonProps.onPress}
             type="small"
           />
