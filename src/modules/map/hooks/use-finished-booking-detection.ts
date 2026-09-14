@@ -3,10 +3,10 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {MapStateActionType, ReducerMapStateAction} from '../mapStateReducer';
 import {
-  clearPendingFinishedBooking,
-  getPendingFinishedBooking,
-  setPendingFinishedBooking,
-} from '../pending-finished-booking';
+  clearLastActiveBooking,
+  getLastActiveBooking,
+  setLastActiveBooking,
+} from '../last-active-booking';
 
 /**
  * Opens the receipt for a booking which has ended while we weren't looking.
@@ -33,20 +33,19 @@ export const useFinishedBookingDetection = (
     if (!isSuccess || !userId) return;
 
     if (activeBookingId) {
-      setPendingFinishedBooking({bookingId: activeBookingId, userId});
+      setLastActiveBooking({bookingId: activeBookingId, userId});
       return;
     }
 
     let isCancelled = false;
-    getPendingFinishedBooking().then((pendingFinishedBooking) => {
-      if (isCancelled || !pendingFinishedBooking) return;
-      clearPendingFinishedBooking();
+    getLastActiveBooking().then((lastActiveBooking) => {
+      if (isCancelled || !lastActiveBooking) return;
+      clearLastActiveBooking();
       // Belongs to a previous user, after a logout or an account switch.
-      if (pendingFinishedBooking.userId !== userId) return;
-      console.log('dispatching end booking');
+      if (lastActiveBooking.userId !== userId) return;
       dispatchMapState({
         type: MapStateActionType.FinishedBooking,
-        bookingId: pendingFinishedBooking.bookingId,
+        bookingId: lastActiveBooking.bookingId,
       });
     });
     return () => {

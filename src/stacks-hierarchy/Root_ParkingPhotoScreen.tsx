@@ -11,7 +11,7 @@ import {PhotoFile} from '@atb/components/camera';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {
-  clearPendingFinishedBooking,
+  clearLastActiveBooking,
   MapStateActionType,
   useMapContext,
 } from '@atb/modules/map';
@@ -82,7 +82,7 @@ export const Root_ParkingPhotoScreen = ({
 
     // The receipt is shown right away here, so the booking disappearing from
     // the active booking query shouldn't open it a second time.
-    clearPendingFinishedBooking();
+    clearLastActiveBooking();
     dispatchMapState({
       type: MapStateActionType.FinishedBooking,
       bookingId: route.params.bookingId,

@@ -11,30 +11,26 @@ import {jsonStringToObject} from '@atb/utils/object';
  * that the active booking has disappeared. The user id is stored alongside it
  * so a booking is never shown to another user after a logout or account switch.
  */
-const PendingFinishedBookingSchema = z.object({
+const LastActiveBookingSchema = z.object({
   bookingId: z.string(),
   userId: z.string(),
 });
 
-type PendingFinishedBooking = z.infer<typeof PendingFinishedBookingSchema>;
+type LastActiveBooking = z.infer<typeof LastActiveBookingSchema>;
 
-export const setPendingFinishedBooking = (
-  pendingFinishedBooking: PendingFinishedBooking,
-) =>
+export const setLastActiveBooking = (lastActiveBooking: LastActiveBooking) =>
   storage.set(
-    StorageModelKeysEnum.PendingFinishedBooking,
-    JSON.stringify(pendingFinishedBooking),
+    StorageModelKeysEnum.LastActiveBooking,
+    JSON.stringify(lastActiveBooking),
   );
 
-export const getPendingFinishedBooking = async (): Promise<
-  PendingFinishedBooking | undefined
+export const getLastActiveBooking = async (): Promise<
+  LastActiveBooking | undefined
 > => {
-  const stored = await storage.get(StorageModelKeysEnum.PendingFinishedBooking);
-  const parsed = PendingFinishedBookingSchema.safeParse(
-    jsonStringToObject(stored),
-  );
+  const stored = await storage.get(StorageModelKeysEnum.LastActiveBooking);
+  const parsed = LastActiveBookingSchema.safeParse(jsonStringToObject(stored));
   return parsed.success ? parsed.data : undefined;
 };
 
-export const clearPendingFinishedBooking = () =>
-  storage.remove(StorageModelKeysEnum.PendingFinishedBooking);
+export const clearLastActiveBooking = () =>
+  storage.remove(StorageModelKeysEnum.LastActiveBooking);

@@ -2,10 +2,10 @@ import {renderHook, waitFor} from '@testing-library/react-native';
 import {useFinishedBookingDetection} from '../hooks/use-finished-booking-detection';
 import {MapStateActionType} from '../mapStateReducer';
 import {
-  clearPendingFinishedBooking,
-  getPendingFinishedBooking,
-  setPendingFinishedBooking,
-} from '../pending-finished-booking';
+  clearLastActiveBooking,
+  getLastActiveBooking,
+  setLastActiveBooking,
+} from '../last-active-booking';
 
 const USER_ID_A = 'user-a';
 const USER_ID_B = 'user-b';
@@ -15,10 +15,10 @@ jest.mock('../mapStateReducer', () => ({
   MapStateActionType: {FinishedBooking: 'FINISHED_BOOKING'},
 }));
 
-jest.mock('../pending-finished-booking', () => ({
-  getPendingFinishedBooking: jest.fn(),
-  setPendingFinishedBooking: jest.fn(),
-  clearPendingFinishedBooking: jest.fn(),
+jest.mock('../last-active-booking', () => ({
+  getLastActiveBooking: jest.fn(),
+  setLastActiveBooking: jest.fn(),
+  clearLastActiveBooking: jest.fn(),
 }));
 
 let mockUserId: string | undefined;
@@ -31,7 +31,7 @@ jest.mock('@atb/modules/mobility', () => ({
   useActiveShmoBookingQuery: () => mockActiveBookingQuery,
 }));
 
-const mockedGetPending = getPendingFinishedBooking as jest.Mock;
+const mockedGetPending = getLastActiveBooking as jest.Mock;
 
 const renderDetection = () => {
   const dispatchMapState = jest.fn();
@@ -56,7 +56,7 @@ describe('useFinishedBookingDetection', () => {
     };
     const {dispatchMapState} = renderDetection();
 
-    expect(setPendingFinishedBooking).toHaveBeenCalledWith({
+    expect(setLastActiveBooking).toHaveBeenCalledWith({
       bookingId: BOOKING_ID,
       userId: USER_ID_A,
     });
@@ -76,7 +76,7 @@ describe('useFinishedBookingDetection', () => {
         bookingId: BOOKING_ID,
       }),
     );
-    expect(clearPendingFinishedBooking).toHaveBeenCalled();
+    expect(clearLastActiveBooking).toHaveBeenCalled();
   });
 
   it('opens the receipt when a booking goes from active to gone', async () => {
@@ -112,7 +112,7 @@ describe('useFinishedBookingDetection', () => {
 
     await waitFor(() => expect(mockedGetPending).not.toHaveBeenCalled());
     expect(dispatchMapState).not.toHaveBeenCalled();
-    expect(clearPendingFinishedBooking).not.toHaveBeenCalled();
+    expect(clearLastActiveBooking).not.toHaveBeenCalled();
   });
 
   it('discards a booking belonging to another user', async () => {
@@ -122,7 +122,7 @@ describe('useFinishedBookingDetection', () => {
     });
     const {dispatchMapState} = renderDetection();
 
-    await waitFor(() => expect(clearPendingFinishedBooking).toHaveBeenCalled());
+    await waitFor(() => expect(clearLastActiveBooking).toHaveBeenCalled());
     expect(dispatchMapState).not.toHaveBeenCalled();
   });
 
@@ -131,7 +131,7 @@ describe('useFinishedBookingDetection', () => {
 
     await waitFor(() => expect(mockedGetPending).toHaveBeenCalled());
     expect(dispatchMapState).not.toHaveBeenCalled();
-    expect(clearPendingFinishedBooking).not.toHaveBeenCalled();
+    expect(clearLastActiveBooking).not.toHaveBeenCalled();
   });
 
   it('does nothing before the user is known', async () => {
