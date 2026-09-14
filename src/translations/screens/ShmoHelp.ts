@@ -11,9 +11,9 @@ export const ShmoHelpTexts = {
   contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
   chatWithOperator: (operatorName: string | undefined) =>
     _(
-      `Chat ${operatorName ? `med ${operatorName}` : ''}`,
-      `Chat ${operatorName ? `with ${operatorName}` : ''}`,
-      `Chat ${operatorName ? `med ${operatorName}` : ''}`,
+      `Chat${operatorName ? ` med ${operatorName}` : ''}`,
+      `Chat${operatorName ? ` with ${operatorName}` : ''}`,
+      `Chat${operatorName ? ` med ${operatorName}` : ''}`,
     ),
   readMoreAt: (domain: string) =>
     _(
