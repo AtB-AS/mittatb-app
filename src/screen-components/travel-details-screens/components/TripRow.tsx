@@ -11,8 +11,8 @@ export type DimensionOverrides = {
 
 // TODO: Remove / rename once old trip details are removed
 export const NEW_TRIP_DIMENSIONS: DimensionOverrides = {
-  labelWidth: 72,
-  decorationContainerWidth: 28,
+  labelWidth: 75,
+  decorationContainerWidth: 42,
   labelAlignment: 'flex-end',
 };
 

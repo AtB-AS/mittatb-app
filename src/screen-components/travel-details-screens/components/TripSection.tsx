@@ -913,7 +913,7 @@ const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
       <View style={style.transportLine}>
         <View style={style.walkIconBox}>
           <ThemeIcon
-            size="normal"
+            size="small"
             svg={WalkFill}
             color={theme.color.transport.walk.primary}
             accessibilityLabel={t(getTranslatedModeName('foot'))}
