@@ -1,6 +1,6 @@
 import {placeV3, reverseV3} from '@atb/api';
 import type {Location} from '@atb/modules/favorites';
-import {parseParamAsCoordinates} from './utils';
+import {parseParamsAsCoordinates} from './utils';
 import type {DeepLink} from './parse-deep-link';
 
 export type TripLocations = {
@@ -10,21 +10,22 @@ export type TripLocations = {
 
 /**
  * Looks up the locations of a trip deep link, e.g.
- * `atb://trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004`.
+ * `atb://trip?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004`.
  */
 export async function resolveTripLocations(
   params: DeepLink['params'],
 ): Promise<TripLocations> {
   const [fromLocation, toLocation] = await Promise.all([
-    resolveLocation(params.fromId, params.fromLatLng),
-    resolveLocation(params.toId, params.toLatLng),
+    resolveLocation(params.fromId, params.fromLat, params.fromLon),
+    resolveLocation(params.toId, params.toLat, params.toLon),
   ]);
   return {fromLocation, toLocation};
 }
 
 async function resolveLocation(
   id: string | undefined,
-  latLng: string | undefined,
+  lat: string | undefined,
+  lon: string | undefined,
 ): Promise<Location | undefined> {
   try {
     if (id) {
@@ -32,7 +33,7 @@ async function resolveLocation(
       return places.find((place) => place.id === id);
     }
 
-    const coordinates = parseParamAsCoordinates(latLng);
+    const coordinates = parseParamsAsCoordinates(lat, lon);
     if (!coordinates) return undefined;
 
     const locations = await reverseV3(coordinates);

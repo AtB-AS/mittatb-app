@@ -11,16 +11,15 @@ export const parseParamAsInt = (data: any): number | undefined => {
 };
 
 /**
- * Parses a comma separated deeplink param as `latitude,longitude`, or falls
- * back to undefined.
+ * Parses a pair of deeplink params as latitude and longitude, or falls back to
+ * undefined.
  */
-export const parseParamAsCoordinates = (
-  data: string | undefined,
+export const parseParamsAsCoordinates = (
+  lat: string | undefined,
+  lon: string | undefined,
 ): Coordinates | undefined => {
-  const parts = data?.split(',') ?? [];
-  if (parts.length !== 2 || parts.some((p) => p.trim() === ''))
-    return undefined;
-  const [latitude, longitude] = parts.map(Number);
+  if (!lat?.trim() || !lon?.trim()) return undefined;
+  const [latitude, longitude] = [lat, lon].map(Number);
   if (!isFinite(latitude) || !isFinite(longitude)) return undefined;
   if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return undefined;
   return {latitude, longitude};

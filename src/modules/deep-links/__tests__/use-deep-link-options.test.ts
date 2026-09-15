@@ -272,7 +272,7 @@ describe('trip', () => {
 
   it('reverse geocodes coordinates', async () => {
     const state = await getStateAfterLookupFrom(
-      'trip?fromLatLng=63.4326,10.3951&toLatLng=63.4402,10.4004',
+      'trip?fromLat=63.4326&fromLon=10.3951&toLat=63.4402&toLon=10.4004',
     );
     expect(mockReverseV3).toHaveBeenCalledWith({
       latitude: 63.4326,
@@ -290,7 +290,7 @@ describe('trip', () => {
 
   it('mixes ids and coordinates', async () => {
     const state = await getStateAfterLookupFrom(
-      'trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004',
+      'trip?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004',
     );
     expect(tripParams(state)).toEqual({
       fromLocation: PLACES['NSR:StopPlace:337'],
@@ -300,7 +300,7 @@ describe('trip', () => {
 
   it('leaves out unknown ids', async () => {
     const state = await getStateAfterLookupFrom(
-      'trip?fromId=NSR:StopPlace:99999999&toLatLng=63.4402,10.4004',
+      'trip?fromId=NSR:StopPlace:99999999&toLat=63.4402&toLon=10.4004',
     );
     expect(tripParams(state)).toEqual({
       fromLocation: undefined,
@@ -311,7 +311,7 @@ describe('trip', () => {
   it('ignores places which do not match the requested id', async () => {
     mockPlaceV3.mockResolvedValue([PLACES['NSR:GroupOfStopPlaces:1']]);
     const state = await getStateAfterLookupFrom(
-      'trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004',
+      'trip?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004',
     );
     expect(tripParams(state).fromLocation).toBeUndefined();
   });
@@ -319,7 +319,7 @@ describe('trip', () => {
   it('leaves out locations which can not be looked up', async () => {
     mockPlaceV3.mockRejectedValue(new Error('nope'));
     const state = await getStateAfterLookupFrom(
-      'trip?fromId=NSR:StopPlace:337&toLatLng=63.4402,10.4004',
+      'trip?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004',
     );
     expect(tripParams(state)).toEqual({
       fromLocation: undefined,
@@ -329,7 +329,18 @@ describe('trip', () => {
 
   it('leaves out invalid coordinates', async () => {
     const state = await getStateAfterLookupFrom(
-      'trip?fromLatLng=93.4326,10.3951&toLatLng=63.4402,10.4004',
+      'trip?fromLat=93.4326&fromLon=10.3951&toLat=63.4402&toLon=10.4004',
+    );
+    expect(mockReverseV3).toHaveBeenCalledTimes(1);
+    expect(tripParams(state)).toEqual({
+      fromLocation: undefined,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('leaves out half specified coordinates', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip?fromLat=63.4326&toLat=63.4402&toLon=10.4004',
     );
     expect(mockReverseV3).toHaveBeenCalledTimes(1);
     expect(tripParams(state)).toEqual({

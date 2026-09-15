@@ -275,7 +275,7 @@ function routeForWidgetAddFavoriteDeparture(): ResultState | undefined {
 }
 
 /**
- * `atb://trip?fromLatLng=63.4326,10.3951&toId=NSR:StopPlace:59872`
+ * `atb://trip?fromLat=63.4326&fromLon=10.3951&toId=NSR:StopPlace:59872`
  */
 function routeForTrip(locations: TripLocations): ResultState | undefined {
   return {
