@@ -693,9 +693,9 @@ export const GeofencingZoneExtraExplanations = {
 
 export const ShmoWarnings = {
   bookingPaused: _(
-    'Det har oppstått en feil og turen er satt på pause. Trykk på knappen for å fortsette turen.',
-    'An error has occurred and the trip is paused. Press the button to manually resume the trip.',
-    'Det har oppstått ein feil og turen er sett på pause. Trykk på knappen for å halde fram turen.',
+    'Det har oppstått en feil og turen er pauset i våre systemer. Trykk på knappen nedenfor for å fortsette tur.',
+    'An error has occurred and the trip is paused in our systems. Press the button below to continue the trip.',
+    'Det har oppstått ein feil og turen er pauset i våre system. Trykk på knappen nedenfor for å fortsette tur.',
   ),
   vehicleDisabled: _(
     'Dette kjøretøyet er ikke tilgjengelig akkurat nå',

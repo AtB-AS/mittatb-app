@@ -45,7 +45,6 @@ import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
 import {EndManualTripCard} from '../EndManualTripCard';
 import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
-import {Unlock} from '@atb/assets/svg/mono-icons/mobility';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -323,7 +322,6 @@ export const ActiveShmoSheet = ({
                           accessibilityRole="button"
                           onPress={resumeShmoBooking}
                           loading={sendShmoBookingEventIsLoading}
-                          rightIcon={{svg: Unlock}}
                           text={t(MobilityTexts.trip.button.resume)}
                         />
                       </View>
