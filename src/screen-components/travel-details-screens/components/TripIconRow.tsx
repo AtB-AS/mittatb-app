@@ -2,6 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import type {StyleProp, ViewProps, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useFontScale} from '@atb/utils/use-font-scale';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import type {IconColor, ThemeIconProps} from '@atb/components/theme-icon';
 import type {ContrastColor, Theme} from '@atb/theme/colors';
@@ -12,11 +13,15 @@ import {
   TripRow,
 } from './TripRow';
 
+// ThemeIcon scales the glyph with the OS text size, so the width used for
+// centring has to as well, or the icon drifts right of the decoration line.
+// The chip's padding is not font-scaled.
 const useIconWidth = (boxed: boolean) => {
   const {theme} = useThemeContext();
+  const fontScale = useFontScale();
   return boxed
-    ? theme.icon.size.small + theme.spacing.small * 2
-    : theme.icon.size.large;
+    ? theme.icon.size.small * fontScale + theme.spacing.small * 2
+    : theme.icon.size.large * fontScale;
 };
 
 const defaultBoxColor = (theme: Theme) => theme.color.transport.walk.primary;
