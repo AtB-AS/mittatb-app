@@ -1037,7 +1037,6 @@ export function mapLegToTimeValues(leg: Leg) {
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
-    marginBottom: theme.spacing.large,
   },
   legPath: {
     flex: 1,
