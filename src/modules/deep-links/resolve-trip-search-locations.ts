@@ -3,18 +3,18 @@ import type {Location} from '@atb/modules/favorites';
 import {parseParamsAsCoordinates} from './utils';
 import type {DeepLink} from './parse-deep-link';
 
-export type TripLocations = {
+export type TripSearchLocations = {
   fromLocation?: Location;
   toLocation?: Location;
 };
 
 /**
- * Looks up the locations of a trip deep link, e.g.
- * `atb://trip?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004`.
+ * Looks up the locations of a trip search deep link, e.g.
+ * `atb://trip-search?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004`.
  */
-export async function resolveTripLocations(
+export async function resolveTripSearchLocations(
   params: DeepLink['params'],
-): Promise<TripLocations> {
+): Promise<TripSearchLocations> {
   const [fromLocation, toLocation] = await Promise.all([
     resolveLocation(params.fromId, params.fromLat, params.fromLon),
     resolveLocation(params.toId, params.toLat, params.toLon),

@@ -22,7 +22,10 @@ import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
 import {parseParamAsFormFactors, parseParamAsInt} from './utils';
 import {initialUrl} from './initial-url';
-import {resolveTripLocations, TripLocations} from './resolve-trip-locations';
+import {
+  resolveTripSearchLocations,
+  TripSearchLocations,
+} from './resolve-trip-search-locations';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
@@ -40,15 +43,15 @@ export function useDeepLinks() {
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
-  const tripLocationsRef = useRef<TripLocations>(undefined);
+  const tripSearchLocationsRef = useRef<TripSearchLocations>(undefined);
 
   /**
    * Asynchronous work that happends before getStateFromPath is called.
    */
   const prepare = useCallback(async (url: string) => {
     const {path, params} = parseDeepLink(url.replace(`${APP_SCHEME}://`, ''));
-    if (path === 'trip') {
-      tripLocationsRef.current = await resolveTripLocations(params);
+    if (path === 'trip-search') {
+      tripSearchLocationsRef.current = await resolveTripSearchLocations(params);
     }
   }, []);
 
@@ -111,9 +114,9 @@ export function useDeepLinks() {
           return routeForDepartures(path, params);
         case 'widget/addFavoriteDeparture':
           return routeForWidgetAddFavoriteDeparture();
-        case 'trip':
-          if (!tripLocationsRef.current) return;
-          return routeForTrip(tripLocationsRef.current);
+        case 'trip-search':
+          if (!tripSearchLocationsRef.current) return;
+          return routeForTripSearch(tripSearchLocationsRef.current);
         default:
           return getStateFromPath(pathAndQuery, config);
       }
@@ -275,9 +278,11 @@ function routeForWidgetAddFavoriteDeparture(): ResultState | undefined {
 }
 
 /**
- * `atb://trip?fromLat=63.4326&fromLon=10.3951&toId=NSR:StopPlace:59872`
+ * `atb://trip-search?fromLat=63.4326&fromLon=10.3951&toId=NSR:StopPlace:59872`
  */
-function routeForTrip(locations: TripLocations): ResultState | undefined {
+function routeForTripSearch(
+  locations: TripSearchLocations,
+): ResultState | undefined {
   return {
     routes: [
       {
