@@ -9,7 +9,7 @@ export type DimensionOverrides = {
   labelAlignment?: 'flex-start' | 'flex-end';
 };
 
-/** Clearance the design specifies either side of the leg decoration line. */
+/** Gap on either side of the leg decoration line, as specified in design. */
 export const DECORATION_GAP = 19;
 
 const DECORATION_LINE_WIDTH = tripLegDetail.decorationLineWidth;
