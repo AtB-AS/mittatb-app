@@ -8,7 +8,6 @@ import {
 } from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
-import {View} from 'react-native';
 import {TripIconRow} from './TripIconRow';
 import {Connection, StaySeated} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {ThemeText} from '@atb/components/text';
@@ -25,19 +24,18 @@ export const InterchangeSection = ({leg}: {leg: Leg}) => {
   const interchangeTexts = getInterchangeTexts(interchange, t, language);
 
   return (
-    <View style={style.container}>
-      <TripIconRow
-        boxed={isStaySeated}
-        svg={isStaySeated ? StaySeated : Connection}
-        accessibilityLabel={`${interchangeTexts.title}. ${interchangeTexts.body}`}
-        accessible={true}
-      >
-        <ThemeText typography="body__m">{interchangeTexts.title}</ThemeText>
-        <ThemeText typography="body__s" type="secondary">
-          {interchangeTexts.body}
-        </ThemeText>
-      </TripIconRow>
-    </View>
+    <TripIconRow
+      boxed={isStaySeated}
+      svg={isStaySeated ? StaySeated : Connection}
+      contentStyle={style.message}
+      accessibilityLabel={`${interchangeTexts.title}. ${interchangeTexts.body}`}
+      accessible={true}
+    >
+      <ThemeText typography="body__m">{interchangeTexts.title}</ThemeText>
+      <ThemeText typography="body__s" type="secondary">
+        {interchangeTexts.body}
+      </ThemeText>
+    </TripIconRow>
   );
 };
 
@@ -77,7 +75,7 @@ const getPublicCode = (
 ) => serviceJourney?.publicCode ?? serviceJourney?.line.publicCode;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    marginBottom: theme.spacing.large, // Note: Should rather gap on parent
+  message: {
+    rowGap: theme.spacing.xSmall,
   },
 }));

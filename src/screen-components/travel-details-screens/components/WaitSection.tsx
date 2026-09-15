@@ -135,7 +135,6 @@ function getTransferMessage(
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     flex: 1,
-    marginBottom: theme.spacing.large,
   },
   message: {
     rowGap: theme.spacing.xSmall,
