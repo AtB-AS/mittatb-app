@@ -8,14 +8,8 @@ import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product'
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {
-  MapFilterType,
-  MobilityMapFilterType,
-  useMapContext,
-} from '@atb/modules/map';
+import {MapFilterType, useEnableFormFactorsInMapFilter} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {getNewFilterState} from '../utils';
-import {useOperators} from '../use-operators';
 
 type BenefitCardProps = {
   interactiveColor: InteractiveColor;
@@ -37,30 +31,16 @@ export const BenefitTile = ({
   );
   const description = getTextForLanguage(benefit.ticketDescription, language);
 
-  const {mapFilter, setMapFilter} = useMapContext();
-  const operators = useOperators();
+  const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
-  const onPress = async () => {
-    if (!mapFilter?.mobility) return;
-    let mobilityFilters: MobilityMapFilterType = mapFilter.mobility;
-    benefit.formFactors.forEach((formFactor) => {
-      const allOperators = operators.byFormFactor(formFactor as FormFactor);
-      const formFactorFilter = getNewFilterState(
-        true,
-        benefit.operatorId,
-        mapFilter.mobility[formFactor],
-        allOperators,
-      );
-      mobilityFilters = {
-        ...mobilityFilters,
-        [formFactor]: formFactorFilter,
-      };
-    });
-
-    // Update stored filters (for persistence, and the filters bottom sheet)
-    setMapFilter({...mapFilter, mobility: mobilityFilters});
-    // Provide the same filters as intital filter state for the map screen
-    onNavigateToMap({...mapFilter, mobility: mobilityFilters});
+  const onPress = () => {
+    // Turn on the filter for the benefit's form factors, so the vehicles are
+    // visible in the map even if the user has previously turned the filter off.
+    const updatedFilter = enableFormFactorsInMapFilter(
+      benefit.formFactors as FormFactor[],
+    );
+    if (!updatedFilter) return;
+    onNavigateToMap(updatedFilter);
   };
   return (
     <View style={[styles.container, style]}>
