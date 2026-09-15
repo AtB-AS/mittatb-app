@@ -79,6 +79,7 @@ import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {InterchangeSection} from './InterchangeSection';
+import {TripIconRow} from './TripIconRow';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -897,7 +898,6 @@ type WalkSectionProps = {
 
 const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
   const {t, language} = useTranslation();
-  const style = useSectionStyles();
   const {theme} = useThemeContext();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   const humanizedDistance = useHumanizeDistance(leg.distance);
@@ -905,34 +905,28 @@ const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
   const a11yLabel = useWalkA11yLabel(leg, timeRounding);
 
   return (
-    <TripRow
-      dimensionOverrides={NEW_TRIP_DIMENSIONS}
+    <TripIconRow
+      decorated
+      boxed
+      svg={WalkFill}
+      color={theme.color.transport.walk.primary}
+      iconAccessibilityLabel={t(getTranslatedModeName('foot'))}
       testID="footLeg"
       accessibilityLabel={a11yLabel}
     >
-      <View style={style.transportLine}>
-        <View style={style.walkIconBox}>
-          <ThemeIcon
-            size="small"
-            svg={WalkFill}
-            color={theme.color.transport.walk.primary}
-            accessibilityLabel={t(getTranslatedModeName('foot'))}
-          />
-        </View>
-        <ThemeText typography="body__s" type="secondary">
-          {isWalkTimeOfSignificance && humanizedDistance
-            ? t(
-                TripDetailsTexts.trip.leg.walk.labelWithDistance(
-                  durationText,
-                  humanizedDistance,
-                ),
-              )
-            : isWalkTimeOfSignificance
-              ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
-              : t(TripDetailsTexts.trip.leg.shortWalk)}
-        </ThemeText>
-      </View>
-    </TripRow>
+      <ThemeText typography="body__s" type="secondary">
+        {isWalkTimeOfSignificance && humanizedDistance
+          ? t(
+              TripDetailsTexts.trip.leg.walk.labelWithDistance(
+                durationText,
+                humanizedDistance,
+              ),
+            )
+          : isWalkTimeOfSignificance
+            ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
+            : t(TripDetailsTexts.trip.leg.shortWalk)}
+      </ThemeText>
+    </TripIconRow>
   );
 };
 
@@ -1059,11 +1053,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: theme.spacing.small,
-  },
-  walkIconBox: {
-    padding: theme.spacing.small,
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.color.transport.walk.primary.background,
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacing.xSmall,
