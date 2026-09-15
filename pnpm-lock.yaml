@@ -107,7 +107,7 @@ settings:
 
 patchedDependencies:
   '@react-native-async-storage/async-storage@2.2.0': 978d0cd98900573029698cd20e58864c336768147bc65f9b0d4197e1ff8412c7
-  '@rnmapbox/maps@10.3.0': e80c219c5aaa8635d63177ce97e35d0c7ecdfa694c5eb6dd9e8b41c5c5bab2be
+  '@rnmapbox/maps@10.3.5': 9fa9603a5cb7630b6ca3ee89e220aa128ba20a027c2975e83bb3bff6f11ae7ee
   app-icon@0.13.2: d3e7d0e029be173ad1d91a689e45ebfa9a7211c4e405dc895cd05417f6ff7ed4
   react-native-date-picker@5.0.13: 46389d5801d03db0d425e3719fd23fac2f8d0e55766bb0125e8667fb43b0377a
   react-native@0.86.3: b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24
@@ -204,8 +204,8 @@ importers:
         specifier: ^7.4.2
         version: 7.6.14(3c7c4c34de045b8e8f668dfe767964d5)
       '@rnmapbox/maps':
-        specifier: 10.3.0
-        version: 10.3.0(patch_hash=e80c219c5aaa8635d63177ce97e35d0c7ecdfa694c5eb6dd9e8b41c5c5bab2be)(react-dom@19.2.3(react@19.2.3))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+        specifier: 10.3.5
+        version: 10.3.5(patch_hash=9fa9603a5cb7630b6ca3ee89e220aa128ba20a027c2975e83bb3bff6f11ae7ee)(react-dom@19.2.3(react@19.2.3))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       '@sayem314/react-native-keep-awake':
         specifier: ^1.4.0
         version: 1.4.0
@@ -2638,8 +2638,8 @@ packages:
       react-native-safe-area-context: '>= 4.0.0'
       react-native-screens: '>= 4.0.0'
 
-  '@rnmapbox/maps@10.3.0':
-    resolution: {integrity: sha512-g5A6hkz6imuA5qy3EGQIbtaofBUbP2YiiyKzj7GJ9ryRXC9gRsnVaJ/8pmAts+0/aIZ5o5w63eboTKjCdO2HrQ==}
+  '@rnmapbox/maps@10.3.5':
+    resolution: {integrity: sha512-ShQppktl1H4HHPp/aninsEVK7+tsHmN48ULxpB1rfmx7W3WogB21Q1NAEw7CzxERnLZveijyutszJG2y3EBn2Q==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
@@ -10348,7 +10348,7 @@ snapshots:
     transitivePeerDependencies:
       - '@react-native-masked-view/masked-view'
 
-  '@rnmapbox/maps@10.3.0(patch_hash=e80c219c5aaa8635d63177ce97e35d0c7ecdfa694c5eb6dd9e8b41c5c5bab2be)(react-dom@19.2.3(react@19.2.3))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)':
+  '@rnmapbox/maps@10.3.5(patch_hash=9fa9603a5cb7630b6ca3ee89e220aa128ba20a027c2975e83bb3bff6f11ae7ee)(react-dom@19.2.3(react@19.2.3))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)':
     dependencies:
       '@turf/along': 6.5.0
       '@turf/distance': 6.5.0

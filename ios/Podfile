@@ -38,7 +38,7 @@ ENV['RCT_USE_PREBUILT_RNCORE'] = '0'
 production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 11.18.2'
+$RNMapboxMapsVersion = '~> 11.23.1'
 
 target 'app' do
   config = use_native_modules!

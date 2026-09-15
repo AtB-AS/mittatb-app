@@ -1539,13 +1539,13 @@ PODS:
     - Yoga
   - leveldb-library (1.22.6)
   - Logging (1.4.0)
-  - MapboxCommon (24.18.3):
+  - MapboxCommon (24.23.1):
     - Turf (= 4.0.0)
-  - MapboxCoreMaps (11.18.3):
-    - MapboxCommon (= 24.18.3)
-  - MapboxMaps (11.18.3):
-    - MapboxCommon (= 24.18.3)
-    - MapboxCoreMaps (= 11.18.3)
+  - MapboxCoreMaps (11.23.1):
+    - MapboxCommon (= 24.23.1)
+  - MapboxMaps (11.23.1):
+    - MapboxCommon (= 24.23.1)
+    - MapboxCoreMaps (= 11.23.1)
     - Turf (= 4.0.0)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
@@ -3742,15 +3742,15 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - rnmapbox-maps (10.3.0):
-    - MapboxMaps (~> 11.18.2)
+  - rnmapbox-maps (10.3.5):
+    - MapboxMaps (~> 11.23.1)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.3.0)
+    - rnmapbox-maps/DynamicLibrary (= 10.3.5)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.3.0):
+  - rnmapbox-maps/DynamicLibrary (10.3.5):
     - hermes-engine
-    - MapboxMaps (~> 11.18.2)
+    - MapboxMaps (~> 11.23.1)
     - RCTRequired
     - RCTTypeSafety
     - React
@@ -4719,9 +4719,9 @@ SPEC CHECKSUMS:
   intercom-react-native: 84bfa38881e960230cf6c0693785d656afd234fb
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
   Logging: beeb016c9c80cf77042d62e83495816847ef108b
-  MapboxCommon: 371fd6db596531464b6fd751ae7daa382fe2da2b
-  MapboxCoreMaps: 811c4196843f5554b10a807d1231270d372ff148
-  MapboxMaps: 0e8fdc25eb3b1c2ff5cf9317266fe984eeb0e18f
+  MapboxCommon: d006256c4643860a7b3046af45d1671569b6c5ac
+  MapboxCoreMaps: de1a4461d0ab5d65d907f06e8d82fdbe06bb3213
+  MapboxMaps: 22340ae0e0d47b2e4761019b1d6c569ab04e088d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   RCTDeprecation: 5268fe9d45036e52deb765d242297f1011e17333
@@ -4821,7 +4821,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: f260abd65ef32ee1520340c19bc97d6dc95e50fd
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNLocalize: 17220985af7688b1dc3125d8aa14bcf904d730d6
-  rnmapbox-maps: 2a0017fa8cf581584de37b2275e24db6e5d95c12
+  rnmapbox-maps: e37b909e826432988cd816eac6cd3312fb849482
   RNPermissions: 2f040942f0367247c4a313191f7f1901643818a8
   RNReanimated: 3760fe16cbc5540885c047fee63b27d00ad8ab30
   RNScreens: 16d333b40551f34ad9c884b80f9078f2fca8c25f
@@ -4847,6 +4847,6 @@ SPEC CHECKSUMS:
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe
   Yoga: 9690ea6ce9c77aee633f4815cc42202c701edbd8
 
-PODFILE CHECKSUM: 397bdf5389efef55f1a04a02b9906d686102c55c
+PODFILE CHECKSUM: 710aded11c2f1e7adf3d4c93bffa93042af28279
 
 COCOAPODS: 1.16.2
