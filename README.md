@@ -37,7 +37,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 > [!TIP]
 > If it's been a while since the last time you ran the app, or there's recently been some changes to a unknown set of dependencies, this command should fix most problems:
 >
-> `pnpm clean:install && pnpm setup dev atb && cd ios && bundle exec pod install --repo-update && cd ../android && ./gradlew clean && cd .. && pnpm start --reset-cache`
+> `pnpm clean:install && pnpm run setup dev atb && cd ios && bundle exec pod install --repo-update && cd ../android && ./gradlew clean && cd .. && pnpm start --reset-cache`
 >
 > Then `pnpm ios --list-devices` or `pnpm android` to build and launch the app
 
@@ -77,7 +77,7 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
    b. Pod install: `cd ios/` and `bundle exec pod install`
 
-5. From root folder run: `pnpm setup dev <organization>` where organization is either `atb`, `fram`, `nfk` or `troms`, to set root .env for local development and generate all icons and launch screens for iOS and Android.
+5. From root folder run: `pnpm run setup dev <organization>` where organization is either `atb`, `fram`, `nfk` or `troms`, to set root .env for local development and generate all icons and launch screens for iOS and Android.
 
 6. Run `pnpm get_ios_certs` to install certificates.
    > ⓘ In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
@@ -150,12 +150,12 @@ You might be missing iOS dependencies (Cocopods). See dependency step in [Starti
 
 ## Design system and assets
 
-Assets such as icons, logos, and illustrations are set up by running `pnpm setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
+Assets such as icons, logos, and illustrations are set up by running `pnpm run setup` in the terminal. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
 
 When adding or changing assets in the design system, run setup again:
 
 ```
-pnpm setup dev <organization>
+pnpm run setup dev <organization>
 ```
 
 Then restart metro and clear cache:

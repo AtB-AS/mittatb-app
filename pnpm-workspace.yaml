@@ -10,7 +10,7 @@ minimumReleaseAgeExclude:
   - '@atb-as/*'
 patchedDependencies:
   '@react-native-async-storage/async-storage@2.2.0': 'patches/@react-native-async-storage__async-storage@2.2.0.patch'
-  '@rnmapbox/maps@10.3.0': 'patches/@rnmapbox__maps@10.3.0.patch'
+  '@rnmapbox/maps@10.3.5': patches/@rnmapbox__maps@10.3.5.patch
   'app-icon@0.13.2': 'patches/app-icon@0.13.2.patch'
   'react-native-date-picker@5.0.13': 'patches/react-native-date-picker@5.0.13.patch'
-  'react-native@0.83.5': 'patches/react-native@0.83.5.patch'
+  react-native@0.86.3: patches/react-native@0.86.3.patch
