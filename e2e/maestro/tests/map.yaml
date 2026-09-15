@@ -1,0 +1,68 @@
+appId: ${APP_ID}
+name: 'Map'
+---
+- tapOn:
+    id: ${output.nav.menu.map}
+    label: 'Navigate to Map tab'
+
+# Note DOWN is a larger movement than UP
+- swipe:
+    direction: UP
+    duration: 1000
+- swipe:
+    direction: UP
+    duration: 1000
+- swipe:
+    direction: DOWN
+    duration: 1000
+# This simulates "zoom in"
+- doubleTapOn:
+    point: "50%,50%"
+- tapOn:
+    point: "50%,50%"
+- doubleTapOn:
+    point: "50%,50%"
+- tapOn:
+    point: "50%,50%"
+- swipe:
+    direction: UP
+    duration: 1500
+- swipe:
+    direction: UP
+    duration: 1500
+- swipe:
+    direction: LEFT
+- swipe:
+    direction: LEFT
+- swipe:
+    direction: DOWN
+    duration: 1500
+- swipe:
+    direction: RIGHT
+- swipe:
+    direction: RIGHT
+- doubleTapOn:
+    point: "50%,50%"
+- tapOn:
+    point: "50%,50%"
+- doubleTapOn:
+    point: "50%,50%"
+- tapOn:
+    point: "50%,50%"
+- swipe:
+    direction: UP
+    duration: 1000
+- swipe:
+    direction: UP
+    duration: 1000
+- swipe:
+    direction: RIGHT
+- swipe:
+    direction: RIGHT
+- swipe:
+    direction: DOWN
+    duration: 1000
+- swipe:
+    direction: LEFT
+- swipe:
+    direction: LEFT
