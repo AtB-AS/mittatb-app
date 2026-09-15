@@ -13,9 +13,8 @@ import {
   TripRow,
 } from './TripRow';
 
-// ThemeIcon scales the glyph with the OS text size, so the width used for
-// centring has to as well, or the icon drifts right of the decoration line.
-// The chip's padding is not font-scaled.
+// ThemeIcon scales the glyph with the OS text size, this helps keep the scaled icon
+// to stay centered on the decoration line.
 const useIconWidth = (boxed: boolean) => {
   const {theme} = useThemeContext();
   const fontScale = useFontScale();
