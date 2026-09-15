@@ -77,7 +77,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'flex-start',
     left:
       theme.tripLegDetail.labelWidth +
-      theme.tripLegDetail.decorationContainerWidth / 2,
+      theme.tripLegDetail.decorationContainerWidth / 2 -
+      theme.tripLegDetail.decorationLineWidth / 2,
   },
   decorationMarker: {
     width: theme.tripLegDetail.decorationLineEndWidth,
