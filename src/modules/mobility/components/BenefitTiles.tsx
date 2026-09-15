@@ -34,8 +34,6 @@ export const BenefitTile = ({
   const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
   const onPress = () => {
-    // Turn on the filter for the benefit's form factors, so the vehicles are
-    // visible in the map even if the user has previously turned the filter off.
     const updatedFilter = enableFormFactorsInMapFilter(
       benefit.formFactors as FormFactor[],
     );
