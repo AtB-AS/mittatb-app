@@ -41,10 +41,13 @@ export const InterchangeSection = ({leg}: {leg: Leg}) => {
         accessible={true}
       >
         <View style={style.interchangeInfo}>
-          <ThemeIcon
-            size="normal"
-            svg={interchange.staySeated ? StaySeated : Connection}
-          />
+          {interchange.staySeated ? (
+            <View style={style.iconBox}>
+              <ThemeIcon size="normal" svg={StaySeated} />
+            </View>
+          ) : (
+            <ThemeIcon size="normal" svg={Connection} />
+          )}
           <View style={style.interchangeText}>
             <ThemeText typography="body__m">{interchangeTexts.title}</ThemeText>
             <ThemeText typography="body__s" type="secondary">
@@ -102,4 +105,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
   },
   interchangeText: {flex: 1},
+  iconBox: {
+    padding: theme.spacing.small,
+    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.color.transport.walk.primary.background,
+  },
 }));
