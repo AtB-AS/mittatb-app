@@ -13,8 +13,7 @@ import {TransferRisk} from '@atb-as/utils';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {DimensionOverrides, NEW_TRIP_DIMENSIONS, TripRow} from './TripRow';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {TripIconRow} from './TripIconRow';
 import {useTransportColor} from '@atb/utils/use-transport-color';
 
 export type WaitDetails = {
@@ -23,15 +22,10 @@ export type WaitDetails = {
   transferRisk?: TransferRisk;
 };
 
-/** The x that `TripLegDecoration` centres the leg line on. */
-const DECORATION_AXIS =
-  (NEW_TRIP_DIMENSIONS.labelWidth ?? 0) +
-  (NEW_TRIP_DIMENSIONS.decorationContainerWidth ?? 0) / 2;
-
 const ONE_MINUTE_IN_SECONDS = 60;
 
 type WaitMessage = {
-  icon: React.ComponentProps<typeof ThemeIcon>['svg'];
+  icon: React.ComponentProps<typeof TripIconRow>['svg'];
   title?: string;
   message: string;
   /** Draws the icon and title in the named emphasis colour. */
@@ -101,48 +95,22 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
     ? theme.color.foreground.emphasis[emphasis]
     : undefined;
 
-  const iconWidth = emphasisColor
-    ? theme.icon.size.large
-    : theme.icon.size.small + theme.spacing.small * 2;
-
-  // These rows draw no leg decoration, so the icon stands in for the line:
-  // centre it on the decoration axis, then spacing.small across to the text.
-  const dimensionOverrides: DimensionOverrides = {
-    ...NEW_TRIP_DIMENSIONS,
-    labelWidth: DECORATION_AXIS - iconWidth / 2,
-    decorationContainerWidth: 0,
-  };
-
   return (
-    <TripRow dimensionOverrides={dimensionOverrides}>
-      <View style={style.row}>
-        {emphasisColor ? (
-          <ThemeIcon svg={icon} size="large" color={emphasisColor} />
-        ) : (
-          <View style={style.iconBox}>
-            <ThemeIcon
-              svg={icon}
-              size="small"
-              color={legColor.secondary.background}
-            />
-          </View>
-        )}
-        <View style={style.message}>
-          {title && (
-            <ThemeText
-              typography="body__m"
-              type="secondary"
-              color={emphasisColor}
-            >
-              {title}
-            </ThemeText>
-          )}
-          <ThemeText typography="body__m" type="secondary">
-            {message}
-          </ThemeText>
-        </View>
-      </View>
-    </TripRow>
+    <TripIconRow
+      boxed={!emphasisColor}
+      svg={icon}
+      color={emphasisColor ?? legColor.secondary.background}
+      contentStyle={style.message}
+    >
+      {title && (
+        <ThemeText typography="body__m" type="secondary" color={emphasisColor}>
+          {title}
+        </ThemeText>
+      )}
+      <ThemeText typography="body__m" type="secondary">
+        {message}
+      </ThemeText>
+    </TripIconRow>
   );
 };
 
@@ -169,19 +137,7 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     marginBottom: theme.spacing.large,
   },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.small,
-  },
   message: {
-    flex: 1,
     rowGap: theme.spacing.xSmall,
-  },
-  iconBox: {
-    padding: theme.spacing.small,
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.color.transport.walk.primary.background,
   },
 }));

@@ -46,7 +46,7 @@ const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
 const androidOrIos = Platform.OS === 'android' ? 'android' : 'ios';
 export const textTypeStyles = createTextTypeStyles(androidOrIos);
 
-const tripLegDetail = {
+export const tripLegDetail = {
   labelWidth: 80,
   decorationContainerWidth: 20,
   decorationLineEndWidth: 12,

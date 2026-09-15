@@ -1,7 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet, tripLegDetail} from '@atb/theme';
 import {DimensionOverrides} from './TripRow';
+
+const decorationLineLeft = (labelWidth: number, gutter: number) =>
+  labelWidth + gutter / 2 - tripLegDetail.decorationLineWidth / 2;
 
 type TripLegDecorationProps = {
   hasStart?: boolean;
@@ -18,17 +21,16 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
   dimensionOverrides,
 }) => {
   const style = useStyles();
-  const {theme} = useThemeContext();
   const colorStyle = {backgroundColor: color};
 
   const leftOverride =
     dimensionOverrides?.labelWidth != null &&
     dimensionOverrides?.decorationContainerWidth != null
       ? {
-          left:
-            dimensionOverrides.labelWidth +
-            dimensionOverrides.decorationContainerWidth / 2 -
-            theme.tripLegDetail.decorationLineWidth / 2,
+          left: decorationLineLeft(
+            dimensionOverrides.labelWidth,
+            dimensionOverrides.decorationContainerWidth,
+          ),
         }
       : undefined;
 
@@ -63,9 +65,6 @@ export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  decorationPlaceholder: {
-    width: theme.spacing.large,
-  },
   decoration: {
     position: 'absolute',
     top: 0,
@@ -75,10 +74,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    left:
-      theme.tripLegDetail.labelWidth +
-      theme.tripLegDetail.decorationContainerWidth / 2 -
-      theme.tripLegDetail.decorationLineWidth / 2,
+    left: decorationLineLeft(
+      theme.tripLegDetail.labelWidth,
+      theme.tripLegDetail.decorationContainerWidth,
+    ),
   },
   decorationMarker: {
     width: theme.tripLegDetail.decorationLineEndWidth,
