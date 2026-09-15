@@ -45,7 +45,6 @@ import {SupportButton} from '../SupportButton';
 import {BrandingImage} from '../BrandingImage';
 import {EndManualTripCard} from '../EndManualTripCard';
 import {ThemedCityBikeStation} from '@atb/theme/ThemedAssets';
-import {Unlock} from '@atb/assets/svg/mono-icons/mobility';
 
 type Props = {
   navigateSupportCallback: () => void;
@@ -296,11 +295,7 @@ export const ActiveShmoSheet = ({
                   {isPaused && (
                     <MessageInfoBox
                       type="error"
-                      message={t(
-                        ShmoWarnings.bookingPaused(
-                          activeBooking.asset.formFactor ?? undefined,
-                        ),
-                      )}
+                      message={t(ShmoWarnings.bookingPaused)}
                     />
                   )}
                   {warningMessage && (
@@ -327,7 +322,6 @@ export const ActiveShmoSheet = ({
                           accessibilityRole="button"
                           onPress={resumeShmoBooking}
                           loading={sendShmoBookingEventIsLoading}
-                          rightIcon={{svg: Unlock}}
                           text={t(MobilityTexts.trip.button.resume)}
                         />
                       </View>
