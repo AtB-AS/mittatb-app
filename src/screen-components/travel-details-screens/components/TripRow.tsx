@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, ViewProps} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, tripLegDetail} from '@atb/theme';
 import {NativeBlockButton} from '@atb/components/native-button';
 
 export type DimensionOverrides = {
@@ -9,12 +9,22 @@ export type DimensionOverrides = {
   labelAlignment?: 'flex-start' | 'flex-end';
 };
 
+/** Clearance the design specifies either side of the leg decoration line. */
+export const DECORATION_GAP = 19;
+
+const DECORATION_LINE_WIDTH = tripLegDetail.decorationLineWidth;
+
 // TODO: Remove / rename once old trip details are removed
 export const NEW_TRIP_DIMENSIONS: DimensionOverrides = {
   labelWidth: 75,
-  decorationContainerWidth: 42,
+  decorationContainerWidth: DECORATION_GAP * 2 + DECORATION_LINE_WIDTH,
   labelAlignment: 'flex-end',
 };
+
+/** The x that `TripLegDecoration` centres the leg line on. */
+export const DECORATION_AXIS =
+  (NEW_TRIP_DIMENSIONS.labelWidth ?? 0) +
+  (NEW_TRIP_DIMENSIONS.decorationContainerWidth ?? 0) / 2;
 
 type TripRowProps = {
   rowLabel?: React.ReactNode;
