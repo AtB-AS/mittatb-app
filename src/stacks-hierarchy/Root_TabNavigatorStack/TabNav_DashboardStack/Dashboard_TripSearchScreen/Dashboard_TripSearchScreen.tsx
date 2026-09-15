@@ -12,7 +12,6 @@ import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
   SelectableLocationType,
   usePendingLocationSearchStore,
-  useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 
@@ -497,8 +496,8 @@ function useLocations(
     ],
   );
 
-  let searchedFromLocation = useLocationSearchValue(route, 'fromLocation');
-  const searchedToLocation = useLocationSearchValue(route, 'toLocation');
+  let searchedFromLocation = route.params?.fromLocation;
+  const searchedToLocation = route.params?.toLocation;
 
   if (searchedToLocation && !searchedFromLocation) {
     searchedFromLocation = currentLocation;

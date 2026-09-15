@@ -1,4 +1,6 @@
 import {APP_SCHEME} from '@env';
+import {useCallback, useRef} from 'react';
+import {Linking} from 'react-native';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import type {NavigationState, PartialState} from '@react-navigation/routers';
 import {
@@ -20,6 +22,10 @@ import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
 import {parseParamAsFormFactors, parseParamAsInt} from './utils';
 import {initialUrl} from './initial-url';
+import {
+  resolveTripSearchLocations,
+  TripSearchLocations,
+} from './resolve-trip-search-locations';
 import {ServiceJourneyDeparture} from '@atb/screen-components/travel-details-screens';
 import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
@@ -37,9 +43,36 @@ export function useDeepLinks() {
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
+  const tripSearchLocationsRef = useRef<TripSearchLocations>(undefined);
+
+  /**
+   * Asynchronous work that happends before getStateFromPath is called.
+   */
+  const prepare = useCallback(async (url: string) => {
+    const {path, params} = parseDeepLink(url.replace(`${APP_SCHEME}://`, ''));
+    if (path === 'trip-search') {
+      tripSearchLocationsRef.current = await resolveTripSearchLocations(params);
+    }
+  }, []);
+
+  const subscribe = useCallback(
+    (listener: (url: string) => void) => {
+      const subscription = Linking.addEventListener('url', ({url}) => {
+        prepare(url).then(() => listener(url));
+      });
+      return () => subscription.remove();
+    },
+    [prepare],
+  );
+
   const linkingOptions: LinkingOptions<RootStackParamList> = {
     prefixes: [`${APP_SCHEME}://`],
-    getInitialURL: () => initialUrl,
+    getInitialURL: async () => {
+      const url = await initialUrl;
+      if (url) await prepare(url);
+      return url;
+    },
+    subscribe,
     config: {
       screens: {
         Root_TabNavigatorStack: {
@@ -81,6 +114,9 @@ export function useDeepLinks() {
           return routeForDepartures(path, params);
         case 'widget/addFavoriteDeparture':
           return routeForWidgetAddFavoriteDeparture();
+        case 'trip-search':
+          if (!tripSearchLocationsRef.current) return;
+          return routeForTripSearch(tripSearchLocationsRef.current);
         default:
           return getStateFromPath(pathAndQuery, config);
       }
@@ -242,6 +278,37 @@ function routeForWidgetAddFavoriteDeparture(): ResultState | undefined {
 }
 
 /**
+ * `atb://trip-search?fromLat=63.4326&fromLon=10.3951&toId=NSR:StopPlace:59872`
+ */
+function routeForTripSearch(
+  locations: TripSearchLocations,
+): ResultState | undefined {
+  return {
+    routes: [
+      {
+        name: 'Root_TabNavigatorStack',
+        state: {
+          routes: [
+            {
+              name: 'TabNav_DashboardStack',
+              state: {
+                routes: [
+                  {name: 'Dashboard_RootScreen', index: 0},
+                  {
+                    name: 'Dashboard_TripSearchScreen',
+                    params: locations,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  } as ResultState;
+}
+
+/**
  * `atb://departures?stopId=...&quayId=...`
  * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
@@ -252,14 +319,10 @@ function routeForDepartures(
 ): ResultState | undefined {
   const destination: PartialRoute<any>[] = [
     {
-      // Index is needed so that the user can go back after
-      // opening the app with the widget when it was not open previously
-      index: 0,
       name: 'Departures_NearbyStopPlacesScreen',
     },
     {
       name: 'Departures_PlaceScreen',
-      index: 1,
       params: {
         place: {id: params.stopId},
         selectedQuayId: params.quayId,

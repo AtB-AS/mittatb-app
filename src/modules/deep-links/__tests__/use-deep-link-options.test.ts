@@ -1,10 +1,15 @@
+import {APP_SCHEME} from '@env';
 import {renderHook} from '@testing-library/react-native';
+import {Linking} from 'react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useDeepLinks} from '../use-deep-links';
 
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
 let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
+
+const mockPlaceV3 = jest.fn();
+const mockReverseV3 = jest.fn();
 
 const mockSelection = {id: 'test-selection'};
 const mockForType = jest.fn((_type: string) => ({
@@ -15,7 +20,13 @@ const mockEnableFormFactorsInMapFilter = jest.fn((formFactors: string[]) => ({
 }));
 
 jest.mock('@atb/modules/feature-toggles', () => ({
-  useFeatureTogglesContext: () => ({isBonusEnabled: mockIsBonusEnabled}),
+  useFeatureTogglesContext: () => ({
+    isBonusEnabled: mockIsBonusEnabled,
+  }),
+}));
+jest.mock('@atb/api', () => ({
+  placeV3: (...args: any[]) => mockPlaceV3(...args),
+  reverseV3: (...args: any[]) => mockReverseV3(...args),
 }));
 jest.mock('@atb/modules/ticketing', () => ({
   useGetFareProductsQuery: () => ({data: mockPreassignedFareProducts}),
@@ -55,12 +66,35 @@ const findRoute = (state: any, name: string): any =>
     undefined,
   );
 
+/**
+ * Runs a url through the linking subscription, like an incoming deep link
+ * would, so that async lookups are done before the state is resolved.
+ */
+const getStateAfterLookupFrom = async (url: string) => {
+  const {result} = renderHook(() => useDeepLinks());
+  const {subscribe, getStateFromPath, config} = result.current;
+  const handled = new Promise<void>((resolve) => subscribe!(() => resolve()));
+  onUrl({url: `${APP_SCHEME}://${url}`});
+  await handled;
+  return getStateFromPath!(url, config);
+};
+
+let onUrl: (event: {url: string}) => void = () => {};
+
 beforeEach(() => {
   mockIsBonusEnabled = false;
   mockPreassignedFareProducts = [];
   mockCustomerProfile = undefined;
   mockForType.mockClear();
   mockEnableFormFactorsInMapFilter.mockClear();
+  mockPlaceV3.mockReset();
+  mockReverseV3.mockReset();
+  jest
+    .spyOn(Linking, 'addEventListener')
+    .mockImplementation((_type, callback) => {
+      onUrl = callback;
+      return {remove: jest.fn()} as any;
+    });
 });
 
 describe('prefixes', () => {
@@ -179,6 +213,153 @@ describe('map', () => {
   });
 });
 
+describe('trip search', () => {
+  // As mapped from the `/bff/v2/geocoder/place` response
+  const PLACES: Record<string, any> = {
+    'NSR:StopPlace:337': {
+      id: 'NSR:StopPlace:337',
+      name: 'Oslo S',
+      label: 'Oslo S, Oslo',
+      layer: 'venue',
+      coordinates: {latitude: 59.910925, longitude: 10.753276},
+      locality: 'Oslo',
+      fare_zones: ['RUT:FareZone:4'],
+      category: ['railStation'],
+      resultType: 'search',
+    },
+    'NSR:GroupOfStopPlaces:1': {
+      id: 'NSR:GroupOfStopPlaces:1',
+      name: 'Oslo',
+      label: 'Oslo, Oslo',
+      layer: 'address',
+      coordinates: {latitude: 59.911076, longitude: 10.748128},
+      locality: 'Oslo',
+      category: [],
+      resultType: 'search',
+    },
+  };
+
+  const ADDRESS = {
+    id: 'NSR:Address:1',
+    name: 'Kongens gate 1',
+    layer: 'address',
+    coordinates: {latitude: 63.4326, longitude: 10.3951},
+    category: [],
+    resultType: 'search',
+  };
+
+  beforeEach(() => {
+    mockPlaceV3.mockImplementation((ids: string[]) =>
+      Promise.resolve(ids.map((id) => PLACES[id]).filter(Boolean)),
+    );
+    mockReverseV3.mockResolvedValue([ADDRESS]);
+  });
+
+  const tripSearchParams = (state: any) =>
+    findRoute(state, 'Dashboard_TripSearchScreen').params;
+
+  it('looks up ids in the geocoder', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromId=NSR:StopPlace:337&toId=NSR:GroupOfStopPlaces:1',
+    );
+    expect(mockPlaceV3).toHaveBeenCalledWith(['NSR:StopPlace:337']);
+    expect(mockPlaceV3).toHaveBeenCalledWith(['NSR:GroupOfStopPlaces:1']);
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: PLACES['NSR:StopPlace:337'],
+      toLocation: PLACES['NSR:GroupOfStopPlaces:1'],
+    });
+  });
+
+  it('reverse geocodes coordinates', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromLat=63.4326&fromLon=10.3951&toLat=63.4402&toLon=10.4004',
+    );
+    expect(mockReverseV3).toHaveBeenCalledWith({
+      latitude: 63.4326,
+      longitude: 10.3951,
+    });
+    expect(mockReverseV3).toHaveBeenCalledWith({
+      latitude: 63.4402,
+      longitude: 10.4004,
+    });
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: ADDRESS,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('mixes ids and coordinates', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004',
+    );
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: PLACES['NSR:StopPlace:337'],
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('leaves out unknown ids', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromId=NSR:StopPlace:99999999&toLat=63.4402&toLon=10.4004',
+    );
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: undefined,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('ignores places which do not match the requested id', async () => {
+    mockPlaceV3.mockResolvedValue([PLACES['NSR:GroupOfStopPlaces:1']]);
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004',
+    );
+    expect(tripSearchParams(state).fromLocation).toBeUndefined();
+  });
+
+  it('leaves out locations which can not be looked up', async () => {
+    mockPlaceV3.mockRejectedValue(new Error('nope'));
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromId=NSR:StopPlace:337&toLat=63.4402&toLon=10.4004',
+    );
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: undefined,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('leaves out invalid coordinates', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromLat=93.4326&fromLon=10.3951&toLat=63.4402&toLon=10.4004',
+    );
+    expect(mockReverseV3).toHaveBeenCalledTimes(1);
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: undefined,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('leaves out half specified coordinates', async () => {
+    const state = await getStateAfterLookupFrom(
+      'trip-search?fromLat=63.4326&toLat=63.4402&toLon=10.4004',
+    );
+    expect(mockReverseV3).toHaveBeenCalledTimes(1);
+    expect(tripSearchParams(state)).toEqual({
+      fromLocation: undefined,
+      toLocation: ADDRESS,
+    });
+  });
+
+  it('is not handled before the locations are looked up', () => {
+    const {result} = renderHook(() => useDeepLinks());
+    expect(
+      result.current.getStateFromPath!(
+        'trip-search?fromId=NSR:StopPlace:337',
+        result.current.config,
+      ),
+    ).toBeUndefined();
+  });
+});
+
 describe('widget', () => {
   // Links as built by `WidgetViewModel.deepLink` in ios/departureWidget
   const stopParams =
@@ -196,7 +377,6 @@ describe('widget', () => {
     const state = getStateFrom(`widget?${stopParams}`);
     expect(findRoute(state, 'Departures_PlaceScreen')).toEqual({
       name: 'Departures_PlaceScreen',
-      index: 1,
       params: {
         place: {id: 'NSR:StopPlace:41613'},
         selectedQuayId: 'NSR:Quay:71184',

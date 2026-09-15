@@ -1,11 +1,23 @@
 import {
+  Location,
   SearchLocation,
   StoredLocationFavorite,
   UserFavorites,
 } from '@atb/modules/favorites';
 import {useSearchHistoryContext} from '@atb/modules/search-history';
-import {LocationSearchResultType} from './types';
+import {LocationSearchResultType, SelectableLocationType} from './types';
 import {getLocationLayer} from '@atb/utils/location';
+
+/**
+ * When the selected location is a journey (with two locations), pick the from
+ * location.
+ */
+export function toSingleLocation(
+  locationParam: SelectableLocationType | undefined,
+): Location | undefined {
+  if (locationParam?.resultType !== 'journey') return locationParam;
+  return {...locationParam.journeyData[0], resultType: 'search'};
+}
 
 export function useFilteredJourneySearch(searchText?: string) {
   const {journeyHistory} = useSearchHistoryContext();

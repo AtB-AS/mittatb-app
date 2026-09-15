@@ -123,6 +123,20 @@ export async function reverseV3(
   return response.data.map(mapFeatureV3ToSearchLocation);
 }
 
+export async function placeV3(
+  ids: string[],
+  config?: AxiosRequestConfig,
+): Promise<SearchLocation[]> {
+  const url = 'bff/v2/geocoder/place';
+  const query = qs.stringify({ids});
+
+  const response = await client.get<FeatureV3[]>(
+    stringifyUrl(url, query),
+    config,
+  );
+  return response.data.map(mapFeatureV3ToSearchLocation);
+}
+
 const featureCategories = new Set<string>(Object.values(FeatureCategory));
 
 const mapFeatureV3ToSearchLocation = ({
