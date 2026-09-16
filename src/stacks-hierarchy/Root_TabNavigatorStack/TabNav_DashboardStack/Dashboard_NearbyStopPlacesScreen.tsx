@@ -5,7 +5,7 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {
   usePendingLocationSearchStore,
-  useOnlySingleLocation,
+  toSingleLocation,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import SharedTexts from '@atb/translations/shared';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -18,7 +18,7 @@ export const Dashboard_NearbyStopPlacesScreen = ({
   navigation,
   route,
 }: Props) => {
-  const fromLocation = useOnlySingleLocation(route, 'location');
+  const fromLocation = toSingleLocation(route.params?.location);
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad(navigation);
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();

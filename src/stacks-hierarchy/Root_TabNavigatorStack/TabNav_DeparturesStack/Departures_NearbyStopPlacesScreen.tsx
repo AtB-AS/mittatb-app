@@ -1,7 +1,7 @@
 import {StopPlace} from '@atb/api/types/departures';
 import {
   usePendingLocationSearchStore,
-  useOnlySingleLocation,
+  toSingleLocation,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect} from 'react';
@@ -20,7 +20,7 @@ export const Departures_NearbyStopPlacesScreen = ({
   navigation,
   route,
 }: Props) => {
-  const fromLocation = useOnlySingleLocation(route, 'location');
+  const fromLocation = toSingleLocation(route.params?.location);
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad(navigation);

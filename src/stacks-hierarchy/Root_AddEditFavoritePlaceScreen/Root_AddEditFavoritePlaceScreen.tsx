@@ -9,8 +9,8 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {
+  toSingleLocation,
   usePendingLocationSearchStore,
-  useOnlySingleLocation,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
@@ -52,11 +52,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const location = useOnlySingleLocation(
-    route,
-    'searchLocation',
-    editItem?.location,
-  );
+  const location =
+    toSingleLocation(route.params?.searchLocation) ?? editItem?.location;
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const onCloseFocusRef = useRef<View | null>(null);
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
