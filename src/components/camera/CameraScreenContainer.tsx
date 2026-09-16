@@ -75,7 +75,7 @@ const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => {
       backgroundColor: 'black',
     },
     overlay: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFill,
     },
     container: {
       gap: theme.spacing.medium,
