@@ -545,7 +545,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 mode="secondary"
                 leftIcon={{svg: Map}}
                 text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-                backgroundColor={theme.color.background.neutral[1]}
+                backgroundColor={theme.color.background.neutral[0]}
                 onPress={() => onPressShowLive(serviceJourneyPolyline)}
               />
             </TripRow>
@@ -708,7 +708,7 @@ const IntermediateInfo = ({
           type="small"
           expanded={false}
           mode="secondary"
-          backgroundColor={theme.color.background.neutral[1]}
+          backgroundColor={theme.color.background.neutral[0]}
           rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
           text={t(
             TripDetailsTexts.trip.leg.intermediateStops.label(
@@ -952,6 +952,7 @@ const BikeSection = ({leg, timeRounding = 'floor'}: BikeSectionProps) => {
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
+          iconSize="small"
           spacious
           rounded
         />
@@ -974,7 +975,6 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
 
   if (id === AUTHORITY) return null;
   if (!url) {
@@ -1006,7 +1006,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           mode="secondary"
           type="small"
           expanded={false}
-          interactiveColor={interactiveColor}
+          backgroundColor={theme.color.background.neutral[0]}
           text={name}
         />
       </View>

@@ -14,7 +14,6 @@ import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {TripIconRow} from './TripIconRow';
-import {useTransportColor} from '@atb/utils/use-transport-color';
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
@@ -70,8 +69,7 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const {t, language} = useTranslation();
   const transfer = getTransferMessage(wait.transferRisk, t);
 
-  // The section carries its own bottom spacing, so rendering it with no rows
-  // leaves a gap. A risk with no message of its own lands here.
+  // A risk with no message of its own lands here.
   if (!transfer && !wait.mustWaitForNextLeg) return null;
 
   return (
@@ -89,7 +87,6 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
 const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
   const style = useSectionStyles();
   const {theme} = useThemeContext();
-  const legColor = useTransportColor();
 
   const emphasisColor = emphasis
     ? theme.color.foreground.emphasis[emphasis]
@@ -99,7 +96,7 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
     <TripIconRow
       boxed={!emphasisColor}
       svg={icon}
-      color={emphasisColor ?? legColor.secondary.background}
+      color={emphasisColor ?? theme.color.transport.walk.primary}
       contentStyle={style.message}
     >
       {title && (
