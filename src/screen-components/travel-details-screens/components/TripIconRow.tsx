@@ -5,7 +5,6 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import type {IconColor, ThemeIconProps} from '@atb/components/theme-icon';
-import type {ContrastColor, Theme} from '@atb/theme/colors';
 import {
   DECORATION_AXIS,
   DimensionOverrides,
@@ -23,13 +22,10 @@ const useIconWidth = (boxed: boolean) => {
     : theme.icon.size.large * fontScale;
 };
 
-const defaultBoxColor = (theme: Theme) => theme.color.transport.walk.primary;
-
 type TripIconRowProps = {
   svg: ThemeIconProps['svg'];
   color?: IconColor;
   boxed?: boolean;
-  boxColor?: ContrastColor;
   iconAccessibilityLabel?: string;
   decorated?: boolean; // whether there's a tripLegDecoration to the left of this icon
   contentStyle?: StyleProp<ViewStyle>;
@@ -41,7 +37,6 @@ export const TripIconRow = ({
   svg,
   color,
   boxed = false,
-  boxColor,
   iconAccessibilityLabel,
   decorated = false,
   contentStyle,
@@ -60,11 +55,14 @@ export const TripIconRow = ({
         decorationContainerWidth: 0,
       };
 
+  const boxContrast =
+    typeof color === 'object' ? color : theme.color.transport.walk.primary;
+
   const icon = (
     <ThemeIcon
       svg={svg}
       size={boxed ? 'small' : 'large'}
-      color={color}
+      color={boxed ? boxContrast : color}
       accessibilityLabel={iconAccessibilityLabel}
     />
   );
@@ -73,15 +71,7 @@ export const TripIconRow = ({
     <TripRow dimensionOverrides={dimensionOverrides} {...rowProps}>
       <View style={style.row}>
         {boxed ? (
-          <View
-            style={[
-              style.box,
-              {
-                backgroundColor: (boxColor ?? defaultBoxColor(theme))
-                  .background,
-              },
-            ]}
-          >
+          <View style={[style.box, {backgroundColor: boxContrast.background}]}>
             {icon}
           </View>
         ) : (
