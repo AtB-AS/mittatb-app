@@ -105,6 +105,9 @@ jobs:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - uses: pnpm/action-setup@v6
+      - name: Install E2E tests
+        working-directory: e2e
+        run: pnpm install
       - name: Install Maestro
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
