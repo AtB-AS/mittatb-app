@@ -8,7 +8,10 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavoritesContext} from '@atb/modules/favorites';
-import {toSingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {
+  toSingleLocation,
+  usePendingLocationSearchStore,
+} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
@@ -18,7 +21,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
 import {
   ButtonSectionItem,
-  HeaderSectionItem,
+  LocationInputSectionItem,
   Section,
   TextInputSectionItem,
 } from '@atb/components/sections';
@@ -26,6 +29,8 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
+
+const RESULT_KEY = 'Root_AddEditFavoritePlaceScreen--searchLocation';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
@@ -51,6 +56,14 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     toSingleLocation(route.params?.searchLocation) ?? editItem?.location;
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const onCloseFocusRef = useRef<View | null>(null);
+  const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
+
+  useEffect(() => {
+    if (pendingResult?.key === RESULT_KEY) {
+      navigation.setParams({searchLocation: pendingResult.location});
+      clearPendingResult();
+    }
+  }, [pendingResult, clearPendingResult, navigation]);
 
   useEffect(() => setEmoji(editItem?.emoji), [editItem?.emoji]);
 
@@ -151,13 +164,20 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         )}
 
         <Section style={styles.section}>
-          <HeaderSectionItem
-            text={
-              location?.resultType === 'geolocation'
-                ? location.name
-                : (location?.label ?? location?.name ?? '')
-            }
-            testID="locationName"
+          <LocationInputSectionItem
+            label={t(AddEditFavoriteTexts.fields.location.label)}
+            location={location}
+            onPress={() => {
+              clearPendingResult();
+              navigation.navigate('Root_LocationSearchByTextScreen', {
+                resultKey: RESULT_KEY,
+                label: t(AddEditFavoriteTexts.fields.location.label),
+                favoriteChipTypes: ['location', 'map'],
+                initialLocation: location,
+                onlyStopPlacesCheckboxInitialState: false,
+              });
+            }}
+            testID="locationSearchButton"
           />
         </Section>
 
