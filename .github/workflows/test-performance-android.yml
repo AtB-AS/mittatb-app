@@ -104,10 +104,11 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - uses: pnpm/action-setup@v4
-      - name: Install E2E tests
-        working-directory: e2e
-        run: pnpm install
+      - uses: pnpm/action-setup@v6
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
       # Emulator cache
       - name: Gradle cache
