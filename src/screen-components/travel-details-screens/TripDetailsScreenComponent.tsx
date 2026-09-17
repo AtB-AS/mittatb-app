@@ -94,6 +94,7 @@ const NewTripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
+  const {isTripTicketMessageEnabled} = useFeatureTogglesContext();
   const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useRefreshTripQuery(
@@ -163,12 +164,24 @@ const NewTripDetailsScreenComponent = ({
               onPressQuay={(stopPlace, selectedQuayId) =>
                 onPressQuay(stopPlace, selectedQuayId, tripAnalytics)
               }
+              purchaseSelection={purchaseSelection}
+              onPressBuyTicket={() => {
+                if (!purchaseSelection) return;
+                logEvent(getAnalytics(), 'click_trip_ticket_message_button');
+                onPressBuyTicket(
+                  {
+                    selection: purchaseSelection,
+                    mode: 'TravelSearch',
+                  },
+                  tripAnalytics,
+                );
+              }}
               now={serverNow}
             />
           </View>
         )}
       </FullScreenView>
-      {purchaseSelection && (
+      {!isTripTicketMessageEnabled && purchaseSelection && (
         <View style={styles.borderTop}>
           <Button
             expanded={true}

@@ -49,6 +49,9 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {TripTicketMessage} from './TripTicketMessage';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -59,6 +62,8 @@ export type TripProps = {
     activeItemIndex: number,
   ) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
+  purchaseSelection?: PurchaseSelectionType;
+  onPressBuyTicket: () => void;
   now: number;
 };
 export const Trip: React.FC<TripProps> = ({
@@ -67,6 +72,8 @@ export const Trip: React.FC<TripProps> = ({
   onPressDetailsMap,
   onPressDeparture,
   onPressQuay,
+  purchaseSelection,
+  onPressBuyTicket,
   now,
 }) => {
   const styles = useStyle();
@@ -74,8 +81,12 @@ export const Trip: React.FC<TripProps> = ({
   const {theme} = useThemeContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfigContext();
+  const {isTripTicketMessageEnabled} = useFeatureTogglesContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
+
+  const shouldShowTicketMessage =
+    isTripTicketMessageEnabled && !!purchaseSelection;
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -180,7 +191,16 @@ export const Trip: React.FC<TripProps> = ({
           message={t(TripDetailsTexts.messages.errorDefault)}
         />
       )}
-      <View style={styles.trip}>
+      {shouldShowTicketMessage && (
+        <TripTicketMessage
+          message={t(TripDetailsTexts.trip.ticketMessage.message)}
+          actionText={t(TripDetailsTexts.trip.ticketMessage.buyAction)}
+          onPress={onPressBuyTicket}
+        />
+      )}
+      <View
+        style={[styles.trip, shouldShowTicketMessage && styles.tripNoTopMargin]}
+      >
         {tripPattern &&
           filteredLegs.map((leg, index) => {
             const legVehiclePosition = vehiclePositions?.find(
@@ -275,6 +295,11 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   trip: {
     marginTop: theme.spacing.medium,
+  },
+  // The ticket message already provides the container row gap above the
+  // legs, so the extra top margin would double it.
+  tripNoTopMargin: {
+    marginTop: 0,
   },
 }));
 
