@@ -1,0 +1,31 @@
+appId: ${APP_ID}
+name: 'Show purchase history'
+---
+# Open purchase history
+- tapOn:
+    id: ${output.nav.menu.tickets}
+    label: 'Navigate to tickets tab'
+- tapOn:
+    id: ${output.nav.tickets.active}
+    label: 'Navigate to active tickets tab'
+- assertVisible: 'Tickets'
+- scrollUntilVisible:
+    element:
+      id: 'historicTicketsButton'
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to purchase history'
+- tapOn:
+    id: 'historicTicketsButton'
+    label: 'Open purchase history'
+- assertVisible: 'Purchase history'
+
+# Scroll
+- repeat:
+    times: 5
+    commands:
+      - scroll
+    label: 'Scroll down'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Back'

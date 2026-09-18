@@ -17,6 +17,7 @@ onFlowComplete:
     env:
       PHONE_NUMBER: ${PHONE_NUMBER}
       OTP: ${OTP}
+      INSPECTION: false
     label: 'Login through onboarding'
 
 # Departures

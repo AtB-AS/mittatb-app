@@ -1,5 +1,5 @@
 appId: ${APP_ID}
-name: 'Mobile token'
+name: 'Tests for performance measurements'
 onFlowStart:
   - runFlow:
       file: ../elements/loadElements.yaml
@@ -11,21 +11,34 @@ onFlowStart:
 onFlowComplete:
   - stopApp
 ---
+# Login
 - runFlow:
     file: ../common/onboarding/loginPhone.yaml
     env:
       PHONE_NUMBER: ${PHONE_NUMBER}
       OTP: ${OTP}
-      INSPECTION: true
+      INSPECTION: false
     label: 'Login through onboarding'
 
+# Travel search
 - runFlow:
-    file: mobileToken/mobileTokenInSettings.yaml
-    label: 'Mobile token in settings'
+    file: travelSearch/simpleTravelSearch.yaml
+    label: 'Travel search'
 
+# Departures
 - runFlow:
-    file: mobileToken/mobileTokenInDebug.yaml
-    label: 'Mobile token in debug'
+    file: departures/departureDetails.yaml
+    label: 'Departures'
+
+# Tickets
+- runFlow:
+    file: tickets/purchaseHistory.yaml
+    label: 'Purchase history'
+
+# Map
+- runFlow:
+    file: map.yaml
+    label: 'Map'
 
 - runFlow:
     file: ../common/logout.yaml
