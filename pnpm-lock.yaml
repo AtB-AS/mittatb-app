@@ -148,7 +148,7 @@ importers:
         version: 3.4.8(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       '@gorhom/bottom-sheet':
         specifier: ^5.2.14
-        version: 5.2.14(000c5943d260f8140f00ca40c5904336)
+        version: 5.2.14(87ebf1b684d401f2b679e354e64f4044)
       '@intercom/intercom-react-native':
         specifier: 9.4.0
         version: 9.4.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
@@ -202,7 +202,7 @@ importers:
         version: 7.1.27(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       '@react-navigation/stack':
         specifier: ^7.4.2
-        version: 7.6.14(3c7c4c34de045b8e8f668dfe767964d5)
+        version: 7.6.14(8bd43abc6f37d7f84ddab3bd442895bc)
       '@rnmapbox/maps':
         specifier: 10.3.5
         version: 10.3.5(patch_hash=9fa9603a5cb7630b6ca3ee89e220aa128ba20a027c2975e83bb3bff6f11ae7ee)(react-dom@19.2.3(react@19.2.3))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
@@ -327,8 +327,8 @@ importers:
         specifier: ^14.1.1
         version: 14.1.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))
       react-native-gesture-handler:
-        specifier: ^3.1.0
-        version: 3.2.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+        specifier: ^3.3.0
+        version: 3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-get-random-values:
         specifier: ^1.11.0
         version: 1.11.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))
@@ -446,13 +446,13 @@ importers:
         version: 10.3.2(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))
       '@storybook/addon-ondevice-controls':
         specifier: ^10.3.2
-        version: 10.3.2(00f45f59db900d1d29158d064eac5056)
+        version: 10.3.2(ae8705e645b9178a98ae9f3c1c0ad2be)
       '@storybook/react':
         specifier: ^10.3.5
         version: 10.3.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(supports-color@8.1.1)(typescript@5.9.3)
       '@storybook/react-native':
         specifier: ^10.3.2
-        version: 10.3.2(84e8552e449543cb9302037b22d8b77a)
+        version: 10.3.2(1e8c8fe481b46300cc683e774cc38899)
       '@svgr/cli':
         specifier: ^6.5.1
         version: 6.5.1(supports-color@8.1.1)
@@ -6453,8 +6453,8 @@ packages:
   react-native-fetch-api@3.0.0:
     resolution: {integrity: sha512-g2rtqPjdroaboDKTsJCTlcmtw54E25OjyaunUP0anOZn4Fuo2IKs8BVfe02zVggA/UysbmfSnRJIqtNkAgggNA==}
 
-  react-native-gesture-handler@3.2.1:
-    resolution: {integrity: sha512-VEWscxUN29aeccbD2McF0LSXrwOhSdisaSRFiEWg0O/3WrVghNJp/tOtLrCgzb9gfcZ3xdA+K2Sp8F5G3iHx/Q==}
+  react-native-gesture-handler@3.3.0:
+    resolution: {integrity: sha512-ZCTlJ09nE3GPbm7J74lvwpxmx1TQ/7MDlHZNLARVYTN82k21mJUJ7BmI9eWjEi8eevHiAudI5O1Cpnt0rJfoJA==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -9433,13 +9433,13 @@ snapshots:
 
   '@firebase/webchannel-wrapper@1.0.6': {}
 
-  '@gorhom/bottom-sheet@5.2.14(000c5943d260f8140f00ca40c5904336)':
+  '@gorhom/bottom-sheet@5.2.14(87ebf1b684d401f2b679e354e64f4044)':
     dependencies:
       '@gorhom/portal': 1.0.14(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       invariant: 2.2.4
       react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
-      react-native-gesture-handler: 3.2.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      react-native-gesture-handler: 3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-reanimated: 4.6.0(ec4d195fa808e07bfeea89f02c519668)
     optionalDependencies:
       '@types/react': 19.2.7
@@ -10334,14 +10334,14 @@ snapshots:
     dependencies:
       nanoid: 3.3.12
 
-  '@react-navigation/stack@7.6.14(3c7c4c34de045b8e8f668dfe767964d5)':
+  '@react-navigation/stack@7.6.14(8bd43abc6f37d7f84ddab3bd442895bc)':
     dependencies:
       '@react-navigation/elements': 2.9.4(a7df9b1ea795498a579e4e780aeeb6c3)
       '@react-navigation/native': 7.1.27(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       color: 4.2.3
       react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
-      react-native-gesture-handler: 3.2.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      react-native-gesture-handler: 3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-safe-area-context: 5.9.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-screens: 4.27.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       use-latest-callback: 0.2.4(react@19.2.3)
@@ -10444,7 +10444,7 @@ snapshots:
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
       storybook: 10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
 
-  '@storybook/addon-ondevice-controls@10.3.2(00f45f59db900d1d29158d064eac5056)':
+  '@storybook/addon-ondevice-controls@10.3.2(ae8705e645b9178a98ae9f3c1c0ad2be)':
     dependencies:
       '@gorhom/portal': 1.0.14(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       '@react-native-community/datetimepicker': 8.4.5(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
@@ -10458,7 +10458,7 @@ snapshots:
       storybook: 10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       tinycolor2: 1.6.0
     optionalDependencies:
-      '@gorhom/bottom-sheet': 5.2.14(000c5943d260f8140f00ca40c5904336)
+      '@gorhom/bottom-sheet': 5.2.14(87ebf1b684d401f2b679e354e64f4044)
     transitivePeerDependencies:
       - react-dom
       - supports-color
@@ -10509,9 +10509,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@storybook/react-native-ui@10.3.2(d94b4a89146ac1827d5aa845a47a2e58)':
+  '@storybook/react-native-ui@10.3.2(81735832c301b2b40b11bceebf42bf12)':
     dependencies:
-      '@gorhom/bottom-sheet': 5.2.14(000c5943d260f8140f00ca40c5904336)
+      '@gorhom/bottom-sheet': 5.2.14(87ebf1b684d401f2b679e354e64f4044)
       '@gorhom/portal': 1.0.14(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       '@nozbe/microfuzz': 1.0.0
       '@storybook/react': 10.3.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(supports-color@8.1.1)(typescript@5.9.3)
@@ -10520,7 +10520,7 @@ snapshots:
       polished: 4.3.1
       react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
-      react-native-gesture-handler: 3.2.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      react-native-gesture-handler: 3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-reanimated: 4.6.0(ec4d195fa808e07bfeea89f02c519668)
       react-native-safe-area-context: 5.9.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-svg: 15.15.5(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
@@ -10530,12 +10530,12 @@ snapshots:
       - supports-color
       - typescript
 
-  '@storybook/react-native@10.3.2(84e8552e449543cb9302037b22d8b77a)':
+  '@storybook/react-native@10.3.2(1e8c8fe481b46300cc683e774cc38899)':
     dependencies:
       '@storybook/mcp': 0.6.2(typescript@5.9.3)
       '@storybook/react': 10.3.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(supports-color@8.1.1)(typescript@5.9.3)
       '@storybook/react-native-theming': 10.3.2(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
-      '@storybook/react-native-ui': 10.3.2(d94b4a89146ac1827d5aa845a47a2e58)
+      '@storybook/react-native-ui': 10.3.2(81735832c301b2b40b11bceebf42bf12)
       '@storybook/react-native-ui-common': 10.3.2(react-dom@19.2.3(react@19.2.3))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(supports-color@8.1.1)(typescript@5.9.3)
       '@tmcp/adapter-valibot': 0.1.5(tmcp@1.19.3(typescript@5.9.3))(valibot@1.3.1(typescript@5.9.3))
       '@tmcp/transport-http': 0.8.5(tmcp@1.19.3(typescript@5.9.3))
@@ -10553,8 +10553,8 @@ snapshots:
       valibot: 1.3.1(typescript@5.9.3)
       ws: 8.20.0
     optionalDependencies:
-      '@gorhom/bottom-sheet': 5.2.14(000c5943d260f8140f00ca40c5904336)
-      react-native-gesture-handler: 3.2.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      '@gorhom/bottom-sheet': 5.2.14(87ebf1b684d401f2b679e354e64f4044)
+      react-native-gesture-handler: 3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-reanimated: 4.6.0(ec4d195fa808e07bfeea89f02c519668)
       react-native-safe-area-context: 5.9.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
     transitivePeerDependencies:
@@ -14939,7 +14939,7 @@ snapshots:
     dependencies:
       p-defer: 3.0.0
 
-  react-native-gesture-handler@3.2.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3):
+  react-native-gesture-handler@3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3):
     dependencies:
       '@types/react-test-renderer': 19.1.0
       invariant: 2.2.4
