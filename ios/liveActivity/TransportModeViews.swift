@@ -75,7 +75,9 @@ struct LineBadge: View {
     HStack(spacing: size * 0.2) {
       ModeIcon(mode, size: size)
       if !number.isEmpty {
-        Text(number).font(BrandFont.primary(size * 0.8))
+        Text(number)
+          .font(BrandFont.primary(size * 0.8))
+          .lineLimit(1)
       }
     }
     .foregroundStyle(mode.onColor)

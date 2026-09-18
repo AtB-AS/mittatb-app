@@ -13,10 +13,10 @@ extension TransitActivityAttributes {
 extension TransitState {
   fileprivate static func preview(
     mode: TransportMode = .bus,
-    title: String = "Fra Prinsens Gate",
+    title: String = "Fra Prinsens Gate P1",
     lineNumber: String = "3",
     lineName: String = "Lohove",
-    minutesFromNow: Int = 12
+    minutesFromNow: Int = 5
   ) -> TransitState {
     TransitState(
       mode: mode,
@@ -32,8 +32,13 @@ extension TransitState {
   TransitLiveActivity()
 } contentStates: {
   TransitState.preview()
-  TransitState.preview(lineNumber: "311", lineName: "Sjetnemarka via Kroppanm. - Okstad")
+  TransitState.preview(
+    title: "Fra Hundremeterskogen Bussterminal øst",
+    lineNumber: "311",
+    lineName: "Sjetnemarka via Kroppanm. - Okstad",
+    minutesFromNow: 12
+  )
+  TransitState.preview(mode: .rail, minutesFromNow: 0)
   TransitState.preview(mode: .walk, title: "Neste stopp")
   TransitState.preview(mode: .water)
-  TransitState.preview(mode: .rail, minutesFromNow: 1)
 }

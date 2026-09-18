@@ -12,33 +12,31 @@ func transitDynamicIsland(
   let accent = BrandColor.accent
 
   return DynamicIsland {
-    DynamicIslandExpandedRegion(.leading) {
-      VStack {
-        LineBadge(mode: state.mode, number: state.lineNumber)
-      }.frame(maxHeight: .infinity, alignment: .center).padding(.leading, 5)
-    }
-    DynamicIslandExpandedRegion(.trailing) {
-      VStack {
-        HStack(spacing: 4) {
-          RealtimeIndicator()
-          state.timeSuffix
-            .font(BrandFont.primary(16))
-            .lineLimit(1).minimumScaleFactor(0.85)
-        }
-      }.frame(maxHeight: .infinity, alignment: .center)
-    }
+    DynamicIslandExpandedRegion(.leading) {}
+    DynamicIslandExpandedRegion(.trailing) {}
     DynamicIslandExpandedRegion(.bottom) {
-      HStack {
-        Text("\(state.lineNumber) \(state.lineName)")
-          .font(BrandFont.primary(16))
-          .lineLimit(1).minimumScaleFactor(0.85)
-        Text("–")
-          .font(BrandFont.primary(16))
-          .lineLimit(1).minimumScaleFactor(0.85)
-        Text("\(state.title)")
-          .font(BrandFont.primary(16))
-          .lineLimit(1).minimumScaleFactor(0.85)
-      }.safeAreaPadding(.horizontal)
+      VStack {
+        Text(state.title)
+          .font(BrandFont.secondary(14))
+          .lineLimit(1)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .opacity(0.8)
+        HStack {
+          LineBadge(mode: state.mode, number: state.lineNumber)
+          VStack {
+            Text(state.lineName)
+              .font(BrandFont.primary(16))
+              .lineLimit(1)
+              .frame(maxWidth: .infinity, alignment: .leading)
+          }
+          HStack(spacing: 4) {
+            RealtimeIndicator()
+            state.timeSuffix
+              .font(BrandFont.primary(16))
+              .lineLimit(1).minimumScaleFactor(0.85)
+          }
+        }
+      }.padding(.horizontal, 8)
     }
   } compactLeading: {
     ModeIcon(state.mode, size: 20)
