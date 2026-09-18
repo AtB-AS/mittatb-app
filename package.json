@@ -101,7 +101,7 @@
     "react-native-bootsplash": "^6.3.11",
     "react-native-date-picker": "5.0.13",
     "react-native-device-info": "^14.1.1",
-    "react-native-gesture-handler": "^3.1.0",
+    "react-native-gesture-handler": "^3.3.0",
     "react-native-get-random-values": "^1.11.0",
     "react-native-in-app-review": "4.4.2",
     "react-native-inappbrowser-reborn": "^3.7.0",
