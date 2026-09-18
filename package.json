@@ -33,9 +33,9 @@
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^11.3.0",
-    "@atb-as/generate-assets": "^18.18.0",
+    "@atb-as/generate-assets": "^18.19.0",
     "@atb-as/mapbox-shared": "^1.0.4",
-    "@atb-as/theme": "^15.3.0",
+    "@atb-as/theme": "^15.5.0",
     "@atb-as/utils": "^8.0.1",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@bugsnag/react-native": "^8.8.0",
