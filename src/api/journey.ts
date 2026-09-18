@@ -1,5 +1,5 @@
 import {client} from '@atb/api/client';
-import { TripPattern } from './types/trips';
+import {TripPattern} from './types/trips';
 
 export type SendStopSignalRequestType = {
   quayId: string;
@@ -11,7 +11,7 @@ export const sendStopSignal = async (req: SendStopSignalRequestType) =>
   client.post('/journey/v1/signal/pickup', req, {authWithIdToken: true});
 
 export type SaveTripRequestType = {
-  tripPattern: TripPattern
+  tripPattern: TripPattern;
 };
 
 export type SaveTripResponseType = {
@@ -20,4 +20,29 @@ export type SaveTripResponseType = {
 };
 
 export const saveJourney = async (req: SaveTripRequestType) =>
-  client.post<SaveTripResponseType>('/journey/v1/trip', req, {authWithIdToken: true});
+  client.post<SaveTripResponseType>('/journey/v1/trip', req, {
+    authWithIdToken: true,
+  });
+
+export type RegisterLiveActivityRequestType = {
+  tripId: string;
+  apnsToken: string;
+};
+
+export const registerLiveActivity = async (
+  req: RegisterLiveActivityRequestType,
+) =>
+  client.post('/journey/v1/live-activity/register', req, {
+    authWithIdToken: true,
+  });
+
+export type UnregisterLiveActivityRequestType = {
+  apnsToken: string;
+};
+
+export const unregisterLiveActivity = async (
+  req: UnregisterLiveActivityRequestType,
+) =>
+  client.post('/journey/v1/live-activity/unregister', req, {
+    authWithIdToken: true,
+  });

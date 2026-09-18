@@ -49,8 +49,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
-import {Button} from '@atb/components/button';
-import {saveJourney} from '@atb/api/journey';
+import {StartLiveActivityButtonComponent} from '@atb/modules/live-activities';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -240,15 +239,7 @@ export const Trip: React.FC<TripProps> = ({
         />
       )}
       <SaveTripPatternButtonComponent tripPattern={tripPattern} now={now} />
-      <Button
-        text="Save to server"
-        expanded={true}
-        onPress={() => {
-          saveJourney({tripPattern: tripPattern}).then((res) => {
-            console.log('res.data', res.data);
-          });
-        }}
-      />
+      <StartLiveActivityButtonComponent tripPattern={tripPattern} />
     </View>
   );
 };

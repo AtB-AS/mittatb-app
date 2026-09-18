@@ -8,6 +8,11 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {NativeLiveActivities} from '@atb/modules/native';
+import {
+  useLiveActivitiesContext,
+  type TransitLiveActivityContentState,
+  type TransitLiveActivityMode,
+} from '@atb/modules/live-activities';
 
 /**
  * Debug-menu interface for the iOS Live Activities PoC.
@@ -17,33 +22,22 @@ import {NativeLiveActivities} from '@atb/modules/native';
  * is a later step — this only exercises the native module + widget.
  */
 
-type TransportMode = 'bus' | 'tram' | 'rail' | 'water' | 'walk';
-
-type TransitContentState = {
-  /** Badge icon + accent color. */
-  mode: TransportMode;
-  /** Badge number, e.g. "3". */
-  lineNumber: string;
-  /** Headsign / destination, e.g. "Lohove". */
-  lineName: string;
-  /** The instruction line, e.g. "6 stopp igjen". */
-  title: string;
-  /** Arrival/departure time shown on the clock, unix seconds. */
-  eventTime: number;
-};
-
 const inMinutes = (m: number) => Math.floor(Date.now() / 1000) + m * 60;
 
-/** No static per-trip data yet — `TransitActivityAttributes` has no fields. */
-const ATTRIBUTES = {};
+/**
+ * The attributes require a trip id. These presets are not backed by a saved
+ * trip, so the backend would not accept this one for registration — it only
+ * keeps the activity startable from the debug menu.
+ */
+const ATTRIBUTES = {tripId: 'debug-preset'};
 
 const BASE = {
-  mode: 'bus' as TransportMode,
+  mode: 'bus' as TransitLiveActivityMode,
   lineNumber: '3',
   lineName: 'Lohove',
 };
 
-const SCENARIOS: Record<string, TransitContentState> = {
+const SCENARIOS: Record<string, TransitLiveActivityContentState> = {
   getOff6: {
     ...BASE,
     title: '6 stopp igjen',
@@ -75,6 +69,7 @@ const SCENARIOS: Record<string, TransitContentState> = {
 export const DebugLiveActivities = () => {
   const styles = useStyles();
   const [activityId, setActivityId] = useState<string | null>(null);
+  const {activities} = useLiveActivitiesContext();
 
   const available = Platform.OS === 'ios' && !!NativeLiveActivities;
 
@@ -158,6 +153,27 @@ export const DebugLiveActivities = () => {
             : 'iOS 18+ only — unavailable on this platform'}
         </ThemeText>
       </GenericSectionItem>
+
+      {available && (
+        <GenericSectionItem>
+          <ThemeText typography="body__s__strong">
+            Registered for push updates
+          </ThemeText>
+          <ThemeText typography="body__s" type="secondary">
+            {activities.length
+              ? activities
+                  .map(
+                    ({activityId, tripId, pushToken}) =>
+                      `${activityId.slice(0, 8)} · trip ${tripId.slice(
+                        0,
+                        8,
+                      )} · token ${pushToken.slice(0, 8)}…`,
+                  )
+                  .join('\n')
+              : 'No push tokens yet — the simulator never issues one'}
+          </ThemeText>
+        </GenericSectionItem>
+      )}
 
       {available && (
         <LinkSectionItem text="Check enabled" onPress={checkEnabled} />

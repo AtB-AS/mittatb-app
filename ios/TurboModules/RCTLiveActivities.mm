@@ -10,12 +10,38 @@ RCT_EXPORT_MODULE(NativeLiveActivities)
 - (id)init {
   if (self = [super init]) {
     liveActivities = [LiveActivitiesImpl new];
+
+    __weak RCTLiveActivities *weakSelf = self;
+    liveActivities.onPushTokenUpdate = ^(NSDictionary *payload) {
+      RCTLiveActivities *module = weakSelf;
+      if ([module canEmit]) {
+        [module emitOnPushTokenUpdate:payload];
+      }
+    };
+    liveActivities.onActivityEnded = ^(NSDictionary *payload) {
+      RCTLiveActivities *module = weakSelf;
+      if ([module canEmit]) {
+        [module emitOnActivityEnded:payload];
+      }
+    };
+
+    [liveActivities startObservingActivities];
   }
   return self;
 }
 
+- (BOOL)canEmit {
+  return _eventEmitterCallback ? YES : NO;
+}
+
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const facebook::react::ObjCTurboModule::InitParams &)params {
   return std::make_shared<facebook::react::NativeLiveActivitiesSpecJSI>(params);
+}
+
+- (void)getActiveActivities:(RCTPromiseResolveBlock)resolve
+                     reject:(RCTPromiseRejectBlock)reject {
+  [liveActivities getActiveActivities:^(id _Nullable result) { resolve(result); }
+                               reject:^(NSString *code, NSString *message) { reject(code, message, nil); }];
 }
 
 - (NSNumber *)areActivitiesEnabled {

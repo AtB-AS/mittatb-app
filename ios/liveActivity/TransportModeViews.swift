@@ -16,6 +16,7 @@ extension TransportMode {
     case .rail: return Color(hex: 0x8E5FB0)
     case .water: return Color(hex: 0x279BC4)
     case .walk: return Color(hex: 0x62727A)
+    case .unknown: return Color(hex: 0x62727A)
     }
   }
 
@@ -30,6 +31,7 @@ extension TransportMode {
     case .rail: return "TrainFill"
     case .water: return "FerryFill"
     case .walk: return "WalkFill"
+    case .unknown: return "UnknownFill"
     }
   }
 }

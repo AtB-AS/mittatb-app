@@ -20,7 +20,40 @@ import Foundation
 class LiveActivitiesImpl: NSObject {
   private static let errorDomain = "LiveActivitiesError"
 
+  // MARK: Event callbacks
+
+  @objc var onPushTokenUpdate: ((NSDictionary) -> Void)?
+
+  @objc var onActivityEnded: ((NSDictionary) -> Void)?
+
   // MARK: Public API
+
+  @objc func startObservingActivities() {
+    guard #available(iOS 18.0, *) else { return }
+
+    for activity in Activity<TransitActivityAttributes>.activities {
+      observe(activity)
+    }
+    Task {
+      for await activity in Activity<TransitActivityAttributes>.activityUpdates {
+        observe(activity)
+      }
+    }
+  }
+
+  @objc func getActiveActivities(
+    _ resolve: @escaping (Any?) -> Void,
+    reject: @escaping (String, String) -> Void
+  ) {
+    guard #available(iOS 18.0, *) else {
+      resolve([])
+      return
+    }
+    resolve(
+      Activity<TransitActivityAttributes>.activities.map { activity in
+        payload(for: activity, pushToken: activity.pushToken.map(hex))
+      })
+  }
 
   @objc func areActivitiesEnabled() -> Bool {
     if #available(iOS 18.0, *) {
@@ -128,26 +161,20 @@ class LiveActivitiesImpl: NSObject {
     }
   }
 
-  // MARK: Debug observation
+  // MARK: Observation
 
-  /// PoC: log everything ActivityKit reports about this activity — push token (to
-  /// send test pushes by hand), each content-state it applies, and lifecycle
-  /// transitions. Only runs while the app process is alive; the widget extension
-  /// logs on every render, which is what covers pushes to a suspended app.
-  ///
-  /// The real implementation must send the token — and every rotation — to a backend.
   @available(iOS 18.0, *)
   private func observe(_ activity: Activity<TransitActivityAttributes>) {
+    guard beginObserving(activity.id) else { return }
+
     NSLog(
-      "[LiveActivity] started id=%@ state=%@", activity.id, activity.content.state.debugJson)
+      "[LiveActivity] observing id=%@ state=%@", activity.id, activity.content.state.debugJson)
     Task {
-      // Print if there is no token
-      if activity.pushToken == nil {
-        NSLog("[LiveActivity] nil push token")
-      }
       for await tokenData in activity.pushTokenUpdates {
-        let hex = tokenData.map { String(format: "%02x", $0) }.joined()
-        NSLog("[LiveActivity] push token: %@", hex)
+        let token = hex(tokenData)
+        rememberToken(token, for: activity.id)
+        NSLog("[LiveActivity] push token: %@", token)
+        onPushTokenUpdate?(payload(for: activity, pushToken: token))
       }
     }
     Task {
@@ -158,8 +185,62 @@ class LiveActivitiesImpl: NSObject {
     Task {
       for await state in activity.activityStateUpdates {
         NSLog("[LiveActivity] activity state: %@", String(describing: state))
+        switch state {
+        case .ended, .dismissed:
+          // `ended` is usually followed by `dismissed`. This makes sure only
+          // the first of them emits.
+          let finished = finishObserving(activity.id)
+          if finished.wasObserved {
+            onActivityEnded?(payload(for: activity, pushToken: finished.pushToken))
+          }
+        default:
+          break
+        }
       }
     }
+  }
+
+  private let observationLock = NSLock()
+  private var observedActivityIds: Set<String> = []
+  private var pushTokens: [String: String] = [:]
+
+  private func beginObserving(_ activityId: String) -> Bool {
+    observationLock.lock()
+    defer { observationLock.unlock() }
+    return observedActivityIds.insert(activityId).inserted
+  }
+
+  private func rememberToken(_ pushToken: String, for activityId: String) {
+    observationLock.lock()
+    defer { observationLock.unlock() }
+    pushTokens[activityId] = pushToken
+  }
+
+  private func finishObserving(_ activityId: String) -> (wasObserved: Bool, pushToken: String?) {
+    observationLock.lock()
+    defer { observationLock.unlock() }
+    return (
+      observedActivityIds.remove(activityId) != nil,
+      pushTokens.removeValue(forKey: activityId)
+    )
+  }
+
+  @available(iOS 18.0, *)
+  private func payload(
+    for activity: Activity<TransitActivityAttributes>,
+    pushToken: String?
+  ) -> NSDictionary {
+    let payload = NSMutableDictionary()
+    payload["activityId"] = activity.id
+    payload["tripId"] = activity.attributes.tripId
+    if let pushToken {
+      payload["pushToken"] = pushToken
+    }
+    return payload
+  }
+
+  private func hex(_ data: Data) -> String {
+    data.map { String(format: "%02x", $0) }.joined()
   }
 
   // MARK: JSON decoding

@@ -3,7 +3,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RCTLiveActivities : NSObject <NativeLiveActivitiesSpec>
+@interface RCTLiveActivities : NativeLiveActivitiesSpecBase <NativeLiveActivitiesSpec>
 
 @end
 

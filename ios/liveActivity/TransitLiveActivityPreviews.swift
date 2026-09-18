@@ -6,7 +6,7 @@ import WidgetKit
 /// picker to switch between lock screen and the Dynamic Island variants.
 extension TransitActivityAttributes {
   fileprivate static var preview: TransitActivityAttributes {
-    TransitActivityAttributes()
+    TransitActivityAttributes(tripId: "preview-trip")
   }
 }
 

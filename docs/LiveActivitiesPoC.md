@@ -18,17 +18,22 @@ activity that would render nothing.
 ## Scope of the PoC
 
 - **AtB flavor only.**
-- Local updates driven from the app via a debug-menu interface. No server, no real
-  trip data yet.
+- Local updates driven from the app via a debug-menu interface.
+- **Registration is wired up**: starting an activity from the trip details screen
+  saves the trip to the journey backend and registers the activity's push token
+  against it, so the backend has everything it needs to push updates. It does not
+  send any yet — that side is still only logging. See
+  [Registering an activity](#registering-an-activity).
 - **Push updates verified by hand** — the activity requests a push token, and
-  updates have been sent to it from Apple's Push Notifications Console. No backend.
+  updates have been sent to it from Apple's Push Notifications Console.
   See [Testing push updates by hand](#testing-push-updates-by-hand).
 - Real-brand SwiftUI design (lock screen, Dynamic Island, watch Smart Stack),
   with AtB transport-mode icons from the extension's own asset catalog.
 
 Not in scope (see [Real implementation](#real-implementation-what-comes-next)):
-a push backend, push-to-start, real data, other whitelabel flavors, Fastlane/Match
-provisioning for the new target.
+the backend actually sending pushes, keeping the activity up to date as the trip
+progresses, push-to-start, other whitelabel flavors, Fastlane/Match provisioning
+for the new target.
 
 ## How to run it
 
@@ -85,7 +90,7 @@ Gotchas when testing (these are system behavior, not bugs):
 ## Architecture
 
 ```
-JS (debug menu)
+JS (trip details button / debug menu)
   └─ NativeLiveActivities (TurboModule spec, src/modules/native/NativeLiveActivities.ts)
        └─ RCTLiveActivities (.h/.mm, ObjC++ TurboModule bridge)     ┐
             └─ LiveActivitiesImpl.swift (ActivityKit start/update/end) │ app target
@@ -138,7 +143,16 @@ asset catalog) are picked up without a `.pbxproj` entry:
 **JS/config:**
 
 - `src/modules/native/NativeLiveActivities.ts` — TurboModule spec (payloads are
-  JSON strings, keeping codegen trivial and the shape free to evolve).
+  JSON strings, keeping codegen trivial and the shape free to evolve), the two
+  event emitters, and `getActiveActivities`.
+- `src/modules/live-activities/` — the JS side of the feature:
+  `LiveActivitiesContext.tsx` (mounted in `src/index.tsx`),
+  `use-live-activity-registration.ts` (the registration bookkeeping),
+  `use-start-trip-live-activity.ts` (save trip → start activity),
+  `StartLiveActivityButtonComponent.tsx` (the trip details entry point),
+  `utils.ts` (trip pattern → `ContentState`).
+- `src/api/journey.ts` — `saveJourney`, `registerLiveActivity`,
+  `unregisterLiveActivity`.
 - `src/stacks-hierarchy/.../components/DebugLiveActivities.tsx` — the debug UI.
 - `package.json` → `codegenConfig.ios.modulesProvider` maps
   `"LiveActivities": "RCTLiveActivities"`.
@@ -161,19 +175,21 @@ The lock screen is a **two-row card**: the instruction, then the line and the ti
 └────────────────────────────────────────────┘
 ```
 
-`TransitActivityAttributes` (static, fixed per activity) is **empty** — there is
-no per-trip data that doesn't change during the trip yet. Anything static that
-shows up later (trip id, deep-link target) belongs here rather than in
-`ContentState`.
+`TransitActivityAttributes` (static, fixed per activity) holds the **`tripId`** of
+the saved trip the activity follows. Nothing renders it: it is there because an
+activity outlives the app process, and it is what lets the app map a push token
+back to a trip when it picks up its activities again after a cold start. Anything
+else static that shows up later (a deep-link target, say) belongs here too, rather
+than in `ContentState`.
 
 `ContentState` (dynamic, updated as the trip progresses):
 
-| field                    | meaning                                                              |
-| ------------------------ | -------------------------------------------------------------------- |
-| `mode`                   | `bus` \| `tram` \| `rail` \| `water` \| `walk` — badge icon + accent |
-| `lineNumber`, `lineName` | badge number + headsign, e.g. "3" / "Lohove"                         |
-| `title`                  | the instruction line, e.g. "6 stopp igjen"                           |
-| `eventTime`              | arrival/departure time shown on the clock, **unix seconds**          |
+| field                    | meaning                                                                           |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `mode`                   | `bus` \| `tram` \| `rail` \| `water` \| `walk` \| `unknown` — badge icon + accent |
+| `lineNumber`, `lineName` | badge number + headsign, e.g. "3" / "Lohove"                                      |
+| `title`                  | the instruction line, e.g. "6 stopp igjen"                                        |
+| `eventTime`              | arrival/departure time shown on the clock, **unix seconds**                       |
 
 Every field is rendered by at least one of the three presentations. `title` is
 passed **pre-formatted/localized from JS**, so the widget stays dumb.
@@ -313,13 +329,15 @@ apns-expiration: 0
 **End-to-end**
 
 ```
-app:  Activity.request(pushType:.token)
-        └ pushTokenUpdates → hex ──► POST /our-api {activityId, tripId, token, env}
-backend: store token ↔ trip ↔ user
+app:  POST /journey/v1/trip {tripPattern} → {tripId}
+      Activity.request(attributes: {tripId}, pushType: .token)
+        └ pushTokenUpdates → hex ──► POST /journey/v1/live-activity/register
+                                       {tripId, apnsToken}
+backend: store token ↔ trip ↔ customer
   on real-time event (delay / next stop / arrival):
         build JWT → HTTP/2 POST api.push.apple.com/3/device/<token> (headers + body)
   on arrival: event:"end"
-app:  token rotates → re-POST the new token   (must be handled)
+app:  token rotates → register the new one, unregister the one it replaced
 ```
 
 **Rust backend (Axum)** — two options:
@@ -355,6 +373,42 @@ app:  token rotates → re-POST the new token   (must be handled)
   set it so the UI never shows confidently-wrong times if updates stop.
 - `relevance-score`: when several Live Activities exist, higher scores win the
   Dynamic Island.
+
+### Registering an activity
+
+The app tells the backend which token belongs to which trip. Starting an activity
+from the trip details screen (`StartLiveActivityButtonComponent`) does two things,
+in this order:
+
+1. `POST /journey/v1/trip` with the trip pattern, which returns a `tripId`.
+2. `Activity.request` with that id in the attributes.
+
+Registration itself is **not** done there. It happens when ActivityKit issues the
+push token, which is asynchronous and can happen long after the activity started —
+or not at all, on the simulator. `LiveActivitiesImpl` emits every token it sees to
+JS, and `useLiveActivityRegistration` (mounted app-wide, so it outlives any screen)
+posts it to `POST /journey/v1/live-activity/register` as `{tripId, apnsToken}`.
+
+Things that fall out of how ActivityKit and the backend work:
+
+- **The trip must be saved first.** The backend has a foreign key from the
+  registration to the trip, and answers `404` for a trip it does not have.
+- **Registrations are keyed by token, not by trip.** A rotated token registers
+  anew and leaves the one it replaced behind, so the app unregisters that one
+  (`POST /journey/v1/live-activity/unregister`, `{apnsToken}`).
+- **Activities outlive the app process.** The native module observes every
+  activity in `Activity.activities` at startup, not just ones started in this
+  session, so a token that rotated while the app was gone is registered on the
+  next launch.
+- **Early events are lost.** Activities are observed from app start, well before
+  React mounts, and emitting before JS subscribes drops the event. JS therefore
+  reconciles with `getActiveActivities()` on mount and treats the emitters as
+  updates on top of that.
+- **Registration needs a signed-in customer** (`authWithIdToken`). Anonymous users
+  have a customer number, so it works for them too; tokens seen before auth is
+  ready are registered once it is.
+- **Unregistering is best-effort.** The app only runs sometimes, so the backend is
+  expected to prune registrations itself (not implemented yet).
 
 ### Testing push updates by hand
 
@@ -428,15 +482,19 @@ container (as `departureWidget` does) and read it in the extension.
 
 ## Real implementation: what comes next
 
-1. **Data source.** Map real trip/departure data → `ContentState`. Trigger points:
-   - `start` when a journey begins (or push-to-start at scheduled departure).
+1. **Data source.** `toInitialContentState` maps a trip pattern to the state the
+   activity **starts** in — the first departure to get to. Everything after that
+   is missing:
    - `update` on delay changes, next-stop transitions, transfers (`lineNumber`
      can change mid-trip — it lives in `ContentState`, not attributes).
    - `getOff` + `alert` when approaching the alight stop; `end` on arrival.
-2. **Push backend.** Store per-activity push tokens; send APNs `liveactivity`
-   pushes on real-time events (SIRI/real-time feed). Add push-to-start tokens for
-   remote start. This is where the bulk of the real work is — the app side is
-   mostly done.
+   - push-to-start at scheduled departure, instead of the user pressing a button.
+2. **Push backend.** Tokens are registered (see
+   [Registering an activity](#registering-an-activity)) and stored against the
+   trip, but nothing sends pushes yet: the refresh job logs the next service
+   journey and stops there. Sending APNs `liveactivity` pushes on real-time
+   events, and pruning dead registrations on `410`, is where the bulk of the
+   remaining work is. The app side is done.
 3. **Localization.** `title` is currently passed pre-formatted from JS. Keep
    localizing on the JS side (reuse `@atb/translations`) so the extension stays
    dumb, or move to string catalogs in the extension.
@@ -483,8 +541,10 @@ flavor) and per-brand colors in `TransitTheme.swift` (or generated tokens).
 
 ## Known limitations of the PoC
 
-- No backend and no real data; pushes are sent by hand from the Push Console, and
-  the push token is only logged, never uploaded.
+- Nothing pushes yet: tokens are registered with the journey backend, but updates
+  still have to be sent by hand from the Push Console.
+- The activity only ever shows the state it started in — nothing updates it as the
+  trip progresses.
 - The `[LiveActivity]` logging is debug scaffolding — drop it when real data lands.
 - **iOS 18+ only** (see the top of this doc); below that the app runs without any
   Live Activity.

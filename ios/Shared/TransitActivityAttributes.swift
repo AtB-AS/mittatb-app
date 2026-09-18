@@ -2,18 +2,9 @@ import ActivityKit
 import Foundation
 import SwiftUI
 
-/// Shared model for the transit Live Activity.
-///
-/// IMPORTANT: this file — and `TransportMode.swift`, which the state references —
-/// must be a member of BOTH the `app` target (so the native module can call
-/// `Activity<TransitActivityAttributes>.request`) and the `liveActivity`
-/// widget-extension target (so the SwiftUI views can render it). If they are only
-/// in the extension, `Activity.request` succeeds but nothing shows.
-///
-/// Every field is rendered by at least one of the three presentations
-/// (`TransitLockScreenView`, `TransitSmartStackView`, `TransitDynamicIsland`).
-/// There is no static per-trip data yet, so the attributes themselves are empty.
 struct TransitActivityAttributes: ActivityAttributes {
+
+  var tripId: String
 
   struct ContentState: Codable, Hashable {
 

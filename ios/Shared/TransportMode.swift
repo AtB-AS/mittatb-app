@@ -1,5 +1,5 @@
 import Foundation
 
 enum TransportMode: String, Codable, Hashable {
-  case bus, tram, rail, water, walk
+  case bus, tram, rail, water, walk, unknown
 }

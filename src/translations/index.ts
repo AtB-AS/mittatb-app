@@ -59,3 +59,4 @@ export {default as OnBehalfOfTexts} from './screens/subscreens/OnBehalfOf';
 export {default as DatePickerSheetTexts} from './components/DatePickerSheet';
 export {default as TravelAidTexts} from './screens/subscreens/TravelAid';
 export {default as TravelCardTexts} from './components/TravelCard';
+export {default as LiveActivityTexts} from './components/LiveActivity';

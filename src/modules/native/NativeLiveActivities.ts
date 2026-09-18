@@ -1,4 +1,19 @@
 import {TurboModule, TurboModuleRegistry} from 'react-native';
+import type {CodegenTypes} from 'react-native';
+
+/**
+ * A running Live Activity, identified by the ActivityKit activity id and the
+ * trip it follows (from the activity's static attributes).
+ *
+ * `pushToken` is the per-activity APNs token the backend pushes updates to. It
+ * is absent until ActivityKit issues one, and never issued at all on the
+ * simulator.
+ */
+export type LiveActivityInfo = {
+  activityId: string;
+  tripId: string;
+  pushToken?: string;
+};
 
 /**
  * Native module for iOS Live Activities (ActivityKit).
@@ -12,11 +27,28 @@ import {TurboModule, TurboModuleRegistry} from 'react-native';
  * iOS only. On Android this resolves to `null` (guard before use).
  */
 export interface Spec extends TurboModule {
+  /**
+   * The APNs push token for an activity, emitted when ActivityKit first issues
+   * one and on every later rotation. Activities started in an earlier app
+   * process emit here too, once they are observed again on startup.
+   */
+  readonly onPushTokenUpdate: CodegenTypes.EventEmitter<LiveActivityInfo>;
+  /** Emitted once per activity when it ends or is dismissed. */
+  readonly onActivityEnded: CodegenTypes.EventEmitter<LiveActivityInfo>;
+
+  /**
+   * Every running activity with its current push token. Events emitted before
+   * JS subscribed are lost, so call this on startup to reconcile.
+   */
+  getActiveActivities(): Promise<LiveActivityInfo[]>;
   /** Whether the user has Live Activities enabled for this app. */
   areActivitiesEnabled(): boolean;
   /**
    * Start a new Live Activity. Resolves with the ActivityKit activity id,
    * which is needed for later `updateActivity` / `endActivity` calls.
+   *
+   * The attributes must carry the `tripId` of a saved trip — it is what ties
+   * the push token emitted by `onPushTokenUpdate` to a trip on the backend.
    */
   startActivity(
     attributesJson: string,

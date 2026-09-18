@@ -35,6 +35,7 @@ import {TimeContextProvider} from '@atb/modules/time';
 import {AnnouncementsContextProvider} from '@atb/modules/announcements';
 import {StorybookContextProvider} from '@atb/modules/storybook';
 import {NotificationContextProvider} from '@atb/modules/notifications';
+import {LiveActivitiesContextProvider} from '@atb/modules/live-activities';
 import {FeatureTogglesContextProvider} from '@atb/modules/feature-toggles';
 import {configureReanimatedLogger} from 'react-native-reanimated';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -112,13 +113,15 @@ export const App = () => {
                                                     <GlobalMessagesContextProvider>
                                                       <AnnouncementsContextProvider>
                                                         <NotificationContextProvider>
-                                                          <BottomSheetModalProvider>
-                                                            <BottomSheetContextProvider>
-                                                              <OnboardingContextProvider>
-                                                                <RootStack />
-                                                              </OnboardingContextProvider>
-                                                            </BottomSheetContextProvider>
-                                                          </BottomSheetModalProvider>
+                                                          <LiveActivitiesContextProvider>
+                                                            <BottomSheetModalProvider>
+                                                              <BottomSheetContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
+                                                              </BottomSheetContextProvider>
+                                                            </BottomSheetModalProvider>
+                                                          </LiveActivitiesContextProvider>
                                                         </NotificationContextProvider>
                                                       </AnnouncementsContextProvider>
                                                     </GlobalMessagesContextProvider>

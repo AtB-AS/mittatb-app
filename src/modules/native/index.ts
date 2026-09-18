@@ -2,3 +2,4 @@ export {ExperimentalFeature} from './NativeExperimentalFeature';
 export {NativeApplePayHandler} from './NativeApplePayHandler';
 export {SecureView} from './SecureView';
 export {NativeLiveActivities} from './NativeLiveActivities';
+export type {LiveActivityInfo} from './NativeLiveActivities';
