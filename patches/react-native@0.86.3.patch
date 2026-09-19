@@ -1,3 +1,29 @@
+diff --git a/Libraries/LogBox/UI/LogBoxInspectorFooter.js b/Libraries/LogBox/UI/LogBoxInspectorFooter.js
+index 5d5092944e057f4da0ab66456d0c4dc8a0e40b76..18802d83145413b10ccb5bbe45eeda5b3d7e0838 100644
+--- a/Libraries/LogBox/UI/LogBoxInspectorFooter.js
++++ b/Libraries/LogBox/UI/LogBoxInspectorFooter.js
+@@ -44,16 +44,16 @@ export default function LogBoxInspectorFooter(props: Props): React.Node {
+         text="Dismiss"
+         onPress={props.onDismiss}
+       />
+-      <LogBoxInspectorFooterButton
+-        id="logbox_footer_button_minimize"
+-        text="Minimize"
+-        onPress={props.onMinimize}
+-      />
+       <LogBoxInspectorFooterButton
+         id="logbox_footer_button_copy"
+         text="Copy"
+         onPress={props.onCopy}
+       />
++      <LogBoxInspectorFooterButton
++        id="logbox_footer_button_minimize"
++        text="Minimize"
++        onPress={props.onMinimize}
++      />
+     </View>
+   );
+ }
 diff --git a/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm b/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
 index 1b02e8b2d39672063551411d5c403a69b671a869..b3481c1b98b45dea769035140dc2fd8d9b088b24 100644
 --- a/React/Fabric/Mounting/ComponentViews/ScrollView/RCTEnhancedScrollView.mm
