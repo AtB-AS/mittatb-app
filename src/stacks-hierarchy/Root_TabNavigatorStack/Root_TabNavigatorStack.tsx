@@ -10,8 +10,7 @@ import {
   TicketingFill,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import {MapPin} from '../../assets/svg/mono-icons/tab-bar';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
+import {ThemeIconProps} from '@atb/components/theme-icon';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
@@ -19,14 +18,10 @@ import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
 import {useThemeContext} from '@atb/theme';
-import {
-  settingToRouteName,
-  useBottomNavigationStyles,
-} from '@atb/utils/navigation';
+import {settingToRouteName} from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
 import React, {useCallback, useEffect} from 'react';
-import {SvgProps} from 'react-native-svg';
+import {BottomTabBar, BottomTabBarItem} from './BottomTabBar';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -50,7 +45,6 @@ export const Root_TabNavigatorStack = () => {
   const interactiveColor = theme.color.interactive[2];
   const {t} = useTranslation();
   const {startScreen} = usePreferencesContext().preferences;
-  const lineHeight = theme.typography.body__s.fontSize.valueOf();
 
   const navigation = useNavigation<RootNavigationProps>();
 
@@ -107,142 +101,67 @@ export const Root_TabNavigatorStack = () => {
     }
   };
 
+  const tabBarConfig: Record<string, BottomTabBarItem> = {
+    TabNav_DashboardStack: {
+      label: t(dictionary.navigation.assistant),
+      Icon: Assistant,
+      IconSelected: AssistantFill,
+      testID: 'assistantTab',
+    },
+    TabNav_MapStack: {
+      label: t(dictionary.navigation.map),
+      Icon: MapPin,
+      IconSelected: MapPinFill,
+      testID: 'mapTab',
+    },
+    TabNav_DeparturesStack: {
+      label: t(dictionary.navigation.nearby),
+      Icon: Departures,
+      IconSelected: DeparturesFill,
+      testID: 'departuresTab',
+    },
+    TabNav_TicketingStack: {
+      label: t(dictionary.navigation.ticketing),
+      Icon: Ticketing,
+      IconSelected: TicketingFill,
+      testID: 'ticketsTab',
+    },
+    TabNav_ProfileStack: {
+      label: t(dictionary.navigation.profile),
+      Icon: Profile,
+      IconSelected: ProfileFill,
+      testID: 'profileTab',
+      notification: getProfileNotification(),
+    },
+  };
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarLabelPosition: 'below-icon',
-        tabBarActiveTintColor: interactiveColor.outline.background,
-        tabBarInactiveTintColor: theme.color.foreground.dynamic.secondary,
-        tabBarStyle: {
-          borderTopWidth: theme.border.width.slim,
-          borderTopColor: theme.color.border.primary.background,
-          backgroundColor: interactiveColor.default.background,
-          ...useBottomNavigationStyles(),
-        },
       }}
       initialRouteName={settingToRouteName(startScreen)}
+      tabBar={(props) => <BottomTabBar {...props} config={tabBarConfig} />}
     >
       <Tab.Screen
         name="TabNav_DashboardStack"
         component={TabNav_DashboardStack}
-        options={tabSettings(
-          t(dictionary.navigation.assistant),
-          t(dictionary.navigation.assistant_a11y),
-          Assistant,
-          AssistantFill,
-          lineHeight,
-          'assistantTab',
-        )}
       />
       <Tab.Screen
         name="TabNav_MapStack"
         component={TabNav_MapStack}
-        options={{
-          ...tabSettings(
-            t(dictionary.navigation.map),
-            t(dictionary.navigation.map),
-            MapPin,
-            MapPinFill,
-            lineHeight,
-            'mapTab',
-          ),
-          ...{freezeOnBlur: false}, // needed to update the map to not load tiles from the vector source
-        }}
+        // freezeOnBlur false is needed to update the map to not load tiles from the vector source
+        options={{freezeOnBlur: false}}
       />
       <Tab.Screen
         name="TabNav_DeparturesStack"
         component={TabNav_DeparturesStack}
-        options={tabSettings(
-          t(dictionary.navigation.nearby),
-          t(dictionary.navigation.nearby),
-          Departures,
-          DeparturesFill,
-          lineHeight,
-          'departuresTab',
-        )}
       />
       <Tab.Screen
         name="TabNav_TicketingStack"
         component={TabNav_TicketingStack}
-        options={tabSettings(
-          t(dictionary.navigation.ticketing),
-          t(dictionary.navigation.ticketing),
-          Ticketing,
-          TicketingFill,
-          lineHeight,
-          'ticketsTab',
-        )}
       />
-      <Tab.Screen
-        name="TabNav_ProfileStack"
-        component={TabNav_ProfileStack}
-        options={tabSettings(
-          t(dictionary.navigation.profile),
-          t(dictionary.navigation.profile_a11y),
-          Profile,
-          ProfileFill,
-          lineHeight,
-          'profileTab',
-          getProfileNotification(),
-        )}
-      />
+      <Tab.Screen name="TabNav_ProfileStack" component={TabNav_ProfileStack} />
     </Tab.Navigator>
   );
 };
-
-type LabelPosition = NonNullable<
-  BottomTabNavigationOptions['tabBarLabelPosition']
->;
-
-type TabSettings = {
-  tabBarLabel(props: {
-    focused: boolean;
-    color: string;
-    position: LabelPosition;
-  }): React.JSX.Element;
-  tabBarIcon(props: {
-    focused: boolean;
-    color: string;
-    size: number;
-  }): React.JSX.Element;
-  testID?: string;
-};
-
-function tabSettings(
-  tabBarLabel: string,
-  tabBarA11yLabel: string,
-  Icon: (svg: SvgProps) => React.JSX.Element,
-  IconSelected: (svg: SvgProps) => React.JSX.Element,
-  lineHeight: number,
-  testID: string,
-  notification?: ThemeIconProps['notification'],
-): TabSettings {
-  return {
-    tabBarLabel: ({color}) => (
-      <ThemeText
-        typography="body__s"
-        style={{
-          color,
-          textAlign: 'center',
-          lineHeight,
-          // react-navigation v7 adds 5px padding to the tab bar label, and breaks text too early
-          // this workaround is to use negative margins to extend beyond parent padding
-          marginHorizontal: -5,
-        }}
-        accessibilityLabel={tabBarA11yLabel}
-        maxFontSizeMultiplier={1.2}
-        testID={testID}
-      >
-        {tabBarLabel}
-      </ThemeText>
-    ),
-    tabBarIcon: ({color, focused}) => (
-      <ThemeIcon
-        svg={focused ? IconSelected : Icon}
-        color={color}
-        notification={notification}
-      />
-    ),
-  };
-}
