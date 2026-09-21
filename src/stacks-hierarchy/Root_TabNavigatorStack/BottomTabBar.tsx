@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, View} from 'react-native';
+import {Platform, Pressable, View} from 'react-native';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -56,7 +56,9 @@ export const BottomTabBar = ({
           <Pressable
             key={route.key}
             onPress={onPress}
-            accessibilityRole="button"
+            // iOS doesn't announce role 'tab' correctly with VoiceOver, so fall
+            // back to 'button' there (same as react-navigation).
+            accessibilityRole={Platform.select({ios: 'button', default: 'tab'})}
             accessibilityState={{selected: focused}}
             accessibilityLabel={item.label}
             style={({pressed}) => [styles.tab, pressed && styles.tabPressed]}
