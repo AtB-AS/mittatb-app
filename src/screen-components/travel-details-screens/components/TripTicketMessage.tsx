@@ -1,11 +1,9 @@
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NativeBlockButton} from '@atb/components/native-button';
-// TODO: Placeholder icon. The design uses a filled red ticket glyph which is
-// not available as an asset yet, so the outlined icon is tinted instead.
-import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
+import {InvalidFill} from '@atb/assets/svg/mono-icons/ticketing';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
@@ -34,7 +32,7 @@ export const TripTicketMessage: React.FC<TripTicketMessageProps> = ({
       accessibilityHint={t(MessageBoxTexts.a11yHintActionPrefix) + actionText}
       testID="tripTicketMessage"
     >
-      <ThemeIcon svg={TicketInvalid} color="error" />
+      <ThemeIcon svg={InvalidFill} color="error" />
       <ThemeText typography="body__m" style={styles.message}>
         {message}
       </ThemeText>
