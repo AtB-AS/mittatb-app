@@ -67,8 +67,7 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
       expect(result.data.benefit?.illustrationName).toBe('TicketValid');
       expect(result.data.benefit?.priceAdjustments[0]).toEqual({
         amount: 0,
-        type: 'FREE_UNLOCK',
-        description: '',
+        adjustmentType: 'FREE_UNLOCK',
       });
       expect(result.data.benefit).not.toHaveProperty('eligibility');
     }

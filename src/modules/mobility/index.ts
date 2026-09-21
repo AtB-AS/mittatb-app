@@ -33,6 +33,7 @@ export {useInitAgeVerificationMutation} from './queries/use-init-age-verificatio
 export {useGetOperatorsQuery} from './queries/use-get-operators-query';
 export {useVehicleQuery} from './queries/use-vehicle-query';
 export {ShmoRequirementEnum} from './types';
+export type {NavigateToPricingDetails} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
 export {useOperators} from './use-operators';
 export {useShmoRequirements} from './use-shmo-requirements';

@@ -24,7 +24,7 @@ type Props = RootStackScreenProps<'Root_ShmoPricingDetailsScreen'>;
 type PricingRow = {label: string; value: string};
 
 export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
-  const {pricingPlan, benefit} = route.params;
+  const {pricingPlan, priceAdjustments} = route.params;
   const focusRef = useFocusOnLoad(navigation);
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -37,13 +37,13 @@ export const Root_ShmoPricingDetailsScreen = ({navigation, route}: Props) => {
   const hasMultiplePerKmPricingPlans =
     (pricingPlan.perKmPricing?.length ?? 0) > 1;
 
-  const freeUnlockPriceAdjustment = benefit?.priceAdjustments.find(
+  const freeUnlockPriceAdjustment = priceAdjustments?.find(
     (adj: PriceAdjustmentType) =>
-      adj.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+      adj.adjustmentType === PriceAdjustmentEnum.enum.FREE_UNLOCK,
   );
-  const freeMinutesPriceAdjustment = benefit?.priceAdjustments.find(
+  const freeMinutesPriceAdjustment = priceAdjustments?.find(
     (adj: PriceAdjustmentType) =>
-      adj.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+      adj.adjustmentType === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
   const hasCampaign = !!(
     freeUnlockPriceAdjustment || freeMinutesPriceAdjustment

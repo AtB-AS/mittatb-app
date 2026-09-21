@@ -13,6 +13,7 @@ import {
   SelectShmoPaymentMethodSheet,
   useActiveShmoBookingQuery,
 } from '@atb/modules/mobility';
+import type {NavigateToPricingDetails} from '@atb/modules/mobility';
 
 import React, {RefObject, useCallback, useEffect, useState} from 'react';
 import {
@@ -23,8 +24,7 @@ import {
   mapPositionToCoordinates,
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
-import {ShmoBookingState, ShmoPricingPlan} from '@atb/api/types/mobility';
-import type {BenefitType} from '@atb/api/types/benefit';
+import {ShmoBookingState} from '@atb/api/types/mobility';
 import {MapFilterType, MapProps} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
@@ -54,10 +54,7 @@ type MapBottomSheetsProps = {
   navigateToScanQrCode: () => void;
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
-  navigateToPricingDetails: (
-    pricingPlan: ShmoPricingPlan,
-    benefit: BenefitType | undefined,
-  ) => void;
+  navigateToPricingDetails: NavigateToPricingDetails;
 };
 
 export const MapBottomSheets = ({
@@ -249,6 +246,7 @@ export const MapBottomSheets = ({
           }}
           locationArrowOnPress={locationArrowOnPress}
           navigateToScanQrCode={navigateToScanQrCode}
+          navigateToPricingDetails={navigateToPricingDetails}
         />
       )}
       {activeBooking?.state === ShmoBookingState.FINISHING &&

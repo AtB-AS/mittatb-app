@@ -1,3 +1,11 @@
+import type {ShmoPricingPlan} from '@atb/api/types/mobility';
+import type {PriceAdjustmentType} from '@atb/api/types/benefit';
+
+export type NavigateToPricingDetails = (
+  pricingPlan: ShmoPricingPlan,
+  priceAdjustments: PriceAdjustmentType[] | undefined,
+) => void;
+
 export enum ShmoRequirementEnum {
   LOCATION = 'LOCATION',
   PAYMENT_CARD = 'PAYMENT_CARD',

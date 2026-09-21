@@ -16,6 +16,7 @@ import {
   ShmoBookingEventType,
   ShmoBookingState,
 } from '@atb/api/types/mobility';
+import type {NavigateToPricingDetails} from '../../types';
 import {useSendShmoBookingEventMutation} from '../../queries/use-send-shmo-booking-event-mutation';
 import {ShmoTripCard} from '../ShmoTripCard';
 import {
@@ -53,6 +54,7 @@ type Props = {
   mapViewRef: RefObject<MapView | null>;
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
+  navigateToPricingDetails: NavigateToPricingDetails;
 };
 
 export const ActiveShmoSheet = ({
@@ -62,6 +64,7 @@ export const ActiveShmoSheet = ({
   mapViewRef,
   locationArrowOnPress,
   navigateToScanQrCode,
+  navigateToPricingDetails,
 }: Props) => {
   useKeepAwake();
   const isFocusedAndActive = useIsFocusedAndActive();
@@ -249,6 +252,7 @@ export const ActiveShmoSheet = ({
             isFocused={isFocusedAndActive}
             mode={mode}
             subMode={subMode}
+            navigateToPricingDetails={navigateToPricingDetails}
           />
         ) : null
       }

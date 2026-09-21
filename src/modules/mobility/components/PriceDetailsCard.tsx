@@ -24,14 +24,12 @@ import {getCurrencySymbol} from '@atb/translations/currency';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import SvgChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
 import type {BenefitType} from '@atb/api/types/benefit';
+import type {NavigateToPricingDetails} from '../types';
 
 type Props = {
   pricingPlan: ShmoPricingPlan;
   benefit?: BenefitType;
-  onNavigatePricingDetails?: (
-    pricingPlan: ShmoPricingPlan,
-    benefit: BenefitType | undefined,
-  ) => void;
+  onNavigatePricingDetails?: NavigateToPricingDetails;
 };
 
 export const PriceDetailsCard = ({
@@ -128,7 +126,9 @@ export const PriceDetailsCard = ({
         <LinkSectionItem
           rightIcon={{svg: SvgChevronRight}}
           text={t(MobilityTexts.pricingDetails.priceInfo)}
-          onPress={() => onNavigatePricingDetails(pricingPlan, benefit)}
+          onPress={() =>
+            onNavigatePricingDetails(pricingPlan, benefit?.priceAdjustments)
+          }
         />
       )}
     </Section>
