@@ -174,6 +174,8 @@ module.exports = {
           'src/utils/use-is-focused-and-active.ts',
           'src/modules/onboarding/use-onboarding-navigation.ts',
           'src/modules/onboarding/onboarding-carousel/use-onboarding-carousel-navigation.ts',
+          // Bottom tab bar; inherently needs navigation from BottomTabBarProps.
+          'src/stacks-hierarchy/Root_TabNavigatorStack/BottomTabBar.tsx',
         ],
         allowedImports: [
           'NavigationProp',

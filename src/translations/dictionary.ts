@@ -1,8 +1,5 @@
-import {Platform} from 'react-native';
 import {translation as _} from './commons';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
-
-const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
 const dictionary = {
   myPosition: _('Min posisjon', 'My position', 'Min posisjon'),
@@ -10,16 +7,10 @@ const dictionary = {
   toPlace: _('Destinasjon', 'Destination', 'Destinasjon'),
   navigation: {
     assistant: _(`Reise`, 'Travel', `Reise`),
-    assistant_a11y: _(
-      `Aktiver for reisesøk. Aktiver to ganger for å nullstille søket.`,
-      'Activate for search assistant. Activate twice to reset search.',
-      `Aktiver for reisesøk. Aktiver to gonger for å nullstille søket.`,
-    ),
     map: _(`Kart`, 'Map', `Kart`),
-    nearby: _(`Av${softhyphen}ganger`, 'Departures', `Avgangar`),
+    nearby: _(`Avganger`, 'Departures', `Avgangar`),
     ticketing: _('Billetter', 'Tickets', `Billettar`),
     profile: _('Profil', 'Profile', `Profil`),
-    profile_a11y: _('Profil', 'Profile', `Profil`),
   },
   missingRealTimePrefix: _('ca. ', 'ca. ', `ca. `),
   a11yRouteTimePrefix: _('rutetid ', 'route time ', `rutetid `),
@@ -230,7 +221,6 @@ export default orgSpecificTranslations(dictionary, {
   fram: {
     navigation: {
       profile: _('Min bruker', 'My user', 'Min brukar'),
-      profile_a11y: _('Min bruker', 'My user', 'Min brukar'),
     },
   },
 });
