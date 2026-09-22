@@ -1,10 +1,9 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {SkeletonBlock} from './SkeletonBlock';
+import {SkeletonBlock} from '@atb/components/skeleton';
 
 const PILL_COUNT = 4;
-const PULSE_STAGGER = 150;
 
 export const LegsSkeleton = () => {
   const styles = useStyles();
@@ -16,7 +15,7 @@ export const LegsSkeleton = () => {
       importantForAccessibility="no-hide-descendants"
     >
       {Array.from({length: PILL_COUNT}, (_, i) => (
-        <SkeletonBlock key={i} style={styles.pill} delay={i * PULSE_STAGGER} />
+        <SkeletonBlock key={i} style={styles.pill} />
       ))}
     </View>
   );

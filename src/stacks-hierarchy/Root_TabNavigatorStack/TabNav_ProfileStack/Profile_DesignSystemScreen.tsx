@@ -42,6 +42,7 @@ import {
 import {Tag} from '@atb/components/tag';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Loading} from '@atb/components/loading';
+import {Skeleton, SkeletonBlock} from '@atb/components/skeleton';
 import {AppearanceSelection} from '@atb/theme/ThemeContext';
 import {
   BottomSheetHeaderType,
@@ -385,6 +386,29 @@ export const Profile_DesignSystemScreen = ({
                 </React.Fragment>
               ))}
             </View>
+          </GenericSectionItem>
+        </Section>
+
+        <Section style={styles.section}>
+          <HeaderSectionItem text="Skeleton" />
+
+          <GenericSectionItem>
+            <ThemeText>Standalone block</ThemeText>
+            <View style={styles.contentContainer}>
+              <Skeleton style={styles.skeletonLine} />
+            </View>
+            <ThemeText>Composed skeleton</ThemeText>
+            <Skeleton style={styles.skeletonCard}>
+              <View style={styles.skeletonCardHeader}>
+                <SkeletonBlock style={styles.skeletonTitle} />
+                <SkeletonBlock style={styles.skeletonBadge} />
+              </View>
+              <View style={styles.skeletonRow}>
+                <SkeletonBlock style={styles.skeletonPill} />
+                <SkeletonBlock style={styles.skeletonPill} />
+                <SkeletonBlock style={styles.skeletonPill} />
+              </View>
+            </Skeleton>
           </GenericSectionItem>
         </Section>
 
@@ -1437,5 +1461,39 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   swatchGroup: {
     margin: theme.spacing.medium,
+  },
+  skeletonLine: {
+    width: 120,
+    height: 16,
+    borderRadius: theme.border.radius.small,
+  },
+  skeletonCard: {
+    gap: theme.spacing.medium,
+    backgroundColor: theme.color.background.neutral[0].background,
+    padding: theme.spacing.medium,
+    borderRadius: theme.border.radius.regular,
+  },
+  skeletonCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  skeletonTitle: {
+    width: 140,
+    height: 18,
+    borderRadius: theme.border.radius.small,
+  },
+  skeletonBadge: {
+    width: 48,
+    height: 18,
+    borderRadius: theme.border.radius.small,
+  },
+  skeletonRow: {
+    flexDirection: 'row',
+    gap: theme.spacing.xSmall,
+  },
+  skeletonPill: {
+    width: 56,
+    height: 32,
+    borderRadius: theme.border.radius.circle,
   },
 }));

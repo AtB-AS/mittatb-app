@@ -2,8 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {TravelCardTexts, useTranslation} from '@atb/translations';
+import {Skeleton, SkeletonBlock} from '@atb/components/skeleton';
 import {LegsSkeleton} from './LegsSkeleton';
-import {SkeletonBlock} from './SkeletonBlock';
 
 /**
  * Layout is duplicated from TravelCard / TravelCardHeader — there is no shared
@@ -13,27 +13,31 @@ export const TravelCardSkeleton = () => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   return (
-    <View
+    <Skeleton
       style={styles.container}
       accessible={true}
       accessibilityLabel={t(TravelCardTexts.skeleton.a11yLabel)}
     >
-      <View style={styles.header}>
-        <SkeletonBlock style={styles.timeBlock} />
-        <SkeletonBlock style={styles.durationBlock} />
+      <View style={styles.content}>
+        <View style={styles.header}>
+          <SkeletonBlock style={styles.timeBlock} />
+          <SkeletonBlock style={styles.durationBlock} />
+        </View>
+        <LegsSkeleton />
       </View>
-      <LegsSkeleton />
-    </View>
+    </Skeleton>
   );
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    gap: theme.spacing.medium,
     backgroundColor: theme.color.background.neutral[0].background,
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
+  },
+  content: {
+    gap: theme.spacing.medium,
   },
   header: {
     flexDirection: 'row',
