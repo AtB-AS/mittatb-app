@@ -99,8 +99,11 @@ export const Map_RootScreen = ({
   );
 
   const navigateToShmoOnboarding = useCallback(
-    (formFactor?: FormFactor) => {
-      navigation.navigate('Root_ShmoOnboardingScreen', {formFactor});
+    (formFactor?: FormFactor, operatorId?: string) => {
+      navigation.navigate('Root_ShmoOnboardingScreen', {
+        formFactor,
+        operatorId,
+      });
     },
     [navigation],
   );

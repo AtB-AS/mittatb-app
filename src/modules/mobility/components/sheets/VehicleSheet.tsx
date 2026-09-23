@@ -60,7 +60,10 @@ type Props = {
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
-  startOnboardingCallback: (formFactor: FormFactor) => void;
+  startOnboardingCallback: (
+    formFactor: FormFactor,
+    operatorId?: string,
+  ) => void;
   locationArrowOnPress: () => void;
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
@@ -288,7 +291,9 @@ export const VehicleSheet = ({
           {actionButton?.type === ActionButtonType.START_TRIP && operatorId ? (
             <>
               <ShmoActionButton
-                onStartOnboarding={() => startOnboardingCallback(formFactor)}
+                onStartOnboarding={() =>
+                  startOnboardingCallback(formFactor, operatorId)
+                }
                 loginCallback={navigateToLogin}
                 vehicleId={vehicle.id}
                 operatorId={operatorId}
