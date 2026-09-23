@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {GenericClickableSectionItem} from '@atb/components/sections';
 import {InvalidFill} from '@atb/assets/svg/mono-icons/ticketing';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation} from '@atb/translations';
@@ -23,8 +23,8 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
   const {t} = useTranslation();
 
   return (
-    <NativeBlockButton
-      style={styles.container}
+    <GenericClickableSectionItem
+      radius="top-bottom"
       onPress={onPress}
       accessible={true}
       accessibilityRole="button"
@@ -32,23 +32,22 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
       accessibilityHint={t(MessageBoxTexts.a11yHintActionPrefix) + actionText}
       testID="tripTicketCard"
     >
-      <ThemeIcon svg={InvalidFill} color="error" />
-      <ThemeText typography="body__m" style={styles.message}>
-        {message}
-      </ThemeText>
-      <View style={styles.action}>
-        <ThemeText typography="body__s">{actionText}</ThemeText>
-        <ThemeIcon svg={ChevronRight} />
+      <View style={styles.content}>
+        <ThemeIcon svg={InvalidFill} color="error" />
+        <ThemeText typography="body__m" style={styles.message}>
+          {message}
+        </ThemeText>
+        <View style={styles.action}>
+          <ThemeText typography="body__s">{actionText}</ThemeText>
+          <ThemeIcon svg={ChevronRight} />
+        </View>
       </View>
-    </NativeBlockButton>
+    </GenericClickableSectionItem>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.regular,
-    padding: theme.spacing.medium,
+  content: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
