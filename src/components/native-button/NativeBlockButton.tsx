@@ -1,11 +1,8 @@
-import {RectButton, RectButtonProps} from 'react-native-gesture-handler';
+import {Touchable, TouchableProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
-export type NativeBlockButtonProps = {disabled?: boolean} & Omit<
-  RectButtonProps,
-  'enabled'
->;
+export type NativeBlockButtonProps = TouchableProps;
 
 export const NativeBlockButton = forwardRef<any, NativeBlockButtonProps>(
   ({disabled, style, ...pressableProps}: NativeBlockButtonProps, focusRef) => {
@@ -16,11 +13,11 @@ export const NativeBlockButton = forwardRef<any, NativeBlockButtonProps>(
 
     const {logEvent} = useAnalyticsContext();
     return (
-      <RectButton
+      <Touchable
         ref={focusRef}
         {...pressableProps}
         accessible
-        enabled={!disabled}
+        disabled={disabled}
         onPress={(e) => {
           pressableProps.onPress?.(e);
           if (pressableProps.testID) {
@@ -28,10 +25,11 @@ export const NativeBlockButton = forwardRef<any, NativeBlockButtonProps>(
           }
         }}
         style={[disabled ? {opacity: 0.2} : undefined, style]}
-        activeOpacity={0.2}
+        underlayColor="black"
+        activeUnderlayOpacity={0.2}
       >
         {pressableProps?.children}
-      </RectButton>
+      </Touchable>
     );
   },
 );

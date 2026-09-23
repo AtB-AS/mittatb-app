@@ -1,14 +1,8 @@
-import {
-  BorderlessButton,
-  BorderlessButtonProps,
-} from 'react-native-gesture-handler';
+import {Touchable, TouchableProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
-export type NativeBorderlessButtonProps = {disabled?: boolean} & Omit<
-  BorderlessButtonProps,
-  'enabled'
->;
+export type NativeBorderlessButtonProps = TouchableProps;
 
 export const NativeBorderlessButton = forwardRef<
   any,
@@ -20,11 +14,11 @@ export const NativeBorderlessButton = forwardRef<
   ) => {
     const {logEvent} = useAnalyticsContext();
     return (
-      <BorderlessButton
+      <Touchable
         ref={focusRef}
         {...pressableProps}
         accessible
-        enabled={!disabled}
+        disabled={disabled}
         onPress={(e) => {
           pressableProps.onPress?.(e);
           if (pressableProps.testID) {
@@ -33,11 +27,10 @@ export const NativeBorderlessButton = forwardRef<
         }}
         style={[disabled ? {opacity: 0.2} : undefined, style]}
         activeOpacity={0.2}
-        rippleRadius={30}
-        foreground={true}
+        androidRipple={{borderless: true, radius: 30, foreground: true}}
       >
         {pressableProps?.children}
-      </BorderlessButton>
+      </Touchable>
     );
   },
 );
