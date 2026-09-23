@@ -414,7 +414,7 @@ const TripDetailsTexts = {
         'Aktiver for å kjøpe billett',
       ),
     },
-    ticketMessage: {
+    ticketCard: {
       message: _(
         'Denne reisen trenger billett',
         'This trip requires a ticket',

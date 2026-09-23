@@ -8,13 +8,13 @@ import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
-type TripTicketMessageProps = {
+type TripTicketCardProps = {
   message: string;
   actionText: string;
   onPress: () => void;
 };
 
-export const TripTicketMessage: React.FC<TripTicketMessageProps> = ({
+export const TripTicketCard: React.FC<TripTicketCardProps> = ({
   message,
   actionText,
   onPress,
@@ -30,7 +30,7 @@ export const TripTicketMessage: React.FC<TripTicketMessageProps> = ({
       accessibilityRole="button"
       accessibilityLabel={message}
       accessibilityHint={t(MessageBoxTexts.a11yHintActionPrefix) + actionText}
-      testID="tripTicketMessage"
+      testID="tripTicketCard"
     >
       <ThemeIcon svg={InvalidFill} color="error" />
       <ThemeText typography="body__m" style={styles.message}>

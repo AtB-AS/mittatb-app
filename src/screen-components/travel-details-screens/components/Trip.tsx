@@ -51,7 +51,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {TripTicketMessage} from './TripTicketMessage';
+import {TripTicketCard} from './TripTicketCard';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -81,12 +81,11 @@ export const Trip: React.FC<TripProps> = ({
   const {theme} = useThemeContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfigContext();
-  const {isTripTicketMessageEnabled} = useFeatureTogglesContext();
+  const {isTripTicketCardEnabled} = useFeatureTogglesContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
 
-  const shouldShowTicketMessage =
-    isTripTicketMessageEnabled && !!purchaseSelection;
+  const shouldShowTicketCard = isTripTicketCardEnabled && !!purchaseSelection;
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -147,10 +146,10 @@ export const Trip: React.FC<TripProps> = ({
           </ThemeText>
         </>
       )}
-      {shouldShowTicketMessage && (
-        <TripTicketMessage
-          message={t(TripDetailsTexts.trip.ticketMessage.message)}
-          actionText={t(TripDetailsTexts.trip.ticketMessage.buyAction)}
+      {shouldShowTicketCard && (
+        <TripTicketCard
+          message={t(TripDetailsTexts.trip.ticketCard.message)}
+          actionText={t(TripDetailsTexts.trip.ticketCard.buyAction)}
           onPress={onPressBuyTicket}
         />
       )}

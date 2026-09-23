@@ -178,8 +178,8 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_travel_aid_stop_button',
   },
   {
-    name: 'isTripTicketMessageEnabled',
-    remoteConfigKey: 'enable_trip_ticket_message',
+    name: 'isTripTicketCardEnabled',
+    remoteConfigKey: 'enable_trip_ticket_card',
   },
   {
     name: 'isVehiclesInMapEnabled',
