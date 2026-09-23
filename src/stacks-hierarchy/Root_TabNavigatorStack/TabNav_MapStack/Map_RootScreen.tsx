@@ -5,6 +5,7 @@ import {
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
 } from '@atb/modules/map';
 import {MapScreenProps} from './navigation-types';
+import {useIsMapTabFocused} from './use-is-map-tab-focused';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {ShmoPricingPlan} from '@atb/api/types/mobility';
 import type {BenefitType} from '@atb/api/types/benefit';
@@ -38,6 +39,7 @@ export const Map_RootScreen = ({
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const tabBarHeight = useBottomTabBarHeight();
   const isFocused = useIsFocusedAndActive();
+  const isMapTabFocused = useIsMapTabFocused(navigation);
 
   const navigateToQuay = useCallback(
     (place: StopPlace, quay: Quay) => {
@@ -174,6 +176,7 @@ export const Map_RootScreen = ({
   return (
     <Map
       isFocused={isFocused}
+      isMapTabFocused={isMapTabFocused}
       tabBarHeight={tabBarHeight}
       navigateToQuay={navigateToQuay}
       navigateToDetails={navigateToDetails}

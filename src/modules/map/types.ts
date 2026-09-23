@@ -60,6 +60,7 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   isFocused: boolean;
+  isMapTabFocused: boolean;
   tabBarHeight: number;
   initialLocation?: Location;
   includeSnackbar?: boolean;
