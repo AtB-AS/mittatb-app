@@ -147,6 +147,13 @@ export const Trip: React.FC<TripProps> = ({
           </ThemeText>
         </>
       )}
+      {shouldShowTicketMessage && (
+        <TripTicketMessage
+          message={t(TripDetailsTexts.trip.ticketMessage.message)}
+          actionText={t(TripDetailsTexts.trip.ticketMessage.buyAction)}
+          onPress={onPressBuyTicket}
+        />
+      )}
       {shortWaitTime && (
         <MessageInfoBox
           type="info"
@@ -191,16 +198,7 @@ export const Trip: React.FC<TripProps> = ({
           message={t(TripDetailsTexts.messages.errorDefault)}
         />
       )}
-      {shouldShowTicketMessage && (
-        <TripTicketMessage
-          message={t(TripDetailsTexts.trip.ticketMessage.message)}
-          actionText={t(TripDetailsTexts.trip.ticketMessage.buyAction)}
-          onPress={onPressBuyTicket}
-        />
-      )}
-      <View
-        style={[styles.trip, shouldShowTicketMessage && styles.tripNoTopMargin]}
-      >
+      <View style={styles.trip}>
         {tripPattern &&
           filteredLegs.map((leg, index) => {
             const legVehiclePosition = vehiclePositions?.find(
@@ -295,11 +293,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   trip: {
     marginTop: theme.spacing.medium,
-  },
-  // The ticket message already provides the container row gap above the
-  // legs, so the extra top margin would double it.
-  tripNoTopMargin: {
-    marginTop: 0,
   },
 }));
 
