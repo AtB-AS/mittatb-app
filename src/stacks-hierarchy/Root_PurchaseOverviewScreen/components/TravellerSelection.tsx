@@ -10,8 +10,8 @@ import {
   GenericClickableSectionItem,
   GenericSectionItem,
   Section,
-  ToggleSectionItem,
 } from '@atb/components/sections';
+import {Checkbox} from '@atb/components/checkbox';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {TravellerSelectionSheet} from './TravellerSelectionSheet';
@@ -164,31 +164,48 @@ export function TravellerSelection({
   return (
     <View style={style}>
       <ContentHeading text={heading} />
-      <Section {...accessibility}>
+      <Section>
         {selectionMode === 'none' ? undefined : canSelectUserProfile ? (
           <GenericClickableSectionItem
             onPress={travellerSelectionOnPress}
             ref={onCloseFocusRef}
             testID="selectTravellerButton"
+            {...accessibility}
           >
             {content}
           </GenericClickableSectionItem>
         ) : (
-          <GenericSectionItem>{content}</GenericSectionItem>
+          <GenericSectionItem {...accessibility}>{content}</GenericSectionItem>
         )}
-        <ToggleSectionItem
-          text={t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
-          value={selection.isOnBehalfOf}
-          onValueChange={(newValue) => {
+        <GenericClickableSectionItem
+          onPress={() => {
             const {selection: newSelection} = builder
               .fromSelection(selection)
-              .isOnBehalfOf(newValue)
+              .isOnBehalfOf(!selection.isOnBehalfOf)
               .build();
             onSave(newSelection);
           }}
-          testID="onBehalfOfToggle"
-          type="slim"
-        />
+          accessibilityRole="checkbox"
+          accessibilityState={{checked: selection.isOnBehalfOf}}
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.onBehalfOf.sendToOthersText,
+          )}
+          testID="onBehalfOfCheckbox"
+          type="block"
+        >
+          <View style={styles.onBehalfOfContainer}>
+            <Checkbox
+              checked={selection.isOnBehalfOf}
+              accessibility={{
+                accessible: false,
+                importantForAccessibility: 'no-hide-descendants',
+              }}
+            />
+            <ThemeText style={styles.onBehalfOfLabel}>
+              {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+            </ThemeText>
+          </View>
+        </GenericClickableSectionItem>
       </Section>
       <TravellerSelectionSheet
         selection={selection}
@@ -222,5 +239,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     gap: theme.spacing.xSmall,
     flexWrap: 'wrap',
+  },
+  onBehalfOfContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.medium,
+  },
+  onBehalfOfLabel: {
+    flex: 1,
   },
 }));
