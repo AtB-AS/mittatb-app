@@ -29,6 +29,7 @@ export const Checkbox: React.FC<CheckedProps> = ({
       {...accessibility}
       style={[style, styles.saveCheckbox, styles.saveCheckboxDefault]}
       testID={testID ? `${testID}Checkbox` : 'checkbox'}
+      collapsable={false}
     >
       {checked ? (
         <SvgCheckboxChecked fill="white" width={theme.icon.size.normal} />
