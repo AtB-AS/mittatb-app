@@ -15,8 +15,9 @@ type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 export const Root_ShmoOnboardingScreen = ({navigation, route}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
   const formFactor = route.params?.formFactor;
+  const operatorId = route.params?.operatorId;
   const {requirements, hasBlockers} = useShmoRequirements(
-    undefined,
+    operatorId,
     formFactor,
   );
 

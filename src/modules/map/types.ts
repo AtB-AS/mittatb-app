@@ -67,7 +67,10 @@ export type MapProps = {
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
-  navigateToShmoOnboarding: (formFactor?: FormFactor) => void;
+  navigateToShmoOnboarding: (
+    formFactor?: FormFactor,
+    operatorId?: string,
+  ) => void;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;

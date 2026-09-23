@@ -95,6 +95,10 @@ type ShmoOperatorParams = {operatorId: string} & (
 export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
 type Root_ContactShmoOperatorScreenParams = ShmoOperatorParams;
+type Root_ShmoOnboardingScreenParams = {
+  formFactor?: FormFactor;
+  operatorId?: string;
+};
 
 type Root_ContactShmoOperatorConfirmationScreenParams = {
   operatorName: string;
@@ -156,7 +160,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ShmoHelpScreen: Root_ShmoHelpScreenParams;
-  Root_ShmoOnboardingScreen: {formFactor?: FormFactor};
+  Root_ShmoOnboardingScreen: Root_ShmoOnboardingScreenParams;
   Root_ShmoPricingDetailsScreen: {
     pricingPlan: ShmoPricingPlan;
     benefit?: BenefitType;
