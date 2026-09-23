@@ -7,7 +7,8 @@ import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, MultiPolygon, Point, Polygon} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
-import {BenefitSchema, PriceAdjustmentSchema} from '@atb/api/types/benefit';
+import {BenefitSchema} from '@atb/api/types/benefit';
+import {PriceAdjustmentSchema} from '@atb/api/types/price-adjustment';
 import {LanguageAndTextTypeArray} from '@atb-as/config-specs/lib/common';
 
 export const ViolationsReportingInitQuerySchema = z.object({
@@ -160,6 +161,7 @@ const ShmoBookingStateSchema = z.enum(
 const ShmoPricingSchema = z.object({
   currentAmount: z.number(),
   finalAmount: z.number().nullish(),
+  priceAdjustments: z.array(PriceAdjustmentSchema).nullish(),
 });
 
 export type ShmoPricing = z.infer<typeof ShmoPricingSchema>;

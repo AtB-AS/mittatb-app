@@ -322,14 +322,14 @@ export const getFreeUnlock = (
   benefit: BenefitType | undefined,
 ): PriceAdjustmentType | undefined =>
   benefit?.priceAdjustments.find(
-    (e) => e.type === PriceAdjustmentEnum.enum.FREE_UNLOCK,
+    (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_UNLOCK,
   );
 
 export const getFreeMinutes = (
   benefit: BenefitType | undefined,
 ): PriceAdjustmentType | undefined =>
   benefit?.priceAdjustments.find(
-    (e) => e.type === PriceAdjustmentEnum.enum.FREE_MINUTES,
+    (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
 
 export const computeFreeMinuteCount = (

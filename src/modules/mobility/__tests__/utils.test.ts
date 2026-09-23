@@ -43,8 +43,7 @@ const segment = (
 
 const freeMinutesAdjustment = (amount: number): PriceAdjustmentType => ({
   amount,
-  type: 'FREE_MINUTES',
-  description: '',
+  adjustmentType: 'FREE_MINUTES',
 });
 
 describe('formatRatePerUnit', () => {

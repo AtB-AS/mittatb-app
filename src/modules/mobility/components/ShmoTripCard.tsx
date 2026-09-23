@@ -1,6 +1,7 @@
 import React from 'react';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {Section} from '@atb/components/sections';
+import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ShmoTripDetailsSectionItem} from './ShmoTripDetailsSectionItem';
 import {useTimeContext} from '@atb/modules/time';
 import {useTransportColor} from '@atb/utils/use-transport-color';
@@ -9,12 +10,15 @@ import {ShmoBooking, ShmoBookingState} from '@atb/api/types/mobility';
 import {LineWithVerticalBars} from '@atb/components/line-with-vertical-bars';
 import {View} from 'react-native';
 import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import type {NavigateToPricingDetails} from '../types';
 
 type ShmoTripCardProps = {
   shmoBooking: ShmoBooking;
   isFocused: boolean;
   mode: AnyMode;
   subMode?: AnySubMode;
+  navigateToPricingDetails: NavigateToPricingDetails;
 };
 
 export const ShmoTripCard = ({
@@ -22,7 +26,9 @@ export const ShmoTripCard = ({
   isFocused,
   mode,
   subMode,
+  navigateToPricingDetails,
 }: ShmoTripCardProps) => {
+  const {t} = useTranslation();
   const styles = useStyles();
   const {serverNow} = useTimeContext(
     isFocused ? ONE_SECOND_MS : ONE_MINUTE_MS * 5,
@@ -53,6 +59,16 @@ export const ShmoTripCard = ({
         totalAmount={shmoBooking?.pricing.currentAmount.toString() ?? ''}
         currency={shmoBooking?.pricingPlan.currency}
         withHeader={false}
+      />
+
+      <LinkSectionItem
+        text={t(MobilityTexts.pricingDetails.priceInfo)}
+        onPress={() =>
+          navigateToPricingDetails(
+            shmoBooking.pricingPlan,
+            shmoBooking.pricing.priceAdjustments ?? undefined,
+          )
+        }
       />
     </Section>
   );

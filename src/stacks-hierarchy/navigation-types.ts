@@ -15,7 +15,7 @@ import {
   ShmoBooking,
   ShmoPricingPlan,
 } from '@atb/api/types/mobility';
-import type {BenefitType} from '@atb/api/types/benefit';
+import type {PriceAdjustmentType} from '@atb/api/types/benefit';
 import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import type {TripAnalytics} from '@atb/screen-components/travel-details-screens';
@@ -96,6 +96,11 @@ export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
 type Root_ContactShmoOperatorScreenParams = ShmoOperatorParams;
 
+type Root_ShmoPricingDetailsScreenParams = {
+  pricingPlan: ShmoPricingPlan;
+  priceAdjustments?: PriceAdjustmentType[];
+};
+
 type Root_ContactShmoOperatorConfirmationScreenParams = {
   operatorName: string;
 };
@@ -157,10 +162,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ShmoHelpScreen: Root_ShmoHelpScreenParams;
   Root_ShmoOnboardingScreen: {formFactor?: FormFactor};
-  Root_ShmoPricingDetailsScreen: {
-    pricingPlan: ShmoPricingPlan;
-    benefit?: BenefitType;
-  };
+  Root_ShmoPricingDetailsScreen: Root_ShmoPricingDetailsScreenParams;
   Root_ContactShmoOperatorScreen: Root_ContactShmoOperatorScreenParams;
   Root_ContactShmoOperatorConfirmationScreen: Root_ContactShmoOperatorConfirmationScreenParams;
   Root_NotificationPermissionScreen: undefined;

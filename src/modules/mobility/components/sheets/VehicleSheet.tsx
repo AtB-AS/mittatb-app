@@ -27,12 +27,7 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {
-  ActionButtonType,
-  BonusOffer,
-  ShmoPricingPlan,
-  Vehicle,
-} from '@atb/api/types/mobility';
+import {ActionButtonType, BonusOffer, Vehicle} from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
@@ -47,6 +42,7 @@ import {
 } from '@atb/modules/bonus';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import type {BenefitType} from '@atb/api/types/benefit';
+import type {NavigateToPricingDetails} from '../../types';
 import {
   useVehicleAppSwitchMutation,
   VehicleAppSwitchVariables,
@@ -65,10 +61,7 @@ type Props = {
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
   navigateToScanQrCode: () => void;
-  navigateToPricingDetails: (
-    pricingPlan: ShmoPricingPlan,
-    benefit: BenefitType | undefined,
-  ) => void;
+  navigateToPricingDetails: NavigateToPricingDetails;
 };
 
 export const VehicleSheet = ({
