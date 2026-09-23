@@ -94,7 +94,9 @@ const NewTripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
-  const {isTripTicketCardEnabled} = useFeatureTogglesContext();
+  const isTripTicketCardEnabled = useIsExperimentalEnabled(
+    'isTripTicketCardEnabled',
+  );
   const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useRefreshTripQuery(

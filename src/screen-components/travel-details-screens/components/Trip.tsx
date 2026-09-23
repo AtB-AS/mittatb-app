@@ -49,7 +49,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {TripTicketCard} from './TripTicketCard';
 
@@ -81,7 +81,9 @@ export const Trip: React.FC<TripProps> = ({
   const {theme} = useThemeContext();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const {enable_ticketing} = useRemoteConfigContext();
-  const {isTripTicketCardEnabled} = useFeatureTogglesContext();
+  const isTripTicketCardEnabled = useIsExperimentalEnabled(
+    'isTripTicketCardEnabled',
+  );
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
 
