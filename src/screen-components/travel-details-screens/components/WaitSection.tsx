@@ -13,9 +13,7 @@ import {TransferRisk} from '@atb-as/utils';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {DimensionOverrides, NEW_TRIP_DIMENSIONS, TripRow} from './TripRow';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {useTransportColor} from '@atb/utils/use-transport-color';
+import {TripIconRow} from './TripIconRow';
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
@@ -23,15 +21,10 @@ export type WaitDetails = {
   transferRisk?: TransferRisk;
 };
 
-/** Where a trip row's content starts, which is what stop place names align to. */
-const TRIP_CONTENT_OFFSET =
-  (NEW_TRIP_DIMENSIONS.labelWidth ?? 0) +
-  (NEW_TRIP_DIMENSIONS.decorationContainerWidth ?? 0);
-
 const ONE_MINUTE_IN_SECONDS = 60;
 
 type WaitMessage = {
-  icon: React.ComponentProps<typeof ThemeIcon>['svg'];
+  icon: React.ComponentProps<typeof TripIconRow>['svg'];
   title?: string;
   message: string;
   /** Draws the icon and title in the named emphasis colour. */
@@ -76,8 +69,7 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const {t, language} = useTranslation();
   const transfer = getTransferMessage(wait.transferRisk, t);
 
-  // The section carries its own bottom spacing, so rendering it with no rows
-  // leaves a gap. A risk with no message of its own lands here.
+  // A risk with no message of its own lands here.
   if (!transfer && !wait.mustWaitForNextLeg) return null;
 
   return (
@@ -95,44 +87,27 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
 const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
   const style = useSectionStyles();
   const {theme} = useThemeContext();
-  const legColor = useTransportColor();
 
   const emphasisColor = emphasis
     ? theme.color.foreground.emphasis[emphasis]
     : undefined;
 
-  const dimensionOverrides: DimensionOverrides = {
-    ...NEW_TRIP_DIMENSIONS,
-    labelWidth: TRIP_CONTENT_OFFSET - theme.spacing.small,
-    decorationContainerWidth: theme.spacing.small,
-  };
-
   return (
-    <TripRow
-      dimensionOverrides={dimensionOverrides}
-      rowLabel={
-        <ThemeIcon
-          svg={icon}
-          size="large"
-          color={emphasisColor ?? legColor.secondary.background}
-        />
-      }
+    <TripIconRow
+      boxed={!emphasisColor}
+      svg={icon}
+      color={emphasisColor ?? theme.color.transport.walk.primary}
+      contentStyle={style.message}
     >
-      <View style={style.message}>
-        {title && (
-          <ThemeText
-            typography="body__m"
-            type="secondary"
-            color={emphasisColor}
-          >
-            {title}
-          </ThemeText>
-        )}
-        <ThemeText typography="body__m" type="secondary">
-          {message}
+      {title && (
+        <ThemeText typography="body__m" type="secondary" color={emphasisColor}>
+          {title}
         </ThemeText>
-      </View>
-    </TripRow>
+      )}
+      <ThemeText typography="body__m" type="secondary">
+        {message}
+      </ThemeText>
+    </TripIconRow>
   );
 };
 
@@ -157,7 +132,6 @@ function getTransferMessage(
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     flex: 1,
-    marginBottom: theme.spacing.large,
   },
   message: {
     rowGap: theme.spacing.xSmall,

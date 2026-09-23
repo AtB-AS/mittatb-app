@@ -79,6 +79,7 @@ import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {InterchangeSection} from './InterchangeSection';
+import {TripIconRow} from './TripIconRow';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -544,7 +545,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 mode="secondary"
                 leftIcon={{svg: Map}}
                 text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-                backgroundColor={theme.color.background.neutral[1]}
+                backgroundColor={theme.color.background.neutral[0]}
                 onPress={() => onPressShowLive(serviceJourneyPolyline)}
               />
             </TripRow>
@@ -707,7 +708,7 @@ const IntermediateInfo = ({
           type="small"
           expanded={false}
           mode="secondary"
-          backgroundColor={theme.color.background.neutral[1]}
+          backgroundColor={theme.color.background.neutral[0]}
           rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
           text={t(
             TripDetailsTexts.trip.leg.intermediateStops.label(
@@ -897,38 +898,35 @@ type WalkSectionProps = {
 
 const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
   const {t, language} = useTranslation();
-  const style = useSectionStyles();
+  const {theme} = useThemeContext();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
   const humanizedDistance = useHumanizeDistance(leg.distance);
   const durationText = secondsToDuration(leg.duration ?? 0, language);
   const a11yLabel = useWalkA11yLabel(leg, timeRounding);
 
   return (
-    <TripRow
-      dimensionOverrides={NEW_TRIP_DIMENSIONS}
+    <TripIconRow
+      decorated
+      boxed
+      svg={WalkFill}
+      color={theme.color.transport.walk.primary}
+      iconAccessibilityLabel={t(getTranslatedModeName('foot'))}
       testID="footLeg"
       accessibilityLabel={a11yLabel}
     >
-      <View style={style.transportLine}>
-        <ThemeIcon
-          size="normal"
-          svg={WalkFill}
-          accessibilityLabel={t(getTranslatedModeName('foot'))}
-        />
-        <ThemeText typography="body__s" type="secondary">
-          {isWalkTimeOfSignificance && humanizedDistance
-            ? t(
-                TripDetailsTexts.trip.leg.walk.labelWithDistance(
-                  durationText,
-                  humanizedDistance,
-                ),
-              )
-            : isWalkTimeOfSignificance
-              ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
-              : t(TripDetailsTexts.trip.leg.shortWalk)}
-        </ThemeText>
-      </View>
-    </TripRow>
+      <ThemeText typography="body__s" type="secondary">
+        {isWalkTimeOfSignificance && humanizedDistance
+          ? t(
+              TripDetailsTexts.trip.leg.walk.labelWithDistance(
+                durationText,
+                humanizedDistance,
+              ),
+            )
+          : isWalkTimeOfSignificance
+            ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
+            : t(TripDetailsTexts.trip.leg.shortWalk)}
+      </ThemeText>
+    </TripIconRow>
   );
 };
 
@@ -954,6 +952,7 @@ const BikeSection = ({leg, timeRounding = 'floor'}: BikeSectionProps) => {
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
+          iconSize="small"
           spacious
           rounded
         />
@@ -976,7 +975,6 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
 
   if (id === AUTHORITY) return null;
   if (!url) {
@@ -1008,7 +1006,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           mode="secondary"
           type="small"
           expanded={false}
-          interactiveColor={interactiveColor}
+          backgroundColor={theme.color.background.neutral[0]}
           text={name}
         />
       </View>
@@ -1039,7 +1037,6 @@ export function mapLegToTimeValues(leg: Leg) {
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   tripSection: {
     flex: 1,
-    marginBottom: theme.spacing.large,
   },
   legPath: {
     flex: 1,

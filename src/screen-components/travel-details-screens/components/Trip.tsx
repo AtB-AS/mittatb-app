@@ -275,6 +275,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   trip: {
     marginTop: theme.spacing.medium,
+    paddingTop: theme.spacing.medium,
+    paddingRight: theme.spacing.medium,
+    paddingBottom: theme.spacing.large,
+    rowGap: theme.spacing.large,
+    backgroundColor: theme.color.background.neutral[0].background,
+    borderRadius: theme.border.radius.regular,
   },
 }));
 

@@ -7,53 +7,35 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
-import {useTransportColor} from '@atb/utils/use-transport-color';
 import {StyleSheet} from '@atb/theme';
-import {View} from 'react-native';
-import {TripLegDecoration} from './TripLegDecoration';
-import {NEW_TRIP_DIMENSIONS, TripRow} from './TripRow';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {TripIconRow} from './TripIconRow';
 import {Connection, StaySeated} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {ThemeText} from '@atb/components/text';
 
 export const InterchangeSection = ({leg}: {leg: Leg}) => {
   const {t, language} = useTranslation();
   const style = useStyles();
-  const legColor = useTransportColor().secondary;
 
   const interchange = leg.interchangeFrom;
 
   if (!interchange?.guaranteed) return null;
 
+  const isStaySeated = !!interchange.staySeated;
   const interchangeTexts = getInterchangeTexts(interchange, t, language);
 
   return (
-    <View style={style.container}>
-      <TripLegDecoration
-        dimensionOverrides={NEW_TRIP_DIMENSIONS}
-        color={legColor.background}
-        hasStart={false}
-        hasEnd={false}
-      />
-      <TripRow
-        dimensionOverrides={NEW_TRIP_DIMENSIONS}
-        accessibilityLabel={`${interchangeTexts.title}. ${interchangeTexts.body}`}
-        accessible={true}
-      >
-        <View style={style.interchangeInfo}>
-          <ThemeIcon
-            size="normal"
-            svg={interchange.staySeated ? StaySeated : Connection}
-          />
-          <View style={style.interchangeText}>
-            <ThemeText typography="body__m">{interchangeTexts.title}</ThemeText>
-            <ThemeText typography="body__s" type="secondary">
-              {interchangeTexts.body}
-            </ThemeText>
-          </View>
-        </View>
-      </TripRow>
-    </View>
+    <TripIconRow
+      boxed={isStaySeated}
+      svg={isStaySeated ? StaySeated : Connection}
+      contentStyle={style.message}
+      accessibilityLabel={`${interchangeTexts.title}. ${interchangeTexts.body}`}
+      accessible={true}
+    >
+      <ThemeText typography="body__m">{interchangeTexts.title}</ThemeText>
+      <ThemeText typography="body__s" type="secondary">
+        {interchangeTexts.body}
+      </ThemeText>
+    </TripIconRow>
   );
 };
 
@@ -93,13 +75,7 @@ const getPublicCode = (
 ) => serviceJourney?.publicCode ?? serviceJourney?.line.publicCode;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    marginBottom: theme.spacing.large, // Note: Should rather gap on parent
+  message: {
+    rowGap: theme.spacing.xSmall,
   },
-  interchangeInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.small,
-  },
-  interchangeText: {flex: 1},
 }));
