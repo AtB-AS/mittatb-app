@@ -254,12 +254,18 @@ const TripDetailsTexts = {
       ),
     },
     ticketCard: {
-      message: _(
+      invalidMessage: _(
         'Denne reisen trenger billett',
         'This trip requires a ticket',
         'Denne reisa treng billett',
       ),
-      buyAction: _('Kjøp', 'Buy', 'Kjøp'),
+      buyTicket: _('Kjøp', 'Buy', 'Kjøp'),
+      validMessage: _(
+        'Du har kjøpt billett til reisen',
+        'You have bought a ticket for this trip',
+        'Du har kjøpt billett til reisa',
+      ),
+      showTicket: _('Vis billett', 'Show ticket', 'Vis billett'),
     },
   },
   messages: {

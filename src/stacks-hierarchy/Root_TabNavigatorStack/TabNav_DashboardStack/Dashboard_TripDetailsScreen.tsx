@@ -34,6 +34,23 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
           tripPattern: route.params.tripPattern,
         });
       }}
+      onPressShowTicket={(tripAnalytics) => {
+        analytics.logEvent(
+          'Trip details',
+          'Show ticket clicked',
+          tripAnalytics,
+        );
+        navigation.navigate('Root_TabNavigatorStack', {
+          screen: 'TabNav_TicketingStack',
+          params: {
+            screen: 'Ticketing_RootScreen',
+            params: {
+              screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+              params: {},
+            },
+          },
+        });
+      }}
       onPressQuay={(stopPlace, selectedQuayId, tripAnalytics) => {
         analytics.logEvent('Trip details', 'Stop place clicked', tripAnalytics);
         navigation.push('Dashboard_PlaceScreen', {

@@ -49,7 +49,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {TripTicketCard} from './TripTicketCard';
+import {TripTicketCard, TripTicketCardMode} from './TripTicketCard';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -62,6 +62,8 @@ export type TripProps = {
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   purchaseSelection?: PurchaseSelectionType;
   onPressBuyTicket: () => void;
+  onPressShowTicket: () => void;
+  ticketCardMode: TripTicketCardMode;
   now: number;
 };
 export const Trip: React.FC<TripProps> = ({
@@ -72,6 +74,8 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
   purchaseSelection,
   onPressBuyTicket,
+  onPressShowTicket,
+  ticketCardMode,
   now,
 }) => {
   const styles = useStyle();
@@ -183,9 +187,20 @@ export const Trip: React.FC<TripProps> = ({
       )}
       {shouldShowTicketCard && (
         <TripTicketCard
-          message={t(TripDetailsTexts.trip.ticketCard.message)}
-          actionText={t(TripDetailsTexts.trip.ticketCard.buyAction)}
-          onPress={onPressBuyTicket}
+          mode={ticketCardMode}
+          message={
+            ticketCardMode === 'valid'
+              ? t(TripDetailsTexts.trip.ticketCard.validMessage)
+              : t(TripDetailsTexts.trip.ticketCard.invalidMessage)
+          }
+          actionText={
+            ticketCardMode === 'valid'
+              ? t(TripDetailsTexts.trip.ticketCard.showTicket)
+              : t(TripDetailsTexts.trip.ticketCard.buyTicket)
+          }
+          onPress={
+            ticketCardMode === 'valid' ? onPressShowTicket : onPressBuyTicket
+          }
         />
       )}
       {shortWaitTime && (

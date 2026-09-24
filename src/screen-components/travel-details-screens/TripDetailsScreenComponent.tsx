@@ -58,6 +58,7 @@ type Props = TripDetailsScreenParams & {
     params: Root_PurchaseOverviewScreenParams,
     tripAnalytics: TripAnalytics,
   ) => void;
+  onPressShowTicket: (tripAnalytics: TripAnalytics) => void;
   onPressQuay: (
     stopPlace: StopPlaceFragment,
     selectedQuayId: string | undefined,
@@ -76,6 +77,7 @@ export const TripDetailsScreenComponent = ({
   tripPattern,
   onPressDetailsMap,
   onPressBuyTicket,
+  onPressShowTicket,
   onPressDeparture,
   onPressQuay,
   focusRef,
@@ -168,6 +170,8 @@ export const TripDetailsScreenComponent = ({
                   tripAnalytics,
                 );
               }}
+              onPressShowTicket={() => onPressShowTicket(tripAnalytics)}
+              ticketCardMode="invalid"
               now={serverNow}
             />
           </View>

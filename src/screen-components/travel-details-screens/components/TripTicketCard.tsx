@@ -3,18 +3,22 @@ import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {GenericClickableSectionItem} from '@atb/components/sections';
-import {InvalidFill} from '@atb/assets/svg/mono-icons/ticketing';
+import {InvalidFill, ValidFill} from '@atb/assets/svg/mono-icons/ticketing';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
+export type TripTicketCardMode = 'valid' | 'invalid';
+
 type TripTicketCardProps = {
+  mode: TripTicketCardMode;
   message: string;
   actionText: string;
   onPress: () => void;
 };
 
 export const TripTicketCard: React.FC<TripTicketCardProps> = ({
+  mode,
   message,
   actionText,
   onPress,
@@ -33,7 +37,11 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
       testID="tripTicketCard"
     >
       <View style={styles.content}>
-        <ThemeIcon svg={InvalidFill} color="error" />
+        {mode === 'valid' ? (
+          <ThemeIcon svg={ValidFill} color="valid" />
+        ) : (
+          <ThemeIcon svg={InvalidFill} color="error" />
+        )}
         <ThemeText typography="body__m" style={styles.message}>
           {message}
         </ThemeText>
