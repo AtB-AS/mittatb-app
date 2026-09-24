@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Platform} from 'react-native';
 import {NativeLiveActivities} from '@atb/modules/native';
 import {useLiveActivityRegistration} from './use-live-activity-registration';
@@ -28,9 +28,19 @@ export const LiveActivitiesContextProvider = ({children}: Props) => {
   const [pushToStartToken, setPushToStartToken] = useState<
     string | undefined
   >();
-  NativeLiveActivities?.onPushToStartTokenUpdate((token) =>
-    setPushToStartToken(token.pushToken),
-  );
+  useEffect(() => {
+    if (!NativeLiveActivities) return;
+
+    // TODO: This could be set up as a reactive value native side, so we don't
+    // have to both listen and fetch updates here.
+    const subscription = NativeLiveActivities.onPushToStartTokenUpdate(
+      (token) => setPushToStartToken(token.pushToken),
+    );
+    NativeLiveActivities.getPushToStartToken().then(
+      (token) => token && setPushToStartToken(token),
+    );
+    return () => subscription.remove();
+  }, []);
 
   return (
     <LiveActivitiesContext.Provider

@@ -13,6 +13,7 @@ import {
   type TransitLiveActivityContentState,
   type TransitLiveActivityMode,
 } from '@atb/modules/live-activities';
+import {ClickableCopy} from '@atb/components/clickable-copy';
 
 /**
  * Debug-menu interface for the iOS Live Activities PoC.
@@ -71,7 +72,7 @@ export const DebugLiveActivities = () => {
   const [activityId, setActivityId] = useState<string | null>(null);
   const {activities, pushToStartToken} = useLiveActivitiesContext();
 
-  const available = Platform.OS === 'ios' && !!NativeLiveActivities;
+  if (Platform.OS !== 'ios' || !NativeLiveActivities) return null;
 
   const start = async (key: keyof typeof SCENARIOS) => {
     if (!NativeLiveActivities) return;
@@ -146,80 +147,71 @@ export const DebugLiveActivities = () => {
           Live Activities (PoC)
         </ThemeText>
         <ThemeText typography="body__s" type="secondary">
-          {available
-            ? activityId
-              ? `Active: ${activityId}`
-              : 'No active activity'
-            : 'iOS 18+ only — unavailable on this platform'}
+          {activityId ? `Active: ${activityId}` : 'No active activity'}
         </ThemeText>
       </GenericSectionItem>
-
-      {available && (
+      {pushToStartToken && (
         <GenericSectionItem>
           <ThemeText typography="body__s__strong">
-            Registered for push updates
+            Push to start token
           </ThemeText>
-          <ThemeText>
-            Push to start token: {pushToStartToken ?? 'unknown'}
-          </ThemeText>
-          <ThemeText typography="body__s" type="secondary">
-            {activities.length
-              ? activities
-                  .map(
-                    ({activityId, tripId, apnsToken}) =>
-                      `${activityId.slice(0, 8)} · trip ${tripId.slice(
-                        0,
-                        8,
-                      )} · token ${apnsToken.slice(0, 8)}…`,
-                  )
-                  .join('\n')
-              : 'No push tokens yet — the simulator never issues one'}
-          </ThemeText>
+          <ClickableCopy
+            copyContent={pushToStartToken}
+            successElement={<ThemeText>✅ Copied!</ThemeText>}
+          >
+            <ThemeText typography="body__s" type="secondary">
+              {pushToStartToken}
+            </ThemeText>
+          </ClickableCopy>
         </GenericSectionItem>
       )}
+      <GenericSectionItem>
+        <ThemeText typography="body__s__strong">
+          Registered for push updates
+        </ThemeText>
+        <ThemeText typography="body__s" type="secondary">
+          {activities.length
+            ? activities
+                .map(
+                  ({activityId, tripId, pushToken}) =>
+                    `${activityId.slice(0, 8)} · trip ${tripId.slice(
+                      0,
+                      8,
+                    )} · token ${pushToken.slice(0, 8)}…`,
+                )
+                .join('\n')
+            : 'No push tokens yet — the simulator never issues one'}
+        </ThemeText>
+      </GenericSectionItem>
+      <LinkSectionItem text="Check enabled" onPress={checkEnabled} />
+      <LinkSectionItem
+        text="Start – Get off (6 stopp igjen)"
+        subtitle="Bus · 3 Lohove"
+        onPress={() => start('getOff6')}
+      />
+      <LinkSectionItem
+        text="Start – Walk to stop"
+        subtitle="Gå til holdeplass Prinsens gate"
+        onPress={() => start('walking')}
+      />
+      <LinkSectionItem
+        text="Start – Departure"
+        subtitle="Neste avgang fra Prinsens gate"
+        onPress={() => start('departure')}
+      />
+      <LinkSectionItem
+        text="Update → 2 stopp igjen"
+        subtitle="Requires an active activity"
+        onPress={() => update('getOff2')}
+      />
+      <LinkSectionItem
+        text="Update → Neste stopp (get off now)"
+        subtitle="Requires an active activity"
+        onPress={() => update('getOffNow')}
+      />
 
-      {available && (
-        <LinkSectionItem text="Check enabled" onPress={checkEnabled} />
-      )}
-      {available && (
-        <LinkSectionItem
-          text="Start – Get off (6 stopp igjen)"
-          subtitle="Bus · 3 Lohove"
-          onPress={() => start('getOff6')}
-        />
-      )}
-      {available && (
-        <LinkSectionItem
-          text="Start – Walk to stop"
-          subtitle="Gå til holdeplass Prinsens gate"
-          onPress={() => start('walking')}
-        />
-      )}
-      {available && (
-        <LinkSectionItem
-          text="Start – Departure"
-          subtitle="Neste avgang fra Prinsens gate"
-          onPress={() => start('departure')}
-        />
-      )}
-      {available && (
-        <LinkSectionItem
-          text="Update → 2 stopp igjen"
-          subtitle="Requires an active activity"
-          onPress={() => update('getOff2')}
-        />
-      )}
-      {available && (
-        <LinkSectionItem
-          text="Update → Neste stopp (get off now)"
-          subtitle="Requires an active activity"
-          onPress={() => update('getOffNow')}
-        />
-      )}
-      {available && <LinkSectionItem text="End activity" onPress={end} />}
-      {available && (
-        <LinkSectionItem text="End all activities" onPress={endAll} />
-      )}
+      <LinkSectionItem text="End active activity" onPress={end} />
+      <LinkSectionItem text="End all activities" onPress={endAll} />
     </Section>
   );
 };
