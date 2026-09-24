@@ -93,6 +93,7 @@ export const Map = (props: MapProps) => {
   const {
     includeSnackbar,
     isFocused,
+    isMapTabFocused,
     tabBarHeight,
     navigateToShmoSupport,
     navigateToShmoOnboarding,
@@ -158,7 +159,7 @@ export const Map = (props: MapProps) => {
     (mapFilter?.mobility.CAR?.showAll ?? false) && !isActiveBikeTrip;
   const showStations = showCityBikeStations || showSharedCars;
   const shouldShowVehiclesAndStations =
-    isFocused && (showVehicles || showSharedCars || showStations); // don't send tile requests while in the background, and always get fresh data upon enter
+    isMapTabFocused && (showVehicles || showSharedCars || showStations);
 
   const showGeofencingZones =
     isGeofencingZonesEnabled &&
