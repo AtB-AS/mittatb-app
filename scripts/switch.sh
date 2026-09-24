@@ -8,4 +8,4 @@ if [ -z "$org" ]; then
     exit 1
 fi
 
-pnpm store prune && pnpm clean && pnpm install && pnpm run setup dev "$org" && pnpm start
+pnpm store prune && pnpm clean && pnpm install && pnpm run setup dev "$org" && pnpm start --reset-cache
