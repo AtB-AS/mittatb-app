@@ -137,7 +137,7 @@ The React Native CLI installs the app with `xcrun devicectl`, which only support
 ERROR: The specified device was not found.(com.apple.dt.CoreDeviceError error 1000 (0x3E8))
 ```
 
-Either run the app through XCode (see above), or install the built app with [ios-deploy](https://github.com/ios-control/ios-deploy):
+Either run the app through XCode, or install the built app with [ios-deploy](https://github.com/ios-control/ios-deploy):
 
 - Install it: `brew install ios-deploy`
 - Find your device's UDID: `xcrun xctrace list devices`
