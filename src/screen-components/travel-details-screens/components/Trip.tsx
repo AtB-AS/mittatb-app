@@ -89,7 +89,9 @@ export const Trip: React.FC<TripProps> = ({
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
 
-  const shouldShowTicketCard = isTripTicketCardEnabled && !!purchaseSelection;
+  const shouldShowTicketCard =
+    isTripTicketCardEnabled &&
+    (ticketCardMode === 'valid' || !!purchaseSelection);
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 

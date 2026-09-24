@@ -21,7 +21,9 @@ import {
 import {
   FareProductTypeConfig,
   FareZone as ConfigFareZone,
+  PreassignedFareProduct,
 } from '@atb/modules/configuration';
+import {FareContractType, getAccesses} from '@atb-as/utils';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
@@ -290,6 +292,95 @@ export function withinZoneIds(legs: Leg[]): string[] {
       ),
   );
   return containingZones;
+}
+
+/**
+ * The fare zones of every stop the trip travels through on the legs that need
+ * a ticket: where each leg starts, calls in between and ends, in travel order.
+ * Each entry holds the zones of one stop, filtered to the fare zones we sell
+ * tickets for. A stop on a zone border can have more than one.
+ *
+ * Returns undefined when a stop has no fare zone we sell tickets for, since it
+ * then can't be determined which zones a ticket must cover.
+ */
+export function getFareZoneIdsPerStop(
+  legs: Leg[],
+  fareZones: ConfigFareZone[],
+): string[][] | undefined {
+  const fareZoneIdsWeSellTicketsFor = new Set(fareZones.map((zone) => zone.id));
+  const fareZoneIdsPerStop: string[][] = [];
+
+  for (const leg of getNonFreeLegs(legs)) {
+    const tariffZonesPerStop = [
+      leg.fromPlace.quay?.tariffZones,
+      ...leg.intermediateEstimatedCalls.map((call) => call.quay.tariffZones),
+      leg.toPlace.quay?.tariffZones,
+    ];
+    for (const tariffZones of tariffZonesPerStop) {
+      const fareZoneIds = (tariffZones ?? [])
+        .map((zone) => zone.id)
+        .filter((id) => fareZoneIdsWeSellTicketsFor.has(id));
+      if (!fareZoneIds.length) return undefined;
+      fareZoneIdsPerStop.push(fareZoneIds);
+    }
+  }
+
+  return fareZoneIdsPerStop;
+}
+
+/**
+ * Whether a fare contract lets the traveller make the whole trip, given the
+ * fare zones of its stops from `getFareZoneIdsPerStop`:
+ * - It is valid when each leg that needs a ticket departs. For carnets, this
+ *   means within an activated access.
+ * - Its product type allows the mode of each of those legs.
+ * - Its fare zones include a zone of every stop.
+ */
+export function isTripCoveredByFareContract(
+  legs: Leg[],
+  fareZoneIdsPerStop: string[][],
+  fareContract: FareContractType,
+  preassignedFareProducts: Pick<PreassignedFareProduct, 'id' | 'type'>[],
+  fareProductTypeConfigs: FareProductTypeConfig[],
+): boolean {
+  const nonFreeLegs = getNonFreeLegs(legs);
+  if (!nonFreeLegs.length) return false;
+
+  const validityPeriods =
+    getAccesses(fareContract)?.usedAccesses ?? fareContract.travelRights;
+  const isValidAtEveryBoarding = nonFreeLegs.every((leg) => {
+    const boardingTime = new Date(leg.expectedStartTime).getTime();
+    return validityPeriods.some(
+      (period) =>
+        period.startDateTime.getTime() <= boardingTime &&
+        boardingTime <= period.endDateTime.getTime(),
+    );
+  });
+  if (!isValidAtEveryBoarding) return false;
+
+  return fareContract.travelRights.some((travelRight) => {
+    const preassignedFareProduct = preassignedFareProducts.find(
+      (product) => product.id === travelRight.fareProductRef,
+    );
+    const fareProductTypeConfig = fareProductTypeConfigs.find(
+      (config) => config.type === preassignedFareProduct?.type,
+    );
+    if (!fareProductTypeConfig) return false;
+
+    const allowsEveryLeg = nonFreeLegs.every((leg) =>
+      fareProductTypeConfig.transportModes.some(
+        (transportMode) =>
+          transportMode.mode === leg.mode &&
+          (!transportMode.subMode ||
+            transportMode.subMode === leg.transportSubmode),
+      ),
+    );
+    const fareZoneRefs = travelRight.fareZoneRefs ?? [];
+    const coversEveryStop = fareZoneIdsPerStop.every((fareZoneIds) =>
+      fareZoneIds.some((id) => fareZoneRefs.includes(id)),
+    );
+    return allowsEveryLeg && coversEveryStop;
+  });
 }
 
 export const isLineFlexibleTransport = (

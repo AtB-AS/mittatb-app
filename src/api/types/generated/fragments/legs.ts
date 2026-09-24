@@ -90,7 +90,12 @@ export type LegFragment = {
     realtime: boolean;
     forAlighting: boolean;
     forBoarding: boolean;
-    quay: {name: string; id: string; stopPlace?: StopPlaceFragment};
+    quay: {
+      name: string;
+      id: string;
+      tariffZones: Array<TariffZoneFragment>;
+      stopPlace?: StopPlaceFragment;
+    };
     notices: Array<NoticeFragment>;
   }>;
   authority?: AuthorityFragment;

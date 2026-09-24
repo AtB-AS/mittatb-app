@@ -44,6 +44,7 @@ import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props'
 import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+import {useTripTicketCardMode} from './use-trip-ticket-card-mode';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -109,6 +110,7 @@ export const TripDetailsScreenComponent = ({
   );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
+  const ticketCardMode = useTripTicketCardMode(updatedTripPattern, serverNow);
   const headerTitle = `${formatToClock(updatedTripPattern.expectedStartTime, language, 'floor')} - ${formatToClock(updatedTripPattern.expectedEndTime, language, 'ceil')}`;
 
   const refreshControlProps = useManualRefreshControlProps({
@@ -171,7 +173,7 @@ export const TripDetailsScreenComponent = ({
                 );
               }}
               onPressShowTicket={() => onPressShowTicket(tripAnalytics)}
-              ticketCardMode="invalid"
+              ticketCardMode={ticketCardMode}
               now={serverNow}
             />
           </View>
