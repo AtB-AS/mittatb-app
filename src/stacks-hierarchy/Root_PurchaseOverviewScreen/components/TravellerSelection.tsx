@@ -177,6 +177,8 @@ export function TravellerSelection({
         ) : (
           <GenericSectionItem {...accessibility}>{content}</GenericSectionItem>
         )}
+        {/* TODO : If we create another checkbox inside section, 
+            consider adding a CheckboxSectionItem and use that instead */}
         <GenericClickableSectionItem
           onPress={() => {
             const {selection: newSelection} = builder
