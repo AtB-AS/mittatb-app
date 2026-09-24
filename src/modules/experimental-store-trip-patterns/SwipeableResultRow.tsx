@@ -13,6 +13,12 @@ export type RightActionKind = 'delete' | 'save';
 
 const RIGHT_SWIPE_THRESHOLD = 40;
 
+// Horizontal distance before the swipe gesture activates. Higher than the
+// library default (10) so that a mostly vertical scroll with slight sideways
+// drift keeps scrolling instead of the swipe stealing the gesture (noticeable
+// on Android).
+const DRAG_ACTIVATION_OFFSET = 30;
+
 export const SwipeableResultRow: React.FC<
   React.PropsWithChildren<{
     onRightAction: (
@@ -50,6 +56,8 @@ export const SwipeableResultRow: React.FC<
       friction={2}
       overshootFriction={8}
       enableTrackpadTwoFingerGesture
+      dragOffsetFromLeft={DRAG_ACTIVATION_OFFSET}
+      dragOffsetFromRight={-DRAG_ACTIVATION_OFFSET}
       rightThreshold={RIGHT_SWIPE_THRESHOLD}
       renderRightActions={RightAction}
       onSwipeableOpen={handleSwipe}
