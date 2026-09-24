@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, Platform} from 'react-native';
+import React from 'react';
+import {Alert, Platform, View} from 'react-native';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -14,6 +14,8 @@ import {
   type TransitLiveActivityMode,
 } from '@atb/modules/live-activities';
 import {ClickableCopy} from '@atb/components/clickable-copy';
+import {Button} from '@atb/components/button';
+import {random} from 'lodash';
 
 /**
  * Debug-menu interface for the iOS Live Activities PoC.
@@ -32,97 +34,55 @@ const inMinutes = (m: number) => Math.floor(Date.now() / 1000) + m * 60;
  */
 const ATTRIBUTES = {tripId: 'debug-preset'};
 
-const BASE = {
-  mode: 'bus' as TransitLiveActivityMode,
-  lineNumber: '3',
-  lineName: 'Lohove',
-};
-
-const SCENARIOS: Record<string, TransitLiveActivityContentState> = {
-  getOff6: {
-    ...BASE,
-    title: '6 stopp igjen',
-    eventTime: inMinutes(18),
-  },
-  getOff2: {
-    ...BASE,
-    title: '2 stopp igjen',
-    eventTime: inMinutes(6),
-  },
-  getOffNow: {
-    ...BASE,
-    title: 'Neste stopp',
-    eventTime: inMinutes(1),
-  },
-  walking: {
-    ...BASE,
-    mode: 'walk',
-    title: 'Gå til holdeplass Prinsens gate',
-    eventTime: inMinutes(4),
-  },
-  departure: {
-    ...BASE,
-    title: 'Neste avgang fra Prinsens gate',
-    eventTime: inMinutes(9),
-  },
-};
-
 export const DebugLiveActivities = () => {
   const styles = useStyles();
-  const [activityId, setActivityId] = useState<string | null>(null);
   const {activities, pushToStartToken} = useLiveActivitiesContext();
 
   if (Platform.OS !== 'ios' || !NativeLiveActivities) return null;
 
-  const start = async (key: keyof typeof SCENARIOS) => {
-    if (!NativeLiveActivities) return;
+  const start = async () => {
+    const scenario: TransitLiveActivityContentState = {
+      eventTime: inMinutes(random(10)),
+      lineName: ['Hakkebakkeskogen', 'Lohove'][random(0, 1)],
+      lineNumber: random(1, 15).toString(),
+      mode: ['bus', 'rail', 'walk'][random(0, 2)] as TransitLiveActivityMode,
+      title: ['6 stopp igjen', '2 stopp igjen', 'Neste stopp'][random(0, 2)],
+    };
     try {
-      const id = await NativeLiveActivities.startActivity(
+      const id = await NativeLiveActivities!.startActivity(
         JSON.stringify(ATTRIBUTES),
-        JSON.stringify(SCENARIOS[key]),
+        JSON.stringify(scenario),
       );
-      setActivityId(id);
       Alert.alert('Live Activity started', `id: ${id}`);
     } catch (e: any) {
       Alert.alert('Start failed', e?.message ?? String(e));
     }
   };
 
-  const update = async (key: keyof typeof SCENARIOS) => {
-    if (!NativeLiveActivities) return;
+  const update = async (activityId: string) => {
     if (!activityId) {
       Alert.alert('No active activity', 'Start one first.');
       return;
     }
     try {
-      await NativeLiveActivities.updateActivity(
+      await NativeLiveActivities!.updateActivity(
         activityId,
-        JSON.stringify(SCENARIOS[key]),
+        JSON.stringify({
+          mode: 'bus' as TransitLiveActivityMode,
+          lineNumber: '3',
+          lineName: 'Lohove',
+          title: '6 stopp igjen',
+          eventTime: inMinutes(18),
+        }),
       );
     } catch (e: any) {
       Alert.alert('Update failed', e?.message ?? String(e));
     }
   };
 
-  const end = async () => {
-    if (!NativeLiveActivities) return;
-    if (!activityId) {
-      Alert.alert('No active activity', 'Nothing to end.');
-      return;
-    }
+  const end = async (id: string) => {
     try {
-      await NativeLiveActivities.endActivity(activityId, false);
-      setActivityId(null);
-    } catch (e: any) {
-      Alert.alert('End failed', e?.message ?? String(e));
-    }
-  };
-
-  const endAll = async () => {
-    if (!NativeLiveActivities) return;
-    try {
-      await NativeLiveActivities.endAllActivities();
-      setActivityId(null);
+      await NativeLiveActivities!.endActivity(id, false);
     } catch (e: any) {
       Alert.alert('End all failed', e?.message ?? String(e));
     }
@@ -143,12 +103,7 @@ export const DebugLiveActivities = () => {
   return (
     <Section style={styles.section}>
       <GenericSectionItem>
-        <ThemeText typography="body__m__strong">
-          Live Activities (PoC)
-        </ThemeText>
-        <ThemeText typography="body__s" type="secondary">
-          {activityId ? `Active: ${activityId}` : 'No active activity'}
-        </ThemeText>
+        <ThemeText typography="body__m__strong">Live Activities</ThemeText>
       </GenericSectionItem>
       {pushToStartToken && (
         <GenericSectionItem>
@@ -165,53 +120,33 @@ export const DebugLiveActivities = () => {
           </ClickableCopy>
         </GenericSectionItem>
       )}
-      <GenericSectionItem>
-        <ThemeText typography="body__s__strong">
-          Registered for push updates
-        </ThemeText>
-        <ThemeText typography="body__s" type="secondary">
-          {activities.length
-            ? activities
-                .map(
-                  ({activityId, tripId, pushToken}) =>
-                    `${activityId.slice(0, 8)} · trip ${tripId.slice(
-                      0,
-                      8,
-                    )} · token ${pushToken.slice(0, 8)}…`,
-                )
-                .join('\n')
-            : 'No push tokens yet — the simulator never issues one'}
-        </ThemeText>
-      </GenericSectionItem>
       <LinkSectionItem text="Check enabled" onPress={checkEnabled} />
-      <LinkSectionItem
-        text="Start – Get off (6 stopp igjen)"
-        subtitle="Bus · 3 Lohove"
-        onPress={() => start('getOff6')}
-      />
-      <LinkSectionItem
-        text="Start – Walk to stop"
-        subtitle="Gå til holdeplass Prinsens gate"
-        onPress={() => start('walking')}
-      />
-      <LinkSectionItem
-        text="Start – Departure"
-        subtitle="Neste avgang fra Prinsens gate"
-        onPress={() => start('departure')}
-      />
-      <LinkSectionItem
-        text="Update → 2 stopp igjen"
-        subtitle="Requires an active activity"
-        onPress={() => update('getOff2')}
-      />
-      <LinkSectionItem
-        text="Update → Neste stopp (get off now)"
-        subtitle="Requires an active activity"
-        onPress={() => update('getOffNow')}
-      />
-
-      <LinkSectionItem text="End active activity" onPress={end} />
-      <LinkSectionItem text="End all activities" onPress={endAll} />
+      <LinkSectionItem text="Start" onPress={start} />
+      {activities.map((activity) => (
+        <GenericSectionItem key={activity.activityId} style={styles.column}>
+          <ThemeText typography="body__s" type="secondary">
+            {activity.activityId.slice(0, 8)} · trip{' '}
+            {activity.tripId.slice(0, 8)} · token{' '}
+            {activity.pushToken.slice(0, 8)}…
+          </ThemeText>
+          <View style={styles.row}>
+            <Button
+              text="Update"
+              expanded={false}
+              mode="secondary"
+              type="small"
+              onPress={() => update(activity.activityId)}
+            />
+            <Button
+              text="End"
+              expanded={false}
+              mode="secondary"
+              type="small"
+              onPress={() => end(activity.activityId)}
+            />
+          </View>
+        </GenericSectionItem>
+      ))}
     </Section>
   );
 };
@@ -221,5 +156,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.large,
     marginHorizontal: theme.spacing.medium,
     marginBottom: theme.spacing.small,
+  },
+  column: {
+    flexDirection: 'column',
+    gap: theme.spacing.small,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: theme.spacing.small,
   },
 }));
