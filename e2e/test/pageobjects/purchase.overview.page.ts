@@ -37,10 +37,10 @@ class PurchaseOverviewPage {
   }
 
   /**
-   * Get the on-behalf-of toggle
+   * Get the on-behalf-of checkbox
    */
-  get onBehalfOfToggle() {
-    const reqId = `//*[@resource-id="onBehalfOfToggle"]`;
+  get onBehalfOfCheckbox() {
+    const reqId = `//*[@resource-id="onBehalfOfCheckbox"]`;
     return $(reqId);
   }
 

@@ -153,14 +153,14 @@ describe('Ticket', () => {
 
       // Check on-behalf-of
       await PurchaseOverviewPage.selectTraveller();
-      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toExist();
+      expect(await PurchaseOverviewPage.onBehalfOfCheckbox).not.toExist();
       await NavigationHelper.closeBottomSheet();
       await NavigationHelper.back();
 
       // Night ticket
       await TicketBuyPage.chooseFareProduct('night_v2');
       await ElementHelper.waitForElement('text', 'Night ticket, bus and tram');
-      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toExist();
+      expect(await PurchaseOverviewPage.onBehalfOfCheckbox).not.toExist();
       await NavigationHelper.back();
     } catch (errMsg) {
       await AppHelper.screenshot('error_ticket_on_behalf_of_anonymous');

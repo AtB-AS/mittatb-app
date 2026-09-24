@@ -65,8 +65,8 @@ describe('Auth Ticket', () => {
         await PurchaseOverviewPage.decreaseTravellerCount('adult');
         await PurchaseOverviewPage.increaseTravellerCount('child');
         await NavigationHelper.closeBottomSheet();
-        expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toBeChecked();
-        await PurchaseOverviewPage.onBehalfOfToggle.click();
+        expect(await PurchaseOverviewPage.onBehalfOfCheckbox).not.toBeChecked();
+        await PurchaseOverviewPage.onBehalfOfCheckbox.click();
 
         // Ensure an offer
         await AppHelper.scrollDownUntilId(
