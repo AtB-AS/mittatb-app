@@ -56,7 +56,7 @@ import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {
   formatDestinationDisplay,
   getBookingStatus,
@@ -795,14 +795,15 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
       style={styles.container}
     >
       {child}
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 

@@ -15,7 +15,7 @@ import {Button} from '@atb/components/button';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {NativeBorderlessButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
@@ -140,7 +140,8 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   style={styles.submitButton}
                   testID="submitButton"
                 />
-                <NativeBorderlessButton
+                <NativeTouchable
+                  variant="borderless"
                   style={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
@@ -153,7 +154,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
                   </ThemeText>
-                </NativeBorderlessButton>
+                </NativeTouchable>
               </>
             )}
           </View>

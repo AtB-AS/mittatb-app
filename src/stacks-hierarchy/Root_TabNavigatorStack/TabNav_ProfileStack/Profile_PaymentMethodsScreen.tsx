@@ -1,7 +1,7 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -182,7 +182,8 @@ const Card = (props: {card: RecurringPayment; onDeletePress: () => void}) => {
         </View>
 
         <View style={style.cardIcons}>
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             accessibilityLabel={t(
               PaymentMethodsTexts.a11y.deleteCardIcon(
                 paymentName,
@@ -200,7 +201,7 @@ const Card = (props: {card: RecurringPayment; onDeletePress: () => void}) => {
               width={21 * fontScale}
               fill={theme.color.foreground.dynamic.primary}
             />
-          </NativeBlockButton>
+          </NativeTouchable>
         </View>
       </View>
 

@@ -15,7 +15,7 @@ import {
   type PurchaseSelectionType,
   usePurchaseSelectionBuilder,
 } from '@atb/modules/purchase-selection';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {WithOverlayButton} from '@atb/components/overlay-button';
 
@@ -42,8 +42,8 @@ export const HarborSelection = forwardRef<
     const {t} = useTranslation();
     const selectionBuilder = usePurchaseSelectionBuilder();
 
-    const fromHarborRef = useRef<typeof NativeBlockButton>(null);
-    const toHarborRef = useRef<typeof NativeBlockButton>(null);
+    const fromHarborRef = useRef<typeof NativeTouchable>(null);
+    const toHarborRef = useRef<typeof NativeTouchable>(null);
     useImperativeHandle(ref, () => ({
       fromHarborRef: fromHarborRef as any,
       toHarborRef: toHarborRef as any,
@@ -104,7 +104,7 @@ type HarborSelectionItemProps = {
 };
 
 const HarborSelectionItem = forwardRef<
-  typeof NativeBlockButton,
+  typeof NativeTouchable,
   HarborSelectionItemProps
 >(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
   const {t} = useTranslation();

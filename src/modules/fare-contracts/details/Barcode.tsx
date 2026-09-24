@@ -12,7 +12,7 @@ import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
 import React, {RefObject, useEffect, useRef, useState} from 'react';
 import {Alert, View} from 'react-native';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
@@ -272,7 +272,8 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
   return (
     <>
       <View style={styles.aztecCode}>
-        <NativeBlockButton
+        <NativeTouchable
+          variant="block"
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -284,7 +285,7 @@ const StaticAztec = ({fc}: {fc: FareContractType}) => {
           <SecureView style={styles.secureViewFill}>
             <SvgXml xml={aztecXml} width="100%" height="100%" />
           </SecureView>
-        </NativeBlockButton>
+        </NativeTouchable>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={aztecXml}
@@ -319,7 +320,8 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           styles.staticQrCodeSmall,
         ]}
       >
-        <NativeBlockButton
+        <NativeTouchable
+          variant="block"
           onPress={() => bottomSheetModalRef.current?.present()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -331,7 +333,7 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
           <SecureView style={styles.secureViewFill}>
             <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
           </SecureView>
-        </NativeBlockButton>
+        </NativeTouchable>
       </View>
       <StaticBarcodeBottomSheet
         qrCodeSvg={qrCodeSvg}
@@ -400,7 +402,8 @@ const StaticBarcodeBottomSheet = ({
     >
       <View style={styles.staticBottomContainer}>
         <View style={[styles.aztecCode, styles.staticQrCode]}>
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             onPress={() => bottomSheetModalRef.current?.dismiss()}
             accessible={true}
             accessibilityLabel={t(
@@ -411,7 +414,7 @@ const StaticBarcodeBottomSheet = ({
             <SecureView style={styles.secureViewFill}>
               <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
             </SecureView>
-          </NativeBlockButton>
+          </NativeTouchable>
         </View>
       </View>
     </BottomSheetModal>

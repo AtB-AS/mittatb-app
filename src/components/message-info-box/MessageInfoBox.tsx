@@ -12,10 +12,12 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {NativeBorderlessButton} from '@atb/components/native-button';
+import {
+  NativeTouchable,
+  NativeTouchableOrView,
+} from '@atb/components/native-touchable';
 import {
   type A11yLiveRegion,
   useLiveRegionAnnouncement,
@@ -100,7 +102,7 @@ export const MessageInfoBox = ({
   );
 
   return (
-    <NativeButtonOrView
+    <NativeTouchableOrView
       onClick={onPress}
       style={[styles.container, style]}
       accessible={onPressConfig ? true : false}
@@ -116,7 +118,7 @@ export const MessageInfoBox = ({
       }
       testID={testID}
       focusRef={focusRef}
-      type="block"
+      variant="block"
     >
       {!noStatusIcon && (
         <ThemeIcon
@@ -156,7 +158,8 @@ export const MessageInfoBox = ({
       </View>
       {onDismiss && (
         <View>
-          <NativeBorderlessButton
+          <NativeTouchable
+            variant="borderless"
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -165,7 +168,7 @@ export const MessageInfoBox = ({
             testID={testID ? `${testID}Close` : 'close'}
           >
             <ThemeIcon svg={Close} {...iconColorProps} />
-          </NativeBorderlessButton>
+          </NativeTouchable>
         </View>
       )}
       {type === 'error' &&
@@ -181,7 +184,7 @@ export const MessageInfoBox = ({
             id: {config.installId}
           </ThemeText>
         )}
-    </NativeButtonOrView>
+    </NativeTouchableOrView>
   );
 };
 

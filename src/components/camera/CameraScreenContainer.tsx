@@ -3,7 +3,7 @@ import {StatusBar, View} from 'react-native';
 import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
 import {StyleSheet} from '@atb/theme';
-import {NativeBorderlessButton} from '../native-button';
+import {NativeTouchable} from '../native-touchable';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
 import SvgChevronLeft from '@atb/assets/svg/mono-icons/navigation/ChevronLeft';
@@ -45,12 +45,16 @@ export const CameraScreenContainer = ({
             backgroundColor="transparent"
           />
           <View style={styles.header} ref={focusRef}>
-            <NativeBorderlessButton onPress={onGoBack} style={styles.back}>
+            <NativeTouchable
+              variant="borderless"
+              onPress={onGoBack}
+              style={styles.back}
+            >
               <ThemeIcon svg={SvgChevronLeft} color="#ffffff" />
               <ThemeText typography="body__s__strong" color="#ffffff">
                 {t(ScreenHeaderTexts.headerButton.back.text)}
               </ThemeText>
-            </NativeBorderlessButton>
+            </NativeTouchable>
           </View>
           <View style={styles.content}>
             <ThemeText typography="heading__l" color="#ffffff">

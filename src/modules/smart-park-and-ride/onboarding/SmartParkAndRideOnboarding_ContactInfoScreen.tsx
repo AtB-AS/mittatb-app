@@ -17,7 +17,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {ThemeText} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
@@ -107,7 +107,8 @@ const ContactInfoContent = () => {
         </GenericSectionItem>
 
         <GenericSectionItem>
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             onPress={async () => openUrl(`tel:${telephoneNumbers['parking']}`)}
             accessibilityRole="link"
           >
@@ -117,7 +118,7 @@ const ContactInfoContent = () => {
             >
               {t(dictionary.telephone(telephoneNumbers['parking']))}
             </ThemeText>
-          </NativeBlockButton>
+          </NativeTouchable>
         </GenericSectionItem>
       </Section>
 
@@ -140,7 +141,8 @@ const ContactInfoContent = () => {
           </View>
         </GenericSectionItem>
         <GenericSectionItem>
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             onPress={async () => openUrl(`tel:${telephoneNumbers['project']}`)}
             accessibilityRole="link"
           >
@@ -150,7 +152,7 @@ const ContactInfoContent = () => {
             >
               {t(dictionary.telephone(telephoneNumbers['project']))}
             </ThemeText>
-          </NativeBlockButton>
+          </NativeTouchable>
         </GenericSectionItem>
       </Section>
 
@@ -165,7 +167,8 @@ const ContactInfoContent = () => {
           </View>
         </GenericSectionItem>
         <GenericSectionItem>
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             onPress={() => openInAppBrowser('https://atb.no/kontakt', 'close')}
             accessibilityRole="link"
             style={style.linkItem}
@@ -181,7 +184,7 @@ const ContactInfoContent = () => {
               size="normal"
               color={theme.color.interactive[0].default.background}
             />
-          </NativeBlockButton>
+          </NativeTouchable>
         </GenericSectionItem>
       </Section>
     </View>

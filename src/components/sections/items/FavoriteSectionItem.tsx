@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 type BaseProps = {
   favorite: StoredLocationFavorite;
@@ -33,7 +33,8 @@ export function FavoriteSectionItem(props: Props) {
       ? `${favorite.name}, ${favorite.location.name}`
       : favorite.location.name;
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
@@ -42,7 +43,7 @@ export function FavoriteSectionItem(props: Props) {
       {...props.accessibility}
     >
       <FavoriteItemContent {...props} />
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 

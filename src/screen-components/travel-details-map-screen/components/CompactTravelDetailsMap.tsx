@@ -12,7 +12,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
@@ -97,7 +97,8 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         // TODO(new-trip-detail): Remove toggle check when legacy screen is deleted
         style={[styles.button, isNewTripDetailScreen && styles.buttonNewDesign]}
         onPress={onExpand}
@@ -107,7 +108,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ChevronRight} />
-      </NativeBlockButton>
+      </NativeTouchable>
     </View>
   );
 };

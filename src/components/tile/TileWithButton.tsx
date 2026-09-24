@@ -1,4 +1,4 @@
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
@@ -35,7 +35,8 @@ export function TileWithButton({
   const styles = useStyles(interactiveColor);
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       style={[styles.container, style]}
       accessible={true}
       onPress={onPress}
@@ -73,7 +74,7 @@ export function TileWithButton({
           color={interactiveColor.default.foreground.primary}
         />
       </View>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 

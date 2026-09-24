@@ -1,5 +1,5 @@
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -26,7 +26,8 @@ export const EditActionSectionItem = forwardRef<any, Props>(
     const {theme} = useThemeContext();
 
     return (
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         ref={ref}
         accessible
         accessibilityRole="button"
@@ -49,7 +50,7 @@ export const EditActionSectionItem = forwardRef<any, Props>(
           size="normal"
           color={theme.color.interactive[0].default.background}
         />
-      </NativeBlockButton>
+      </NativeTouchable>
     );
   },
 );

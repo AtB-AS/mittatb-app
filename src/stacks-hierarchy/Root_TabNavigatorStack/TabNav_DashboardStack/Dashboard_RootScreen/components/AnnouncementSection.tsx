@@ -13,7 +13,7 @@ import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {NativeBorderlessButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {insets} from '@atb/utils/insets';
 import {
   GenericSectionItem,
@@ -85,7 +85,8 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
                 >
                   {summaryTitle}
                 </ThemeText>
-                <NativeBorderlessButton
+                <NativeTouchable
+                  variant="borderless"
                   style={styles.close}
                   role="button"
                   hitSlop={insets.all(theme.spacing.medium)}
@@ -96,7 +97,7 @@ export const AnnouncementSection = ({announcement, style}: Props) => {
                   testID="closeAnnouncement"
                 >
                   <ThemeIcon svg={Close} />
-                </NativeBorderlessButton>
+                </NativeTouchable>
               </View>
               <ThemeText style={styles.summary}>
                 {getTextForLanguage(announcement.summary, language)}

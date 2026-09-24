@@ -1,5 +1,5 @@
 import {Checkbox} from '@atb/components/checkbox';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {RadioIcon} from '@atb/components/radio';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useState, ReactElement} from 'react';
@@ -98,7 +98,8 @@ const SelectItem = <T,>({
 
   return (
     <View style={style ?? itemStyles.container}>
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         style={{
           ...itemStyles.item,
           backgroundColor: selected ? selectedBackground : background,
@@ -124,7 +125,7 @@ const SelectItem = <T,>({
           </View>
         )}
         {renderItem(item, selected)}
-      </NativeBlockButton>
+      </NativeTouchable>
     </View>
   );
 };

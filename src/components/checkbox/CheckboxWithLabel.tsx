@@ -5,7 +5,7 @@ import {Checkbox} from '.';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import type {ContrastColor} from '@atb-as/theme';
-import {NativeBlockButton} from '../native-button';
+import {NativeTouchable} from '../native-touchable';
 
 export const CheckboxWithLabel = ({
   label,
@@ -31,7 +31,8 @@ export const CheckboxWithLabel = ({
     t(checked ? dictionary.checked : dictionary.unchecked);
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       style={[styles.container, style]}
       accessible={true}
       accessibilityLabel={a11yLabel}
@@ -40,7 +41,7 @@ export const CheckboxWithLabel = ({
     >
       <Checkbox checked={checked} />
       <ThemeText color={color}>{label}</ThemeText>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 };
 

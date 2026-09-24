@@ -32,7 +32,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {useAnnouncementsContext} from '@atb/modules/announcements';
 import {useNotificationsContext} from '@atb/modules/notifications';
 import {useTimeContext} from '@atb/modules/time';
@@ -519,7 +519,8 @@ export const Profile_DebugInfoScreen = () => {
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
-                    <NativeBlockButton
+                    <NativeTouchable
+                      variant="block"
                       key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
@@ -527,7 +528,7 @@ export const Profile_DebugInfoScreen = () => {
                         title={key}
                         value={preferences[key as keyof UserPreferences]}
                       />
-                    </NativeBlockButton>
+                    </NativeTouchable>
                   ))}
                 </View>
               )
@@ -742,7 +743,8 @@ function MapEntry({title, value}: {title: string; value: any}) {
   if (!!value && typeof value === 'object') {
     return (
       <View key={title} style={styles.objectEntry}>
-        <NativeBlockButton
+        <NativeTouchable
+          variant="block"
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
@@ -750,7 +752,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-        </NativeBlockButton>
+        </NativeTouchable>
         {isExpanded && <MapValue value={value} />}
       </View>
     );
@@ -762,13 +764,14 @@ function MapEntry({title, value}: {title: string; value: any}) {
         testID={title === 'user_id' ? 'userId' : ''}
       >
         {isLongString ? (
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
             <ThemeText typography="body__m__strong">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-          </NativeBlockButton>
+          </NativeTouchable>
         ) : (
           <ThemeText typography="body__m__strong">{title}: </ThemeText>
         )}

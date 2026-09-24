@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import {NativeBorderlessButton} from '../native-button';
+import {NativeTouchable} from '../native-touchable';
 import {ThemeText} from '../text';
 import {ThemeIcon} from '../theme-icon';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -63,7 +63,8 @@ export const BottomSheetHeader = ({
 
           {(headerData?.text || headerData?.icon) && (
             <View style={styles.headerRight}>
-              <NativeBorderlessButton
+              <NativeTouchable
+                variant="borderless"
                 style={styles.dismissButton}
                 testID="closeBottomSheet"
                 accessibilityRole="button"
@@ -76,7 +77,7 @@ export const BottomSheetHeader = ({
                   </ThemeText>
                 )}
                 {headerData?.icon && <ThemeIcon svg={headerData.icon} />}
-              </NativeBorderlessButton>
+              </NativeTouchable>
             </View>
           )}
         </View>

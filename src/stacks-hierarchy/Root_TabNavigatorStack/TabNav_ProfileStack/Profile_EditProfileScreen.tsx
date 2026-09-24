@@ -20,7 +20,7 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {useGetBirthdateQuery} from '@atb/modules/mobility';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ErrorResponse} from '@atb-as/utils';
 import {errorDetailsToResponseData} from '@atb/api/utils';
@@ -262,7 +262,8 @@ export const Profile_EditProfileScreen = ({
                     {t(EditProfileTexts.personalDetails.birthdate.info)}
                   </ThemeText>
 
-                  <NativeBlockButton
+                  <NativeTouchable
+                    variant="block"
                     onPress={handleOpenVippsApp}
                     accessibilityRole="link"
                     accessibilityHint={t(
@@ -274,7 +275,7 @@ export const Profile_EditProfileScreen = ({
                       {t(EditProfileTexts.personalDetails.birthdate.link)}
                     </ThemeText>
                     <ThemeIcon svg={ExternalLink} />
-                  </NativeBlockButton>
+                  </NativeTouchable>
                 </View>
               )}
 

@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
-  NativeBlockButton,
-  NativeBlockButtonProps,
-} from '@atb/components/native-button';
+  NativeTouchable,
+  NativeTouchableProps,
+} from '@atb/components/native-touchable';
 import {shadows} from '@atb/modules/map';
 import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
 import {Loading} from '../loading';
@@ -46,7 +46,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
 } & ButtonModeAwareProps &
-  NativeBlockButtonProps;
+  Omit<NativeTouchableProps, 'variant'>;
 
 export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   const {
@@ -137,7 +137,8 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   }
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       accessible
       accessibilityRole="button"
       accessibilityState={{disabled}}
@@ -182,7 +183,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
           )}
         </View>
       )}
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 });
 

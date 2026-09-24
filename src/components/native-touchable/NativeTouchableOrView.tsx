@@ -1,14 +1,9 @@
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {ReactNode} from 'react';
-import {
-  NativeBlockButton,
-  NativeBorderlessButton,
-} from '@atb/components/native-button';
+import {NativeTouchable, NativeTouchableVariant} from './NativeTouchable';
 
-export type NativeButtonType = 'borderless' | 'block';
-
-export const NativeButtonOrView = ({
-  type = 'borderless',
+export const NativeTouchableOrView = ({
+  variant,
   style,
   onClick,
   children,
@@ -16,17 +11,16 @@ export const NativeButtonOrView = ({
   focusRef,
   ...a11yProps
 }: {
-  type?: NativeButtonType;
+  variant: NativeTouchableVariant;
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
   onClick?: () => void;
   testID?: string;
   focusRef?: React.Ref<any>;
 } & AccessibilityProps) => {
-  const ButtonComponent =
-    type === 'borderless' ? NativeBorderlessButton : NativeBlockButton;
   return onClick ? (
-    <ButtonComponent
+    <NativeTouchable
+      variant={variant}
       onPress={onClick}
       style={style}
       ref={focusRef}
@@ -34,7 +28,7 @@ export const NativeButtonOrView = ({
       testID={testID ? testID : 'messageBox'}
     >
       {children}
-    </ButtonComponent>
+    </NativeTouchable>
   ) : (
     <View
       style={style}

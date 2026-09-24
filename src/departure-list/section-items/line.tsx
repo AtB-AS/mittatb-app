@@ -37,7 +37,7 @@ import {
   getBookingStatus,
 } from '@atb/screen-components/travel-details-screens';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   getMsgTypeForMostCriticalSituationOrNotice,
@@ -90,7 +90,8 @@ export function LineItem({
   return (
     <View style={[topContainer, {paddingVertical: 0, paddingHorizontal: 0}]}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
-        <NativeBlockButton
+        <NativeTouchable
+          variant="block"
           style={[contentContainer, styles.lineHeader]}
           onPress={() => onPressDeparture(items, 0)}
           hitSlop={insets.symmetric(12, 0)}
@@ -117,7 +118,7 @@ export function LineItem({
           <ThemeText style={{flex: 1}} testID="title">
             {title}
           </ThemeText>
-        </NativeBlockButton>
+        </NativeTouchable>
       </View>
       <ScrollView
         horizontal
@@ -255,7 +256,8 @@ function DepartureTimeItem({
     return null;
   }
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       style={styles.departure}
       testID={testID}
       key={departure.aimedTime + departure.serviceJourneyId}
@@ -272,7 +274,7 @@ function DepartureTimeItem({
         {formatTimeText(departure, searchDate, language, t)}
       </ThemeText>
       {rightIcon && <ThemeIcon svg={rightIcon} />}
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 
