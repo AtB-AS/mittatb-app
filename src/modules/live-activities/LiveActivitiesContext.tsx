@@ -1,8 +1,8 @@
-import React, {createContext, useContext} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import {Platform} from 'react-native';
 import {NativeLiveActivities} from '@atb/modules/native';
 import {useLiveActivityRegistration} from './use-live-activity-registration';
-import type {LiveActivityWithApnsToken} from './types';
+import type {LiveActivityWithPushToken} from './types';
 
 type LiveActivitiesContextState = {
   /**
@@ -10,7 +10,8 @@ type LiveActivitiesContextState = {
    * `NativeLiveActivities.areActivitiesEnabled()` for user preference.
    */
   isAvailable: boolean;
-  activities: LiveActivityWithApnsToken[];
+  activities: LiveActivityWithPushToken[];
+  pushToStartToken: string | undefined;
 };
 
 const LiveActivitiesContext = createContext<
@@ -24,11 +25,19 @@ type Props = {
 export const LiveActivitiesContextProvider = ({children}: Props) => {
   const activities = useLiveActivityRegistration();
 
+  const [pushToStartToken, setPushToStartToken] = useState<
+    string | undefined
+  >();
+  NativeLiveActivities?.onPushToStartTokenUpdate((token) =>
+    setPushToStartToken(token.pushToken),
+  );
+
   return (
     <LiveActivitiesContext.Provider
       value={{
         isAvailable: Platform.OS === 'ios' && !!NativeLiveActivities,
         activities,
+        pushToStartToken,
       }}
     >
       {children}

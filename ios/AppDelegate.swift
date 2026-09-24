@@ -1,13 +1,13 @@
-import UIKit
-import React
 import Bugsnag
 import Firebase
 import Intercom
 import RNBootSplash
-import SwiftBridging
-import React_RCTAppDelegate
-import ReactAppDependencyProvider
 import RNCAsyncStorage
+import React
+import ReactAppDependencyProvider
+import React_RCTAppDelegate
+import SwiftBridging
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,11 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var reactNativeFactory: RCTReactNativeFactory?
 
   @objc var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  
+
   @objc static var shared: AppDelegate? {
     return UIApplication.shared.delegate as? AppDelegate
   }
-  
+
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -32,48 +32,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     reactNativeDelegate = delegate
     reactNativeFactory = factory
-    
+
     // Initialize window
     window = UIWindow(frame: UIScreen.main.bounds)
 
     // Initialize Intercom
-    if let intercomApiKey = Bundle.main.object(forInfoDictionaryKey: "IntercomApiKey") as? String, !intercomApiKey.isEmpty {
-      if let intercomAppId = Bundle.main.object(forInfoDictionaryKey: "IntercomAppId") as? String, !intercomAppId.isEmpty {
+    if let intercomApiKey = Bundle.main.object(forInfoDictionaryKey: "IntercomApiKey") as? String,
+      !intercomApiKey.isEmpty
+    {
+      if let intercomAppId = Bundle.main.object(forInfoDictionaryKey: "IntercomAppId") as? String,
+        !intercomAppId.isEmpty
+      {
         Intercom.setApiKey(intercomApiKey, forAppId: intercomAppId)
       }
     }
-    
+
     // Initialize Bugsnag
-    if let bugsnagApiKey = Bundle.main.object(forInfoDictionaryKey: "BugsnagApiKey") as? String, !bugsnagApiKey.isEmpty {
+    if let bugsnagApiKey = Bundle.main.object(forInfoDictionaryKey: "BugsnagApiKey") as? String,
+      !bugsnagApiKey.isEmpty
+    {
       let config = BugsnagConfiguration.init(bugsnagApiKey)
-      
-      if let releaseStage = Bundle.main.object(forInfoDictionaryKey: "ReleaseStage") as? String, !releaseStage.isEmpty {
+
+      if let releaseStage = Bundle.main.object(forInfoDictionaryKey: "ReleaseStage") as? String,
+        !releaseStage.isEmpty
+      {
         config.releaseStage = releaseStage
       }
-      
+
       Bugsnag.start(with: config)
     }
-    
+
     // Initialize Firebase
     if FirebaseApp.app() == nil {
       FirebaseApp.configure()
     }
 
     // Initialize App Group
-    if let appGroupName = Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String, !appGroupName.isEmpty {
-      RNCAsyncStorage.setAppGroupName(appGroupName);
+    if let appGroupName = Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String,
+      !appGroupName.isEmpty
+    {
+      RNCAsyncStorage.setAppGroupName(appGroupName)
     }
-    
+
+    // Before React Native: the push-to-start token is issued early in launch,
+    // and subscribing after that misses it.
+    LiveActivitiesImpl.shared.startObservingActivities()
+
     factory.startReactNative(
-         withModuleName: "atb",
-         in: window,
-         launchOptions: launchOptions
-       )
+      withModuleName: "atb",
+      in: window,
+      launchOptions: launchOptions
+    )
 
     return true
   }
-  
-  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+
+  func application(
+    _ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+  ) -> Bool {
     return RCTLinkingManager.application(app, open: url, options: options)
   }
 }
@@ -82,15 +98,15 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
   override func sourceURL(for bridge: RCTBridge) -> URL? {
     self.bundleURL()
   }
-  
+
   override func bundleURL() -> URL? {
-#if DEBUG
-    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
-#else
-    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-#endif
+    #if DEBUG
+      RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    #else
+      Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    #endif
   }
-  
+
   override func customize(_ rootView: RCTRootView) {
     super.customize(rootView)
     RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)

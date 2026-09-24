@@ -69,7 +69,7 @@ const SCENARIOS: Record<string, TransitLiveActivityContentState> = {
 export const DebugLiveActivities = () => {
   const styles = useStyles();
   const [activityId, setActivityId] = useState<string | null>(null);
-  const {activities} = useLiveActivitiesContext();
+  const {activities, pushToStartToken} = useLiveActivitiesContext();
 
   const available = Platform.OS === 'ios' && !!NativeLiveActivities;
 
@@ -158,6 +158,9 @@ export const DebugLiveActivities = () => {
         <GenericSectionItem>
           <ThemeText typography="body__s__strong">
             Registered for push updates
+          </ThemeText>
+          <ThemeText>
+            Push to start token: {pushToStartToken ?? 'unknown'}
           </ThemeText>
           <ThemeText typography="body__s" type="secondary">
             {activities.length

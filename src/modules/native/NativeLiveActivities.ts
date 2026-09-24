@@ -16,6 +16,13 @@ export type LiveActivityInfo = {
 };
 
 /**
+ * APNs token to start a Live Activity remotely. Unique per app install.
+ */
+export type PushToStartTokenInfo = {
+  pushToken: string;
+};
+
+/**
  * Native module for iOS Live Activities (ActivityKit).
  *
  * The attributes (static) and content-state (dynamic) are passed as JSON
@@ -35,12 +42,23 @@ export interface Spec extends TurboModule {
   readonly onPushTokenUpdate: CodegenTypes.EventEmitter<LiveActivityInfo>;
   /** Emitted once per activity when it ends or is dismissed. */
   readonly onActivityEnded: CodegenTypes.EventEmitter<LiveActivityInfo>;
+  /**
+   * The push-to-start token, emitted when ActivityKit first issues one and on
+   * every later rotation.
+   */
+  readonly onPushToStartTokenUpdate: CodegenTypes.EventEmitter<PushToStartTokenInfo>;
 
   /**
    * Every running activity with its current push token. Events emitted before
    * JS subscribed are lost, so call this on startup to reconcile.
    */
   getActiveActivities(): Promise<LiveActivityInfo[]>;
+  /**
+   * The current push-to-start token, or `null` if none has been issued. Like
+   * {@link getActiveActivities}, this exists to reconcile on startup: the token
+   * is usually issued before JS is running, so the event alone would miss it.
+   */
+  getPushToStartToken(): Promise<string | null>;
   /** Whether the user has Live Activities enabled for this app. */
   areActivitiesEnabled(): boolean;
   /**

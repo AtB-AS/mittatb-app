@@ -9,7 +9,7 @@ RCT_EXPORT_MODULE(NativeLiveActivities)
 
 - (id)init {
   if (self = [super init]) {
-    liveActivities = [LiveActivitiesImpl new];
+    liveActivities = LiveActivitiesImpl.shared;
 
     __weak RCTLiveActivities *weakSelf = self;
     liveActivities.onPushTokenUpdate = ^(NSDictionary *payload) {
@@ -24,8 +24,12 @@ RCT_EXPORT_MODULE(NativeLiveActivities)
         [module emitOnActivityEnded:payload];
       }
     };
-
-    [liveActivities startObservingActivities];
+    liveActivities.onPushToStartTokenUpdate = ^(NSDictionary *payload) {
+      RCTLiveActivities *module = weakSelf;
+      if ([module canEmit]) {
+        [module emitOnPushToStartTokenUpdate:payload];
+      }
+    };
   }
   return self;
 }
@@ -41,6 +45,12 @@ RCT_EXPORT_MODULE(NativeLiveActivities)
 - (void)getActiveActivities:(RCTPromiseResolveBlock)resolve
                      reject:(RCTPromiseRejectBlock)reject {
   [liveActivities getActiveActivities:^(id _Nullable result) { resolve(result); }
+                               reject:^(NSString *code, NSString *message) { reject(code, message, nil); }];
+}
+
+- (void)getPushToStartToken:(RCTPromiseResolveBlock)resolve
+                     reject:(RCTPromiseRejectBlock)reject {
+  [liveActivities getPushToStartToken:^(id _Nullable result) { resolve(result); }
                                reject:^(NSString *code, NSString *message) { reject(code, message, nil); }];
 }
 

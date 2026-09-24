@@ -4,8 +4,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {registerLiveActivity, unregisterLiveActivity} from '@atb/api/journey';
 import {NativeLiveActivities, type LiveActivityInfo} from '@atb/modules/native';
 import {useAuthContext} from '@atb/modules/auth';
-import type {LiveActivityWithApnsToken} from './types';
-import {useNotificationsContext} from '../notifications';
+import type {LiveActivityWithPushToken} from './types';
 
 const REGISTRATION_RETRIES = 3;
 
@@ -23,16 +22,15 @@ const REGISTRATION_RETRIES = 3;
  * unregisters it too, best-effort: the backend prunes registrations on its own,
  * and this only runs while the app does.
  */
-export const useLiveActivityRegistration = (): LiveActivityWithApnsToken[] => {
+export const useLiveActivityRegistration = (): LiveActivityWithPushToken[] => {
   const {authStatus} = useAuthContext();
-  const {fcmToken} = useNotificationsContext();
   const isAuthenticated = authStatus === 'authenticated';
 
   const [activities, setActivities] = useState<
-    Record<string, LiveActivityWithApnsToken>
+    Record<string, LiveActivityWithPushToken>
   >({});
   /** Mirrors `activities`, so the event handlers can read it without resubscribing. */
-  const activitiesRef = useRef<Record<string, LiveActivityWithApnsToken>>({});
+  const activitiesRef = useRef<Record<string, LiveActivityWithPushToken>>({});
   /** Tokens no longer in use: replaced by a rotation, or belonging to an ended activity. */
   const [staleTokens, setStaleTokens] = useState<string[]>([]);
   /** Tokens already sent to the backend, so reconciling twice registers once. */
@@ -50,20 +48,27 @@ export const useLiveActivityRegistration = (): LiveActivityWithApnsToken[] => {
   useEffect(() => {
     if (!NativeLiveActivities) return;
 
-    const onPushToken = ({activityId, tripId, apnsToken}: LiveActivityInfo) => {
-      if (!apnsToken) return;
+    const onPushToken = ({activityId, tripId, pushToken}: LiveActivityInfo) => {
+      console.log(
+        `[LiveActivity] onPushToken: activityId=${activityId}, tripId=${tripId}, pushToken=${pushToken}`,
+      );
+      if (!pushToken) return;
       const previous = activitiesRef.current[activityId];
-      if (previous?.apnsToken === apnsToken) return;
+      if (previous?.pushToken === pushToken) return;
 
       activitiesRef.current = {
         ...activitiesRef.current,
-        [activityId]: {activityId, tripId, apnsToken},
+        [activityId]: {activityId, tripId, pushToken},
       };
       setActivities(activitiesRef.current);
-      if (previous) setStaleTokens((tokens) => [...tokens, previous.apnsToken]);
+      if (previous) setStaleTokens((tokens) => [...tokens, previous.pushToken]);
     };
 
-    const onEnded = ({activityId, apnsToken}: LiveActivityInfo) => {
+    const onEnded = ({activityId, pushToken}: LiveActivityInfo) => {
+      console.log(
+        `[LiveActivity] onEnded: activityId=${activityId}, pushToken=${pushToken}`,
+      );
+
       const previous = activitiesRef.current[activityId];
       if (previous) {
         const remaining = {...activitiesRef.current};
@@ -72,7 +77,7 @@ export const useLiveActivityRegistration = (): LiveActivityWithApnsToken[] => {
         setActivities(remaining);
       }
 
-      const staleToken = apnsToken ?? previous?.apnsToken;
+      const staleToken = pushToken ?? previous?.pushToken;
       if (staleToken) setStaleTokens((tokens) => [...tokens, staleToken]);
     };
 
@@ -94,23 +99,22 @@ export const useLiveActivityRegistration = (): LiveActivityWithApnsToken[] => {
 
   useEffect(() => {
     if (!isAuthenticated) return;
-    if (!fcmToken) return;
 
-    Object.values(activities).forEach(({tripId, apnsToken}) => {
-      if (registeredTokens.current.has(apnsToken)) return;
-      registeredTokens.current.add(apnsToken);
+    Object.values(activities).forEach(({tripId, pushToken}) => {
+      if (registeredTokens.current.has(pushToken)) return;
+      registeredTokens.current.add(pushToken);
 
       register(
-        {tripId, apnsToken, fcmToken},
+        {tripId, apnsToken: pushToken},
         {
           onError: (error) => {
-            registeredTokens.current.delete(apnsToken);
+            registeredTokens.current.delete(pushToken);
             Bugsnag.notify(`Failed to register Live Activity: ${error}`);
           },
         },
       );
     });
-  }, [activities, isAuthenticated, register, fcmToken]);
+  }, [activities, isAuthenticated, register]);
 
   useEffect(() => {
     if (!isAuthenticated || staleTokens.length === 0) return;

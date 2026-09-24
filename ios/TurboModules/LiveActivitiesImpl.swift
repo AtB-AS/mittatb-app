@@ -20,11 +20,17 @@ import Foundation
 class LiveActivitiesImpl: NSObject {
   private static let errorDomain = "LiveActivitiesError"
 
+  /// Shared with the TurboModule bridge, because observation starts from
+  /// `AppDelegate`, before JS instantiates the module.
+  @objc static let shared = LiveActivitiesImpl()
+
   // MARK: Event callbacks
 
   @objc var onPushTokenUpdate: ((NSDictionary) -> Void)?
 
   @objc var onActivityEnded: ((NSDictionary) -> Void)?
+
+  @objc var onPushToStartTokenUpdate: ((NSDictionary) -> Void)?
 
   // MARK: Public API
 
@@ -37,6 +43,15 @@ class LiveActivitiesImpl: NSObject {
     Task {
       for await activity in Activity<TransitActivityAttributes>.activityUpdates {
         observe(activity)
+      }
+    }
+    Task {
+      // No de-duplication here: returning out of this loop would cancel the
+      // subscription for the rest of the process. JS drops repeats instead.
+      for await tokenData in Activity<TransitActivityAttributes>.pushToStartTokenUpdates {
+        let token = hex(tokenData)
+        NSLog("[LiveActivity] push-to-start token: %@", token)
+        onPushToStartTokenUpdate?(["pushToken": token])
       }
     }
   }
@@ -53,6 +68,19 @@ class LiveActivitiesImpl: NSObject {
       Activity<TransitActivityAttributes>.activities.map { activity in
         payload(for: activity, apnsToken: activity.pushToken.map(hex))
       })
+  }
+
+  /// The current push-to-start token, or `nil` if ActivityKit has not issued
+  /// one. One per install, and never issued at all on the simulator.
+  @objc func getPushToStartToken(
+    _ resolve: @escaping (Any?) -> Void,
+    reject: @escaping (String, String) -> Void
+  ) {
+    guard #available(iOS 18.0, *) else {
+      resolve(nil)
+      return
+    }
+    resolve(Activity<TransitActivityAttributes>.pushToStartToken.map(hex))
   }
 
   @objc func areActivitiesEnabled() -> Bool {
