@@ -13,7 +13,7 @@ import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {View} from 'react-native';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {forwardRef} from 'react';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
@@ -73,7 +73,8 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
     const {topContainer} = useSectionItem(props);
 
     return (
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         {...props}
         ref={focusRef}
         onPress={onPress}
@@ -129,7 +130,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
           </View>
           <ThemeIcon svg={ChevronRight} />
         </View>
-      </NativeBlockButton>
+      </NativeTouchable>
     );
   },
 );

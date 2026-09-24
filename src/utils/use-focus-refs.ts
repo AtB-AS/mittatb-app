@@ -1,9 +1,9 @@
 import {RefObject, useRef, useEffect} from 'react';
 import {giveFocus} from './use-focus-on-load';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 export type FocusRefsType = {
-  [key: string]: RefObject<typeof NativeBlockButton>;
+  [key: string]: RefObject<typeof NativeTouchable>;
 };
 
 export function useFocusRefs(focusOnElementName: string | undefined) {

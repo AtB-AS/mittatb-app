@@ -7,7 +7,7 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransportColor} from '@atb/theme/colors';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 export const TicketingTile = ({
   accented = false,
@@ -39,7 +39,8 @@ export const TicketingTile = ({
   const themeSecondaryColor = transportColor.secondary;
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       onPress={onPress}
       accessible={true}
       accessibilityLabel={accessibilityLabel}
@@ -79,7 +80,7 @@ export const TicketingTile = ({
           height={theme.icon.size.large}
         />
       </View>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 };
 

@@ -13,7 +13,7 @@ import {
   AnalyticsEventContext,
   useAnalyticsContext,
 } from '@atb/modules/analytics';
-import {NativeBorderlessButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ContrastColor} from '@atb/theme/colors';
 
 export type ButtonModes = 'back' | 'cancel' | 'close' | 'custom';
@@ -57,7 +57,8 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
   };
 
   return (
-    <NativeBorderlessButton
+    <NativeTouchable
+      variant="borderless"
       onPress={onPressWithLogEvent}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
@@ -65,7 +66,7 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
       {...accessibilityProps}
     >
       {children}
-    </NativeBorderlessButton>
+    </NativeTouchable>
   );
 };
 

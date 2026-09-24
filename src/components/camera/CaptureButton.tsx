@@ -1,7 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {RefObject} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {NativeBlockButton} from '../native-button';
+import {NativeTouchable} from '../native-touchable';
 
 type Props = {
   onCapture: () => void;
@@ -21,13 +21,14 @@ export const CaptureButton = ({
   const style = useStyles({size, color})();
   return (
     <View style={containerStyle}>
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         onPress={onCapture}
         style={style.button}
         ref={focusRef}
       >
         <View style={style.innerButton} />
-      </NativeBlockButton>
+      </NativeTouchable>
     </View>
   );
 };

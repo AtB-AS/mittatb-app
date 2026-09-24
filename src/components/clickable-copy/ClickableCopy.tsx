@@ -1,4 +1,4 @@
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, {PropsWithChildren, useState} from 'react';
 import {AccessibilityProps} from 'react-native';
@@ -27,8 +27,13 @@ export function ClickableCopy({
   }
 
   return (
-    <NativeBlockButton disabled={isAnimating} onPress={setClipboard} {...props}>
+    <NativeTouchable
+      variant="block"
+      disabled={isAnimating}
+      onPress={setClipboard}
+      {...props}
+    >
       {isAnimating ? successElement : children}
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }

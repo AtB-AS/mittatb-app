@@ -8,7 +8,7 @@ import React, {
 import RNBootSplash from 'react-native-bootsplash';
 import {default as StorybookApp} from '../../../.rnstorybook';
 import {StatusBar, useColorScheme} from 'react-native';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronLeft} from '@atb/assets/svg/mono-icons/navigation';
@@ -42,7 +42,8 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
       {isEnabled ? (
         <SafeAreaView style={{flex: 1}}>
           <StatusBar translucent={true} />
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             onPress={() => setEnabled(false)}
             style={{flexDirection: 'row', padding: 8, alignItems: 'center'}}
           >
@@ -50,7 +51,7 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
             <ThemeText style={{marginLeft: 4, color: textColor}}>
               Back to app
             </ThemeText>
-          </NativeBlockButton>
+          </NativeTouchable>
           <StorybookApp />
         </SafeAreaView>
       ) : (

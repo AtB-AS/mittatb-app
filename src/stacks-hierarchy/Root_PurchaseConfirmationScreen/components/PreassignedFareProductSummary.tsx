@@ -22,7 +22,7 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import React from 'react';
 import {View} from 'react-native';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {TicketRecipientType} from '@atb/modules/ticketing';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
@@ -135,7 +135,8 @@ export const PreassignedFareContractSummary = ({
               {getReferenceDataName(preassignedFareProduct, language)}
             </ThemeText>
             {onEdit && (
-              <NativeBlockButton
+              <NativeTouchable
+                variant="block"
                 onPress={onEdit}
                 style={styles.editButton}
                 accessibilityRole="button"
@@ -148,7 +149,7 @@ export const PreassignedFareContractSummary = ({
                   svg={SvgEdit}
                   color={theme.color.foreground.emphasis.interactive}
                 />
-              </NativeBlockButton>
+              </NativeTouchable>
             )}
           </View>
           <View accessible={true}>

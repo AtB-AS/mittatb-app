@@ -22,7 +22,7 @@ import {
   View,
 } from 'react-native';
 import {immutableMove} from './sort-utils';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 type SortableListFallbackProps = {
   data: UserFavorites;
@@ -150,7 +150,8 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   }
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       onPress={() => onPress({item, direction, index, length})}
       accessibilityRole="button"
       accessible
@@ -161,6 +162,6 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
       testID={direction}
     >
       <ThemeIcon svg={Icon} />
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }

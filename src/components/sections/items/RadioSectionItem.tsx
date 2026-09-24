@@ -13,9 +13,11 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 
 import {SvgProps} from 'react-native-svg';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {
+  NativeTouchable,
+  NativeTouchableOrView,
+} from '@atb/components/native-touchable';
 import {RadioIcon} from '@atb/components/radio';
-import {NativeButtonOrView} from '@atb/components/native-button-or-view';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Loading} from '@atb/components/loading';
 
@@ -65,7 +67,8 @@ export function RadioSectionItem({
   const a11yLabel = accessibilityLabel || `${text}, ${subtext || ''}`;
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       onPress={() => {
         // Talkback doesn't read out the updated state automatically, so we
         // trigger it manually instead.
@@ -109,22 +112,22 @@ export function RadioSectionItem({
           )}
         </View>
         {rightAction && (
-          <NativeButtonOrView
+          <NativeTouchableOrView
             onClick={rightAction.isLoading ? undefined : rightAction.onPress}
             style={styles.rightAction}
             accessible={true}
             accessibilityRole="button"
-            type="borderless"
+            variant="borderless"
           >
             {rightAction.isLoading ? (
               <Loading />
             ) : (
               <ThemeIcon svg={rightAction.icon} />
             )}
-          </NativeButtonOrView>
+          </NativeTouchableOrView>
         )}
       </View>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 

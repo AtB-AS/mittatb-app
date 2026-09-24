@@ -16,7 +16,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {
   getAffectedStopNames,
   getMsgTypeForMostCriticalSituationOrNotice,
@@ -204,7 +204,8 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
   const styles = useStyles();
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       onPress={() => openInAppBrowser(infoLink.uri, 'close')}
       accessibilityRole="link"
       style={styles.infoLink}
@@ -212,7 +213,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
       <ThemeText typography="body__m__underline" type="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 };
 

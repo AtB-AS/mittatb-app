@@ -5,7 +5,7 @@ import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {useFetchOnBehalfOfAccountsQuery} from '@atb/modules/on-behalf-of';
 
 const MAX_RECIPIENTS = 10;
@@ -40,7 +40,8 @@ export const SaveRecipientToggle = ({
           style={styles.maxRecipientsWarning}
         />
       )}
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         style={[styles.container, isAtMaxRecipients && {opacity: 0.2}]}
         onPress={onPress}
         accessibilityRole="button"
@@ -51,7 +52,7 @@ export const SaveRecipientToggle = ({
         <ThemeText color={themeColor}>
           {t(OnBehalfOfTexts.saveCheckBoxLabel)}
         </ThemeText>
-      </NativeBlockButton>
+      </NativeTouchable>
     </>
   );
 };

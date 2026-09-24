@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Loading} from '@atb/components/loading';
@@ -60,7 +60,8 @@ export const LoadMoreButton = ({
   if (!loadMoreTrips) return null;
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       onPress={loadMoreTrips}
       style={styles.loadMoreButton}
       testID="loadMoreButton"
@@ -70,7 +71,7 @@ export const LoadMoreButton = ({
         {' '}
         {t(TripSearchTexts.results.fetchMore)}
       </ThemeText>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 };
 

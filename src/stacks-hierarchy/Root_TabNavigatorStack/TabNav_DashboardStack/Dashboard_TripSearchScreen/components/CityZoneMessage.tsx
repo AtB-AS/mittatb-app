@@ -21,7 +21,7 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {useFindZoneInLocation} from '@atb/utils/use-find-zone-in-location';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 
@@ -116,7 +116,8 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
       </View>
       {onDismiss && (
         <View>
-          <NativeBlockButton
+          <NativeTouchable
+            variant="block"
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -124,7 +125,7 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
             hitSlop={insets.all(theme.spacing.medium)}
           >
             <ThemeIcon color={textColor} svg={Close} />
-          </NativeBlockButton>
+          </NativeTouchable>
         </View>
       )}
     </View>

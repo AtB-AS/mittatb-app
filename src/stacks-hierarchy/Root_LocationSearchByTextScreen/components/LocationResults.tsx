@@ -13,7 +13,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {SearchLocation} from '@atb/modules/favorites';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 type Props = {
   title?: string;
@@ -42,7 +42,8 @@ export const LocationResults: React.FC<Props> = ({
         {locations.map(mapToVisibleSearchResult).map((searchResult, idx) => (
           <View style={styles.rowContainer} key={searchResult.key}>
             <View style={styles.locationButtonContainer}>
-              <NativeBlockButton
+              <NativeTouchable
+                variant="block"
                 accessible={true}
                 accessibilityLabel={[
                   searchResult.location.label,
@@ -77,7 +78,7 @@ export const LocationResults: React.FC<Props> = ({
                     multiple={true}
                   />
                 )}
-              </NativeBlockButton>
+              </NativeTouchable>
             </View>
           </View>
         ))}

@@ -11,7 +11,7 @@ import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 export type ButtonSectionItemProps = SectionItemProps<{
   label: string;
@@ -62,14 +62,15 @@ export function ButtonSectionItem({
 
   const handlerWithPress =
     hasIcon && onIconPress ? (
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         hitSlop={insets.all(12)}
         onPress={onIconPress}
         style={[styles.iconContainer, padding]}
         {...iconAccessibility}
       >
         <View>{iconEl}</View>
-      </NativeBlockButton>
+      </NativeTouchable>
     ) : undefined;
 
   const valueEl =
@@ -89,7 +90,8 @@ export function ButtonSectionItem({
 
   return (
     <View>
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         onPress={onPress}
         style={[
           topContainer,
@@ -110,7 +112,7 @@ export function ButtonSectionItem({
         </View>
         {!inlineValue && <View style={styles.inlineValueStyle}>{valueEl}</View>}
         {handlerWithoutPress}
-      </NativeBlockButton>
+      </NativeTouchable>
       {handlerWithPress}
     </View>
   );

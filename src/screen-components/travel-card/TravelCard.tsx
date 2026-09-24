@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Statuses, StyleSheet} from '@atb/theme';
 import type {TripPattern} from '@atb/api/types/trips';
 import {TravelCardLegs} from './TravelCardLegs';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {TravelCardHeader} from './TravelCardHeader';
 import {LayoutChangeEvent, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -69,7 +69,8 @@ export const TravelCard: React.FC<TravelCardProps> = ({
       order={['cardPrefix', 'tag', 'header', 'legs', 'notifications']}
     >
       {(accessibilityProps) => (
-        <NativeBlockButton
+        <NativeTouchable
+          variant="block"
           onPress={() => onDetailsPressed(tripPattern)}
           testID={testID}
           style={[styles.container, isDisabled && styles.containerDisabled]}
@@ -113,7 +114,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
               includeTransportInfo={includeTransportInfo}
             />
           )}
-        </NativeBlockButton>
+        </NativeTouchable>
       )}
     </CompositeAccessibilityProvider>
   );

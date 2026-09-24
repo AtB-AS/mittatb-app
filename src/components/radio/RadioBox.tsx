@@ -3,7 +3,7 @@ import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import {getRadioA11y} from './utils';
@@ -52,7 +52,8 @@ export function RadioBox({
   } = themeColor;
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       style={[
         styles.container,
         {
@@ -86,7 +87,7 @@ export function RadioBox({
       <View style={styles.radioIcon} testID={`${testID}Radio`}>
         <RadioIcon checked={selected} color={textColor} />
       </View>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 

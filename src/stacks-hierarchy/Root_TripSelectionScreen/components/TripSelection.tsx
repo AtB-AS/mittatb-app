@@ -13,7 +13,7 @@ import {SectionSeparator} from '@atb/components/sections';
 import {TripPatternWithBooking} from '@atb/api/types/trips';
 import {Tag} from '@atb/components/tag';
 import {ThemeText} from '@atb/components/text';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {
   getTextForLanguage,
@@ -187,7 +187,8 @@ function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
   const situations = findAllSituations(tripPattern);
 
   return (
-    <NativeBlockButton
+    <NativeTouchable
+      variant="block"
       onPress={onPress}
       style={[
         styles.container,
@@ -254,7 +255,7 @@ function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
           </View>
         </>
       )}
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 }
 

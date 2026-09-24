@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, ViewProps} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 export type DimensionOverrides = {
   labelWidth?: number;
@@ -64,13 +64,14 @@ export const TripRow: React.FC<TripRowProps> = ({
   );
   if (isClickable) {
     return (
-      <NativeBlockButton
+      <NativeTouchable
+        variant="block"
         onPress={onPress}
         accessibilityRole="button"
         {...props}
       >
         <View style={rowStyles}>{rowContent}</View>
-      </NativeBlockButton>
+      </NativeTouchable>
     );
   }
   return (

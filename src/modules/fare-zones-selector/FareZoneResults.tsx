@@ -14,7 +14,7 @@ import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {useFareZoneFromLocation} from './use-fare-zone-from-location';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 
 type Props = {
   fareZones: FareZone[];
@@ -36,7 +36,8 @@ export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
         {fareZones.map((fareZone) => (
           <View style={styles.rowContainer} key={fareZone.id}>
             <View style={styles.fareZoneButtonContainer}>
-              <NativeBlockButton
+              <NativeTouchable
+                variant="block"
                 accessible={true}
                 accessibilityLabel={
                   t(
@@ -72,7 +73,7 @@ export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
                     <ThemeIcon svg={Location} />
                   </View>
                 ) : null}
-              </NativeBlockButton>
+              </NativeTouchable>
             </View>
           </View>
         ))}

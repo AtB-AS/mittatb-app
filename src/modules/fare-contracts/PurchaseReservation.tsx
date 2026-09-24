@@ -12,7 +12,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {WithValidityLine} from './components/WithValidityLine';
 import {getReservationStatus} from './utils';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -41,7 +41,11 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
 
   const paymentType = PaymentType[reservation.paymentType];
   return (
-    <NativeBlockButton accessible={false} importantForAccessibility="no">
+    <NativeTouchable
+      variant="block"
+      accessible={false}
+      importantForAccessibility="no"
+    >
       <Section>
         <GenericSectionItem style={styles.genericSectionItemOverrides}>
           <WithValidityLine
@@ -92,7 +96,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
             )}
         </GenericSectionItem>
       </Section>
-    </NativeBlockButton>
+    </NativeTouchable>
   );
 };
 

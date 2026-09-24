@@ -21,7 +21,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
 import {ContentHeading} from '@atb/components/heading';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {NativeBlockButton} from '@atb/components/native-button';
+import {NativeTouchable} from '@atb/components/native-touchable';
 import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
 
 type ZonesSelectionProps = {
@@ -37,7 +37,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
     const {theme} = useThemeContext();
     const {t, language} = useTranslation();
 
-    const zonesRef = useRef<typeof NativeBlockButton>(null);
+    const zonesRef = useRef<typeof NativeTouchable>(null);
     useImperativeHandle(ref, () => ({
       zonesRef: zonesRef as any,
     }));
