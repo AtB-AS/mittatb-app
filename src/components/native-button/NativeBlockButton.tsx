@@ -1,5 +1,6 @@
 import {Touchable, TouchableProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
+import {Platform} from 'react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export type NativeBlockButtonProps = TouchableProps;
@@ -26,7 +27,8 @@ export const NativeBlockButton = forwardRef<any, NativeBlockButtonProps>(
         }}
         style={[disabled ? {opacity: 0.2} : undefined, style]}
         underlayColor="black"
-        activeUnderlayOpacity={0.2}
+        activeUnderlayOpacity={Platform.OS === 'ios' ? 0.2 : 0}
+        androidRipple={{}}
       >
         {pressableProps?.children}
       </Touchable>
