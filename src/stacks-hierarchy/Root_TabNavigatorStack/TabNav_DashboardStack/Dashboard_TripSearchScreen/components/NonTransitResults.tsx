@@ -1,7 +1,7 @@
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import {Button} from '@atb/components/button';
-import {SkeletonBlock} from '@atb/screen-components/travel-card';
+import {Skeleton, SkeletonBlock} from '@atb/components/skeleton';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 import {
@@ -37,10 +37,10 @@ export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
 
   if (isNewTripSearch && isLoading) {
     return (
-      <View style={[style.container, style.skeletonContainer]}>
+      <Skeleton style={[style.container, style.skeletonContainer]}>
         <SkeletonBlock style={style.skeletonPill} />
-        <SkeletonBlock style={style.skeletonPill} delay={150} />
-      </View>
+        <SkeletonBlock style={style.skeletonPill} />
+      </Skeleton>
     );
   }
 

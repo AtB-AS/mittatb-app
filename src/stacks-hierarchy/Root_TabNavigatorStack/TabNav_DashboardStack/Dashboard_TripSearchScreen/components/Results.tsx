@@ -25,9 +25,9 @@ import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_Das
 import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {getTripPatternKey} from '@atb/modules/trip-patterns';
+import {Skeleton} from '@atb/components/skeleton';
 import {
   TravelCard,
-  SkeletonBlock,
   WithTravelCardSkeleton,
 } from '@atb/screen-components/travel-card';
 
@@ -124,7 +124,7 @@ export const Results: React.FC<Props> = ({
                   }
                 />
               ) : (
-                i === 0 && <SkeletonBlock style={styles.dayLabelSkeleton} />
+                i === 0 && <Skeleton style={styles.dayLabelSkeleton} />
               )}
               <WithTravelCardSkeleton>
                 {tripPattern &&
