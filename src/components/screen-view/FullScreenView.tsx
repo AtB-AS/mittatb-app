@@ -1,12 +1,12 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
-  ScrollView,
   View,
   KeyboardAvoidingView,
   RefreshControl,
   RefreshControlProps,
   Platform,
 } from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 // eslint-disable-next-line rulesdir/navigation-only-in-screens
 import {BottomTabBarHeightContext} from '@react-navigation/bottom-tabs';
