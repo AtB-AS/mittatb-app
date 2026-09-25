@@ -128,6 +128,30 @@ If it tells you that the JDK is wrong (probably too new) follow this guide to co
 
 The `doctor` command can also help you troubleshoot other problems.
 
+
+#### Cannot run app on older iOS devices using `pnpm ios` 
+
+The React Native CLI installs the app with `xcrun devicectl`, which only supports iOS 17 and newer. On older devices the build succeeds, but the install step fails with:
+
+```
+ERROR: The specified device was not found.(com.apple.dt.CoreDeviceError error 1000 (0x3E8))
+```
+
+Either run the app through XCode, or install the built app with [ios-deploy](https://github.com/ios-control/ios-deploy):
+
+- Install it: `brew install ios-deploy`
+- Find your device's UDID: `xcrun xctrace list devices`
+- Install the app:
+  `ios-deploy --id <UDID> --bundle ~/Library/Developer/Xcode/DerivedData/atb-*/Build/Products/Debug-iphoneos/AtB.app`
+
+On first launch, you may need to trust the developer certificate under `Settings > General > VPN & Device Management`.
+
+Debug builds connect to Metro automatically, however the app was installed. At build time your Mac's IP is bundled into the app, and the app loads the JS bundle from `<that IP>:8081`.
+
+- Run `pnpm start`, and make sure the device is on the same Wi-Fi as your Mac.
+- Allow local network access when the app asks for it.
+- If your Mac's IP has changed since the build, either rebuild, or shake the device to open the Dev Menu, choose `Configure Bundler`, and enter your Mac's IP (`ipconfig getifaddr en0`) and port `8081`.
+
 #### Command failed: `xcrun simctl list --json devices`
 
 You might have Command Line Tools set without Xcode (eg. when using homebrew without xcode). Change Command Line Tool to Xcode:
