@@ -50,7 +50,6 @@ export const useFareContracts = (
       enable_ticketing &&
       isEventStreamEnabled &&
       isEventStreamFareContractsEnabled,
-    availability: availabilityStatus.availability,
   });
 
   const setNeedsRefresh = useNeedsRefreshStore(
@@ -67,15 +66,13 @@ export const useFareContracts = (
   const [fareContracts, setFareContracts] = useState(
     fareContractsFromFirestore,
   );
-  const queryClient = useQueryClient();
   useEffect(() => {
     setFareContracts(fareContractsFromFirestore);
   }, [fareContractsFromFirestore]);
 
   const refetch = () => {
-    // On refetch, also invalidate queries with availability !== 'available' to
-    // ensure consistency throughout the app.
-    invalidateFareContractsQuery(queryClient);
+    // Refetch the shared fare contracts query. Since all consumers use the same
+    // query key, this single refetch keeps the whole app consistent.
     getFareContractsFromBackend().then(({data, isSuccess}) => {
       if (isSuccess) {
         const parsedFareContracts = data
@@ -100,14 +97,11 @@ export const useFareContracts = (
   };
 };
 const fareContractsQueryKey = 'FETCH_FARE_CONTRACTS';
-export const useGetFareContractsQuery = (props: {
-  enabled: boolean;
-  availability: AvailabilityStatusInput['availability'] | undefined;
-}) => {
+export const useGetFareContractsQuery = (props: {enabled: boolean}) => {
   const {abtCustomerId} = useAuthContext();
   return useQuery({
-    queryKey: [fareContractsQueryKey, abtCustomerId, props.availability],
-    queryFn: () => getFareContracts(props.availability),
+    queryKey: [fareContractsQueryKey, abtCustomerId],
+    queryFn: () => getFareContracts(),
     enabled: props.enabled && !!abtCustomerId,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
