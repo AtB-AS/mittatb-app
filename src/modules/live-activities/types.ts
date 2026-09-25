@@ -31,4 +31,4 @@ export type TransitLiveActivityContentState = {
 };
 
 /** A running Live Activity that ActivityKit has issued a push token for. */
-export type LiveActivityWithPushToken = LiveActivityInfo & {pushToken: string};
+export type LiveActivityWithApnsToken = LiveActivityInfo & {apnsToken: string};

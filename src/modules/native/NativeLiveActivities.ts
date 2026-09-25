@@ -5,14 +5,14 @@ import type {CodegenTypes} from 'react-native';
  * A running Live Activity, identified by the ActivityKit activity id and the
  * trip it follows (from the activity's static attributes).
  *
- * `pushToken` is the per-activity APNs token the backend pushes updates to. It
+ * `apnsToken` is the per-activity APNs token the backend pushes updates to. It
  * is absent until ActivityKit issues one, and never issued at all on the
  * simulator.
  */
 export type LiveActivityInfo = {
   activityId: string;
   tripId: string;
-  pushToken?: string;
+  apnsToken?: string;
 };
 
 /**

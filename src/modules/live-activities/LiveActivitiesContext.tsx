@@ -2,7 +2,7 @@ import React, {createContext, useContext} from 'react';
 import {Platform} from 'react-native';
 import {NativeLiveActivities} from '@atb/modules/native';
 import {useLiveActivityRegistration} from './use-live-activity-registration';
-import type {LiveActivityWithPushToken} from './types';
+import type {LiveActivityWithApnsToken} from './types';
 
 type LiveActivitiesContextState = {
   /**
@@ -10,7 +10,7 @@ type LiveActivitiesContextState = {
    * `NativeLiveActivities.areActivitiesEnabled()` for user preference.
    */
   isAvailable: boolean;
-  activities: LiveActivityWithPushToken[];
+  activities: LiveActivityWithApnsToken[];
 };
 
 const LiveActivitiesContext = createContext<

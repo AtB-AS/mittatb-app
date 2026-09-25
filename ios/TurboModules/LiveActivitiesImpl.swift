@@ -51,7 +51,7 @@ class LiveActivitiesImpl: NSObject {
     }
     resolve(
       Activity<TransitActivityAttributes>.activities.map { activity in
-        payload(for: activity, pushToken: activity.pushToken.map(hex))
+        payload(for: activity, apnsToken: activity.pushToken.map(hex))
       })
   }
 
@@ -174,7 +174,7 @@ class LiveActivitiesImpl: NSObject {
         let token = hex(tokenData)
         rememberToken(token, for: activity.id)
         NSLog("[LiveActivity] push token: %@", token)
-        onPushTokenUpdate?(payload(for: activity, pushToken: token))
+        onPushTokenUpdate?(payload(for: activity, apnsToken: token))
       }
     }
     Task {
@@ -191,7 +191,7 @@ class LiveActivitiesImpl: NSObject {
           // the first of them emits.
           let finished = finishObserving(activity.id)
           if finished.wasObserved {
-            onActivityEnded?(payload(for: activity, pushToken: finished.pushToken))
+            onActivityEnded?(payload(for: activity, apnsToken: finished.apnsToken))
           }
         default:
           break
@@ -202,7 +202,7 @@ class LiveActivitiesImpl: NSObject {
 
   private let observationLock = NSLock()
   private var observedActivityIds: Set<String> = []
-  private var pushTokens: [String: String] = [:]
+  private var apnsTokens: [String: String] = [:]
 
   private func beginObserving(_ activityId: String) -> Bool {
     observationLock.lock()
@@ -210,31 +210,31 @@ class LiveActivitiesImpl: NSObject {
     return observedActivityIds.insert(activityId).inserted
   }
 
-  private func rememberToken(_ pushToken: String, for activityId: String) {
+  private func rememberToken(_ apnsToken: String, for activityId: String) {
     observationLock.lock()
     defer { observationLock.unlock() }
-    pushTokens[activityId] = pushToken
+    apnsTokens[activityId] = apnsToken
   }
 
-  private func finishObserving(_ activityId: String) -> (wasObserved: Bool, pushToken: String?) {
+  private func finishObserving(_ activityId: String) -> (wasObserved: Bool, apnsToken: String?) {
     observationLock.lock()
     defer { observationLock.unlock() }
     return (
       observedActivityIds.remove(activityId) != nil,
-      pushTokens.removeValue(forKey: activityId)
+      apnsTokens.removeValue(forKey: activityId)
     )
   }
 
   @available(iOS 18.0, *)
   private func payload(
     for activity: Activity<TransitActivityAttributes>,
-    pushToken: String?
+    apnsToken: String?
   ) -> NSDictionary {
     let payload = NSMutableDictionary()
     payload["activityId"] = activity.id
     payload["tripId"] = activity.attributes.tripId
-    if let pushToken {
-      payload["pushToken"] = pushToken
+    if let apnsToken {
+      payload["apnsToken"] = apnsToken
     }
     return payload
   }

@@ -163,11 +163,11 @@ export const DebugLiveActivities = () => {
             {activities.length
               ? activities
                   .map(
-                    ({activityId, tripId, pushToken}) =>
+                    ({activityId, tripId, apnsToken}) =>
                       `${activityId.slice(0, 8)} · trip ${tripId.slice(
                         0,
                         8,
-                      )} · token ${pushToken.slice(0, 8)}…`,
+                      )} · token ${apnsToken.slice(0, 8)}…`,
                   )
                   .join('\n')
               : 'No push tokens yet — the simulator never issues one'}
