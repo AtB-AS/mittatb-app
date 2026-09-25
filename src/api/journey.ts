@@ -26,6 +26,7 @@ export const saveJourney = async (req: SaveTripRequestType) =>
 
 export type RegisterLiveActivityRequestType = {
   tripId: string;
+  fcmToken: string;
   apnsToken: string;
 };
 

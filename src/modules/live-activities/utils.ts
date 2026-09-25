@@ -1,4 +1,4 @@
-import {Leg, TripPattern} from '@atb/api/types/trips';
+import {TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {LiveActivityTexts, TranslateFunction} from '@atb/translations';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
@@ -45,6 +45,12 @@ export const toInitialContentState = (
   const leg = tripPattern.legs.find((leg) => !!leg.line);
   if (!leg) return undefined;
 
+  const quayName = leg.fromPlace.quay?.name ?? leg.fromPlace.name ?? '';
+  const title =
+    leg.mode === Mode.Foot
+      ? t(LiveActivityTexts.title.walkToQuay(quayName))
+      : t(LiveActivityTexts.title.departureFrom(quayName));
+
   return {
     mode: toLiveActivityMode(leg.mode),
     lineNumber: leg.line?.publicCode ?? '',
@@ -52,20 +58,9 @@ export const toInitialContentState = (
       formatDestinationDisplay(t, leg.fromEstimatedCall?.destinationDisplay) ??
       leg.line?.name ??
       '',
-    title: t(toInitialTitle(tripPattern, leg)),
+    title,
     eventTime: toUnixSeconds(leg.expectedStartTime),
   };
-};
-
-/**
- * Walk first if the trip starts on foot, otherwise wait for the departure. The
- * quay is the one the traveller boards at, either way.
- */
-const toInitialTitle = (tripPattern: TripPattern, leg: Leg) => {
-  const quayName = leg.fromPlace.quay?.name ?? leg.fromPlace.name ?? '';
-  return tripPattern.legs[0]?.mode === Mode.Foot
-    ? LiveActivityTexts.title.walkToQuay(quayName)
-    : LiveActivityTexts.title.departureFrom(quayName);
 };
 
 /** ActivityKit gets unix seconds, and ticks the clock down from there itself. */
