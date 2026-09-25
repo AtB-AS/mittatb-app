@@ -74,6 +74,7 @@ import type {TripAnalytics} from '@atb/screen-components/travel-details-screens'
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useStoredTripPatterns} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
+import type {TripPattern} from '@atb/api/types/trips';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -216,9 +217,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,
     );
+    let savedTripPattern: TripPattern | undefined;
     if (tripPatternToSave && !hasSavedTripRef.current) {
       hasSavedTripRef.current = true;
       addTripPattern(tripPatternToSave);
+      savedTripPattern = tripPatternToSave;
       analytics.logEvent('Ticketing', 'Trip saved after purchase', {
         ...params.tripAnalytics,
       });
@@ -230,7 +233,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         screen: 'Ticketing_RootScreen',
         params: {
           screen: 'TicketTabNav_AvailableFareContractsTabScreen',
-          params: {},
+          params: {savedTripPattern},
         },
       },
     });
