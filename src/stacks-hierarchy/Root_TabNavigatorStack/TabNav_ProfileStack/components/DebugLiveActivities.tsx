@@ -124,11 +124,30 @@ export const DebugLiveActivities = () => {
       <LinkSectionItem text="Start" onPress={start} />
       {activities.map((activity) => (
         <GenericSectionItem key={activity.activityId} style={styles.column}>
-          <ThemeText typography="body__s" type="secondary">
-            {activity.activityId.slice(0, 8)} · trip{' '}
-            {activity.tripId.slice(0, 8)} · token{' '}
-            {activity.apnsToken.slice(0, 8)}…
-          </ThemeText>
+          <ClickableCopy
+            copyContent={activity.activityId}
+            successElement={<ThemeText>✅ Copied!</ThemeText>}
+          >
+            <ThemeText isMarkdown={true} typography="body__s">
+              {`**Activity ID:** ${activity.activityId}`}
+            </ThemeText>
+          </ClickableCopy>
+          <ClickableCopy
+            copyContent={activity.tripId}
+            successElement={<ThemeText>✅ Copied!</ThemeText>}
+          >
+            <ThemeText isMarkdown={true} type="secondary">
+              {`**Trip ID:** ${activity.tripId}`}
+            </ThemeText>
+          </ClickableCopy>
+          <ClickableCopy
+            copyContent={activity.apnsToken}
+            successElement={<ThemeText>✅ Copied!</ThemeText>}
+          >
+            <ThemeText isMarkdown={true} typography="body__s">
+              {`**APNS Token:** ${activity.apnsToken}`}
+            </ThemeText>
+          </ClickableCopy>
           <View style={styles.row}>
             <Button
               text="Update"
