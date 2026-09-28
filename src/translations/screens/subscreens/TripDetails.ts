@@ -275,9 +275,9 @@ const TripDetailsTexts = {
           `Går ut kl. ${time}, før du er framme`,
         ),
       activateMessage: _(
-        'Du har en billett til reisen. Aktiver den før du går på.',
-        'You have a ticket for this trip. Activate it before boarding.',
-        'Du har ein billett til reisa. Aktiver han før du går på.',
+        'Du har en billett til reisen. Aktiver den rett før du går på.',
+        'You have a ticket for this trip. Activate it right before boarding.',
+        'Du har ein billett til reisa. Aktiver han rett før du går på.',
       ),
       activateTicket: _('Aktiver', 'Activate', 'Aktiver'),
     },

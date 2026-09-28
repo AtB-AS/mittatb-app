@@ -129,11 +129,11 @@ export const Trip: React.FC<TripProps> = ({
   // A ticket that can't be inspected on this device is the bigger problem, so
   // its warning is shown instead of when the ticket expires.
   const ticketCardDetailText =
-    ticketCardMode !== 'valid'
+    ticketCardMode === 'invalid' || !ticketCardMode
       ? undefined
       : nonInspectableTokenWarning
         ? nonInspectableTokenWarning
-        : ticketCardValidUntilTime
+        : ticketCardMode === 'valid' && ticketCardValidUntilTime
           ? t(
               ticketCardExpiresBeforeArrival
                 ? TripDetailsTexts.trip.ticketCard.expiresBeforeArrival(

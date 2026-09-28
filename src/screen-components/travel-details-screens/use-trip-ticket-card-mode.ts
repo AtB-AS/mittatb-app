@@ -31,6 +31,8 @@ export type TripTicketCardState = {
 /**
  * Which state the trip ticket card should have, based on the user's fare
  * contracts that fit the trip:
+ * - undefined, meaning no card, when the last leg that needs a ticket has
+ *   arrived, since a ticket is no longer relevant then.
  * - 'valid' when one of them is valid at the first boarding, and still valid.
  * - undefined, meaning no card, when one of them was valid at the first
  *   boarding but has expired since. The trip has then started with a ticket,
@@ -56,6 +58,8 @@ export const useTripTicketCardMode = (
   );
 
   const legs = tripPattern.legs;
+  const lastAlightingTime = getLastAlightingTime(legs);
+  if (lastAlightingTime && lastAlightingTime.getTime() <= now) return undefined;
   if (hasLegsFromOtherAuthorities(legs, currentAppAuthorityId)) {
     return {mode: 'invalid'};
   }
@@ -79,7 +83,6 @@ export const useTripTicketCardMode = (
     .filter(isDefined)
     .sort((a, b) => b.getTime() - a.getTime())[0];
   if (validUntil && validUntil.getTime() > now) {
-    const lastAlightingTime = getLastAlightingTime(legs);
     return {
       mode: 'valid',
       validUntil,

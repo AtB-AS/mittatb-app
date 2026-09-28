@@ -34,10 +34,12 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
           tripPattern: route.params.tripPattern,
         });
       }}
-      onPressShowTicket={(tripAnalytics) => {
+      onPressShowTicket={(tripAnalytics, ticketCardMode) => {
         analytics.logEvent(
           'Trip details',
-          'Show ticket clicked',
+          ticketCardMode === 'activate'
+            ? 'Activate ticket clicked'
+            : 'Show ticket clicked',
           tripAnalytics,
         );
         navigation.navigate('Root_TabNavigatorStack', {

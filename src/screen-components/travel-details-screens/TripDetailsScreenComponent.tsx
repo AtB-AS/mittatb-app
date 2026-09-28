@@ -45,6 +45,7 @@ import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-compone
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {useTripTicketCardMode} from './use-trip-ticket-card-mode';
+import type {TripTicketCardMode} from './components/TripTicketCard';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -59,7 +60,10 @@ type Props = TripDetailsScreenParams & {
     params: Root_PurchaseOverviewScreenParams,
     tripAnalytics: TripAnalytics,
   ) => void;
-  onPressShowTicket: (tripAnalytics: TripAnalytics) => void;
+  onPressShowTicket: (
+    tripAnalytics: TripAnalytics,
+    ticketCardMode: TripTicketCardMode | undefined,
+  ) => void;
   onPressQuay: (
     stopPlace: StopPlaceFragment,
     selectedQuayId: string | undefined,
@@ -172,7 +176,9 @@ export const TripDetailsScreenComponent = ({
                   tripAnalytics,
                 );
               }}
-              onPressShowTicket={() => onPressShowTicket(tripAnalytics)}
+              onPressShowTicket={() =>
+                onPressShowTicket(tripAnalytics, ticketCardState?.mode)
+              }
               ticketCardMode={ticketCardState?.mode}
               ticketCardValidUntil={ticketCardState?.validUntil}
               ticketCardExpiresBeforeArrival={
