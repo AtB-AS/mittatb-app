@@ -443,24 +443,17 @@ export const SendSupportRequestBodySchema = z.object({
     .superRefine((data, ctx) => {
       const email = data.email || undefined;
 
-      if (!data.phone && !email) {
+      if (!email || !isValidEmail(email)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: [],
+          path: ['email'],
         });
       }
 
       if (data.phone && !isValidPhoneNumber(data.phone)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ['phoneNumber'],
-        });
-      }
-
-      if (email && !isValidEmail(email)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['email'],
+          path: ['phone'],
         });
       }
     }),
