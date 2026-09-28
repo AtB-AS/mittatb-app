@@ -64,17 +64,17 @@ export const ContactShmoOperatorTexts = {
   },
   contactInfo: {
     header: _(
-      'Din kontaktinformasjon',
-      'Contact information',
-      'Kontaktinfoen din',
+      'Din kontaktinfo (E-postadresse er obligatorisk)',
+      'Your contact info (Email address is required)',
+      'Kontaktinfoen din (E-postadressa er obligatorisk)',
     ),
     email: {
-      label: _(
-        'E-postadresse (obligatorisk)',
-        'E-mail address (required)',
-        'E-postadresse (obligatorisk)',
+      label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
+      placeholder: _(
+        'Legg til e-postadresse',
+        'Add email address',
+        'Legg til e-postadresse',
       ),
-      placeholder: _('Legg til e-post', 'Add email address', 'Legg til e-post'),
       errorMessage: _(
         `Vennligst legg inn en gyldig e-postadresse`,
         `Please enter a valid e-mail adress.`,
