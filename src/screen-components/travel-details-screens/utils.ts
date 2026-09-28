@@ -333,6 +333,8 @@ export function getFareZoneIdsPerStop(
  * zones of its stops from `getFareZoneIdsPerStop`. Validity in time is checked
  * separately, and the organization's full validity rules are not applied, so
  * the traveller should still check the ticket.
+ * - It is a travel ticket, not a supplement or a school ticket, which is only
+ *   valid between home and school.
  * - Its product type allows the mode of each of the legs that need a ticket.
  * - Its fare zones include a zone of every stop.
  */
@@ -340,16 +342,21 @@ export function isFareContractApplicableToTrip(
   legs: Leg[],
   fareZoneIdsPerStop: string[][],
   fareContract: FareContractType,
-  preassignedFareProducts: Pick<PreassignedFareProduct, 'id' | 'type'>[],
+  preassignedFareProducts: Pick<
+    PreassignedFareProduct,
+    'id' | 'type' | 'isSupplementProduct'
+  >[],
   fareProductTypeConfigs: FareProductTypeConfig[],
 ): boolean {
   const nonFreeLegs = getNonFreeLegs(legs);
   if (!nonFreeLegs.length) return false;
 
   return fareContract.travelRights.some((travelRight) => {
+    if (travelRight.schoolName) return false;
     const preassignedFareProduct = preassignedFareProducts.find(
       (product) => product.id === travelRight.fareProductRef,
     );
+    if (preassignedFareProduct?.isSupplementProduct) return false;
     const fareProductTypeConfig = fareProductTypeConfigs.find(
       (config) => config.type === preassignedFareProduct?.type,
     );
@@ -369,6 +376,26 @@ export function isFareContractApplicableToTrip(
     );
     return allowsEveryLeg && coversEveryStop;
   });
+}
+
+/**
+ * Whether any of the legs that need a ticket is operated for another authority
+ * than the given one, so our tickets can't be assumed to be valid for it.
+ */
+export function hasLegsFromOtherAuthorities(
+  legs: Leg[],
+  authorityId: string,
+): boolean {
+  return getNonFreeLegs(legs).some((leg) => leg.authority?.id !== authorityId);
+}
+
+/**
+ * When the last leg that needs a ticket arrives, so walking at the end of the
+ * trip is not included.
+ */
+export function getLastAlightingTime(legs: Leg[]): Date | undefined {
+  const lastNonFreeLeg = getNonFreeLegs(legs).at(-1);
+  return lastNonFreeLeg ? new Date(lastNonFreeLeg.expectedEndTime) : undefined;
 }
 
 const getFirstBoardingTime = (legs: Leg[]): number | undefined => {

@@ -51,6 +51,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {useNonInspectableTokenWarning} from '@atb/modules/fare-contracts';
 import {TripTicketCard, TripTicketCardMode} from './TripTicketCard';
 
 export type TripProps = {
@@ -65,8 +66,10 @@ export type TripProps = {
   purchaseSelection?: PurchaseSelectionType;
   onPressBuyTicket: () => void;
   onPressShowTicket: () => void;
-  ticketCardMode: TripTicketCardMode;
+  /** No ticket card is shown when undefined */
+  ticketCardMode?: TripTicketCardMode;
   ticketCardValidUntil?: Date;
+  ticketCardExpiresBeforeArrival?: boolean;
   now: number;
 };
 export const Trip: React.FC<TripProps> = ({
@@ -80,6 +83,7 @@ export const Trip: React.FC<TripProps> = ({
   onPressShowTicket,
   ticketCardMode,
   ticketCardValidUntil,
+  ticketCardExpiresBeforeArrival,
   now,
 }) => {
   const styles = useStyle();
@@ -92,37 +96,54 @@ export const Trip: React.FC<TripProps> = ({
   );
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
+  const nonInspectableTokenWarning = useNonInspectableTokenWarning();
 
   const shouldShowTicketCard =
     isTripTicketCardEnabled &&
+    !!ticketCardMode &&
     (ticketCardMode !== 'invalid' || !!purchaseSelection);
-  const ticketCardContent = {
-    valid: {
-      message: t(TripDetailsTexts.trip.ticketCard.validMessage),
-      actionText: t(TripDetailsTexts.trip.ticketCard.showTicket),
-      onPress: onPressShowTicket,
-    },
-    activate: {
-      message: t(TripDetailsTexts.trip.ticketCard.activateMessage),
-      actionText: t(TripDetailsTexts.trip.ticketCard.activateTicket),
-      onPress: onPressShowTicket,
-    },
-    invalid: {
-      message: t(TripDetailsTexts.trip.ticketCard.invalidMessage),
-      actionText: t(TripDetailsTexts.trip.ticketCard.buyTicket),
-      onPress: onPressBuyTicket,
-    },
-  }[ticketCardMode];
-  const ticketCardValidUntilText =
-    ticketCardMode === 'valid' && ticketCardValidUntil
-      ? t(
-          TripDetailsTexts.trip.ticketCard.validUntil(
-            isWithinSameDate(ticketCardValidUntil, new Date(now))
-              ? formatToClock(ticketCardValidUntil, language, 'floor')
-              : formatToShortDate(ticketCardValidUntil, language),
-          ),
-        )
-      : undefined;
+  const ticketCardContent =
+    ticketCardMode &&
+    {
+      valid: {
+        message: t(TripDetailsTexts.trip.ticketCard.validMessage),
+        actionText: t(TripDetailsTexts.trip.ticketCard.showTicket),
+        onPress: onPressShowTicket,
+      },
+      activate: {
+        message: t(TripDetailsTexts.trip.ticketCard.activateMessage),
+        actionText: t(TripDetailsTexts.trip.ticketCard.activateTicket),
+        onPress: onPressShowTicket,
+      },
+      invalid: {
+        message: t(TripDetailsTexts.trip.ticketCard.invalidMessage),
+        actionText: t(TripDetailsTexts.trip.ticketCard.buyTicket),
+        onPress: onPressBuyTicket,
+      },
+    }[ticketCardMode];
+  const ticketCardValidUntilTime =
+    ticketCardValidUntil &&
+    (isWithinSameDate(ticketCardValidUntil, new Date(now))
+      ? formatToClock(ticketCardValidUntil, language, 'floor')
+      : formatToShortDate(ticketCardValidUntil, language));
+  // A ticket that can't be inspected on this device is the bigger problem, so
+  // its warning is shown instead of when the ticket expires.
+  const ticketCardDetailText =
+    ticketCardMode !== 'valid'
+      ? undefined
+      : nonInspectableTokenWarning
+        ? nonInspectableTokenWarning
+        : ticketCardValidUntilTime
+          ? t(
+              ticketCardExpiresBeforeArrival
+                ? TripDetailsTexts.trip.ticketCard.expiresBeforeArrival(
+                    ticketCardValidUntilTime,
+                  )
+                : TripDetailsTexts.trip.ticketCard.validUntil(
+                    ticketCardValidUntilTime,
+                  ),
+            )
+          : undefined;
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -218,11 +239,11 @@ export const Trip: React.FC<TripProps> = ({
           </ThemeText>
         </>
       )}
-      {shouldShowTicketCard && (
+      {shouldShowTicketCard && ticketCardContent && (
         <TripTicketCard
           mode={ticketCardMode}
           message={ticketCardContent.message}
-          validUntilText={ticketCardValidUntilText}
+          detailText={ticketCardDetailText}
           actionText={ticketCardContent.actionText}
           onPress={ticketCardContent.onPress}
         />

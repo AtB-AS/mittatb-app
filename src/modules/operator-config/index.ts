@@ -3,7 +3,7 @@ import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_type
 import {AUTHORITY} from '@env';
 import {isFreeLeg} from '@atb/screen-components/travel-details-screens';
 
-const currentAppAuthorityId = AUTHORITY ?? 'ATB:Authority:2';
+export const currentAppAuthorityId = AUTHORITY ?? 'ATB:Authority:2';
 
 export function hasLegsWeCantSellTicketsFor(
   tripPattern: TripPattern,

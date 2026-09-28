@@ -173,8 +173,11 @@ export const TripDetailsScreenComponent = ({
                 );
               }}
               onPressShowTicket={() => onPressShowTicket(tripAnalytics)}
-              ticketCardMode={ticketCardState.mode}
-              ticketCardValidUntil={ticketCardState.validUntil}
+              ticketCardMode={ticketCardState?.mode}
+              ticketCardValidUntil={ticketCardState?.validUntil}
+              ticketCardExpiresBeforeArrival={
+                ticketCardState?.expiresBeforeArrival
+              }
               now={serverNow}
             />
           </View>

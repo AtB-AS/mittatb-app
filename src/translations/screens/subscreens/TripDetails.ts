@@ -268,6 +268,12 @@ const TripDetailsTexts = {
       showTicket: _('Vis billett', 'Show ticket', 'Vis billett'),
       validUntil: (time: string) =>
         _(`Gyldig til ${time}`, `Valid until ${time}`, `Gyldig til ${time}`),
+      expiresBeforeArrival: (time: string) =>
+        _(
+          `Utløper kl. ${time}, før du er fremme`,
+          `Expires at ${time}, before you arrive`,
+          `Går ut kl. ${time}, før du er framme`,
+        ),
       activateMessage: _(
         'Du har en billett til reisen. Aktiver den før du går på.',
         'You have a ticket for this trip. Activate it before boarding.',

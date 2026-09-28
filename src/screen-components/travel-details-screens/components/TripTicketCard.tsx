@@ -14,7 +14,7 @@ export type TripTicketCardMode = 'valid' | 'activate' | 'invalid';
 type TripTicketCardProps = {
   mode: TripTicketCardMode;
   message: string;
-  validUntilText?: string;
+  detailText?: string;
   actionText: string;
   onPress: () => void;
 };
@@ -22,7 +22,7 @@ type TripTicketCardProps = {
 export const TripTicketCard: React.FC<TripTicketCardProps> = ({
   mode,
   message,
-  validUntilText,
+  detailText,
   actionText,
   onPress,
 }) => {
@@ -35,7 +35,7 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
       onPress={onPress}
       accessible={true}
       accessibilityRole="button"
-      accessibilityLabel={[message, validUntilText].filter(Boolean).join('. ')}
+      accessibilityLabel={[message, detailText].filter(Boolean).join('. ')}
       accessibilityHint={t(MessageBoxTexts.a11yHintActionPrefix) + actionText}
       testID="tripTicketCard"
     >
@@ -49,9 +49,9 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
         )}
         <View style={styles.message}>
           <ThemeText typography="body__m">{message}</ThemeText>
-          {validUntilText && (
+          {detailText && (
             <ThemeText typography="body__s" type="secondary">
-              {validUntilText}
+              {detailText}
             </ThemeText>
           )}
         </View>

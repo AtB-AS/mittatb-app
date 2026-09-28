@@ -11,7 +11,9 @@ import {
 } from '@atb/modules/configuration';
 import {
   canActivateCarnetForTrip,
+  getLastAlightingTime,
   getValidityEndAtFirstBoarding,
+  hasLegsFromOtherAuthorities,
   isFareContractApplicableToTrip,
 } from '../utils';
 
@@ -37,6 +39,11 @@ const preassignedFareProducts = [
   {id: 'ATB:PreassignedFareProduct:single', type: 'single'},
   {id: 'ATB:PreassignedFareProduct:carnet', type: 'carnet'},
   {id: 'ATB:PreassignedFareProduct:boat', type: 'boat-single'},
+  {
+    id: 'ATB:PreassignedFareProduct:bike',
+    type: 'single',
+    isSupplementProduct: true,
+  },
 ] as PreassignedFareProduct[];
 
 const busModes = [
@@ -169,6 +176,49 @@ describe('isFareContractApplicableToTrip', () => {
     const fc = fareContract(travelRight());
     expect(isApplicable([leg(0, Mode.Foot, undefined)], [], fc)).toBe(false);
   });
+
+  it('is not applicable for a supplement product', () => {
+    const fc = fareContract(
+      travelRight({fareProductRef: 'ATB:PreassignedFareProduct:bike'}),
+    );
+    expect(isApplicable([leg(0)], zonesAtoC1, fc)).toBe(false);
+  });
+
+  it('is not applicable for a school ticket', () => {
+    const fc = fareContract(travelRight({schoolName: 'Nardo skole'}));
+    expect(isApplicable([leg(0)], zonesAtoC1, fc)).toBe(false);
+  });
+});
+
+describe('hasLegsFromOtherAuthorities', () => {
+  const ourAuthority = 'ATB:Authority:2';
+  const withAuthority = (l: Leg, authorityId?: string): Leg =>
+    ({...l, authority: authorityId ? {id: authorityId} : undefined}) as Leg;
+
+  it('is false when every leg is operated for our authority', () => {
+    const legs = [withAuthority(leg(0), ourAuthority)];
+    expect(hasLegsFromOtherAuthorities(legs, ourAuthority)).toBe(false);
+  });
+
+  it('is true when a leg is operated for another authority', () => {
+    const legs = [
+      withAuthority(leg(0), ourAuthority),
+      withAuthority(leg(30), 'SJN:Authority:SJN'),
+    ];
+    expect(hasLegsFromOtherAuthorities(legs, ourAuthority)).toBe(true);
+  });
+
+  it('is true when a leg has no authority', () => {
+    expect(hasLegsFromOtherAuthorities([leg(0)], ourAuthority)).toBe(true);
+  });
+
+  it('ignores legs that do not need a ticket', () => {
+    const legs = [
+      withAuthority(leg(0, Mode.Foot, undefined)),
+      withAuthority(leg(10), ourAuthority),
+    ];
+    expect(hasLegsFromOtherAuthorities(legs, ourAuthority)).toBe(false);
+  });
 });
 
 describe('getValidityEndAtFirstBoarding', () => {
@@ -227,6 +277,38 @@ describe('getValidityEndAtFirstBoarding', () => {
       const fc = carnet([{startDateTime: at(-60), endDateTime: at(-1)}]);
       expect(getValidityEndAtFirstBoarding([leg(0)], fc)).toBeUndefined();
     });
+
+    it('returns the end of the last access of a used up carnet', () => {
+      const fc = carnet([{startDateTime: at(-5), endDateTime: at(10)}], {
+        maximumNumberOfAccesses: 1,
+      });
+      expect(getValidityEndAtFirstBoarding([leg(0), leg(30)], fc)).toEqual(
+        at(10),
+      );
+    });
+  });
+});
+
+describe('getLastAlightingTime', () => {
+  const withEnd = (l: Leg, endMinutes: number): Leg => ({
+    ...l,
+    expectedEndTime: at(endMinutes).toISOString(),
+  });
+
+  it('returns the arrival of the last leg that needs a ticket', () => {
+    const legs = [withEnd(leg(0), 20), withEnd(leg(30), 50)];
+    expect(getLastAlightingTime(legs)).toEqual(at(50));
+  });
+
+  it('ignores walking at the end of the trip', () => {
+    const legs = [withEnd(leg(0), 20), withEnd(leg(20, Mode.Foot), 30)];
+    expect(getLastAlightingTime(legs)).toEqual(at(20));
+  });
+
+  it('is undefined for a trip without legs that need a ticket', () => {
+    expect(
+      getLastAlightingTime([withEnd(leg(0, Mode.Foot, undefined), 10)]),
+    ).toBeUndefined();
   });
 });
 
