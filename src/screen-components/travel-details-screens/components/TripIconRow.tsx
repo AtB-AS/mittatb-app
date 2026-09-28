@@ -1,0 +1,100 @@
+import React from 'react';
+import {View} from 'react-native';
+import type {StyleProp, ViewProps, ViewStyle} from 'react-native';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useFontScale} from '@atb/utils/use-font-scale';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import type {IconColor, ThemeIconProps} from '@atb/components/theme-icon';
+import {
+  DECORATION_AXIS,
+  DimensionOverrides,
+  NEW_TRIP_DIMENSIONS,
+  TripRow,
+} from './TripRow';
+
+// ThemeIcon scales the glyph with the OS text size, this helps keep the scaled icon
+// to stay centered on the decoration line.
+const useIconWidth = (boxed: boolean) => {
+  const {theme} = useThemeContext();
+  const fontScale = useFontScale();
+  return boxed
+    ? theme.icon.size.small * fontScale + theme.spacing.small * 2
+    : theme.icon.size.large * fontScale;
+};
+
+type TripIconRowProps = {
+  svg: ThemeIconProps['svg'];
+  color?: IconColor;
+  boxed?: boolean;
+  iconAccessibilityLabel?: string;
+  decorated?: boolean; // whether there's a tripLegDecoration to the left of this icon
+  contentStyle?: StyleProp<ViewStyle>;
+  children: React.ReactNode;
+} & Pick<ViewProps, 'accessible' | 'accessibilityLabel' | 'testID'>;
+
+/** A trip row led by an icon, with spacing.small across to the content. */
+export const TripIconRow = ({
+  svg,
+  color,
+  boxed = false,
+  iconAccessibilityLabel,
+  decorated = false,
+  contentStyle,
+  children,
+  ...rowProps
+}: TripIconRowProps) => {
+  const style = useStyles();
+  const {theme} = useThemeContext();
+  const iconWidth = useIconWidth(boxed);
+
+  const dimensionOverrides: DimensionOverrides = decorated
+    ? NEW_TRIP_DIMENSIONS
+    : {
+        ...NEW_TRIP_DIMENSIONS,
+        labelWidth: DECORATION_AXIS - iconWidth / 2,
+        decorationContainerWidth: 0,
+      };
+
+  const boxContrast =
+    typeof color === 'object' ? color : theme.color.transport.walk.primary;
+
+  const icon = (
+    <ThemeIcon
+      svg={svg}
+      size={boxed ? 'small' : 'large'}
+      color={boxed ? boxContrast : color}
+      accessibilityLabel={iconAccessibilityLabel}
+    />
+  );
+
+  return (
+    <TripRow dimensionOverrides={dimensionOverrides} {...rowProps}>
+      <View style={style.row}>
+        {boxed ? (
+          <View style={[style.box, {backgroundColor: boxContrast.background}]}>
+            {icon}
+          </View>
+        ) : (
+          icon
+        )}
+        <View style={[style.content, contentStyle]}>{children}</View>
+      </View>
+    </TripRow>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.small,
+  },
+  box: {
+    padding: theme.spacing.small,
+    borderRadius: theme.border.radius.regular,
+  },
+  content: {
+    flex: 1,
+  },
+}));
