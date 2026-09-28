@@ -13,7 +13,6 @@ export const useGetHasReservationOrAvailableFareContract = () => {
 
   const {data: fareContracts} = useGetFareContractsQuery({
     enabled: true,
-    availability: 'available',
   });
 
   const hasReservationOrAvailableFareContract = useMemo(

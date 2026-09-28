@@ -20,8 +20,6 @@ import {
 } from './types';
 import {SupplementProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
-import {capitalize} from 'lodash';
-import qs from 'query-string';
 import {isDefined} from '@atb/utils/presence';
 import {Language} from '@atb/translations/commons';
 import type {OfferSearchLeg} from '@atb/api/types/sales';
@@ -268,15 +266,8 @@ export async function getSupplementProducts(): Promise<SupplementProduct[]> {
     .filter(isDefined);
 }
 
-export async function getFareContracts(
-  availability: 'available' | 'historical' | undefined,
-): Promise<FareContractType[]> {
-  const url = qs.stringifyUrl({
-    url: 'ticket/v4/list',
-    query: {
-      availability: availability ? capitalize(availability) : undefined,
-    },
-  });
+export async function getFareContracts(): Promise<FareContractType[]> {
+  const url = 'ticket/v4/list';
   const response = await client.get(url, {
     authWithIdToken: true,
   });

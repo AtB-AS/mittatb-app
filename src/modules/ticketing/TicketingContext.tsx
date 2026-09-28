@@ -164,7 +164,6 @@ export const TicketingContextProvider = ({children}: Props) => {
       enable_ticketing &&
       isEventStreamEnabled &&
       isEventStreamFareContractsEnabled,
-    availability: undefined,
   });
   useEffect(() => {
     dispatch({
