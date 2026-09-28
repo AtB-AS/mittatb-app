@@ -127,7 +127,7 @@ export const DebugLiveActivities = () => {
           <ThemeText typography="body__s" type="secondary">
             {activity.activityId.slice(0, 8)} · trip{' '}
             {activity.tripId.slice(0, 8)} · token{' '}
-            {activity.pushToken.slice(0, 8)}…
+            {activity.apnsToken.slice(0, 8)}…
           </ThemeText>
           <View style={styles.row}>
             <Button
