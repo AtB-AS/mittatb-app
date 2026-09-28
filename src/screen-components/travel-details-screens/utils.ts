@@ -329,14 +329,14 @@ export function getFareZoneIdsPerStop(
 }
 
 /**
- * Whether a fare contract lets the traveller make the whole trip, given the
- * fare zones of its stops from `getFareZoneIdsPerStop`:
- * - It is valid when each leg that needs a ticket departs. For carnets, this
- *   means within an activated access.
- * - Its product type allows the mode of each of those legs.
+ * Whether a fare contract's product and zones fit the trip, given the fare
+ * zones of its stops from `getFareZoneIdsPerStop`. Validity in time is checked
+ * separately, and the organization's full validity rules are not applied, so
+ * the traveller should still check the ticket.
+ * - Its product type allows the mode of each of the legs that need a ticket.
  * - Its fare zones include a zone of every stop.
  */
-export function isTripCoveredByFareContract(
+export function isFareContractApplicableToTrip(
   legs: Leg[],
   fareZoneIdsPerStop: string[][],
   fareContract: FareContractType,
@@ -345,18 +345,6 @@ export function isTripCoveredByFareContract(
 ): boolean {
   const nonFreeLegs = getNonFreeLegs(legs);
   if (!nonFreeLegs.length) return false;
-
-  const validityPeriods =
-    getAccesses(fareContract)?.usedAccesses ?? fareContract.travelRights;
-  const isValidAtEveryBoarding = nonFreeLegs.every((leg) => {
-    const boardingTime = new Date(leg.expectedStartTime).getTime();
-    return validityPeriods.some(
-      (period) =>
-        period.startDateTime.getTime() <= boardingTime &&
-        boardingTime <= period.endDateTime.getTime(),
-    );
-  });
-  if (!isValidAtEveryBoarding) return false;
 
   return fareContract.travelRights.some((travelRight) => {
     const preassignedFareProduct = preassignedFareProducts.find(
@@ -381,6 +369,63 @@ export function isTripCoveredByFareContract(
     );
     return allowsEveryLeg && coversEveryStop;
   });
+}
+
+const getFirstBoardingTime = (legs: Leg[]): number | undefined => {
+  const firstNonFreeLeg = getNonFreeLegs(legs)[0];
+  return firstNonFreeLeg
+    ? new Date(firstNonFreeLeg.expectedStartTime).getTime()
+    : undefined;
+};
+
+const isWithinPeriod = (
+  time: number,
+  period: {startDateTime: Date; endDateTime: Date},
+) =>
+  period.startDateTime.getTime() <= time &&
+  time <= period.endDateTime.getTime();
+
+/**
+ * When the fare contract stops being valid, if it is valid when the first leg
+ * that needs a ticket departs. For carnets, this is the end of the activated
+ * access at that time.
+ */
+export function getValidityEndAtFirstBoarding(
+  legs: Leg[],
+  fareContract: FareContractType,
+): Date | undefined {
+  const firstBoardingTime = getFirstBoardingTime(legs);
+  if (firstBoardingTime === undefined) return undefined;
+
+  const validityPeriods =
+    getAccesses(fareContract)?.usedAccesses ?? fareContract.travelRights;
+  const periodAtFirstBoarding = validityPeriods
+    .filter((period) => isWithinPeriod(firstBoardingTime, period))
+    .sort((a, b) => b.endDateTime.getTime() - a.endDateTime.getTime())[0];
+  return periodAtFirstBoarding?.endDateTime;
+}
+
+/**
+ * Whether the fare contract is a carnet that has no activated access when the
+ * first leg that needs a ticket departs, but has accesses left and is valid
+ * then, so an access can be activated for the trip.
+ */
+export function canActivateCarnetForTrip(
+  legs: Leg[],
+  fareContract: FareContractType,
+): boolean {
+  const accesses = getAccesses(fareContract);
+  if (!accesses) return false;
+  if (accesses.numberOfUsedAccesses >= accesses.maximumNumberOfAccesses) {
+    return false;
+  }
+  if (getValidityEndAtFirstBoarding(legs, fareContract)) return false;
+
+  const firstBoardingTime = getFirstBoardingTime(legs);
+  if (firstBoardingTime === undefined) return false;
+  return fareContract.travelRights.some((travelRight) =>
+    isWithinPeriod(firstBoardingTime, travelRight),
+  );
 }
 
 export const isLineFlexibleTransport = (

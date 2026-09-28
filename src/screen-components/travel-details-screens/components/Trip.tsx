@@ -1,6 +1,8 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
+  formatToClock,
+  formatToShortDate,
   formatToVerboseFullDate,
   isWithinSameDate,
   secondsBetween,
@@ -64,6 +66,7 @@ export type TripProps = {
   onPressBuyTicket: () => void;
   onPressShowTicket: () => void;
   ticketCardMode: TripTicketCardMode;
+  ticketCardValidUntil?: Date;
   now: number;
 };
 export const Trip: React.FC<TripProps> = ({
@@ -76,6 +79,7 @@ export const Trip: React.FC<TripProps> = ({
   onPressBuyTicket,
   onPressShowTicket,
   ticketCardMode,
+  ticketCardValidUntil,
   now,
 }) => {
   const styles = useStyle();
@@ -91,7 +95,34 @@ export const Trip: React.FC<TripProps> = ({
 
   const shouldShowTicketCard =
     isTripTicketCardEnabled &&
-    (ticketCardMode === 'valid' || !!purchaseSelection);
+    (ticketCardMode !== 'invalid' || !!purchaseSelection);
+  const ticketCardContent = {
+    valid: {
+      message: t(TripDetailsTexts.trip.ticketCard.validMessage),
+      actionText: t(TripDetailsTexts.trip.ticketCard.showTicket),
+      onPress: onPressShowTicket,
+    },
+    activate: {
+      message: t(TripDetailsTexts.trip.ticketCard.activateMessage),
+      actionText: t(TripDetailsTexts.trip.ticketCard.activateTicket),
+      onPress: onPressShowTicket,
+    },
+    invalid: {
+      message: t(TripDetailsTexts.trip.ticketCard.invalidMessage),
+      actionText: t(TripDetailsTexts.trip.ticketCard.buyTicket),
+      onPress: onPressBuyTicket,
+    },
+  }[ticketCardMode];
+  const ticketCardValidUntilText =
+    ticketCardMode === 'valid' && ticketCardValidUntil
+      ? t(
+          TripDetailsTexts.trip.ticketCard.validUntil(
+            isWithinSameDate(ticketCardValidUntil, new Date(now))
+              ? formatToClock(ticketCardValidUntil, language, 'floor')
+              : formatToShortDate(ticketCardValidUntil, language),
+          ),
+        )
+      : undefined;
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -190,19 +221,10 @@ export const Trip: React.FC<TripProps> = ({
       {shouldShowTicketCard && (
         <TripTicketCard
           mode={ticketCardMode}
-          message={
-            ticketCardMode === 'valid'
-              ? t(TripDetailsTexts.trip.ticketCard.validMessage)
-              : t(TripDetailsTexts.trip.ticketCard.invalidMessage)
-          }
-          actionText={
-            ticketCardMode === 'valid'
-              ? t(TripDetailsTexts.trip.ticketCard.showTicket)
-              : t(TripDetailsTexts.trip.ticketCard.buyTicket)
-          }
-          onPress={
-            ticketCardMode === 'valid' ? onPressShowTicket : onPressBuyTicket
-          }
+          message={ticketCardContent.message}
+          validUntilText={ticketCardValidUntilText}
+          actionText={ticketCardContent.actionText}
+          onPress={ticketCardContent.onPress}
         />
       )}
       {shortWaitTime && (

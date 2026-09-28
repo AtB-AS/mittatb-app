@@ -266,6 +266,14 @@ const TripDetailsTexts = {
         'Du har kjøpt billett til reisa',
       ),
       showTicket: _('Vis billett', 'Show ticket', 'Vis billett'),
+      validUntil: (time: string) =>
+        _(`Gyldig til ${time}`, `Valid until ${time}`, `Gyldig til ${time}`),
+      activateMessage: _(
+        'Du har en billett til reisen. Aktiver den før du går på.',
+        'You have a ticket for this trip. Activate it before boarding.',
+        'Du har ein billett til reisa. Aktiver han før du går på.',
+      ),
+      activateTicket: _('Aktiver', 'Activate', 'Aktiver'),
     },
   },
   messages: {

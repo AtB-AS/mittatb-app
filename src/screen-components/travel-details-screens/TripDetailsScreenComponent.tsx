@@ -110,7 +110,7 @@ export const TripDetailsScreenComponent = ({
   );
 
   const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
-  const ticketCardMode = useTripTicketCardMode(updatedTripPattern, serverNow);
+  const ticketCardState = useTripTicketCardMode(updatedTripPattern, serverNow);
   const headerTitle = `${formatToClock(updatedTripPattern.expectedStartTime, language, 'floor')} - ${formatToClock(updatedTripPattern.expectedEndTime, language, 'ceil')}`;
 
   const refreshControlProps = useManualRefreshControlProps({
@@ -173,7 +173,8 @@ export const TripDetailsScreenComponent = ({
                 );
               }}
               onPressShowTicket={() => onPressShowTicket(tripAnalytics)}
-              ticketCardMode={ticketCardMode}
+              ticketCardMode={ticketCardState.mode}
+              ticketCardValidUntil={ticketCardState.validUntil}
               now={serverNow}
             />
           </View>
