@@ -1,5 +1,9 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {
+  ForceUpdateTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React, {useCallback, useState} from 'react';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -143,9 +147,7 @@ export const ShmoActionButton = ({
         {openStoreLinkError && (
           <MessageInfoBox
             type="error"
-            message={t(
-              MobilityTexts.shmoRequirements.appUpdateRequiredErrorMessage,
-            )}
+            message={t(ForceUpdateTexts.errorMessage)}
           />
         )}
         <Button

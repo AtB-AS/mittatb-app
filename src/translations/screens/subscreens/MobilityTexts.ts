@@ -294,14 +294,9 @@ export const MobilityTexts = {
       ),
     appUpdateRequired: _('Oppdater appen', 'Update the app', 'Oppdater appen'),
     appUpdateRequiredInfoMessage: _(
-      'En nyere versjon av appen kreves for å starte en tur',
-      'A newer version of the app is required to start a trip',
-      'Ei nyare versjon av appen krevjast for å starte ein tur',
-    ),
-    appUpdateRequiredErrorMessage: _(
-      'Noe gikk galt. Vennligst prøv på nytt, eller gå inn i app-butikken på enheten din for å oppdatere.',
-      'Something went wrong. Please try again, or go to the store on your device to update the app.',
-      'Noko gjekk gale. Ver venleg og prøv på nytt, eller gå inn i app-butikken på eininga di for å oppdatere.',
+      'Du må oppdatere appen for å starte en tur',
+      'You need to update the app to start a trip',
+      'Du må oppdatere appen for å starte ein tur',
     ),
     location: {
       title: _(
