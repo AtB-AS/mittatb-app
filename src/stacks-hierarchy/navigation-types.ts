@@ -94,7 +94,7 @@ type ShmoOperatorParams = {operatorId: string} & (
 );
 export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
-type Root_ContactShmoOperatorScreenParams = ShmoOperatorParams;
+type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
 
 type Root_ShmoPricingDetailsScreenParams = {
   pricingPlan: ShmoPricingPlan;

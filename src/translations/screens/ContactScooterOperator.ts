@@ -1,3 +1,4 @@
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {SupportType} from '@atb/api/types/mobility';
 import {translation as _} from '../commons';
 
@@ -43,12 +44,25 @@ export const ContactShmoOperatorTexts = {
           return _('Annet', 'Other', 'Anna');
       }
     },
-    noEndInfo: (operatorName: string) => {
-      return _(
-        `Alle turer avsluttes etter én time. Sett kjøretøyet på et trygt sted og send inn dette skjemaet slik at ${operatorName} kan rette opp feilen.`,
-        `All trips end after one hour. Park the vehicle in a safe spot and submit this form so that ${operatorName} can correct the error.`,
-        `Alle turar blir avslutta etter éin time. Sett køyretøyet på ein trygg stad og send inn dette skjemaet slik at ${operatorName} kan retta opp feilen.`,
-      );
+    noEndInfo: (
+      operatorName: string,
+      maxRentalDuration: string,
+      formFactor: FormFactor | undefined,
+    ) => {
+      switch (formFactor) {
+        case FormFactor.Bicycle:
+          return _(
+            `Alle turer avsluttes etter ${maxRentalDuration}. Sett fra deg sykkelen i et stativ og send inn dette skjemaet slik at ${operatorName} kan rette opp feilen.`,
+            `All trips end after ${maxRentalDuration}. Return the bike to a dock and submit this form so that ${operatorName} can correct the error.`,
+            `Alle turar blir avslutta etter ${maxRentalDuration}. Sett frå deg sykkelen i eit stativ og send inn dette skjemaet slik at ${operatorName} kan retta opp feilen.`,
+          );
+        default:
+          return _(
+            `Alle turer avsluttes etter ${maxRentalDuration}. Sett kjøretøyet på et trygt sted og send inn dette skjemaet slik at ${operatorName} kan rette opp feilen.`,
+            `All trips end after ${maxRentalDuration}. Park the vehicle in a safe spot and submit this form so that ${operatorName} can correct the error.`,
+            `Alle turar blir avslutta etter ${maxRentalDuration}. Sett køyretøyet på ein trygg stad og send inn dette skjemaet slik at ${operatorName} kan retta opp feilen.`,
+          );
+      }
     },
   },
   comment: {

@@ -48,6 +48,7 @@ export const Root_ShmoHelpScreen = ({
 
   const contactParams = {
     operatorId,
+    formFactor,
     ...(vehicleId
       ? {vehicleId}
       : bookingId
