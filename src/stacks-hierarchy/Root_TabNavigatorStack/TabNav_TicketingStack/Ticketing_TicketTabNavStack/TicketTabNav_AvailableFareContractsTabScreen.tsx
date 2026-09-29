@@ -115,6 +115,16 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   );
 
   useEffect(() => {
+    if (!savedTripPattern) return;
+    const timeout = setTimeout(dismissSavedTrip, 10 * ONE_SECOND_MS);
+    const unsubscribeBlur = navigation.addListener('blur', dismissSavedTrip);
+    return () => {
+      clearTimeout(timeout);
+      unsubscribeBlur();
+    };
+  }, [savedTripPattern, dismissSavedTrip, navigation]);
+
+  useEffect(() => {
     if (!showTransferCodeSuccess) return;
     const timeout = setTimeout(
       () => setShowTransferCodeSuccess(false),
