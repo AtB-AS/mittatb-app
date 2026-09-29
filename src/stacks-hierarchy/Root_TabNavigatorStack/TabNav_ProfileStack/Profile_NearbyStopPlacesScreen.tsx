@@ -59,9 +59,6 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
         [navigation],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
-      onAddFavoritePlace={() =>
-        navigation.navigate('Root_SearchFavoritePlaceScreen')
-      }
     />
   );
 };

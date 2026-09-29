@@ -11,6 +11,7 @@ import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
 import {useThemeContext} from '@atb/theme';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
 const RESULT_KEY = 'Departures_NearbyStopPlacesScreen--location';
 
@@ -25,6 +26,11 @@ export const Departures_NearbyStopPlacesScreen = ({
   const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad(navigation);
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
+  const favoriteListScreenParams = useNestedProfileScreenParams(
+    'Profile_FavoriteListScreen',
+    undefined,
+    ['Profile_FavoriteScreen'],
+  );
 
   useEffect(() => {
     if (pendingResult?.key === RESULT_KEY) {
@@ -64,8 +70,8 @@ export const Departures_NearbyStopPlacesScreen = ({
         [navigation],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
-      onAddFavoritePlace={() =>
-        navigation.navigate('Root_SearchFavoritePlaceScreen')
+      onEditFavoritePlaces={() =>
+        navigation.navigate('Root_TabNavigatorStack', favoriteListScreenParams)
       }
     />
   );

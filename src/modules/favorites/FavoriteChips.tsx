@@ -1,4 +1,4 @@
-import {Add} from '@atb/assets/svg/mono-icons/actions';
+import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
@@ -24,7 +24,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
-  onAddFavoritePlace: () => void;
+  onEditFavoritePlaces?: () => void;
   backgroundColor: ContrastColor;
 };
 
@@ -34,7 +34,7 @@ export const FavoriteChips: React.FC<Props> = ({
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
-  onAddFavoritePlace,
+  onEditFavoritePlaces = () => {},
   backgroundColor,
 }) => {
   const {favorites} = useFavoritesContext();
@@ -100,16 +100,16 @@ export const FavoriteChips: React.FC<Props> = ({
               testID={'favoriteChip' + i}
             />
           ))}
-        {activeType('add-favorite') && (
+        {activeType('edit-favorites') && (
           <FavoriteChip
             expanded={false}
             backgroundColor={backgroundColor}
             mode="secondary"
-            text={t(FavoriteTexts.chips.addFavorite)}
+            text={t(FavoriteTexts.chips.editFavorites)}
             accessibilityRole="button"
-            leftIcon={{svg: Add}}
-            onPress={onAddFavoritePlace}
-            testID="addFavoriteButton"
+            leftIcon={{svg: Filter}}
+            onPress={onEditFavoritePlaces}
+            testID="editFavoritesButton"
           />
         )}
       </ScrollView>

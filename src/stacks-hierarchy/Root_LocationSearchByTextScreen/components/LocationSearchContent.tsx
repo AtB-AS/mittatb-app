@@ -46,7 +46,6 @@ type LocationSearchContentProps = {
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
   onlyStopPlacesCheckboxInitialState: boolean;
-  onAddFavoritePlace: () => void;
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
@@ -62,7 +61,6 @@ export function LocationSearchContent({
   includeHistory = true,
   includeJourneyHistory = false,
   onlyStopPlacesCheckboxInitialState,
-  onAddFavoritePlace,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavoritesContext();
@@ -172,7 +170,6 @@ export function LocationSearchContent({
             onMapSelection={onMapSelection}
             chipTypes={favoriteChipTypes}
             style={styles.chipBox}
-            onAddFavoritePlace={onAddFavoritePlace}
             backgroundColor={theme.color.background.neutral[2]}
           />
         )}

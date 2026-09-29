@@ -34,9 +34,6 @@ export const Root_SearchFavoritePlaceScreen = ({navigation}: Props) => {
         label={t(AddEditFavoriteTexts.fields.location.label)}
         placeholder={t(AddEditFavoriteTexts.fields.location.placeholder)}
         favoriteChipTypes={[]}
-        onAddFavoritePlace={() =>
-          navigation.navigate('Root_SearchFavoritePlaceScreen')
-        }
         onlyStopPlacesCheckboxInitialState={false}
       />
     </View>
