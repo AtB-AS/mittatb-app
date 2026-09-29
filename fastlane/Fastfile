@@ -33,6 +33,15 @@ def intent_cert_info
   return intent_prov_profile_name, intent_prov_profile_path
 end
 
+def liveactivity_cert_info
+  # Live Activity provisioning profile
+  liveactivity_prefix = "#{ENV['IOS_APP_LIVEACTIVITY_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  liveactivity_prov_profile_path = ENV["sigh_#{liveactivity_prefix}_profile-path"]
+  liveactivity_prov_profile_name = (ENV["sigh_#{liveactivity_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+
+  return liveactivity_prov_profile_name, liveactivity_prov_profile_path
+end
+
 platform :ios do
   desc 'Update new devices and provisioning profiles'
   lane :update_devices do
@@ -46,6 +55,7 @@ platform :ios do
         'IOS_BUNDLE_IDENTIFIER',
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
+        'IOS_APP_LIVEACTIVITY_IDENTIFIER',
         'FASTLANE_MATCH_TYPE',
         'MATCH_DEPLOY_KEY',
         'APPCONNECT_API_KEY_PATH',
@@ -57,7 +67,7 @@ platform :ios do
       devices_file: ENV['IOS_DEVICES_FILE'],
       api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER'], ENV['IOS_APP_LIVEACTIVITY_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
     puts "Provisioning profiles for #{identifiers}"
     match(
@@ -85,6 +95,7 @@ platform :ios do
         'IOS_BUNDLE_IDENTIFIER',
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
+        'IOS_APP_LIVEACTIVITY_IDENTIFIER',
         'FASTLANE_MATCH_TYPE',
         'MATCH_DEPLOY_KEY',
         'KEYCHAIN_NAME',
@@ -92,7 +103,7 @@ platform :ios do
         'APPCONNECT_API_KEY_PATH'
       ]
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER'], ENV['IOS_APP_LIVEACTIVITY_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
     match_nuke(
       type: ENV['FASTLANE_MATCH_TYPE'],
@@ -116,6 +127,7 @@ platform :ios do
           'IOS_BUNDLE_IDENTIFIER',
           'IOS_APP_WIDGET_IDENTIFIER',
           'IOS_APP_INTENT_IDENTIFIER',
+          'IOS_APP_LIVEACTIVITY_IDENTIFIER',
           'FASTLANE_MATCH_TYPE',
           'MATCH_DEPLOY_KEY',
           'KEYCHAIN_NAME',
@@ -123,7 +135,7 @@ platform :ios do
           'APPCONNECT_API_KEY_PATH'
         ]
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER'], ENV['IOS_APP_LIVEACTIVITY_IDENTIFIER']]
     keychain_name = ENV['KEYCHAIN_NAME']
 
     create_keychain(
@@ -167,11 +179,12 @@ platform :ios do
         'IOS_BUNDLE_IDENTIFIER',
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
+        'IOS_APP_LIVEACTIVITY_IDENTIFIER',
         'IOS_DEVELOPMENT_TEAM_ID',
         'KEYCHAIN_NAME'
       ]
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER'], ENV['IOS_APP_LIVEACTIVITY_IDENTIFIER']]
     if is_ci
       keychain_name = ENV['KEYCHAIN_NAME']
 
@@ -255,7 +268,7 @@ platform :ios do
     get_certs
 
     ensure_env_vars(
-      env_vars: ['FASTLANE_MATCH_TYPE', 'BUILD_CONFIGURATION', 'ENABLE_WIDGET', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER']
+      env_vars: ['FASTLANE_MATCH_TYPE', 'BUILD_CONFIGURATION', 'ENABLE_WIDGET', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_APP_LIVEACTIVITY_IDENTIFIER']
     )
 
     update_code_signing_settings(
@@ -269,8 +282,10 @@ platform :ios do
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
+    liveactivity_prov_profile_name, liveactivity_prov_profile_path = liveactivity_cert_info
+
     puts "Identity name: #{app_signing_identity_name}"
-    puts "Certificate names: #{app_prov_profile_name}, #{widget_prov_profile_name}, #{intent_prov_profile_name}"
+    puts "Certificate names: #{app_prov_profile_name}, #{widget_prov_profile_name}, #{intent_prov_profile_name}, #{liveactivity_prov_profile_name}"
 
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
@@ -301,6 +316,13 @@ platform :ios do
         build_configuration: ENV['BUILD_CONFIGURATION'],
         code_signing_identity: app_signing_identity_name
       )
+      update_project_provisioning(
+        xcodeproj: "./ios/atb.xcodeproj",
+        target_filter: "liveActivity",
+        profile: liveactivity_prov_profile_path,
+        build_configuration: ENV['BUILD_CONFIGURATION'],
+        code_signing_identity: app_signing_identity_name
+      )
     end
   end
 
@@ -325,6 +347,8 @@ platform :ios do
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
+    liveactivity_prov_profile_name, liveactivity_prov_profile_path = liveactivity_cert_info
+
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
@@ -336,7 +360,8 @@ platform :ios do
         provisioningProfiles: {
           ENV['IOS_BUNDLE_IDENTIFIER'] => app_prov_profile_name,
           ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_prov_profile_name,
-          ENV['IOS_APP_INTENT_IDENTIFIER'] => intent_prov_profile_name
+          ENV['IOS_APP_INTENT_IDENTIFIER'] => intent_prov_profile_name,
+          ENV['IOS_APP_LIVEACTIVITY_IDENTIFIER'] => liveactivity_prov_profile_name
       	}
       }
     )
