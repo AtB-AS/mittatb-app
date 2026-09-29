@@ -4,12 +4,12 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {InvalidFill, ValidFill} from '@atb/assets/svg/mono-icons/ticketing';
-import {Info} from '@atb/assets/svg/mono-icons/status';
+import {Info, Warning} from '@atb/assets/svg/mono-icons/status';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 
-export type TripTicketCardMode = 'valid' | 'activate' | 'invalid';
+export type TripTicketCardMode = 'valid' | 'activate' | 'expired' | 'invalid';
 
 type TripTicketCardProps = {
   mode: TripTicketCardMode;
@@ -44,6 +44,8 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
           <ThemeIcon svg={ValidFill} color="valid" />
         ) : mode === 'activate' ? (
           <ThemeIcon svg={Info} color="info" />
+        ) : mode === 'expired' ? (
+          <ThemeIcon svg={Warning} color="warning" />
         ) : (
           <ThemeIcon svg={InvalidFill} color="error" />
         )}

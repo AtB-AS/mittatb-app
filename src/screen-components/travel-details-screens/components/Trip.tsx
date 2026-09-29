@@ -98,10 +98,19 @@ export const Trip: React.FC<TripProps> = ({
   const {requestReview} = useInAppReviewFlow();
   const nonInspectableTokenWarning = useNonInspectableTokenWarning();
 
+  const ticketCardValidUntilTime =
+    ticketCardValidUntil &&
+    (isWithinSameDate(ticketCardValidUntil, new Date(now))
+      ? formatToClock(ticketCardValidUntil, language, 'floor')
+      : formatToShortDate(ticketCardValidUntil, language));
+  // The states that lead to buying a ticket are only shown when there is
+  // something to buy.
   const shouldShowTicketCard =
     isTripTicketCardEnabled &&
     !!ticketCardMode &&
-    (ticketCardMode !== 'invalid' || !!purchaseSelection);
+    (ticketCardMode === 'valid' ||
+      ticketCardMode === 'activate' ||
+      !!purchaseSelection);
   const ticketCardContent =
     ticketCardMode &&
     {
@@ -115,21 +124,29 @@ export const Trip: React.FC<TripProps> = ({
         actionText: t(TripDetailsTexts.trip.ticketCard.activateTicket),
         onPress: onPressShowTicket,
       },
+      expired: {
+        message: t(
+          ticketCardValidUntil && ticketCardValidUntil.getTime() > now
+            ? TripDetailsTexts.trip.ticketCard.expiresBeforeNextBoardingMessage(
+                ticketCardValidUntilTime ?? '',
+              )
+            : TripDetailsTexts.trip.ticketCard.expiredMessage(
+                ticketCardValidUntilTime ?? '',
+              ),
+        ),
+        actionText: t(TripDetailsTexts.trip.ticketCard.buyTicket),
+        onPress: onPressBuyTicket,
+      },
       invalid: {
         message: t(TripDetailsTexts.trip.ticketCard.invalidMessage),
         actionText: t(TripDetailsTexts.trip.ticketCard.buyTicket),
         onPress: onPressBuyTicket,
       },
     }[ticketCardMode];
-  const ticketCardValidUntilTime =
-    ticketCardValidUntil &&
-    (isWithinSameDate(ticketCardValidUntil, new Date(now))
-      ? formatToClock(ticketCardValidUntil, language, 'floor')
-      : formatToShortDate(ticketCardValidUntil, language));
   // A ticket that can't be inspected on this device is the bigger problem, so
   // its warning is shown instead of when the ticket expires.
   const ticketCardDetailText =
-    ticketCardMode === 'invalid' || !ticketCardMode
+    ticketCardMode !== 'valid' && ticketCardMode !== 'activate'
       ? undefined
       : nonInspectableTokenWarning
         ? nonInspectableTokenWarning

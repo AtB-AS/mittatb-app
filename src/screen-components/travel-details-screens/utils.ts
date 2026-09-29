@@ -390,20 +390,59 @@ export function hasLegsFromOtherAuthorities(
 }
 
 /**
+ * When the traveller boards the leg: when it actually departed if that is
+ * known, otherwise when it is expected to depart.
+ */
+const getBoardingTime = (leg: Leg): number =>
+  new Date(
+    leg.fromEstimatedCall?.actualDepartureTime ?? leg.expectedStartTime,
+  ).getTime();
+
+/**
+ * When the traveller leaves the leg: when it actually arrived if that is
+ * known, otherwise when it is expected to arrive.
+ */
+const getAlightingTime = (leg: Leg): number =>
+  new Date(
+    leg.toEstimatedCall?.actualArrivalTime ?? leg.expectedEndTime,
+  ).getTime();
+
+/**
  * When the last leg that needs a ticket arrives, so walking at the end of the
  * trip is not included.
  */
 export function getLastAlightingTime(legs: Leg[]): Date | undefined {
   const lastNonFreeLeg = getNonFreeLegs(legs).at(-1);
-  return lastNonFreeLeg ? new Date(lastNonFreeLeg.expectedEndTime) : undefined;
+  return lastNonFreeLeg
+    ? new Date(getAlightingTime(lastNonFreeLeg))
+    : undefined;
 }
 
-const getFirstBoardingTime = (legs: Leg[]): number | undefined => {
+/**
+ * When the first leg that needs a ticket departs.
+ */
+export function getFirstBoardingTime(legs: Leg[]): number | undefined {
   const firstNonFreeLeg = getNonFreeLegs(legs)[0];
-  return firstNonFreeLeg
-    ? new Date(firstNonFreeLeg.expectedStartTime).getTime()
-    : undefined;
-};
+  return firstNonFreeLeg ? getBoardingTime(firstNonFreeLeg) : undefined;
+}
+
+/**
+ * The part of the trip that a ticket still matters for, starting at the next
+ * leg that needs a ticket and has not departed yet.
+ * - Before the trip has started, it is the whole trip.
+ * - When every leg that needs a ticket has departed, it starts at the last of
+ *   them, which the traveller is then on.
+ */
+export function getRemainingLegs(legs: Leg[], now: number): Leg[] {
+  const nonFreeLegs = getNonFreeLegs(legs);
+  if (!nonFreeLegs.length) return legs;
+  if (getBoardingTime(nonFreeLegs[0]) > now) return legs;
+
+  const nextLeg =
+    nonFreeLegs.find((leg) => getBoardingTime(leg) > now) ??
+    nonFreeLegs[nonFreeLegs.length - 1];
+  return legs.slice(legs.indexOf(nextLeg));
+}
 
 const isWithinPeriod = (
   time: number,

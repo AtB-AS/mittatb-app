@@ -280,6 +280,18 @@ const TripDetailsTexts = {
         'Du har ein billett til reisa. Aktiver han rett før du går på.',
       ),
       activateTicket: _('Aktiver', 'Activate', 'Aktiver'),
+      expiresBeforeNextBoardingMessage: (time: string) =>
+        _(
+          `Billetten din går ut kl. ${time}, før neste påstigning. Sjekk om du trenger ny billett.`,
+          `Your ticket expires at ${time}, before your next boarding. Check whether you need a new ticket.`,
+          `Billetten din går ut kl. ${time}, før neste påstigning. Sjekk om du treng ny billett.`,
+        ),
+      expiredMessage: (time: string) =>
+        _(
+          `Billetten din gikk ut kl. ${time}. Sjekk om du trenger ny billett før neste påstigning.`,
+          `Your ticket expired at ${time}. Check whether you need a new ticket before your next boarding.`,
+          `Billetten din gjekk ut kl. ${time}. Sjekk om du treng ny billett før neste påstigning.`,
+        ),
     },
   },
   messages: {

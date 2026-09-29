@@ -1,4 +1,4 @@
-import {TripPattern} from '@atb/api/types/trips';
+import {Leg, TripPattern} from '@atb/api/types/trips';
 import {useAuthContext} from '@atb/modules/auth';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
@@ -14,7 +14,9 @@ import {TripTicketCardMode} from './components/TripTicketCard';
 import {
   canActivateCarnetForTrip,
   getFareZoneIdsPerStop,
+  getFirstBoardingTime,
   getLastAlightingTime,
+  getRemainingLegs,
   getValidityEndAtFirstBoarding,
   hasLegsFromOtherAuthorities,
   isFareContractApplicableToTrip,
@@ -22,7 +24,11 @@ import {
 
 export type TripTicketCardState = {
   mode: TripTicketCardMode;
-  /** When the longest lasting of the valid fare contracts stops being valid */
+  /**
+   * For 'valid': when the longest lasting of the valid fare contracts stops
+   * being valid. For 'expired': when the fare contract the trip started with
+   * stops, or stopped, being valid.
+   */
   validUntil?: Date;
   /** Whether validUntil is before the last leg that needs a ticket arrives */
   expiresBeforeArrival?: boolean;
@@ -30,16 +36,20 @@ export type TripTicketCardState = {
 
 /**
  * Which state the trip ticket card should have, based on the user's fare
- * contracts that fit the trip:
+ * contracts. Once the trip has started, only the remaining part of it from the
+ * next boarding is considered, see `getRemainingLegs`.
  * - undefined, meaning no card, when the last leg that needs a ticket has
  *   arrived, since a ticket is no longer relevant then.
- * - 'valid' when one of them is valid at the first boarding, and still valid.
- * - undefined, meaning no card, when one of them was valid at the first
- *   boarding but has expired since. The trip has then started with a ticket,
- *   so we should not ask the user to buy one, and whether the ticket still
- *   covers the trip depends on rules we don't check.
- * - 'activate' when the user can activate one of them, like a carnet or a
- *   ticket bought for later.
+ * - 'valid' when a fare contract that fits the remaining trip is valid at the
+ *   next boarding, and still valid.
+ * - 'activate' when the user can activate a fare contract for the remaining
+ *   trip, like a carnet or a ticket bought for later. This goes before
+ *   'expired', since activating is better than buying a new ticket.
+ * - 'expired' when the trip started with a fare contract that is not valid at
+ *   the next boarding. We don't decide whether a new ticket is needed, since
+ *   that depends on validity rules we don't check.
+ * - undefined when the trip started with a fare contract that has expired
+ *   since, and there is no boarding left, so there is nothing to do.
  * - 'invalid' otherwise.
  */
 export const useTripTicketCardMode = (
@@ -57,31 +67,62 @@ export const useTripTicketCardMode = (
     now,
   );
 
-  const legs = tripPattern.legs;
-  const lastAlightingTime = getLastAlightingTime(legs);
+  const tripLegs = tripPattern.legs;
+  const lastAlightingTime = getLastAlightingTime(tripLegs);
   if (lastAlightingTime && lastAlightingTime.getTime() <= now) return undefined;
-  if (hasLegsFromOtherAuthorities(legs, currentAppAuthorityId)) {
+
+  const firstBoardingTime = getFirstBoardingTime(tripLegs);
+  const hasStarted =
+    firstBoardingTime !== undefined && firstBoardingTime <= now;
+  const legs = getRemainingLegs(tripLegs, now);
+  const nextBoardingTime = getFirstBoardingTime(legs);
+  const hasBoardingLeft =
+    nextBoardingTime !== undefined && nextBoardingTime > now;
+
+  const getApplicableFareContracts = (
+    legsToCover: Leg[],
+    candidates: FareContractType[],
+  ) => {
+    if (hasLegsFromOtherAuthorities(legsToCover, currentAppAuthorityId)) {
+      return [];
+    }
+    const fareZoneIdsPerStop = getFareZoneIdsPerStop(legsToCover, fareZones);
+    if (!fareZoneIdsPerStop) return [];
+    return candidates.filter((fareContract) =>
+      isFareContractApplicableToTrip(
+        legsToCover,
+        fareZoneIdsPerStop,
+        fareContract,
+        preassignedFareProducts,
+        fareProductTypeConfigs,
+      ),
+    );
+  };
+  const getLatestValidityEnd = (
+    legsToCover: Leg[],
+    candidates: FareContractType[],
+  ) =>
+    candidates
+      .map((fareContract) =>
+        getValidityEndAtFirstBoarding(legsToCover, fareContract),
+      )
+      .filter(isDefined)
+      .sort((a, b) => b.getTime() - a.getTime())[0];
+
+  if (
+    hasLegsFromOtherAuthorities(legs, currentAppAuthorityId) ||
+    !getFareZoneIdsPerStop(legs, fareZones)
+  ) {
     return {mode: 'invalid'};
   }
-  const fareZoneIdsPerStop = getFareZoneIdsPerStop(legs, fareZones);
-  if (!fareZoneIdsPerStop) return {mode: 'invalid'};
-
-  const isApplicable = (fareContract: FareContractType) =>
-    isFareContractApplicableToTrip(
-      legs,
-      fareZoneIdsPerStop,
-      fareContract,
-      preassignedFareProducts,
-      fareProductTypeConfigs,
-    );
-  const applicableFareContracts = fareContracts.filter(isApplicable);
+  const applicableFareContracts = getApplicableFareContracts(
+    legs,
+    fareContracts,
+  );
 
   // A carnet can still be available when the access that was active at the
-  // first boarding has expired, so validUntil can be in the past.
-  const validUntil = applicableFareContracts
-    .map((fareContract) => getValidityEndAtFirstBoarding(legs, fareContract))
-    .filter(isDefined)
-    .sort((a, b) => b.getTime() - a.getTime())[0];
+  // next boarding has expired, so validUntil can be in the past.
+  const validUntil = getLatestValidityEnd(legs, applicableFareContracts);
   if (validUntil && validUntil.getTime() > now) {
     return {
       mode: 'valid',
@@ -90,21 +131,7 @@ export const useTripTicketCardMode = (
         !!lastAlightingTime && validUntil < lastAlightingTime,
     };
   }
-
-  // Sent fare contracts are not in this list, but received ones are. Only
-  // count the user's own to be explicit about it.
-  const wasValidAtFirstBoarding =
-    !!validUntil ||
-    historicalFareContracts.some((fareContract) => {
-      if (fareContract.customerAccountId !== currentUserId) return false;
-      const {status} = getAvailabilityStatus(fareContract, now);
-      if (status !== 'expired' && status !== 'empty') return false;
-      return (
-        isApplicable(fareContract) &&
-        !!getValidityEndAtFirstBoarding(legs, fareContract)
-      );
-    });
-  if (wasValidAtFirstBoarding) return undefined;
+  if (validUntil) return undefined;
 
   const canActivate = applicableFareContracts.some((fareContract) => {
     if (fareContract.customerAccountId !== currentUserId) return false;
@@ -123,5 +150,30 @@ export const useTripTicketCardMode = (
       )
     );
   });
-  return {mode: canActivate ? 'activate' : 'invalid'};
+  if (canActivate) return {mode: 'activate'};
+
+  if (hasStarted) {
+    // Sent fare contracts are not in these lists, but received ones are. Only
+    // count the user's own to be explicit about it.
+    const ownFareContracts = [
+      ...fareContracts,
+      ...historicalFareContracts.filter((fareContract) => {
+        const {status} = getAvailabilityStatus(fareContract, now);
+        return status === 'expired' || status === 'empty';
+      }),
+    ].filter(
+      (fareContract) => fareContract.customerAccountId === currentUserId,
+    );
+    const startedWithValidUntil = getLatestValidityEnd(
+      tripLegs,
+      getApplicableFareContracts(tripLegs, ownFareContracts),
+    );
+    if (startedWithValidUntil) {
+      return hasBoardingLeft
+        ? {mode: 'expired', validUntil: startedWithValidUntil}
+        : undefined;
+    }
+  }
+
+  return {mode: 'invalid'};
 };

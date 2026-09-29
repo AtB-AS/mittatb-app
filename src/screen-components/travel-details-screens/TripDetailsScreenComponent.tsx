@@ -20,6 +20,7 @@ import {ServiceJourneyDeparture} from './types';
 import {
   canSellCollabTicket,
   getNonFreeLegs,
+  getRemainingLegs,
   getTicketInfoForExpressBoatBookingTrip,
   getTripPatternAnalytics,
   type TripAnalytics,
@@ -113,7 +114,16 @@ export const TripDetailsScreenComponent = ({
     serverNow,
   );
 
-  const purchaseSelection = usePurchaseSelectionFromTrip(updatedTripPattern);
+  // With the ticket card, a trip in progress only offers a ticket for the
+  // remaining part of it, like after the ticket it started with has expired.
+  const purchaseSelection = usePurchaseSelectionFromTrip(
+    isTripTicketCardEnabled
+      ? {
+          ...updatedTripPattern,
+          legs: getRemainingLegs(updatedTripPattern.legs, serverNow),
+        }
+      : updatedTripPattern,
+  );
   const ticketCardState = useTripTicketCardMode(updatedTripPattern, serverNow);
   const headerTitle = `${formatToClock(updatedTripPattern.expectedStartTime, language, 'floor')} - ${formatToClock(updatedTripPattern.expectedEndTime, language, 'ceil')}`;
 
