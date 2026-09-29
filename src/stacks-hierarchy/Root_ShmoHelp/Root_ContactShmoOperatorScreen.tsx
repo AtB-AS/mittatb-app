@@ -63,7 +63,6 @@ export const Root_ContactShmoOperatorScreen = ({
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
-    isContactInfoPresent,
     isAllInputValid,
     onSubmit,
     showError,
@@ -162,9 +161,7 @@ export const Root_ContactShmoOperatorScreen = ({
             errorText={
               !isEmailValid && showError
                 ? t(ContactShmoOperatorTexts.contactInfo.email.errorMessage)
-                : !isContactInfoPresent && showError
-                  ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
-                  : undefined
+                : undefined
             }
           />
         </Section>
@@ -199,9 +196,7 @@ export const Root_ContactShmoOperatorScreen = ({
             errorText={
               !isPhoneNumberValid && showError
                 ? t(ContactShmoOperatorTexts.contactInfo.phone.errorMessage)
-                : !isContactInfoPresent && showError
-                  ? t(ContactShmoOperatorTexts.contactInfo.errorMessage)
-                  : undefined
+                : undefined
             }
           />
         </Section>
@@ -297,7 +292,6 @@ const useShmoContactFormController = (
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
-    isContactInfoPresent,
     isAllInputValid,
     validatedRequestBody,
   } = validateSchema(requestBody);
@@ -333,7 +327,6 @@ const useShmoContactFormController = (
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
-    isContactInfoPresent,
     isAllInputValid,
     onSubmit,
     showError,
@@ -350,8 +343,6 @@ export const validateSchema = (body: SendSupportRequestBodyInput) => {
       !formattedErrors?.contactInformationEndUser?.phone?._errors?.length,
     isEmailValid:
       !formattedErrors?.contactInformationEndUser?.email?._errors?.length,
-    isContactInfoPresent:
-      !formattedErrors?.contactInformationEndUser?._errors?.length,
     isAllInputValid: result.success,
     validatedRequestBody: result.success ? result.data : undefined,
   };

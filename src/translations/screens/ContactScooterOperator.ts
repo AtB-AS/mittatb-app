@@ -64,13 +64,17 @@ export const ContactShmoOperatorTexts = {
   },
   contactInfo: {
     header: _(
-      'Din kontaktinformasjon (obligatorisk med minst én)',
-      'Contact information (at least one required)',
-      'Kontaktinfoen din (obligatorisk med minst éin)',
+      'Din kontaktinfo (E-postadresse er obligatorisk)',
+      'Your contact info (Email address is required)',
+      'Kontaktinfoen din (E-postadressa er obligatorisk)',
     ),
     email: {
       label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
-      placeholder: _('Legg til e-post', 'Add email address', 'Legg til e-post'),
+      placeholder: _(
+        'Legg til e-postadresse',
+        'Add email address',
+        'Legg til e-postadresse',
+      ),
       errorMessage: _(
         `Vennligst legg inn en gyldig e-postadresse`,
         `Please enter a valid e-mail adress.`,
@@ -90,11 +94,6 @@ export const ContactShmoOperatorTexts = {
         `Ver vennleg og legg til eit gyldig telefonnummer.`,
       ),
     },
-    errorMessage: _(
-      `Vennligst legg til enten telefonnummer eller e-postadresse.`,
-      `Please enter a phone number or email adress.`,
-      `Ver vennleg og legg til anten telefonnummer eller e-postadresse.`,
-    ),
   },
   location: {
     header: _(
