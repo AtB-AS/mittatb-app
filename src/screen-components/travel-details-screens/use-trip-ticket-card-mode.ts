@@ -42,14 +42,14 @@ export type TripTicketCardState = {
  *   arrived, since a ticket is no longer relevant then.
  * - 'valid' when a fare contract that fits the remaining trip is valid at the
  *   next boarding, and still valid.
+ * - undefined when there is no boarding left, like on the last leg, since it
+ *   is too late to activate or buy a ticket then.
  * - 'activate' when the user can activate a fare contract for the remaining
  *   trip, like a carnet or a ticket bought for later. This goes before
  *   'expired', since activating is better than buying a new ticket.
  * - 'expired' when the trip started with a fare contract that is not valid at
  *   the next boarding. We don't decide whether a new ticket is needed, since
  *   that depends on validity rules we don't check.
- * - undefined when the trip started with a fare contract that has expired
- *   since, and there is no boarding left, so there is nothing to do.
  * - 'invalid' otherwise.
  */
 export const useTripTicketCardMode = (
@@ -113,7 +113,7 @@ export const useTripTicketCardMode = (
     hasLegsFromOtherAuthorities(legs, currentAppAuthorityId) ||
     !getFareZoneIdsPerStop(legs, fareZones)
   ) {
-    return {mode: 'invalid'};
+    return hasBoardingLeft ? {mode: 'invalid'} : undefined;
   }
   const applicableFareContracts = getApplicableFareContracts(
     legs,
@@ -131,7 +131,9 @@ export const useTripTicketCardMode = (
         !!lastAlightingTime && validUntil < lastAlightingTime,
     };
   }
-  if (validUntil) return undefined;
+  // With no boarding left, it's too late to activate or buy a ticket, so only
+  // a valid ticket is worth showing, for inspection.
+  if (!hasBoardingLeft) return undefined;
 
   const canActivate = applicableFareContracts.some((fareContract) => {
     if (fareContract.customerAccountId !== currentUserId) return false;
@@ -169,9 +171,7 @@ export const useTripTicketCardMode = (
       getApplicableFareContracts(tripLegs, ownFareContracts),
     );
     if (startedWithValidUntil) {
-      return hasBoardingLeft
-        ? {mode: 'expired', validUntil: startedWithValidUntil}
-        : undefined;
+      return {mode: 'expired', validUntil: startedWithValidUntil};
     }
   }
 
