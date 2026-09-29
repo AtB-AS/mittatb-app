@@ -9,6 +9,7 @@ import {useIsMapTabFocused} from './use-is-map-tab-focused';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import type {NavigateToPricingDetails} from '@atb/modules/mobility';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
+import type {PreReq} from '@atb/api/types/mobility';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ShmoHelpScreenProps} from '@atb/stacks-hierarchy/Root_ShmoHelp/Root_ShmoHelpScreen';
@@ -100,8 +101,8 @@ export const Map_RootScreen = ({
   );
 
   const navigateToShmoOnboarding = useCallback(
-    (formFactor?: FormFactor) => {
-      navigation.navigate('Root_ShmoOnboardingScreen', {formFactor});
+    (formFactor?: FormFactor, preReqs?: PreReq[]) => {
+      navigation.navigate('Root_ShmoOnboardingScreen', {formFactor, preReqs});
     },
     [navigation],
   );
