@@ -15,12 +15,6 @@ export const ShmoHelpTexts = {
       `Chat${operatorName ? ` with ${operatorName}` : ''}`,
       `Chat${operatorName ? ` med ${operatorName}` : ''}`,
     ),
-  readMoreAt: (domain: string) =>
-    _(
-      `Les mer på ${domain}`,
-      `Read more at ${domain}`,
-      `Les meir på ${domain}`,
-    ),
   reportParking: _(
     'Rapporter feilparkering',
     'Report parking violation',

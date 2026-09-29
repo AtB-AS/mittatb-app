@@ -97,7 +97,7 @@ export const Root_ShmoHelpScreen = ({
             <ExpandableSectionItem
               key={item.id}
               text={getTextForLanguage(item.title, language) ?? ''}
-              textType="body__m__strong"
+              textType="body__m"
               showIconText={false}
               expanded={currentlyOpenFaqIndex === index}
               onPress={() => {

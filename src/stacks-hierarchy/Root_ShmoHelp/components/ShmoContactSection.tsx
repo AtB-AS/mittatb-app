@@ -41,10 +41,6 @@ export const ShmoContactSection = ({
 
   const isBicycle = formFactor === FormFactor.Bicycle;
 
-  const websiteDomain = contactInfo?.websiteUrl
-    ? extractDomain(contactInfo.websiteUrl)
-    : undefined;
-
   return (
     <>
       <View style={style.illustration}>
@@ -92,9 +88,9 @@ export const ShmoContactSection = ({
           />
         )}
 
-        {!!contactInfo?.websiteUrl && !!websiteDomain && (
+        {!!contactInfo?.websiteUrl && (
           <LinkSectionItem
-            text={t(ShmoHelpTexts.readMoreAt(websiteDomain))}
+            text={t(ShmoHelpTexts.faq)}
             rightIcon={{svg: ExternalLink}}
             onPress={() => openUrl(contactInfo.websiteUrl!)}
           />
@@ -109,14 +105,6 @@ export const ShmoContactSection = ({
     </>
   );
 };
-
-function extractDomain(url: string): string | undefined {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '');
-  } catch {
-    return undefined;
-  }
-}
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   illustration: {
