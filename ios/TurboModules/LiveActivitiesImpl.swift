@@ -149,7 +149,6 @@ class LiveActivitiesImpl: NSObject {
 
   @objc func endActivity(
     _ activityId: String,
-    dismissImmediately: Bool,
     resolve: @escaping (Any?) -> Void,
     reject: @escaping (String, String) -> Void
   ) {
@@ -165,10 +164,9 @@ class LiveActivitiesImpl: NSObject {
       return
     }
     Task {
-      let policy: ActivityUIDismissalPolicy = dismissImmediately ? .immediate : .default
       await activity.end(
         ActivityContent(state: activity.content.state, staleDate: nil),
-        dismissalPolicy: policy)
+        dismissalPolicy: .immediate)
       resolve(nil)
     }
   }

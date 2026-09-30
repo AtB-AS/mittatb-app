@@ -74,8 +74,8 @@ export interface Spec extends TurboModule {
   ): Promise<string>;
   /** Update the dynamic content-state of a running activity. */
   updateActivity(activityId: string, contentStateJson: string): Promise<void>;
-  /** End a single activity. `dismissImmediately` removes it from the UI at once. */
-  endActivity(activityId: string, dismissImmediately: boolean): Promise<void>;
+  /** End a single activity and remove it from the UI immediately. */
+  endActivity(activityId: string): Promise<void>;
   /** End every running activity for this app immediately. */
   endAllActivities(): Promise<void>;
 }

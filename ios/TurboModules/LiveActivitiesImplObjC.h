@@ -31,7 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
                 reject:(void (^)(NSString *, NSString *))reject;
 
 - (void)endActivity:(NSString *)activityId
- dismissImmediately:(BOOL)dismissImmediately
             resolve:(void (^)(id _Nullable))resolve
              reject:(void (^)(NSString *, NSString *))reject;
 

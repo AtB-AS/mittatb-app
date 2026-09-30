@@ -79,11 +79,9 @@ RCT_EXPORT_MODULE(NativeLiveActivities)
 }
 
 - (void)endActivity:(NSString *)activityId
- dismissImmediately:(BOOL)dismissImmediately
             resolve:(RCTPromiseResolveBlock)resolve
              reject:(RCTPromiseRejectBlock)reject {
   [liveActivities endActivity:activityId
-           dismissImmediately:dismissImmediately
                       resolve:^(id _Nullable result) { resolve(result); }
                        reject:^(NSString *code, NSString *message) { reject(code, message, nil); }];
 }

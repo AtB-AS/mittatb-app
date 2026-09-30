@@ -82,9 +82,9 @@ export const DebugLiveActivities = () => {
 
   const end = async (id: string) => {
     try {
-      await NativeLiveActivities!.endActivity(id, false);
+      await NativeLiveActivities!.endActivity(id);
     } catch (e: any) {
-      Alert.alert('End all failed', e?.message ?? String(e));
+      Alert.alert('End failed', e?.message ?? String(e));
     }
   };
 
