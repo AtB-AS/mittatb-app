@@ -5,6 +5,7 @@ export type TransitLiveActivityMode =
   | 'bus'
   | 'tram'
   | 'rail'
+  | 'metro'
   | 'water'
   | 'walk'
   | 'unknown';

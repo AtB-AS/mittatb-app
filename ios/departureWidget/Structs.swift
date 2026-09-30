@@ -23,15 +23,15 @@ enum TransportMode: String, Codable {
     var icon: Image? {
         switch self {
         case .water:
-            return Image("Boat")
+            return Image("FerryFill")
         case .rail:
-            return Image("Train")
+            return Image("TrainFill")
         case .tram:
-            return Image("Tram")
+            return Image("TramFill")
         case .bus:
-            return Image("Bus")
+            return Image("BusFill")
         case .metro:
-            return Image("Metro")
+            return Image("MetroFill")
         default:
             return nil
         }

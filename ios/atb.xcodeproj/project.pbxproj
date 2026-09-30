@@ -81,6 +81,8 @@
 		FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */; };
 		FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */; };
 		FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */; };
+		D7A1C3E5F2B4A6C8E0F1A2B4 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */; };
+		D7A1C3E5F2B4A6C8E0F1A2B5 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -200,10 +202,11 @@
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 		FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewSmall.swift; sourceTree = "<group>"; };
 		FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewMedium.swift; sourceTree = "<group>"; };
+		D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2A9E4C1B7F03D5A6B8C2E402 /* Exceptions for "liveActivity" folder in "liveActivity" target */ = {
+		2A9E4C1B7F03D5A6B8C2E402 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -213,29 +216,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		22D476662F3CBAD6008B795E /* TurboModules */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = TurboModules;
-			sourceTree = "<group>";
-		};
-		2A9E4C1B7F03D5A6B8C2E401 /* liveActivity */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				2A9E4C1B7F03D5A6B8C2E402 /* Exceptions for "liveActivity" folder in "liveActivity" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = liveActivity;
-			sourceTree = "<group>";
-		};
+		22D476662F3CBAD6008B795E /* TurboModules */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TurboModules; sourceTree = "<group>"; };
+		2A9E4C1B7F03D5A6B8C2E401 /* liveActivity */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (2A9E4C1B7F03D5A6B8C2E402 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = liveActivity; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -446,6 +428,7 @@
 			children = (
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
 				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
+				D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */,
 				5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */,
 				6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */,
 				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
@@ -616,6 +599,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7A1C3E5F2B4A6C8E0F1A2B5 /* SharedAssets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,6 +618,7 @@
 			files = (
 				FE1DCA8E2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */,
 				FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */,
+				D7A1C3E5F2B4A6C8E0F1A2B4 /* SharedAssets.xcassets in Resources */,
 				50488981293F4B660016DD7A /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

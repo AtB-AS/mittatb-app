@@ -13,7 +13,7 @@ const MODES: {[mode in Mode]?: TransitLiveActivityMode} = {
   [Mode.Trolleybus]: 'bus',
   [Mode.Tram]: 'tram',
   [Mode.Rail]: 'rail',
-  [Mode.Metro]: 'rail',
+  [Mode.Metro]: 'metro',
   [Mode.Monorail]: 'rail',
   [Mode.Funicular]: 'rail',
   [Mode.Water]: 'water',

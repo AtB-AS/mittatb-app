@@ -13,19 +13,20 @@ extension TransportMode {
     switch self {
     case .bus: return Color(hex: 0x557A2A)
     case .tram: return Color(hex: 0xE07C39)
-    case .rail: return Color(hex: 0x8E5FB0)
+    case .rail, .metro: return Color(hex: 0x8E5FB0)
     case .water: return Color(hex: 0x279BC4)
     case .walk: return Color(hex: 0x62727A)
     case .unknown: return Color(hex: 0x62727A)
     }
   }
 
-  /// AtB transport-mode icon asset (see `Assets.xcassets/TransportModes`).
+  /// AtB transport-mode icon asset (see `Shared/SharedAssets.xcassets/TransportModes`).
   var iconName: String {
     switch self {
     case .bus: return "BusFill"
     case .tram: return "TramFill"
     case .rail: return "TrainFill"
+    case .metro: return "MetroFill"
     case .water: return "FerryFill"
     case .walk: return "WalkFill"
     case .unknown: return "UnknownFill"
