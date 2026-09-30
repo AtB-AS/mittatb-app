@@ -293,7 +293,7 @@ export const MobilityTexts = {
         `Du må gå igjennom ${numberOfBlockers} steg før du kan starte turen`,
       ),
     appUpdateRequired: _('Oppdater appen', 'Update the app', 'Oppdater appen'),
-    appUpdateRequiredInfoMessage: _(
+    appUpdateRequiredMessage: _(
       'Du må oppdatere appen for å starte en tur',
       'You need to update the app to start a trip',
       'Du må oppdatere appen for å starte ein tur',

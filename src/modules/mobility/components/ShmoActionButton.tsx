@@ -29,6 +29,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useMapVehicle} from '../use-map-vehicle.tsx';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {openUrl} from '@atb/utils/open-url';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
@@ -140,9 +141,7 @@ export const ShmoActionButton = ({
       <View style={styles.startTripWrapper}>
         <MessageInfoBox
           type="warning"
-          message={t(
-            MobilityTexts.shmoRequirements.appUpdateRequiredInfoMessage,
-          )}
+          message={t(MobilityTexts.shmoRequirements.appUpdateRequiredMessage)}
         />
         {openStoreLinkError && (
           <MessageInfoBox
@@ -152,6 +151,7 @@ export const ShmoActionButton = ({
         )}
         <Button
           mode="primary"
+          rightIcon={{svg: ExternalLink}}
           active={false}
           interactiveColor={theme.color.interactive[0]}
           expanded={true}
