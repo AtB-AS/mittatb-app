@@ -1,5 +1,5 @@
 import {Linking} from 'react-native';
-import {openUrl} from '../open-url';
+import {openUrl, openUrlOrThrow} from '../open-url';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 jest.mock('react-native', () => ({
@@ -60,5 +60,24 @@ describe('openUrl', () => {
     (Linking.openURL as jest.Mock).mockRejectedValue(new Error('fail'));
 
     await expect(openUrl('https://example.com')).resolves.toBeUndefined();
+  });
+});
+
+describe('openUrlOrThrow', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should call notifyBugsnag and rethrow on error', async () => {
+    const error = new Error('Cannot open URL');
+    (Linking.openURL as jest.Mock).mockRejectedValue(error);
+
+    await expect(openUrlOrThrow('https://example.com')).rejects.toBe(error);
+    expect(notifyBugsnag).toHaveBeenCalledWith(error, {
+      metadata: {
+        url: 'https://example.com',
+      },
+      errorGroupHash: 'linkingOpenUrl',
+    });
   });
 });

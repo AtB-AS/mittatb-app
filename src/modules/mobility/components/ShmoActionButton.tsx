@@ -1,11 +1,7 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {
-  ForceUpdateTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {ForceUpdateTexts, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
@@ -15,7 +11,7 @@ import {
   PreReqType,
 } from '@atb/api/types/mobility';
 import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
@@ -27,9 +23,8 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useMapVehicle} from '../use-map-vehicle.tsx';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {openUrl} from '@atb/utils/open-url';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {useOpenStoreListing} from '@atb/utils/use-open-store-listing';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
@@ -70,13 +65,13 @@ export const ShmoActionButton = ({
   const appUpdateRequired = requirements.some(
     (req) => req.requirementCode === PreReqType.UNSUPPORTED,
   );
-  const [openStoreLinkError, setOpenStoreLinkError] = useState(false);
-  const {t, language} = useTranslation();
+  const {openStoreListing, isError: openStoreListingError} =
+    useOpenStoreListing();
+  const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
   const {logEvent} = useAnalyticsContext();
-  const {configurableLinks} = useFirestoreConfigurationContext();
   const {warningMessage} = useShmoWarnings(
     // Shmo warnings not yet supported for station based vehicles.
     mapState.isStationBasedBooking ? undefined : vehicleId,
@@ -143,7 +138,7 @@ export const ShmoActionButton = ({
           type="warning"
           message={t(MobilityTexts.shmoRequirements.appUpdateRequiredMessage)}
         />
-        {openStoreLinkError && (
+        {openStoreListingError && (
           <MessageInfoBox
             type="error"
             message={t(ForceUpdateTexts.errorMessage)}
@@ -157,21 +152,7 @@ export const ShmoActionButton = ({
           expanded={true}
           type="large"
           accessibilityRole="button"
-          onPress={() => {
-            const link = Platform.select({
-              ios: getTextForLanguage(
-                configurableLinks?.iosStoreListing,
-                language,
-              ),
-              android: getTextForLanguage(
-                configurableLinks?.androidStoreListing,
-                language,
-              ),
-              default: '',
-            });
-            setOpenStoreLinkError(false);
-            openUrl(link, () => setOpenStoreLinkError(true));
-          }}
+          onPress={openStoreListing}
           text={t(MobilityTexts.shmoRequirements.appUpdateRequired)}
         />
       </View>
