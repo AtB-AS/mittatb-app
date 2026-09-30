@@ -16,7 +16,7 @@ export const useShmoRequirements = (
   preReqs?: PreReq[],
   formFactor?: FormFactor,
 ) => {
-  const {authenticationType} = useAuthContext();
+  const {isLoggedIn} = useAuthContext();
   const {givenScooterConsent, givenBicycleConsent} = useMapContext();
   const givenConsent = (() => {
     switch (formFactor) {
@@ -50,7 +50,7 @@ export const useShmoRequirements = (
           return {
             requirementCode: PreReqType.IS_LOGGED_IN,
             isLoading: false,
-            isBlocking: authenticationType !== 'phone',
+            isBlocking: !isLoggedIn,
           };
         case PreReqType.AGE_VERIFICATION:
           return {
@@ -88,7 +88,7 @@ export const useShmoRequirements = (
     });
   }, [
     preReqs,
-    authenticationType,
+    isLoggedIn,
     ageVerifiedLoading,
     isShmoDeepIntegrationEnabled,
     ageVerification,
