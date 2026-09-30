@@ -1,28 +1,22 @@
 import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {Logo} from '@atb/assets/svg/mono-icons/logo';
-import {Platform, ScrollView, View} from 'react-native';
-import {openUrl} from '@atb/utils/open-url';
-import React, {useState} from 'react';
+import {ScrollView, View} from 'react-native';
+import React from 'react';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {
-  ForceUpdateTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {ForceUpdateTexts, useTranslation} from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {useOpenStoreListing} from '@atb/utils/use-open-store-listing';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
 export const ForceUpdateScreen = () => {
-  const [error, setError] = useState<boolean>(false);
+  const {openStoreListing, isError} = useOpenStoreListing();
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const {t, language} = useTranslation();
-  const {configurableLinks} = useFirestoreConfigurationContext();
+  const {t} = useTranslation();
 
   const iconDimension = 80;
 
@@ -50,24 +44,10 @@ export const ForceUpdateScreen = () => {
           <Button
             expanded={true}
             rightIcon={{svg: ExternalLink}}
-            onPress={() => {
-              const link = Platform.select({
-                ios: getTextForLanguage(
-                  configurableLinks?.iosStoreListing,
-                  language,
-                ),
-                android: getTextForLanguage(
-                  configurableLinks?.androidStoreListing,
-                  language,
-                ),
-                default: '',
-              });
-              setError(false);
-              openUrl(link, () => setError(true));
-            }}
+            onPress={openStoreListing}
             text={t(ForceUpdateTexts.externalButton)}
           />
-          {error && (
+          {isError && (
             <MessageInfoBox
               message={t(ForceUpdateTexts.errorMessage)}
               type="error"
