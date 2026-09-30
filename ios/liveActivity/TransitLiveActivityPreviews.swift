@@ -27,7 +27,6 @@ extension TransitState {
   }
 }
 
-@available(iOS 17.0, *)
 #Preview("Transit", as: .content, using: TransitActivityAttributes.preview) {
   TransitLiveActivity()
 } contentStates: {

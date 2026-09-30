@@ -1,5 +1,4 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {Platform} from 'react-native';
 import {NativeLiveActivities} from '@atb/modules/native';
 import {useLiveActivityRegistration} from './use-live-activity-registration';
 import type {LiveActivityWithApnsToken} from './types';
@@ -45,7 +44,7 @@ export const LiveActivitiesContextProvider = ({children}: Props) => {
   return (
     <LiveActivitiesContext.Provider
       value={{
-        isAvailable: Platform.OS === 'ios' && !!NativeLiveActivities,
+        isAvailable: !!NativeLiveActivities,
         activities,
         pushToStartToken,
       }}

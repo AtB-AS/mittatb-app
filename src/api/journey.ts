@@ -19,7 +19,7 @@ export type SaveTripResponseType = {
   shareLink: string;
 };
 
-export const saveJourney = async (req: SaveTripRequestType) =>
+export const saveTrip = async (req: SaveTripRequestType) =>
   client.post<SaveTripResponseType>('/journey/v1/trip', req, {
     authWithIdToken: true,
   });

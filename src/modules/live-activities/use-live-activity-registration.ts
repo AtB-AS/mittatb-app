@@ -4,8 +4,8 @@ import Bugsnag from '@bugsnag/react-native';
 import {registerLiveActivity, unregisterLiveActivity} from '@atb/api/journey';
 import {NativeLiveActivities, type LiveActivityInfo} from '@atb/modules/native';
 import {useAuthContext} from '@atb/modules/auth';
+import {useNotificationsContext} from '@atb/modules/notifications';
 import type {LiveActivityWithApnsToken} from './types';
-import {useNotificationsContext} from '../notifications';
 
 const REGISTRATION_RETRIES = 3;
 

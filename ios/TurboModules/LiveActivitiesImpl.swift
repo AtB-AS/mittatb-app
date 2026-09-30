@@ -49,9 +49,7 @@ class LiveActivitiesImpl: NSObject {
       // No de-duplication here: returning out of this loop would cancel the
       // subscription for the rest of the process. JS drops repeats instead.
       for await tokenData in Activity<TransitActivityAttributes>.pushToStartTokenUpdates {
-        let token = hex(tokenData)
-        NSLog("[LiveActivity] push-to-start token: %@", token)
-        onPushToStartTokenUpdate?(["pushToken": token])
+        onPushToStartTokenUpdate?(["pushToken": hex(tokenData)])
       }
     }
   }
@@ -171,46 +169,21 @@ class LiveActivitiesImpl: NSObject {
     }
   }
 
-  @objc func endAllActivities(
-    _ resolve: @escaping (Any?) -> Void,
-    reject: @escaping (String, String) -> Void
-  ) {
-    guard #available(iOS 18.0, *) else {
-      reject("E_LA_UNSUPPORTED", "Live Activities require iOS 18 or newer.")
-      return
-    }
-    Task {
-      for activity in Activity<TransitActivityAttributes>.activities {
-        await activity.end(nil, dismissalPolicy: .immediate)
-      }
-      resolve(nil)
-    }
-  }
-
   // MARK: Observation
 
   @available(iOS 18.0, *)
   private func observe(_ activity: Activity<TransitActivityAttributes>) {
     guard beginObserving(activity.id) else { return }
 
-    NSLog(
-      "[LiveActivity] observing id=%@ state=%@", activity.id, activity.content.state.debugJson)
     Task {
       for await tokenData in activity.pushTokenUpdates {
         let token = hex(tokenData)
         rememberToken(token, for: activity.id)
-        NSLog("[LiveActivity] push token: %@", token)
         onPushTokenUpdate?(payload(for: activity, apnsToken: token))
       }
     }
     Task {
-      for await content in activity.contentUpdates {
-        NSLog("[LiveActivity] content update: %@", content.state.debugJson)
-      }
-    }
-    Task {
       for await state in activity.activityStateUpdates {
-        NSLog("[LiveActivity] activity state: %@", String(describing: state))
         switch state {
         case .ended, .dismissed:
           // `ended` is usually followed by `dismissed`. This makes sure only
@@ -271,8 +244,6 @@ class LiveActivitiesImpl: NSObject {
 
   // MARK: JSON decoding
 
-  // `ContentState` has no `Date` fields (`eventTime` is unix seconds), so no
-  // `dateDecodingStrategy` is needed here.
   private let decoder = JSONDecoder()
 
   private func decode<T: Decodable>(_ type: T.Type, from json: String) throws -> T {

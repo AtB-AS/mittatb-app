@@ -11,30 +11,15 @@ on:
           - fram
           - nfk
           - troms
-      # TODO: Remove before merging. Causes issues when nuke is enabled.
-      match-type:
-        description: 'Match type'
-        required: true
-        type: choice
-        options:
-          - all
-          - development
-          - adhoc
-          - appstore
-      nuke:
-        description: 'Revoke and recreate all certs and profiles (breaks installed dev/ad-hoc builds)'
-        type: boolean
-        default: false
 jobs:
   nuke-certificates:
     name: Nuke certificates
-    if: ${{ inputs.nuke }}
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     runs-on: macOS-26
     strategy:
       matrix:
-        environment: ${{ fromJSON(inputs.match-type == 'all' && '["development","adhoc","appstore"]' || format('["{0}"]', inputs.match-type)) }}
+        environment: [ development, adhoc, appstore ]
       fail-fast: true
       max-parallel: 1
     env:
@@ -64,11 +49,10 @@ jobs:
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     needs: nuke-certificates
-    if: ${{ !cancelled() && (needs.nuke-certificates.result == 'success' || needs.nuke-certificates.result == 'skipped') }}
     runs-on: macOS-26
     strategy:
       matrix:
-        environment: ${{ fromJSON(inputs.match-type == 'all' && '["development","adhoc","appstore"]' || format('["{0}"]', inputs.match-type)) }}
+        environment: [ development, adhoc, appstore ]
       fail-fast: true
       max-parallel: 1
     env:

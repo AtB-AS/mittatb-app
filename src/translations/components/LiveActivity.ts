@@ -7,8 +7,6 @@ const LiveActivityTexts = {
     'Følg reisa på låseskjermen',
   ),
   title: {
-    walkToQuay: (quayName: string) =>
-      _(`Gå til ${quayName}`, `Walk to ${quayName}`, `Gå til ${quayName}`),
     departureFrom: (quayName: string) =>
       _(
         `Neste avgang fra ${quayName}`,

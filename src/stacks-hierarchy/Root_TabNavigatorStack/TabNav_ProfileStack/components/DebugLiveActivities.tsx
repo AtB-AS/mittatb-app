@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Platform, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -18,14 +18,19 @@ import {Button} from '@atb/components/button';
 import {random} from 'lodash';
 
 /**
- * Debug-menu interface for the iOS Live Activities PoC.
- *
- * Fires real Live Activities with mock preset data so the SwiftUI design can be
- * seen on the lock screen / Dynamic Island. Hooking these up to real trip data
- * is a later step — this only exercises the native module + widget.
+ * Debug-menu interface for Live Activities: starts and updates activities with
+ * random mock data, and shows the tokens the backend needs for pushing.
  */
 
 const inMinutes = (m: number) => Math.floor(Date.now() / 1000) + m * 60;
+
+const randomContentState = (): TransitLiveActivityContentState => ({
+  eventTime: inMinutes(random(10)),
+  lineName: ['Hakkebakkeskogen', 'Lohove'][random(0, 1)],
+  lineNumber: random(1, 15).toString(),
+  mode: ['bus', 'rail', 'walk'][random(0, 2)] as TransitLiveActivityMode,
+  title: ['6 stopp igjen', '2 stopp igjen', 'Neste stopp'][random(0, 2)],
+});
 
 /**
  * The attributes require a trip id. These presets are not backed by a saved
@@ -38,20 +43,14 @@ export const DebugLiveActivities = () => {
   const styles = useStyles();
   const {activities, pushToStartToken} = useLiveActivitiesContext();
 
-  if (Platform.OS !== 'ios' || !NativeLiveActivities) return null;
+  const liveActivities = NativeLiveActivities;
+  if (!liveActivities) return null;
 
   const start = async () => {
-    const scenario: TransitLiveActivityContentState = {
-      eventTime: inMinutes(random(10)),
-      lineName: ['Hakkebakkeskogen', 'Lohove'][random(0, 1)],
-      lineNumber: random(1, 15).toString(),
-      mode: ['bus', 'rail', 'walk'][random(0, 2)] as TransitLiveActivityMode,
-      title: ['6 stopp igjen', '2 stopp igjen', 'Neste stopp'][random(0, 2)],
-    };
     try {
-      const id = await NativeLiveActivities!.startActivity(
+      const id = await liveActivities.startActivity(
         JSON.stringify(ATTRIBUTES),
-        JSON.stringify(scenario),
+        JSON.stringify(randomContentState()),
       );
       Alert.alert('Live Activity started', `id: ${id}`);
     } catch (e: any) {
@@ -60,20 +59,10 @@ export const DebugLiveActivities = () => {
   };
 
   const update = async (activityId: string) => {
-    if (!activityId) {
-      Alert.alert('No active activity', 'Start one first.');
-      return;
-    }
     try {
-      await NativeLiveActivities!.updateActivity(
+      await liveActivities.updateActivity(
         activityId,
-        JSON.stringify({
-          mode: 'bus' as TransitLiveActivityMode,
-          lineNumber: '3',
-          lineName: 'Lohove',
-          title: '6 stopp igjen',
-          eventTime: inMinutes(18),
-        }),
+        JSON.stringify(randomContentState()),
       );
     } catch (e: any) {
       Alert.alert('Update failed', e?.message ?? String(e));
@@ -82,18 +71,17 @@ export const DebugLiveActivities = () => {
 
   const end = async (id: string) => {
     try {
-      await NativeLiveActivities!.endActivity(id);
+      await liveActivities.endActivity(id);
     } catch (e: any) {
       Alert.alert('End failed', e?.message ?? String(e));
     }
   };
 
   const checkEnabled = () => {
-    if (!NativeLiveActivities) return;
     try {
       Alert.alert(
         'Live Activities enabled?',
-        String(NativeLiveActivities.areActivitiesEnabled()),
+        String(liveActivities.areActivitiesEnabled()),
       );
     } catch (e: any) {
       Alert.alert('Check failed', e?.message ?? String(e));

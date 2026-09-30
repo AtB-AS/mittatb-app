@@ -7,22 +7,7 @@ import SwiftUI
 /// When rolling this out for real / to other flavors, generate these from the
 /// theme package instead of hardcoding.
 enum BrandColor {
-  // MARK: Light lock-screen card
-  /// Card background (the lock-screen banner is a white card).
-  static let card = Color.white
-  /// Primary text on the card.
-  static let title = Color(hex: 0x11242B)
-  /// Secondary / muted text.
-  static let subtitle = Color(hex: 0x62727A)
-  /// Hairline divider between the two rows.
-  static let divider = Color(hex: 0xE2E8EB)
-
-  // MARK: Illustration tile
-  /// Fallback illustration tile (until a real artwork asset is added).
-  static let illustrationBg = Color(hex: 0x3F5D1F)
-  static let illustrationFg = Color(hex: 0xCFE39A)
-
-  // MARK: Dynamic Island (always on a dark system background)
+  /// Dynamic Island keyline tint (always on a dark system background).
   static let accent = Color(hex: 0x86B200)
 }
 

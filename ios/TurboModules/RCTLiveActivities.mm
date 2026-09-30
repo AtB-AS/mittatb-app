@@ -86,10 +86,4 @@ RCT_EXPORT_MODULE(NativeLiveActivities)
                        reject:^(NSString *code, NSString *message) { reject(code, message, nil); }];
 }
 
-- (void)endAllActivities:(RCTPromiseResolveBlock)resolve
-                  reject:(RCTPromiseRejectBlock)reject {
-  [liveActivities endAllActivities:^(id _Nullable result) { resolve(result); }
-                            reject:^(NSString *code, NSString *message) { reject(code, message, nil); }];
-}
-
 @end

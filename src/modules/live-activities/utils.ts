@@ -17,7 +17,6 @@ const MODES: {[mode in Mode]?: TransitLiveActivityMode} = {
   [Mode.Monorail]: 'rail',
   [Mode.Funicular]: 'rail',
   [Mode.Water]: 'water',
-  [Mode.Foot]: 'walk',
 };
 
 /**
@@ -46,10 +45,6 @@ export const toInitialContentState = (
   if (!leg) return undefined;
 
   const quayName = leg.fromPlace.quay?.name ?? leg.fromPlace.name ?? '';
-  const title =
-    leg.mode === Mode.Foot
-      ? t(LiveActivityTexts.title.walkToQuay(quayName))
-      : t(LiveActivityTexts.title.departureFrom(quayName));
 
   return {
     mode: toLiveActivityMode(leg.mode),
@@ -58,7 +53,7 @@ export const toInitialContentState = (
       formatDestinationDisplay(t, leg.fromEstimatedCall?.destinationDisplay) ??
       leg.line?.name ??
       '',
-    title,
+    title: t(LiveActivityTexts.title.departureFrom(quayName)),
     eventTime: toUnixSeconds(leg.expectedStartTime),
   };
 };

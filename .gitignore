@@ -22,7 +22,6 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 **/.xcode.env.local
-ios/buildServer.json
 
 # Android/IntelliJ
 #

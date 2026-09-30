@@ -34,9 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
             resolve:(void (^)(id _Nullable))resolve
              reject:(void (^)(NSString *, NSString *))reject;
 
-- (void)endAllActivities:(void (^)(id _Nullable))resolve
-                  reject:(void (^)(NSString *, NSString *))reject;
-
 @end
 
 NS_ASSUME_NONNULL_END

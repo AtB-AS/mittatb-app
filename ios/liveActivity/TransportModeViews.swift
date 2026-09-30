@@ -8,7 +8,7 @@ import SwiftUI
 /// The color values mirror `@atb-as/theme` (AtB light mode) — see the note in
 /// `TransitTheme.swift` about hardcoding them for the PoC.
 extension TransportMode {
-  /// Accent color for the mode — tints the line badge and the Dynamic Island icon.
+  /// Accent color for the mode — the line badge background.
   var color: Color {
     switch self {
     case .bus: return Color(hex: 0x557A2A)
@@ -19,9 +19,6 @@ extension TransportMode {
     case .unknown: return Color(hex: 0x62727A)
     }
   }
-
-  /// Text/icon color on top of `color`.
-  var onColor: Color { .white }
 
   /// AtB transport-mode icon asset (see `Assets.xcassets/TransportModes`).
   var iconName: String {
@@ -40,29 +37,18 @@ extension TransportMode {
 struct ModeIcon: View {
   let mode: TransportMode
   let size: CGFloat
-  /// Tint with the mode's own accent color instead of inheriting the
-  /// surrounding `foregroundStyle`.
-  let colored: Bool
 
-  init(_ mode: TransportMode, size: CGFloat, colored: Bool = false) {
+  init(_ mode: TransportMode, size: CGFloat) {
     self.mode = mode
     self.size = size
-    self.colored = colored
   }
 
   var body: some View {
-    let icon =
-      Image(mode.iconName)
+    Image(mode.iconName)
       .renderingMode(.template)
       .resizable()
       .aspectRatio(contentMode: .fit)
       .frame(width: size, height: size)
-
-    if colored {
-      icon.foregroundStyle(mode.color)
-    } else {
-      icon
-    }
   }
 }
 
@@ -82,7 +68,7 @@ struct LineBadge: View {
           .lineLimit(1)
       }
     }
-    .foregroundStyle(mode.onColor)
+    .foregroundStyle(.white)
     .padding(size * 0.4)
     .background(mode.color, in: Capsule())
   }

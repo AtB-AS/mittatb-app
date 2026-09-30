@@ -21,14 +21,12 @@ struct TransitSmartStackView: View {
         .lineLimit(1).minimumScaleFactor(0.8)
         .frame(maxWidth: .infinity, alignment: .leading)
       Spacer(minLength: 0)
-      VStack(alignment: .leading) {
-        HStack(alignment: .center, spacing: 4) {
-          LineBadge(mode: state.mode, number: state.lineNumber, size: 16)
-          Spacer(minLength: 0)
-          HStack(spacing: 2) {
-            RealtimeIndicator(size: 10)
-            TimeText(state: state, size: 14)
-          }
+      HStack(alignment: .center, spacing: 4) {
+        LineBadge(mode: state.mode, number: state.lineNumber, size: 16)
+        Spacer(minLength: 0)
+        HStack(spacing: 2) {
+          RealtimeIndicator(size: 10)
+          TimeText(state: state, size: 14)
         }
       }
     }

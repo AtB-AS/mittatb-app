@@ -28,8 +28,7 @@ export type PushToStartTokenInfo = {
  * The attributes (static) and content-state (dynamic) are passed as JSON
  * strings so the codegen spec stays trivial and the payload shape can evolve
  * without regenerating native code. See the Swift `TransitActivityAttributes`
- * for the expected JSON shape, and `buildTransitPayload` in the debug UI for a
- * typed helper that produces it.
+ * for the expected JSON shape.
  *
  * iOS only. On Android this resolves to `null` (guard before use).
  */
@@ -76,8 +75,6 @@ export interface Spec extends TurboModule {
   updateActivity(activityId: string, contentStateJson: string): Promise<void>;
   /** End a single activity and remove it from the UI immediately. */
   endActivity(activityId: string): Promise<void>;
-  /** End every running activity for this app immediately. */
-  endAllActivities(): Promise<void>;
 }
 
 export const NativeLiveActivities = TurboModuleRegistry.get<Spec>(

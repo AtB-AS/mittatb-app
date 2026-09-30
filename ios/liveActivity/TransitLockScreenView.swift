@@ -30,27 +30,19 @@ struct TransitLockScreenView: View {
   private var state: TransitState { context.state }
 
   var body: some View {
-    #if DEBUG
-      // PoC: proves a pushed state reached the extension, even with the app suspended.
-      let _ = NSLog("[LiveActivity] render: %@", state.debugJson)
-    #endif
     VStack(alignment: .leading, spacing: 12) {
       Text(state.title)
         .font(BrandFont.secondary(14)).opacity(0.8)
         .lineLimit(1).minimumScaleFactor(0.85)
       HStack(spacing: 12) {
         LineBadge(mode: state.mode, number: state.lineNumber)
-        VStack(alignment: .leading, spacing: 2) {
-          Text(state.lineName)
-            .font(BrandFont.primary(16))
-            .lineLimit(1).minimumScaleFactor(0.85)
-        }
+        Text(state.lineName)
+          .font(BrandFont.primary(16))
+          .lineLimit(1).minimumScaleFactor(0.85)
         Spacer(minLength: 0)
         HStack(spacing: 4) {
           RealtimeIndicator()
-          state.timeSuffix
-            .font(BrandFont.primary(16))
-            .lineLimit(1).minimumScaleFactor(0.85)
+          TimeText(state: state, size: 16)
         }
       }
     }

@@ -12,8 +12,6 @@ func transitDynamicIsland(
   let accent = BrandColor.accent
 
   return DynamicIsland {
-    DynamicIslandExpandedRegion(.leading) {}
-    DynamicIslandExpandedRegion(.trailing) {}
     DynamicIslandExpandedRegion(.bottom) {
       VStack {
         Text(state.title)
@@ -23,17 +21,13 @@ func transitDynamicIsland(
           .opacity(0.8)
         HStack {
           LineBadge(mode: state.mode, number: state.lineNumber)
-          VStack {
-            Text(state.lineName)
-              .font(BrandFont.primary(16))
-              .lineLimit(1)
-              .frame(maxWidth: .infinity, alignment: .leading)
-          }
+          Text(state.lineName)
+            .font(BrandFont.primary(16))
+            .lineLimit(1)
+            .frame(maxWidth: .infinity, alignment: .leading)
           HStack(spacing: 4) {
             RealtimeIndicator()
-            state.timeSuffix
-              .font(BrandFont.primary(16))
-              .lineLimit(1).minimumScaleFactor(0.85)
+            TimeText(state: state, size: 16)
           }
         }
       }.padding(.horizontal, 8)

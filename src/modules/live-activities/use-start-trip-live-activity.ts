@@ -1,5 +1,5 @@
 import {useMutation} from '@tanstack/react-query';
-import {saveJourney} from '@atb/api/journey';
+import {saveTrip} from '@atb/api/journey';
 import {TripPattern} from '@atb/api/types/trips';
 import {NativeLiveActivities} from '@atb/modules/native';
 import type {TransitLiveActivityContentState} from './types';
@@ -29,7 +29,7 @@ export const useStartTripLiveActivity = () =>
         throw new Error('Live Activities are not available on this device.');
       }
 
-      const {data} = await saveJourney({tripPattern});
+      const {data} = await saveTrip({tripPattern});
       const activityId = await NativeLiveActivities.startActivity(
         JSON.stringify({tripId: data.tripId}),
         JSON.stringify(contentState),
