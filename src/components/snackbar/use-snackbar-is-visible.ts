@@ -1,4 +1,4 @@
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {useState, useEffect, useRef} from 'react';
 import {
   SnackbarContent,
@@ -28,7 +28,7 @@ export const useSnackbarIsVisible = (
   const [snackbarIsVisible, setSnackbarIsVisible] =
     useState(shouldShowSnackbar);
 
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
 
   const timeoutIdRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const clearCurrentTimeout = () =>

@@ -5,7 +5,7 @@ import {AnnouncementSection} from './AnnouncementSection';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {StyleSheet} from '@atb/theme';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {useTimeContext} from '@atb/modules/time';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {ContentHeading} from '@atb/components/heading';
@@ -38,7 +38,7 @@ export const Announcements = ({style, isFocused}: Props) => {
   const enrollmentIds = useGetEnrollments().map((e) => e.programId);
 
   const styles = useStyle();
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
 
   const {fareZone, cityZone, carPoolingZone} = useZones();
 

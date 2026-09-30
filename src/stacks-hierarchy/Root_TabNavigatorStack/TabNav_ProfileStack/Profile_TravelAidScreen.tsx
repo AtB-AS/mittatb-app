@@ -15,7 +15,7 @@ import {Button} from '@atb/components/button';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {CustomerServiceText} from '@atb/translations/screens/subscreens/CustomerService';
 import {ThemeText} from '@atb/components/text';
 import {useOnboardingContext} from '@atb/modules/onboarding';
@@ -33,7 +33,8 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const {contactPhoneNumber} = useFirestoreConfigurationContext();
   const {isTravelAidStopButtonEnabled} = useFeatureTogglesContext();
   const analytics = useAnalyticsContext();
-  const screenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled: screenReaderEnabled} =
+    useAccessibilityContext();
   const {completeOnboardingSection} = useOnboardingContext();
 
   const backgroundColor = theme.color.background.neutral[0];

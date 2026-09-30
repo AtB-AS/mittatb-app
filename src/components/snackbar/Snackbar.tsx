@@ -12,7 +12,7 @@ import {
   useStableValue,
 } from '@atb/components/snackbar';
 import {useTranslation} from '@atb/translations';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
@@ -104,7 +104,7 @@ const SnackbarInstance = ({
       : stableContent;
 
   const focusRef = useSnackbarScreenReaderFocus(isDisabled, activeContent);
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
 
   if (!snackbarIsVisible && isScreenReaderEnabled) {
     return <></>;

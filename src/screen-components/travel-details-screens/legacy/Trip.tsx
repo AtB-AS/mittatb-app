@@ -36,7 +36,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {GlobalMessage} from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
@@ -79,7 +79,7 @@ export const LegacyTrip: React.FC<LegacyTripProps> = ({
   const styles = useStyle();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
   const {enable_ticketing} = useRemoteConfigContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();

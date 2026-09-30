@@ -44,7 +44,7 @@ import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
 import {ServiceJourneyDeparture} from './types';
 import {useDepartureDetailsQuery} from './use-departure-details-query';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
@@ -172,7 +172,8 @@ export const DepartureDetailsScreenComponent = ({
   );
 
   const {isTravelAidEnabled} = useFeatureTogglesContext();
-  const screenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled: screenReaderEnabled} =
+    useAccessibilityContext();
 
   const {
     preferences: {
