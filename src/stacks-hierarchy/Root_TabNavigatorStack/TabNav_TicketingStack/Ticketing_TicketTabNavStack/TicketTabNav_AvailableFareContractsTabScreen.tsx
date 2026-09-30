@@ -116,12 +116,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
 
   useEffect(() => {
     if (!savedTripPattern) return;
-    const timeout = setTimeout(dismissSavedTrip, 10 * ONE_SECOND_MS);
-    const unsubscribeBlur = navigation.addListener('blur', dismissSavedTrip);
-    return () => {
-      clearTimeout(timeout);
-      unsubscribeBlur();
-    };
+    return navigation.addListener('blur', dismissSavedTrip);
   }, [savedTripPattern, dismissSavedTrip, navigation]);
 
   useEffect(() => {
@@ -250,6 +245,7 @@ const TripSavedMessageInfoBox = React.memo(
         title={t(TicketingTexts.tripSaved.title)}
         message={t(TicketingTexts.tripSaved.message(fromName, toName))}
         onDismiss={onDismiss}
+        a11yLiveRegion="polite"
       />
     );
   },
