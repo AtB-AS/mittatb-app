@@ -74,7 +74,7 @@ export const ShmoContactSection = ({
 
         {!!contactInfo?.chatUrl && (
           <LinkSectionItem
-            text={t(ShmoHelpTexts.chatWithOperator(operatorName))}
+            text={t(ShmoHelpTexts.chatInBrowser)}
             rightIcon={{svg: ExternalLink}}
             onPress={() => openUrl(contactInfo.chatUrl!)}
           />

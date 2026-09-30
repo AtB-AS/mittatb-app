@@ -58,21 +58,16 @@ export const Root_ContactShmoOperatorScreen = ({
   const navigation = useNavigation<RootNavigationProps>();
   const isFocused = useIsFocused();
 
-  /* The trip length the operator allows is configured per vehicle type, and is
-     read from the booking while a trip is running since a rented vehicle is not
-     in the vehicles feed. Without a trip to end there is nothing to warn about,
-     so the support type is left out entirely rather than shown without it. */
+  /* The trip length the operator allows is configured per vehicle type. It is read
+     off the booking while a trip is running, since a rented vehicle leaves the
+     vehicles feed for the duration of the trip, and off the vehicle otherwise. */
   const {data: activeBooking} = useActiveShmoBookingQuery(isFocused);
   const {data: vehicle} = useVehicleQuery(vehicleId);
-  const hasTripToEnd = isActiveTripBooking(activeBooking) || !!vehicleId;
-  const maxRentalDuration = isActiveTripBooking(activeBooking)
-    ? activeBooking?.asset.maxRentalDuration
-    : vehicle?.maxRentalDuration;
-
-  const supportTypes = Object.values(SupportType).filter(
-    (supportType) =>
-      hasTripToEnd || supportType !== SupportType.UNABLE_TO_CLOSE,
-  );
+  const activeTrip = isActiveTripBooking(activeBooking)
+    ? activeBooking
+    : undefined;
+  const maxRentalDuration =
+    activeTrip?.asset.maxRentalDuration ?? vehicle?.maxRentalDuration;
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactShmoOperatorConfirmationScreen', {
@@ -113,7 +108,7 @@ export const Root_ContactShmoOperatorScreen = ({
         <RadioGroupSection<SupportType>
           keyExtractor={(supportType) => supportType}
           selected={requestBody.supportType}
-          items={supportTypes}
+          items={Object.values(SupportType) as SupportType[]}
           onSelect={(supportType) =>
             setRequestBody((prev) => ({...prev, supportType}))
           }
