@@ -5,20 +5,18 @@ import {
 } from '@atb/modules/mobility';
 import {LocationScreenComponent} from '@atb/modules/mobility';
 import {PaymentScreenComponent} from '@atb/modules/mobility';
-import {ShmoRequirementEnum} from '@atb/modules/mobility';
 import {useShmoRequirements} from '@atb/modules/mobility';
 import {RootStackScreenProps} from './navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {PreReqType} from '@atb/api/types/mobility';
 
 type Props = RootStackScreenProps<'Root_ShmoOnboardingScreen'>;
 
 export const Root_ShmoOnboardingScreen = ({navigation, route}: Props) => {
   const focusRef = useFocusOnLoad(navigation);
   const formFactor = route.params?.formFactor;
-  const {requirements, hasBlockers} = useShmoRequirements(
-    undefined,
-    formFactor,
-  );
+  const preReqs = route.params?.preReqs;
+  const {requirements, hasBlockers} = useShmoRequirements(preReqs, formFactor);
 
   useEffect(() => {
     if (!hasBlockers) {
@@ -26,36 +24,24 @@ export const Root_ShmoOnboardingScreen = ({navigation, route}: Props) => {
     }
   }, [hasBlockers, navigation]);
 
-  if (
-    requirements.find(
-      (e) => e.requirementCode === ShmoRequirementEnum.AGE_VERIFICATION,
-    )?.isBlocking
-  ) {
-    return <AgeVerificationScreenComponent focusRef={focusRef} />;
-  }
+  // preReqs are sent in the order they should be presented/resolved in.
+  // IS_LOGGED_IN is excluded here as it's already resolved earlier, in ShmoActionButton.
+  const blockingRequirementCode = requirements.find(
+    (r) => r.isBlocking && r.requirementCode !== PreReqType.IS_LOGGED_IN,
+  )?.requirementCode;
 
-  if (
-    requirements.find(
-      (e) => e.requirementCode === ShmoRequirementEnum.TERMS_AND_CONDITIONS,
-    )?.isBlocking
-  ) {
-    return <RulesScreenComponent focusRef={focusRef} formFactor={formFactor} />;
+  switch (blockingRequirementCode) {
+    case PreReqType.AGE_VERIFICATION:
+      return <AgeVerificationScreenComponent focusRef={focusRef} />;
+    case PreReqType.TERMS_AND_CONDITIONS:
+      return (
+        <RulesScreenComponent focusRef={focusRef} formFactor={formFactor} />
+      );
+    case PreReqType.PRECISE_LOCATION:
+      return <LocationScreenComponent focusRef={focusRef} />;
+    case PreReqType.PAYMENT_METHOD:
+      return <PaymentScreenComponent focusRef={focusRef} />;
+    default:
+      return null;
   }
-
-  if (
-    requirements.find((e) => e.requirementCode === ShmoRequirementEnum.LOCATION)
-      ?.isBlocking
-  ) {
-    return <LocationScreenComponent focusRef={focusRef} />;
-  }
-
-  if (
-    requirements.find(
-      (e) => e.requirementCode === ShmoRequirementEnum.PAYMENT_CARD,
-    )?.isBlocking
-  ) {
-    return <PaymentScreenComponent focusRef={focusRef} />;
-  }
-
-  return null;
 };

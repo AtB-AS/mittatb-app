@@ -292,6 +292,12 @@ export const MobilityTexts = {
         `You need to go through ${numberOfBlockers} steps before you can start the trip`,
         `Du må gå igjennom ${numberOfBlockers} steg før du kan starte turen`,
       ),
+    appUpdateRequired: _('Oppdater appen', 'Update the app', 'Oppdater appen'),
+    appUpdateRequiredMessage: _(
+      'Du må oppdatere appen for å starte en tur',
+      'You need to update the app to start a trip',
+      'Du må oppdatere appen for å starte ein tur',
+    ),
     location: {
       title: _(
         'Vi trenger din posisjon',

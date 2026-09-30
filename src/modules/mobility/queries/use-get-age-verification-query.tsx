@@ -16,10 +16,13 @@ export const getAgeVerificationQueryKey = (legalAge: number) => [
   legalAge,
 ];
 
-export const useGetAgeVerificationQuery = (legalAge: number) => {
+export const useGetAgeVerificationQuery = (
+  legalAge: number,
+  enabled: boolean,
+) => {
   const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   return useQuery({
-    enabled: isShmoDeepIntegrationEnabled,
+    enabled: enabled && isShmoDeepIntegrationEnabled,
     queryKey: getAgeVerificationQueryKey(legalAge),
     queryFn: ({signal}) => getAgeVerification(legalAge, {signal}),
     staleTime: ONE_MINUTE_MS,

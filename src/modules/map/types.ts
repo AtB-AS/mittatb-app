@@ -26,6 +26,7 @@ import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import type {NavigateToPricingDetails} from '@atb/modules/mobility';
+import type {PreReq} from '@atb/api/types/mobility';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -48,6 +49,11 @@ export type NavigateToTripSearchCallback = (
   destination: string,
 ) => void;
 
+export type NavigateToShmoOnboardingCallback = (
+  formFactor?: FormFactor,
+  preReqs?: PreReq[],
+) => void;
+
 export type NavigateToQuayCallback = (place: StopPlace, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
   serviceJourneyId: string,
@@ -67,7 +73,7 @@ export type MapProps = {
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
-  navigateToShmoOnboarding: (formFactor?: FormFactor) => void;
+  navigateToShmoOnboarding: NavigateToShmoOnboardingCallback;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;

@@ -1,4 +1,4 @@
-import type {ShmoPricingPlan} from '@atb/api/types/mobility';
+import type {PreReqType, ShmoPricingPlan} from '@atb/api/types/mobility';
 import type {PriceAdjustmentType} from '@atb/api/types/benefit';
 
 export type NavigateToPricingDetails = (
@@ -6,15 +6,8 @@ export type NavigateToPricingDetails = (
   priceAdjustments: PriceAdjustmentType[] | undefined,
 ) => void;
 
-export enum ShmoRequirementEnum {
-  LOCATION = 'LOCATION',
-  PAYMENT_CARD = 'PAYMENT_CARD',
-  TERMS_AND_CONDITIONS = 'TERMS_AND_CONDITIONS',
-  AGE_VERIFICATION = 'AGE_VERIFICATION',
-}
-
 export type ShmoRequirementType = {
-  requirementCode: ShmoRequirementEnum;
+  requirementCode: PreReqType;
   isLoading: boolean;
   isBlocking: boolean;
 };
