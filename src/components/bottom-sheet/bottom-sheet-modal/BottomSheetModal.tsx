@@ -20,7 +20,7 @@ import {ReduceMotion} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useThemeContext} from '@atb/theme';
 import {useBottomSheetContext} from '../BottomSheetContext';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {BottomSheetHeaderType} from '../use-bottom-sheet-header-type';
 import {BottomSheetModalMethods as GorhomBottomSheetModalMethods} from '@gorhom/bottom-sheet/lib/typescript/types';
@@ -78,7 +78,7 @@ export const BottomSheetModal = ({
   const {theme} = useThemeContext();
   const focusRef = React.useRef<View>(null);
   const {setIsOpen, isOpen} = useBottomSheetContext();
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
 
   useEffect(() => {
     if (isOpen) {

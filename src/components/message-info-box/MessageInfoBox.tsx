@@ -25,7 +25,7 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {useLocalConfig} from '@atb/utils/use-local-config';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -75,7 +75,7 @@ export const MessageInfoBox = ({
   const styles = useStyles(type)();
   const {t} = useTranslation();
   const config = useLocalConfig();
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
   const iconColorProps = {
     color: theme.color.status[type].secondary.foreground.primary,
   };

@@ -15,7 +15,7 @@ import * as React from 'react';
 import {Ref, useContext, useState} from 'react';
 import {FullScreenFooter} from '../screen-footer';
 import {ContrastColor} from '@atb/theme/colors';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {useLayout} from '@atb/utils/use-layout';
 
 type Props = {
@@ -56,7 +56,7 @@ export function FullScreenView(props: Props) {
     props.headerProps.color ?? theme.color.background.neutral[1];
   const backgroundColor = themeColor.background;
 
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
 
   const titleShouldAnimate =
     props.titleAlwaysVisible || isScreenReaderEnabled
