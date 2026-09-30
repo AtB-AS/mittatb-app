@@ -15,7 +15,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {useAuthContext} from '@atb/modules/auth';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useIsFocused} from '@react-navigation/native';
 import {compressImageToBase64} from '@atb/utils/image';
 import {View} from 'react-native';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
@@ -34,7 +34,7 @@ export const Root_ParkingViolationsQrScreen = ({
   const style = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const isFocused = useIsFocusedAndActive();
+  const isFocused = useIsFocused();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);

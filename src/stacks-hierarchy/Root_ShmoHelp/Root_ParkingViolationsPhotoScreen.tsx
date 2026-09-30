@@ -5,6 +5,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from '@atb/modules/parking-violations-reporting';
 import {PhotoCapture} from '@atb/components/PhotoCapture';
 import {useCallback} from 'react';
+import {useIsFocused} from '@react-navigation/native';
 
 export type PhotoScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsPhotoScreen'>;
@@ -15,6 +16,7 @@ export const Root_ParkingViolationsPhotoScreen = ({
 }: PhotoScreenProps) => {
   const {t} = useTranslation();
   const {coordinates, isLoading} = useParkingViolations();
+  const isFocused = useIsFocused();
 
   const onGoBack = useCallback(() => {
     navigation.goBack();
@@ -35,6 +37,7 @@ export const Root_ParkingViolationsPhotoScreen = ({
       title={t(ParkingViolationTexts.photo.title)}
       secondaryText={t(ParkingViolationTexts.photo.instruction)}
       isLoading={isLoading}
+      isFocused={isFocused}
     />
   );
 };

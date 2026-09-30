@@ -1,5 +1,4 @@
 import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {Ref, useEffect, useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -15,6 +14,7 @@ type PhotoCaptureProps = {
   secondaryText: string;
   isLoading?: boolean;
   focusRef?: Ref<any>;
+  isFocused: boolean;
 };
 
 export const PhotoCapture = ({
@@ -25,9 +25,8 @@ export const PhotoCapture = ({
   secondaryText,
   isLoading = false,
   focusRef,
+  isFocused,
 }: PhotoCaptureProps) => {
-  const isFocused = useIsFocusedAndActive();
-
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const [file, setFile] = useState<PhotoFile | null>(null);
