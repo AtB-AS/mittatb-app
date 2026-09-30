@@ -104,6 +104,15 @@ const TicketingTexts = {
       'Vi har lagt til billetten din!',
     ),
   },
+  tripSaved: {
+    title: _('Reisen er lagret', 'Trip saved', 'Reisa er lagra'),
+    message: (from: string, to: string) =>
+      _(
+        `Reisen fra ${from} til ${to} er lagret og lagt på framsiden.`,
+        `The trip from ${from} to ${to} has been saved and added to the front page.`,
+        `Reisa frå ${from} til ${to} er lagra og lagt på framsida.`,
+      ),
+  },
   availableFareProductsAndReservationsTab: {
     label: _('Mine billetter', 'My tickets', 'Mine billettar'),
     noActiveTicketsTitle: _(
