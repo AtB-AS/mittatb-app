@@ -27,7 +27,7 @@ export type PushToStartTokenInfo = {
  *
  * The attributes (static) and content-state (dynamic) are passed as JSON
  * strings so the codegen spec stays trivial and the payload shape can evolve
- * without regenerating native code. See the Swift `TransitActivityAttributes`
+ * without regenerating native code. See the Swift `TripLiveActivityAttributes`
  * for the expected JSON shape.
  *
  * iOS only. On Android this resolves to `null` (guard before use).

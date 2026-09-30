@@ -5,6 +5,6 @@ export {
 export {StartLiveActivityButtonComponent} from './StartLiveActivityButtonComponent';
 export {useStartTripLiveActivity} from './use-start-trip-live-activity';
 export type {
-  TransitLiveActivityContentState,
-  TransitLiveActivityMode,
+  TripLiveActivityContentState,
+  LiveActivityTransportMode,
 } from './types';

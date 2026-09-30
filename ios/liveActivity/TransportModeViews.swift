@@ -3,10 +3,10 @@ import SwiftUI
 /// Presentation for `TransportMode`: accent color, icon asset, and the views that
 /// render them. The mode itself lives in `Shared/TransportMode.swift` because the
 /// app target needs it to encode a content-state; this half depends on
-/// `TransitTheme.swift` and is compiled into the extension only.
+/// `LiveActivityTheme.swift` and is compiled into the extension only.
 ///
 /// The color values mirror `@atb-as/theme` (AtB light mode) — see the note in
-/// `TransitTheme.swift` about hardcoding them for the PoC.
+/// `LiveActivityTheme.swift` about hardcoding them for the PoC.
 extension TransportMode {
   /// Accent color for the mode — the line badge background.
   var color: Color {

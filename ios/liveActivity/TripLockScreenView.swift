@@ -3,13 +3,13 @@ import Foundation
 import SwiftUI
 import WidgetKit
 
-typealias TransitState = TransitActivityAttributes.ContentState
+typealias TripState = TripLiveActivityAttributes.ContentState
 
 // MARK: - Shared building blocks
 
 /// Renders `eventDate` as an absolute clock time.
 struct TimeText: View {
-  let state: TransitState
+  let state: TripState
   var size: CGFloat = 15
 
   var body: some View {
@@ -24,10 +24,10 @@ struct TimeText: View {
 // MARK: - Lock-screen layout
 
 /// Two-row light card: instruction + illustration, then line + arrival.
-struct TransitLockScreenView: View {
-  let context: ActivityViewContext<TransitActivityAttributes>
+struct TripLockScreenView: View {
+  let context: ActivityViewContext<TripLiveActivityAttributes>
 
-  private var state: TransitState { context.state }
+  private var state: TripState { context.state }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {

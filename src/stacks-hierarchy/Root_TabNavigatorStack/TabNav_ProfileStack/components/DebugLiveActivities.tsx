@@ -10,8 +10,8 @@ import {StyleSheet} from '@atb/theme';
 import {NativeLiveActivities} from '@atb/modules/native';
 import {
   useLiveActivitiesContext,
-  type TransitLiveActivityContentState,
-  type TransitLiveActivityMode,
+  type TripLiveActivityContentState,
+  type LiveActivityTransportMode,
 } from '@atb/modules/live-activities';
 import {ClickableCopy} from '@atb/components/clickable-copy';
 import {Button} from '@atb/components/button';
@@ -24,11 +24,11 @@ import {random} from 'lodash';
 
 const inMinutes = (m: number) => Math.floor(Date.now() / 1000) + m * 60;
 
-const randomContentState = (): TransitLiveActivityContentState => ({
+const randomContentState = (): TripLiveActivityContentState => ({
   eventTime: inMinutes(random(10)),
   lineName: ['Hakkebakkeskogen', 'Lohove'][random(0, 1)],
   lineNumber: random(1, 15).toString(),
-  mode: ['bus', 'rail', 'walk'][random(0, 2)] as TransitLiveActivityMode,
+  mode: ['bus', 'rail', 'walk'][random(0, 2)] as LiveActivityTransportMode,
   title: ['6 stopp igjen', '2 stopp igjen', 'Neste stopp'][random(0, 2)],
 });
 

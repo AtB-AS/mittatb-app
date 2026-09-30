@@ -1,7 +1,7 @@
 import type {LiveActivityInfo} from '@atb/modules/native';
 
 /** Mirrors the `TransportMode` enum in `ios/Shared/TransportMode.swift`. */
-export type TransitLiveActivityMode =
+export type LiveActivityTransportMode =
   | 'bus'
   | 'tram'
   | 'rail'
@@ -11,13 +11,13 @@ export type TransitLiveActivityMode =
   | 'unknown';
 
 /**
- * Mirrors `TransitActivityAttributes.ContentState` in
- * `ios/Shared/TransitActivityAttributes.swift`. Every field must be present —
+ * Mirrors `TripLiveActivityAttributes.ContentState` in
+ * `ios/Shared/TripLiveActivityAttributes.swift`. Every field must be present —
  * ActivityKit drops a state it cannot decode, silently.
  */
-export type TransitLiveActivityContentState = {
+export type TripLiveActivityContentState = {
   /** Badge icon + accent color. */
-  mode: TransitLiveActivityMode;
+  mode: LiveActivityTransportMode;
   /** Badge number, e.g. "3". */
   lineNumber: string;
   /** Headsign / destination, e.g. "Lohove". */

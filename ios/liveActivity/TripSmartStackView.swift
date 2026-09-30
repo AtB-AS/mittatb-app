@@ -9,10 +9,10 @@ import WidgetKit
 /// Rendered on the paired watch from this same iOS extension — there is no
 /// watchOS target. Much tighter than the lock screen: a single row with the line
 /// badge, the headsign + instruction, and the arrival time.
-struct TransitSmartStackView: View {
-  let context: ActivityViewContext<TransitActivityAttributes>
+struct TripSmartStackView: View {
+  let context: ActivityViewContext<TripLiveActivityAttributes>
 
-  private var state: TransitState { context.state }
+  private var state: TripState { context.state }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {

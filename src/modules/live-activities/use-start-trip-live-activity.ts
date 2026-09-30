@@ -2,11 +2,11 @@ import {useMutation} from '@tanstack/react-query';
 import {saveTrip} from '@atb/api/journey';
 import {TripPattern} from '@atb/api/types/trips';
 import {NativeLiveActivities} from '@atb/modules/native';
-import type {TransitLiveActivityContentState} from './types';
+import type {TripLiveActivityContentState} from './types';
 
 type StartTripLiveActivityRequest = {
   tripPattern: TripPattern;
-  contentState: TransitLiveActivityContentState;
+  contentState: TripLiveActivityContentState;
 };
 
 /**

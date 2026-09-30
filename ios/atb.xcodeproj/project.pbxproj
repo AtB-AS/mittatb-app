@@ -13,7 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		22CDD79A2E682A4B009A6A01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CDD7992E682A4B009A6A01 /* AppDelegate.swift */; };
 		298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 298D19492AEBC45E00065733 /* InfoPlist.strings */; };
-		3738C565048B749B1B16BF8C /* TransitActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */; };
+		3738C565048B749B1B16BF8C /* TripLiveActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1C7D575A683351D142AFAA /* TripLiveActivityAttributes.swift */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		4C7501D205EF7D21F5A4F624 /* Pods_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D67A4EB71FAAE4592CCD1A /* Pods_app.framework */; };
 		500752DC29855BD100AC5A7F /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 500752DB29855BD100AC5A7F /* Intents.framework */; };
@@ -52,12 +52,14 @@
 		6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAA1D092A77D3EC00CC8016 /* PassKit.framework */; };
 		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
 		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
-		74B7D5AB436802EA2A130B26 /* TransitActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */; };
+		74B7D5AB436802EA2A130B26 /* TripLiveActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1C7D575A683351D142AFAA /* TripLiveActivityAttributes.swift */; };
 		8C41F5D2A0B63E79D4128CF6 /* TransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */; };
 		907FD69EA4A47F1355531234 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C08586D4BB36C7BAE574A0 /* SwiftUI.framework */; };
 		B50A3C59C60DF4DA1F7F2AE0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CF208E6AFA036B6EF6CFA3F /* Foundation.framework */; };
 		B93D07A6E2145C8F70A3D51E /* TransportMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */; };
 		C18256D729E9412DA315E055 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80CBD2ACDD97450583702DEF /* Colors.xcassets */; };
+		D7A1C3E5F2B4A6C8E0F1A2B4 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */; };
+		D7A1C3E5F2B4A6C8E0F1A2B5 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */; };
 		DDDF982FB606CFDA23A0EC47 /* liveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 63C02298678A71951B47FFE4 /* liveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE09922928FFF47300E5046D /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
 		FE09922C28FFF50800E5046D /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922B28FFF50800E5046D /* Bundle.swift */; };
@@ -81,8 +83,6 @@
 		FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */; };
 		FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */; };
 		FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */; };
-		D7A1C3E5F2B4A6C8E0F1A2B4 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */; };
-		D7A1C3E5F2B4A6C8E0F1A2B5 /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,7 +164,7 @@
 		50AAE58429897C4A00BA7611 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/WidgetConfiguration.intentdefinition; sourceTree = "<group>"; };
 		50AAE58729897C4C00BA7611 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/WidgetConfiguration.strings; sourceTree = "<group>"; };
 		5CF208E6AFA036B6EF6CFA3F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransitActivityAttributes.swift; sourceTree = "<group>"; };
+		5F1C7D575A683351D142AFAA /* TripLiveActivityAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TripLiveActivityAttributes.swift; sourceTree = "<group>"; };
 		63C02298678A71951B47FFE4 /* liveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = liveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransportMode.swift; sourceTree = "<group>"; };
 		6DAA1D092A77D3EC00CC8016 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
@@ -173,6 +173,7 @@
 		6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPresentation.swift; sourceTree = "<group>"; };
 		80CBD2ACDD97450583702DEF /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = atb/Colors.xcassets; sourceTree = "<group>"; };
 		BC1D3BCEAFEFE08EA08D4F06 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/WidgetKit.framework; sourceTree = DEVELOPER_DIR; };
+		D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F4E28791985A7C586D2BCDFA /* liveActivity.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = liveActivity.entitlements; sourceTree = "<group>"; };
 		FE09922828FFF47300E5046D /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
@@ -202,7 +203,6 @@
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 		FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewSmall.swift; sourceTree = "<group>"; };
 		FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewMedium.swift; sourceTree = "<group>"; };
-		D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -429,7 +429,7 @@
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
 				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
 				D7A1C3E5F2B4A6C8E0F1A2B3 /* SharedAssets.xcassets */,
-				5F1C7D575A683351D142AFAA /* TransitActivityAttributes.swift */,
+				5F1C7D575A683351D142AFAA /* TripLiveActivityAttributes.swift */,
 				6A2E4B18C9D7F3021A5E8B44 /* TransportMode.swift */,
 				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
 			);
@@ -742,7 +742,7 @@
 				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
 				FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */,
 				6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */,
-				74B7D5AB436802EA2A130B26 /* TransitActivityAttributes.swift in Sources */,
+				74B7D5AB436802EA2A130B26 /* TripLiveActivityAttributes.swift in Sources */,
 				8C41F5D2A0B63E79D4128CF6 /* TransportMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -775,7 +775,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3738C565048B749B1B16BF8C /* TransitActivityAttributes.swift in Sources */,
+				3738C565048B749B1B16BF8C /* TripLiveActivityAttributes.swift in Sources */,
 				B93D07A6E2145C8F70A3D51E /* TransportMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

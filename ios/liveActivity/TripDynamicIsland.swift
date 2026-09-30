@@ -5,8 +5,8 @@ import WidgetKit
 // MARK: - Dynamic Island layout
 
 /// Builds the expanded, compact and minimal Dynamic Island presentations.
-func transitDynamicIsland(
-  context: ActivityViewContext<TransitActivityAttributes>
+func tripDynamicIsland(
+  context: ActivityViewContext<TripLiveActivityAttributes>
 ) -> DynamicIsland {
   let state = context.state
   let accent = BrandColor.accent

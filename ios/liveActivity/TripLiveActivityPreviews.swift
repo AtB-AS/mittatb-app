@@ -4,21 +4,21 @@ import WidgetKit
 
 /// Xcode previews for the Live Activity. Use the preview canvas' presentation
 /// picker to switch between lock screen and the Dynamic Island variants.
-extension TransitActivityAttributes {
-  fileprivate static var preview: TransitActivityAttributes {
-    TransitActivityAttributes(tripId: "preview-trip")
+extension TripLiveActivityAttributes {
+  fileprivate static var preview: TripLiveActivityAttributes {
+    TripLiveActivityAttributes(tripId: "preview-trip")
   }
 }
 
-extension TransitState {
+extension TripState {
   fileprivate static func preview(
     mode: TransportMode = .bus,
     title: String = "Fra Prinsens Gate P1",
     lineNumber: String = "3",
     lineName: String = "Lohove",
     minutesFromNow: Int = 5
-  ) -> TransitState {
-    TransitState(
+  ) -> TripState {
+    TripState(
       mode: mode,
       lineNumber: lineNumber,
       lineName: lineName,
@@ -27,17 +27,17 @@ extension TransitState {
   }
 }
 
-#Preview("Transit", as: .content, using: TransitActivityAttributes.preview) {
-  TransitLiveActivity()
+#Preview("Trip", as: .content, using: TripLiveActivityAttributes.preview) {
+  TripLiveActivity()
 } contentStates: {
-  TransitState.preview()
-  TransitState.preview(
+  TripState.preview()
+  TripState.preview(
     title: "Fra Hundremeterskogen Bussterminal øst",
     lineNumber: "311",
     lineName: "Sjetnemarka via Kroppanm. - Okstad",
     minutesFromNow: 12
   )
-  TransitState.preview(mode: .rail, minutesFromNow: 0)
-  TransitState.preview(mode: .walk, title: "Neste stopp")
-  TransitState.preview(mode: .water)
+  TripState.preview(mode: .rail, minutesFromNow: 0)
+  TripState.preview(mode: .walk, title: "Neste stopp")
+  TripState.preview(mode: .water)
 }

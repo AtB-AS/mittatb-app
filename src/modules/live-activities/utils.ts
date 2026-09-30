@@ -3,11 +3,11 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {LiveActivityTexts, TranslateFunction} from '@atb/translations';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
 import type {
-  TransitLiveActivityContentState,
-  TransitLiveActivityMode,
+  TripLiveActivityContentState,
+  LiveActivityTransportMode,
 } from './types';
 
-const MODES: {[mode in Mode]?: TransitLiveActivityMode} = {
+const MODES: {[mode in Mode]?: LiveActivityTransportMode} = {
   [Mode.Bus]: 'bus',
   [Mode.Coach]: 'bus',
   [Mode.Trolleybus]: 'bus',
@@ -26,7 +26,7 @@ const MODES: {[mode in Mode]?: TransitLiveActivityMode} = {
  */
 export const toLiveActivityMode = (
   mode: Mode | undefined,
-): TransitLiveActivityMode => (mode && MODES[mode]) || 'unknown';
+): LiveActivityTransportMode => (mode && MODES[mode]) || 'unknown';
 
 /**
  * The state a Live Activity starts in, built from the first leg of the trip the
@@ -40,7 +40,7 @@ export const toLiveActivityMode = (
 export const toInitialContentState = (
   t: TranslateFunction,
   tripPattern: TripPattern,
-): TransitLiveActivityContentState | undefined => {
+): TripLiveActivityContentState | undefined => {
   const leg = tripPattern.legs.find((leg) => !!leg.line);
   if (!leg) return undefined;
 

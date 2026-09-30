@@ -7,7 +7,7 @@ import Foundation
 /// is a thin TurboModule bridge on top (mirrors the ApplePayHandler pattern).
 ///
 /// The JS side passes the ActivityKit attributes and content-state as JSON
-/// strings, which we decode into `TransitActivityAttributes` here. That keeps the
+/// strings, which we decode into `TripLiveActivityAttributes` here. That keeps the
 /// TurboModule spec trivial (only strings/bools cross the bridge) and lets the
 /// real implementation evolve the payload shape without codegen churn.
 ///
@@ -37,18 +37,18 @@ class LiveActivitiesImpl: NSObject {
   @objc func startObservingActivities() {
     guard #available(iOS 18.0, *) else { return }
 
-    for activity in Activity<TransitActivityAttributes>.activities {
+    for activity in Activity<TripLiveActivityAttributes>.activities {
       observe(activity)
     }
     Task {
-      for await activity in Activity<TransitActivityAttributes>.activityUpdates {
+      for await activity in Activity<TripLiveActivityAttributes>.activityUpdates {
         observe(activity)
       }
     }
     Task {
       // No de-duplication here: returning out of this loop would cancel the
       // subscription for the rest of the process. JS drops repeats instead.
-      for await tokenData in Activity<TransitActivityAttributes>.pushToStartTokenUpdates {
+      for await tokenData in Activity<TripLiveActivityAttributes>.pushToStartTokenUpdates {
         onPushToStartTokenUpdate?(["pushToken": hex(tokenData)])
       }
     }
@@ -63,7 +63,7 @@ class LiveActivitiesImpl: NSObject {
       return
     }
     resolve(
-      Activity<TransitActivityAttributes>.activities.map { activity in
+      Activity<TripLiveActivityAttributes>.activities.map { activity in
         payload(for: activity, apnsToken: activity.pushToken.map(hex))
       })
   }
@@ -78,7 +78,7 @@ class LiveActivitiesImpl: NSObject {
       resolve(nil)
       return
     }
-    resolve(Activity<TransitActivityAttributes>.pushToStartToken.map(hex))
+    resolve(Activity<TripLiveActivityAttributes>.pushToStartToken.map(hex))
   }
 
   @objc func areActivitiesEnabled() -> Bool {
@@ -105,8 +105,8 @@ class LiveActivitiesImpl: NSObject {
       return
     }
     do {
-      let attributes = try decode(TransitActivityAttributes.self, from: attributesJson)
-      let state = try decode(TransitActivityAttributes.ContentState.self, from: contentStateJson)
+      let attributes = try decode(TripLiveActivityAttributes.self, from: attributesJson)
+      let state = try decode(TripLiveActivityAttributes.ContentState.self, from: contentStateJson)
       let content = ActivityContent(state: state, staleDate: nil)
       let activity = try Activity.request(
         attributes: attributes, content: content, pushType: .token)
@@ -128,14 +128,14 @@ class LiveActivitiesImpl: NSObject {
       return
     }
     guard
-      let activity = Activity<TransitActivityAttributes>.activities
+      let activity = Activity<TripLiveActivityAttributes>.activities
         .first(where: { $0.id == activityId })
     else {
       reject("E_LA_NOT_FOUND", "No active Live Activity with id \(activityId).")
       return
     }
     do {
-      let state = try decode(TransitActivityAttributes.ContentState.self, from: contentStateJson)
+      let state = try decode(TripLiveActivityAttributes.ContentState.self, from: contentStateJson)
       Task {
         await activity.update(ActivityContent(state: state, staleDate: nil))
         resolve(nil)
@@ -155,7 +155,7 @@ class LiveActivitiesImpl: NSObject {
       return
     }
     guard
-      let activity = Activity<TransitActivityAttributes>.activities
+      let activity = Activity<TripLiveActivityAttributes>.activities
         .first(where: { $0.id == activityId })
     else {
       reject("E_LA_NOT_FOUND", "No active Live Activity with id \(activityId).")
@@ -172,7 +172,7 @@ class LiveActivitiesImpl: NSObject {
   // MARK: Observation
 
   @available(iOS 18.0, *)
-  private func observe(_ activity: Activity<TransitActivityAttributes>) {
+  private func observe(_ activity: Activity<TripLiveActivityAttributes>) {
     guard beginObserving(activity.id) else { return }
 
     Task {
@@ -226,7 +226,7 @@ class LiveActivitiesImpl: NSObject {
 
   @available(iOS 18.0, *)
   private func payload(
-    for activity: Activity<TransitActivityAttributes>,
+    for activity: Activity<TripLiveActivityAttributes>,
     apnsToken: String?
   ) -> NSDictionary {
     let payload = NSMutableDictionary()

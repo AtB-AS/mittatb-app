@@ -1,7 +1,7 @@
 import ActivityKit
 import Foundation
 
-struct TransitActivityAttributes: ActivityAttributes {
+struct TripLiveActivityAttributes: ActivityAttributes {
 
   var tripId: String
 

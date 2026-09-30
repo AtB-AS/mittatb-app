@@ -2,34 +2,34 @@ import ActivityKit
 import SwiftUI
 import WidgetKit
 
-struct TransitLiveActivity: Widget {
+struct TripLiveActivity: Widget {
   var body: some WidgetConfiguration {
-    ActivityConfiguration(for: TransitActivityAttributes.self) { context in
-      TransitActivityContent(context: context)
+    ActivityConfiguration(for: TripLiveActivityAttributes.self) { context in
+      TripLiveActivityContent(context: context)
     } dynamicIsland: { context in
-      transitDynamicIsland(context: context)
+      tripDynamicIsland(context: context)
     }
     // Opt in to the Apple Watch Smart Stack. Without this the watch renders a
-    // system-generated fallback instead of `TransitSmartStackView`.
+    // system-generated fallback instead of `TripSmartStackView`.
     .supplementalActivityFamilies([.small])
   }
 }
 
 /// Picks the presentation for the size the system asked for: `.medium` is the
 /// iPhone lock screen / banner, `.small` is the Apple Watch Smart Stack.
-struct TransitActivityContent: View {
+struct TripLiveActivityContent: View {
   @Environment(\.activityFamily) private var activityFamily
 
-  let context: ActivityViewContext<TransitActivityAttributes>
+  let context: ActivityViewContext<TripLiveActivityAttributes>
 
   var body: some View {
     switch activityFamily {
     case .small:
-      TransitSmartStackView(context: context)
+      TripSmartStackView(context: context)
     case .medium:
-      TransitLockScreenView(context: context)
+      TripLockScreenView(context: context)
     @unknown default:
-      TransitLockScreenView(context: context)
+      TripLockScreenView(context: context)
     }
   }
 }
