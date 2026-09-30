@@ -51,7 +51,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {useNonInspectableTokenWarning} from '@atb/modules/fare-contracts';
+import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {TripTicketCard, TripTicketCardMode} from './TripTicketCard';
 
 export type TripProps = {
@@ -96,7 +96,8 @@ export const Trip: React.FC<TripProps> = ({
   );
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
-  const nonInspectableTokenWarning = useNonInspectableTokenWarning();
+  const {mobileTokenStatus} = useMobileTokenContext();
+  const isTicketOnOtherDevice = mobileTokenStatus === 'success-not-inspectable';
 
   const ticketCardValidUntilTime =
     ticketCardValidUntil &&
@@ -148,8 +149,8 @@ export const Trip: React.FC<TripProps> = ({
   const ticketCardDetailText =
     ticketCardMode !== 'valid' && ticketCardMode !== 'activate'
       ? undefined
-      : nonInspectableTokenWarning
-        ? nonInspectableTokenWarning
+      : isTicketOnOtherDevice
+        ? t(TripDetailsTexts.trip.ticketCard.availableOnOtherDevice)
         : ticketCardMode === 'valid' && ticketCardValidUntilTime
           ? t(
               ticketCardExpiresBeforeArrival

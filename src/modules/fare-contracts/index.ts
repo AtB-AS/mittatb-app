@@ -6,7 +6,6 @@ export {
   getReservationStatus,
   getFareContractInfo,
   useOtherDeviceIsInspectableWarning,
-  useNonInspectableTokenWarning,
   hasShmoBookingId,
   getTravellersIcon,
   getTravellersText,

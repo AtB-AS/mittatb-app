@@ -280,6 +280,11 @@ const TripDetailsTexts = {
         'Du har ein billett til reisa. Aktiver han rett før du går på.',
       ),
       activateTicket: _('Aktiver', 'Activate', 'Aktiver'),
+      availableOnOtherDevice: _(
+        'Billett tilgjengelig fra annen enhet',
+        'Ticket available on another device',
+        'Billett tilgjengeleg frå anna eining',
+      ),
       expiresBeforeNextBoardingMessage: (time: string) =>
         _(
           `Billetten din går ut kl. ${time}, før neste påstigning. Sjekk om du trenger ny billett.`,
