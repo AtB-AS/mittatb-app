@@ -21,6 +21,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Loading} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useIsFocused} from '@react-navigation/native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type ParkingPhotoScreenProps =
@@ -36,6 +37,7 @@ export const Root_ParkingPhotoScreen = ({
   const {dispatchMapState} = useMapContext();
   const {logEvent} = useAnalyticsContext();
   const isFocusedAndActive = useIsFocusedAndActive();
+  const isFocused = useIsFocused();
   const {data: shmoBooking} = useShmoBookingQuery(
     isFocusedAndActive,
     route.params.bookingId,
@@ -110,6 +112,7 @@ export const Root_ParkingPhotoScreen = ({
       )}
       secondaryText={t(MobilityTexts.photo.subHeader)}
       focusRef={focusRef}
+      isFocused={isFocused}
     />
   );
 };
