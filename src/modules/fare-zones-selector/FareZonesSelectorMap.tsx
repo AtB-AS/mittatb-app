@@ -12,7 +12,7 @@ import {
   NationalStopRegistryFeatures,
   LocationArrow,
   useMapViewConfig,
-  TariffZoneLinesAndLabels,
+  FareZoneLinesAndLabels,
   mapZonesToPolygonCollection,
 } from '@atb/modules/map';
 import hexToRgba from 'hex-to-rgba';
@@ -139,13 +139,13 @@ const FareZonesSelectorMap = ({
             />
 
             <MapboxGL.ShapeSource
-              id="tariffZonesFillShape"
+              id="fareZonesFillShape"
               shape={featureCollection}
               hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
               onPress={selectFeature}
             >
               <MapboxGL.FillLayer
-                id="tariffZonesFill"
+                id="fareZonesFill"
                 style={{
                   fillAntialias: true,
                   fillColor: [
@@ -163,7 +163,7 @@ const FareZonesSelectorMap = ({
                 }}
               />
             </MapboxGL.ShapeSource>
-            <TariffZoneLinesAndLabels
+            <FareZoneLinesAndLabels
               polygonCollection={featureCollection}
               showLabelsAtAllZoom
             />

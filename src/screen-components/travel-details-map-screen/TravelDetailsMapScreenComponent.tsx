@@ -10,7 +10,7 @@ import {
   LocationArrow,
   useControlPositionsStyle,
   useMapViewConfig,
-  TariffZoneLinesAndLabels,
+  FareZoneLinesAndLabels,
   mapZonesToPolygonCollection,
 } from '@atb/modules/map';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
@@ -169,7 +169,7 @@ export const TravelDetailsMapScreenComponent = ({
           showsUserHeadingIndicator
           renderMode={UserLocationRenderMode.Native}
         />
-        <TariffZoneLinesAndLabels polygonCollection={fareZonePolygons} />
+        <FareZoneLinesAndLabels polygonCollection={fareZonePolygons} />
         <MapRoute lines={features} />
         {toPlace && (
           <MapLabel
