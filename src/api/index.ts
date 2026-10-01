@@ -1,9 +1,3 @@
 export {CancelToken, client, useDebugUserInfoHeader} from './client';
-export {
-  autocomplete,
-  reverse,
-  autocompleteV3,
-  reverseV3,
-  placeV3,
-} from './bff/geocoder';
+export {autocomplete, reverse, place} from './bff/geocoder';
 export {getProfile, updateProfile, deleteProfile} from './profile';
