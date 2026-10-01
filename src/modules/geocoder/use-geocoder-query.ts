@@ -5,7 +5,7 @@ import {useQuery} from '@tanstack/react-query';
 export function useGeocoderQuery(
   text: string | null,
   coords: Coordinates | null,
-  onlyLocalTariffZoneAuthority?: boolean,
+  onlyLocalFareZoneAuthority?: boolean,
   onlyStopPlaces?: boolean,
 ) {
   return useQuery({
@@ -13,14 +13,14 @@ export function useGeocoderQuery(
       'geocoder',
       text,
       coords,
-      onlyLocalTariffZoneAuthority,
+      onlyLocalFareZoneAuthority,
       onlyStopPlaces,
     ],
     queryFn: ({signal}) =>
       autocomplete(
         text ?? '',
         coords,
-        onlyLocalTariffZoneAuthority,
+        onlyLocalFareZoneAuthority,
         onlyStopPlaces,
         {signal},
       ),

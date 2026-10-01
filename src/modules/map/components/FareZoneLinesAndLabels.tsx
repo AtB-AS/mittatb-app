@@ -19,15 +19,15 @@ const labelZoomOpacity: Expression = [
   0,
 ];
 
-type TariffZonesProps = {
+type FareZonesProps = {
   polygonCollection: FeatureCollection<Polygon>;
   showLabelsAtAllZoom?: boolean;
 };
 
-export const TariffZoneLinesAndLabels = ({
+export const FareZoneLinesAndLabels = ({
   polygonCollection,
   showLabelsAtAllZoom,
-}: TariffZonesProps) => {
+}: FareZonesProps) => {
   const {theme} = useThemeContext();
 
   const labelPointsCollection =
@@ -35,9 +35,9 @@ export const TariffZoneLinesAndLabels = ({
 
   return (
     <>
-      <MapboxGL.ShapeSource id="tariffZonesShape" shape={polygonCollection}>
+      <MapboxGL.ShapeSource id="fareZonesShape" shape={polygonCollection}>
         <MapboxGL.LineLayer
-          id="tariffZonesLine"
+          id="fareZonesLine"
           style={{
             lineWidth: 1,
             lineColor: theme.color.foreground.dynamic.secondary,
@@ -46,9 +46,9 @@ export const TariffZoneLinesAndLabels = ({
         />
       </MapboxGL.ShapeSource>
 
-      <MapboxGL.ShapeSource id="tariffZoneLabels" shape={labelPointsCollection}>
+      <MapboxGL.ShapeSource id="fareZoneLabels" shape={labelPointsCollection}>
         <MapboxGL.SymbolLayer
-          id="tariffZoneLabelText"
+          id="fareZoneLabelText"
           style={{
             textField: ['get', 'name'],
             textSize: 20,

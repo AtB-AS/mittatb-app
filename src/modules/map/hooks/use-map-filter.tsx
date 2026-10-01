@@ -7,7 +7,7 @@ const MAP_FILTER_STORAGE_KEY = '@ATB_user_map_filters_v2';
 
 const fallback: MapFilterType = {
   mobility: {},
-  showTariffZones: true,
+  showFareZones: true,
 };
 
 /**
@@ -51,6 +51,23 @@ export const useUserMapFilters = () => {
 };
 
 const parse = (data: string) => {
-  const res = MapFilter.safeParse(JSON.parse(data));
+  const res = MapFilter.safeParse(migrateLegacyFilter(JSON.parse(data)));
   return res.success ? res.data : undefined;
+};
+
+/**
+ * TEMPORARY MIGRATION – remove a couple of releases after this ships.
+ *
+ * Migrates the renamed `showTariffZones` filter into `showFareZones`. Parsed
+ * filters are persisted again on load (see `useUserMapFilters`), so stored data
+ * is upgraded to the new shape in place. Once enough releases have passed that
+ * stored filters no longer use the old key, delete this function and its call
+ * in `parse`.
+ */
+const migrateLegacyFilter = (raw: unknown) => {
+  if (raw && typeof raw === 'object' && 'showTariffZones' in raw) {
+    const {showTariffZones, ...rest} = raw as {showTariffZones?: boolean};
+    return {showFareZones: showTariffZones, ...rest};
+  }
+  return raw;
 };

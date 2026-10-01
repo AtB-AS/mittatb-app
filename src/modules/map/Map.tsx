@@ -77,7 +77,7 @@ import {MapBottomSheets} from './MapBottomSheets';
 import {MapButtons} from './components/MapButtons';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {ShmoTesting} from './components/mobility/ShmoTesting';
-import {TariffZoneLinesAndLabels} from './components/TariffZoneLinesAndLabels';
+import {FareZoneLinesAndLabels} from './components/FareZoneLinesAndLabels';
 import {mapZonesToPolygonCollection} from './zone-utils';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useTranslation} from '@atb/translations';
@@ -130,7 +130,7 @@ export const Map = (props: MapProps) => {
   const startingCoordinates = getCurrentCoordinatesGlobal() || FOCUS_ORIGIN;
 
   const showVehicles = mapFilter?.mobility.SCOOTER?.showAll ?? false;
-  const showTariffZones = mapFilter?.showTariffZones ?? true;
+  const showFareZones = mapFilter?.showFareZones ?? true;
 
   const selectedFeature = mapState.feature;
 
@@ -528,8 +528,8 @@ export const Map = (props: MapProps) => {
               />
             ))}
 
-          {showTariffZones && (
-            <TariffZoneLinesAndLabels polygonCollection={fareZonePolygons} />
+          {showFareZones && (
+            <FareZoneLinesAndLabels polygonCollection={fareZonePolygons} />
           )}
 
           <NationalStopRegistryFeatures

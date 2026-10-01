@@ -106,7 +106,7 @@ export const LegacyTrip: React.FC<LegacyTripProps> = ({
         operators: [],
       },
     },
-    showTariffZones: false,
+    showFareZones: false,
   };
 
   const shouldShowDate =

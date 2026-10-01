@@ -1,4 +1,4 @@
-import {FOCUS_LATITUDE, FOCUS_LONGITUDE, TARIFF_ZONE_AUTHORITY} from '@env';
+import {FOCUS_LATITUDE, FOCUS_LONGITUDE, FARE_ZONE_AUTHORITY} from '@env';
 import {Coordinates} from '@atb/utils/coordinates';
 import {client} from '../client';
 import qs from 'query-string';
@@ -27,7 +27,7 @@ export async function autocomplete(
       lon: coordinates?.longitude ?? FOCUS_ORIGIN.longitude,
       limit: 10,
       fareZoneAuthorities: onlyLocalFareZoneAuthority
-        ? TARIFF_ZONE_AUTHORITY
+        ? FARE_ZONE_AUTHORITY
         : null,
       layers: onlyStopPlaces ? ['stopPlace'] : undefined,
       multimodal: 'parent',
