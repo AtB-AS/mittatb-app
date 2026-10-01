@@ -1,4 +1,4 @@
-import {placeV3, reverseV3} from '@atb/api';
+import {place, reverse} from '@atb/api';
 import type {Location} from '@atb/modules/favorites';
 import {parseParamsAsCoordinates} from './utils';
 import type {DeepLink} from './parse-deep-link';
@@ -29,14 +29,14 @@ async function resolveLocation(
 ): Promise<Location | undefined> {
   try {
     if (id) {
-      const places = await placeV3([id]);
-      return places.find((place) => place.id === id);
+      const places = await place([id]);
+      return places.find((p) => p.id === id);
     }
 
     const coordinates = parseParamsAsCoordinates(lat, lon);
     if (!coordinates) return undefined;
 
-    const locations = await reverseV3(coordinates);
+    const locations = await reverse(coordinates);
     return locations[0];
   } catch {
     return undefined;
