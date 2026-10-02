@@ -17,7 +17,7 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
       focusRef={focusRef}
       isFocused={isFocused}
       onPressDetailsMap={(params, tripAnalytics) => {
-        params.vehicleWithPosition
+        params.followVehicle
           ? analytics.logEvent('Trip details', 'See live bus clicked', {
               fromPlace: params.fromPlace,
               toPlace: params.toPlace,
