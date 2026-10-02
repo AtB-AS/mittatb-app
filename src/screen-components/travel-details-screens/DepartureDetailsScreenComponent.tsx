@@ -268,9 +268,16 @@ export const DepartureDetailsScreenComponent = ({
       serviceJourneyPolylines: serviceJourneyPolyline.mapLegs,
       fromPlace: serviceJourneyPolyline.start,
       toPlace: serviceJourneyPolyline.stop,
-      vehicleWithPosition: vehiclePosition,
-      mode: serviceJourney?.transportMode,
-      subMode: serviceJourney?.transportSubmode,
+      vehicles: vehiclePosition
+        ? [
+            {
+              vehicleWithPosition: vehiclePosition,
+              mode: serviceJourney?.transportMode,
+              subMode: serviceJourney?.transportSubmode,
+            },
+          ]
+        : undefined,
+      followVehicle: !!vehiclePosition,
       estimatedCalls: serviceJourney?.estimatedCalls,
     });
   };

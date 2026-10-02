@@ -226,9 +226,14 @@ export const Trip: React.FC<TripProps> = ({
                             serviceJourneyPolylines.mapLegs,
                           fromPlace: serviceJourneyPolylines.start,
                           toPlace: serviceJourneyPolylines.stop,
-                          vehicleWithPosition: legVehiclePosition,
-                          mode: leg.mode,
-                          subMode: leg.transportSubmode,
+                          vehicles: [
+                            {
+                              vehicleWithPosition: legVehiclePosition,
+                              mode: leg.mode,
+                              subMode: leg.transportSubmode,
+                            },
+                          ],
+                          followVehicle: true,
                         });
                       }
                     : undefined
@@ -251,6 +256,18 @@ export const Trip: React.FC<TripProps> = ({
               serviceJourneyPolylines: tripPatternLegs,
               fromPlace: tripPatternLegs[0]?.fromPlace,
               toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+              vehicles: vehiclePositions?.map((vehicleWithPosition) => {
+                const leg = tripPatternLegs.find(
+                  (l) =>
+                    l.serviceJourney?.id ===
+                    vehicleWithPosition.serviceJourney?.id,
+                );
+                return {
+                  vehicleWithPosition,
+                  mode: leg?.mode,
+                  subMode: leg?.transportSubmode,
+                };
+              }),
               mapFilter,
             });
           }}
