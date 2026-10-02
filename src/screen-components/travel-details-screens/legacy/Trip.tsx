@@ -207,9 +207,14 @@ export const LegacyTrip: React.FC<LegacyTripProps> = ({
                             serviceJourneyPolylines.mapLegs,
                           fromPlace: serviceJourneyPolylines.start,
                           toPlace: serviceJourneyPolylines.stop,
-                          vehicleWithPosition: legVehiclePosition,
-                          mode: leg.mode,
-                          subMode: leg.transportSubmode,
+                          vehicles: [
+                            {
+                              vehicleWithPosition: legVehiclePosition,
+                              mode: leg.mode,
+                              subMode: leg.transportSubmode,
+                            },
+                          ],
+                          followVehicle: true,
                         });
                       }
                     : undefined

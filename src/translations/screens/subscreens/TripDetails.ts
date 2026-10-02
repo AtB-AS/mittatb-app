@@ -403,7 +403,7 @@ const TripDetailsTexts = {
     },
     summary: {
       showTripInMap: {
-        label: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
+        label: _('Se i kart', 'Show on map', 'Sjå i kart'),
       },
     },
     buyTicket: {

@@ -22,6 +22,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
+import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {
   Feature,
   FeatureCollection,
@@ -44,13 +45,22 @@ import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {TRANSPORT_SUB_MODES_BOAT} from '@atb/components/icon-box';
 
-export type TravelDetailsMapScreenParams = {
-  serviceJourneyPolylines: ServiceJourneyPolyline[];
-  vehicleWithPosition?: VehicleWithPosition;
-  fromPlace?: Coordinates | Position;
-  toPlace?: Coordinates | Position;
+export type MapVehicleWithPosition = {
+  vehicleWithPosition: VehicleWithPosition;
   mode?: AnyMode;
   subMode?: AnySubMode;
+};
+
+export type TravelDetailsMapScreenParams = {
+  serviceJourneyPolylines: ServiceJourneyPolyline[];
+  vehicles?: MapVehicleWithPosition[];
+  /**
+   *  Whether the camera should follow the vehicle. If there are multiple
+   *  vehicles, the first one is followed.
+   */
+  followVehicle?: boolean;
+  fromPlace?: Coordinates | Position;
+  toPlace?: Coordinates | Position;
   mapFilter?: MapFilterType;
   estimatedCalls?: Array<EstimatedCallWithQuayFragment>;
 };
@@ -62,14 +72,25 @@ type Props = TravelDetailsMapScreenParams & {
 const FOLLOW_ZOOM_LEVEL = 14.5;
 const FOLLOW_ANIMATION_DURATION = 500;
 
+// Scale the vehicle markers with the zoom level: small when zoomed far out,
+// larger size when zoomed in close.
+const iconSizeByZoom: Expression = [
+  'interpolate',
+  ['linear'],
+  ['zoom'],
+  9,
+  0.5,
+  14,
+  1.0,
+];
+
 export const TravelDetailsMapScreenComponent = ({
   serviceJourneyPolylines,
-  vehicleWithPosition,
+  vehicles,
+  followVehicle,
   toPlace,
   fromPlace,
   onPressBack,
-  mode,
-  subMode,
   estimatedCalls,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -87,12 +108,13 @@ export const TravelDetailsMapScreenComponent = ({
     () => createMapLines(serviceJourneyPolylines),
     [serviceJourneyPolylines],
   );
-  const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
-  const centerPosition = vehicleWithPosition?.location
-    ? [
-        vehicleWithPosition?.location?.longitude,
-        vehicleWithPosition?.location?.latitude,
-      ]
+
+  const followSeedLocation = followVehicle
+    ? vehicles?.[0]?.vehicleWithPosition.location
+    : undefined;
+  const bounds = followVehicle ? undefined : getMapBounds(features);
+  const centerPosition = followSeedLocation
+    ? [followSeedLocation.longitude, followSeedLocation.latitude]
     : undefined;
 
   const {t, language} = useTranslation();
@@ -101,11 +123,11 @@ export const TravelDetailsMapScreenComponent = ({
   const controlStyles = useControlPositionsStyle();
   const styles = useStyles();
 
-  const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
-    serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
-    vehicleWithPosition,
-    enabled: isFocusedAndActive,
-  });
+  // The live position of the followed vehicle, reported up by its <LiveVehicle>.
+  // Only used for camera follow and the debug overlay.
+  const [followedVehicle, setFollowedVehicle] = useState<
+    VehicleWithPosition | undefined
+  >(followVehicle ? vehicles?.[0]?.vehicleWithPosition : undefined);
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
 
@@ -129,7 +151,8 @@ export const TravelDetailsMapScreenComponent = ({
         };
 
   useEffect(() => {
-    const location = liveVehicle?.location;
+    if (!followVehicle) return;
+    const location = followedVehicle?.location;
     if (!location) return;
     if (shouldTrack && loadedMap) {
       flyToLocation({
@@ -140,7 +163,7 @@ export const TravelDetailsMapScreenComponent = ({
         animationMode: 'easeTo',
       });
     }
-  }, [liveVehicle, loadedMap, shouldTrack]);
+  }, [followVehicle, followedVehicle, loadedMap, shouldTrack]);
 
   return (
     <View style={styles.mapView}>
@@ -156,8 +179,8 @@ export const TravelDetailsMapScreenComponent = ({
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
-          zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
-          centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
+          zoomLevel={followVehicle ? FOLLOW_ZOOM_LEVEL : undefined}
+          centerCoordinate={followVehicle ? centerPosition : undefined}
           animationDuration={0}
         />
         <NationalStopRegistryFeatures
@@ -185,15 +208,22 @@ export const TravelDetailsMapScreenComponent = ({
             text={t(MapTexts.startPoint.label)}
           />
         )}
-        {liveVehicle && (
-          <LiveVehicleMarker
-            vehicle={liveVehicle}
+        {vehicles?.map((vehicle, index) => (
+          <LiveVehicle
+            key={vehicle.vehicleWithPosition.serviceJourney?.id ?? index}
+            markerId={
+              vehicle.vehicleWithPosition.serviceJourney?.id ?? String(index)
+            }
+            seed={vehicle.vehicleWithPosition}
+            mode={vehicle.mode}
+            subMode={vehicle.subMode}
+            enabled={isFocusedAndActive}
             setShouldTrack={setShouldTrack}
-            mode={mode}
-            subMode={subMode}
-            isError={isLiveConnected}
+            onLiveUpdate={
+              followVehicle && index === 0 ? setFollowedVehicle : undefined
+            }
           />
-        )}
+        ))}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow
@@ -218,16 +248,61 @@ export const TravelDetailsMapScreenComponent = ({
           }}
         />
       </View>
-      {debugShowProgressBetweenStops && liveVehicle && (
+      {debugShowProgressBetweenStops && followedVehicle && (
         <ThemeText style={{color: 'white', backgroundColor: 'black'}}>
-          {debugProgressBetweenStopsText(liveVehicle, estimatedCalls)}
+          {debugProgressBetweenStopsText(followedVehicle, estimatedCalls)}
         </ThemeText>
       )}
     </View>
   );
 };
 
+type LiveVehicleProps = {
+  markerId: string;
+  seed: VehicleWithPosition;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
+  enabled: boolean;
+  setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
+  /** Reports the live position up to the parent, e.g. for camera follow. */
+  onLiveUpdate?: (vehicle: VehicleWithPosition) => void;
+};
+
+const LiveVehicle = ({
+  markerId,
+  seed,
+  mode,
+  subMode,
+  enabled,
+  setShouldTrack,
+  onLiveUpdate,
+}: LiveVehicleProps) => {
+  const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
+    serviceJourneyId: seed.serviceJourney?.id,
+    vehicleWithPosition: seed,
+    enabled,
+  });
+
+  useEffect(() => {
+    if (liveVehicle) onLiveUpdate?.(liveVehicle);
+  }, [liveVehicle, onLiveUpdate]);
+
+  if (!liveVehicle) return null;
+
+  return (
+    <LiveVehicleMarker
+      markerId={markerId}
+      vehicle={liveVehicle}
+      setShouldTrack={setShouldTrack}
+      mode={mode}
+      subMode={subMode}
+      isError={isLiveConnected}
+    />
+  );
+};
+
 type LiveVehicleMarkerProps = {
+  markerId: string;
   vehicle: VehicleWithPosition;
   mode?: AnyMode;
   subMode?: AnySubMode;
@@ -236,6 +311,7 @@ type LiveVehicleMarkerProps = {
 };
 
 const LiveVehicleMarker = ({
+  markerId,
   vehicle,
   setShouldTrack,
   mode,
@@ -291,10 +367,11 @@ const LiveVehicleMarker = ({
   const layers = useMemo<React.ReactElement[]>(() => {
     const result: React.ReactElement[] = [
       <MapboxGL.SymbolLayer
-        id={`liveVehicleIcon_${vehicle.mode}`}
-        key={`liveVehicleIcon_${vehicle.mode}`}
+        id={`liveVehicleIcon_${markerId}`}
+        key={`liveVehicleIcon_${markerId}`}
         style={{
           iconImage,
+          iconSize: iconSizeByZoom,
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
         }}
@@ -304,10 +381,11 @@ const LiveVehicleMarker = ({
     if (!isError && !isStale && vehicle.bearing != null) {
       result.push(
         <MapboxGL.SymbolLayer
-          id={`liveDirectionArrow_${vehicle.mode}`}
-          key={`liveDirectionArrow_${vehicle.mode}`}
+          id={`liveDirectionArrow_${markerId}`}
+          key={`liveDirectionArrow_${markerId}`}
           style={{
             iconImage: arrowImage,
+            iconSize: iconSizeByZoom,
             iconAllowOverlap: true,
             iconIgnorePlacement: true,
             iconRotationAlignment: 'map',
@@ -320,7 +398,7 @@ const LiveVehicleMarker = ({
 
     return result;
   }, [
-    vehicle.mode,
+    markerId,
     vehicle.bearing,
     iconImage,
     arrowImage,
@@ -333,7 +411,7 @@ const LiveVehicleMarker = ({
 
   return (
     <MapboxGL.ShapeSource
-      id={`liveIconSource_${vehicle.mode}`}
+      id={`liveIconSource_${markerId}`}
       shape={PointFeatureCollection}
       onPress={() => {
         setShouldTrack(true);
