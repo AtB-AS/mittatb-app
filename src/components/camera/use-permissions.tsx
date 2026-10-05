@@ -14,7 +14,7 @@ export const usePermissions = () => {
   const {t} = useTranslation();
   const [isAuthorized, setIsAuthorized] = useState<boolean>();
   const appState = useAppStateStatus();
-  const isInitialMount = useRef(true);
+  const isInitialMountRef = useRef(true);
 
   // `t` is recreated on every render, so it's kept in a ref and read from
   // there in the effect below. This lets the effect run only once per mount
@@ -22,15 +22,28 @@ export const usePermissions = () => {
   const tRef = useRef(t);
   tRef.current = t;
 
+  // Re-checks (without re-requesting) whenever the app returns to active,
+  // e.g. after the user grants access via "Open settings".
   useEffect(() => {
+    const isInitialMount = isInitialMountRef.current;
+    isInitialMountRef.current = false;
+
+    if (!CAMERA_PERMISSION) {
+      setIsAuthorized(false);
+      return;
+    }
+    if (appState !== 'active') {
+      return;
+    }
+
     (async () => {
-      if (!CAMERA_PERMISSION) {
-        setIsAuthorized(false);
-        return;
-      }
       const granted = await check(CAMERA_PERMISSION);
       if (granted === RESULTS.GRANTED) {
         setIsAuthorized(true);
+        return;
+      }
+      if (!isInitialMount) {
+        setIsAuthorized(false);
         return;
       }
       const t = tRef.current;
@@ -40,21 +53,6 @@ export const usePermissions = () => {
         buttonPositive: t(CameraTexts.permissionsDialog.action),
       });
       setIsAuthorized(requested === RESULTS.GRANTED);
-    })();
-  }, []);
-
-  // Re-check (don't re-request) when returning to active, e.g. from "Open settings".
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-    if (appState !== 'active' || !CAMERA_PERMISSION) {
-      return;
-    }
-    (async () => {
-      const granted = await check(CAMERA_PERMISSION);
-      setIsAuthorized(granted === RESULTS.GRANTED);
     })();
   }, [appState]);
 
