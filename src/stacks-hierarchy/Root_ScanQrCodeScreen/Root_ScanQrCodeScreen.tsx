@@ -10,7 +10,7 @@ import {
 } from '@atb/modules/mobility';
 import {getOperatorNameById} from '@atb/api/utils';
 import {isDefined} from '@atb/utils/presence';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useIsFocused} from '@react-navigation/native';
 import {Alert, Linking} from 'react-native';
 
 import {
@@ -39,7 +39,7 @@ export type Props = RootStackScreenProps<'Root_ScanQrCodeScreen'>;
 export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
   const {t, language} = useTranslation();
   const focusRef = useFocusOnLoad(navigation);
-  const isFocused = useIsFocusedAndActive();
+  const isFocused = useIsFocused();
   const {dispatchMapState} = useMapContext();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
   const isProcessingQr = useRef(false);
