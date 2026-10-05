@@ -10,7 +10,6 @@ import {
 } from '@atb/modules/mobility';
 import {LocationArrow} from './LocationArrow';
 import {ScanButton} from './ScanButton';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {LayoutChangeEvent, View} from 'react-native';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {BonusBalanceButton} from '@atb/modules/bonus';
@@ -36,13 +35,10 @@ export const MapButtons = ({
   const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeShmoBooking, isLoading: activeShmoBookingIsLoading} =
     useActiveShmoBookingQuery(isFocusedAndActive);
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-
   const {isMutating: initShmoOneStopBookingIsMutating} =
     useInitShmoBookingMutationStatus();
 
   const showScanButton =
-    isShmoDeepIntegrationEnabled &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&

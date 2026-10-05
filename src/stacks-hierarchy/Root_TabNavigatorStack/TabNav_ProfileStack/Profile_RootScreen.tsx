@@ -90,7 +90,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isSmartParkAndRideEnabled,
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
-    isShmoDeepIntegrationEnabled,
   } = useFeatureTogglesContext();
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
@@ -108,7 +107,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const hasActiveShmoTrip = !!activeShmoBooking;
 
   const handleLogoutPress = () => {
-    if (isShmoDeepIntegrationEnabled && isActiveShmoBookingPending) return;
+    if (isActiveShmoBookingPending) return;
     if (hasActiveShmoTrip) {
       Alert.alert(
         t(ProfileTexts.sections.account.linkSectionItems.logout.label),

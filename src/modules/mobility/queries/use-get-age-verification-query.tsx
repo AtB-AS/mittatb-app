@@ -1,7 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {getAgeVerification} from '@atb/api/identity';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 export enum AgeVerificationEnum {
   LegalAge = 'legalAge',
@@ -20,9 +19,8 @@ export const useGetAgeVerificationQuery = (
   legalAge: number,
   enabled: boolean,
 ) => {
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   return useQuery({
-    enabled: enabled && isShmoDeepIntegrationEnabled,
+    enabled,
     queryKey: getAgeVerificationQueryKey(legalAge),
     queryFn: ({signal}) => getAgeVerification(legalAge, {signal}),
     staleTime: ONE_MINUTE_MS,
