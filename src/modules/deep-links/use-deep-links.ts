@@ -101,6 +101,8 @@ export function useDeepLinks() {
           return routeForBonus(isBonusEnabled);
         case 'privacy':
           return routeForPrivacy();
+        case 'payment-methods':
+          return routeForPaymentMethods();
         case 'purchase-overview':
           return routeForPurchaseOverview(
             params,
@@ -177,6 +179,34 @@ function routeForPrivacy(): ResultState | undefined {
                   {name: 'Profile_RootScreen'},
                   {
                     name: 'Profile_PrivacyScreen',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  } as ResultState;
+}
+
+/**
+ * `atb://payment-methods`
+ */
+function routeForPaymentMethods(): ResultState | undefined {
+  return {
+    routes: [
+      {
+        name: 'Root_TabNavigatorStack',
+        state: {
+          routes: [
+            {
+              name: 'TabNav_ProfileStack',
+              state: {
+                routes: [
+                  {name: 'Profile_RootScreen'},
+                  {
+                    name: 'Profile_PaymentMethodsScreen',
                   },
                 ],
               },

@@ -9,6 +9,14 @@ const PaymentMethodsTexts = {
     'You have no stored payment cards.',
     'Du har ingen lagra betalingskort.',
   ),
+  loginRequired: {
+    title: _('Krever innlogging', 'Login required', 'Krev innlogging'),
+    message: _(
+      'Logg inn for å administrere betalingsmåter.',
+      'Log in to manage payment methods.',
+      'Logg inn for å administrere betalingsmåtar.',
+    ),
+  },
   genericError: _(
     'Det oppstod en feil. Vennligst prøv igjen.',
     'An error occurred. Please try again.',
