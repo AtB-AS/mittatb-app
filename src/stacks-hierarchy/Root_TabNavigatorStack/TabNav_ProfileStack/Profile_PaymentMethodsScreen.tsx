@@ -48,8 +48,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     recurringPaymentError,
     onAddRecurringPayment,
   } = useRecurringPayment();
-  const {isApplePayEnabled, isShmoDeepIntegrationEnabled} =
-    useFeatureTogglesContext();
+  const {isApplePayEnabled} = useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
   const isLoggedIn = authenticationType === 'phone';
   const {enable_vipps_login} = useRemoteConfigContext();
@@ -133,11 +132,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                     <Card
                       card={card}
                       onDeletePress={() => {
-                        if (
-                          isShmoDeepIntegrationEnabled &&
-                          isActiveShmoBookingPending
-                        )
-                          return;
+                        if (isActiveShmoBookingPending) return;
                         if (hasActiveShmoTrip) {
                           setShowDeleteBlockedError(true);
                           return;
