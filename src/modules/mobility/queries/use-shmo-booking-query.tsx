@@ -16,8 +16,7 @@ export const useShmoBookingQuery = (
   refetchInterval?: number | false,
 ) => {
   const acceptLanguage = useAcceptLanguage();
-  const {isShmoDeepIntegrationEnabled, isEventStreamEnabled} =
-    useFeatureTogglesContext();
+  const {isEventStreamEnabled} = useFeatureTogglesContext();
   const bookingIdString = bookingId || '';
   const isValidBookingId = !!bookingId && bookingIdString.trim() !== '';
 
@@ -31,7 +30,7 @@ export const useShmoBookingQuery = (
       getShmoBooking(bookingIdString, acceptLanguage, {signal}),
     staleTime: ONE_HOUR_MS,
     gcTime: ONE_HOUR_MS,
-    enabled: enabled && isValidBookingId && isShmoDeepIntegrationEnabled,
+    enabled: enabled && isValidBookingId,
     refetchInterval: effectiveRefetchInterval,
   });
 };

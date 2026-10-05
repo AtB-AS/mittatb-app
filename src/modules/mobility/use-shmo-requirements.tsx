@@ -5,7 +5,6 @@ import {
   AgeVerificationEnum,
   useGetAgeVerificationQuery,
 } from './queries/use-get-age-verification-query';
-import {useFeatureTogglesContext} from '../feature-toggles';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMemo} from 'react';
 import {useMapContext} from '../map';
@@ -34,8 +33,6 @@ export const useShmoRequirements = (
   );
   const operatorAgeLimit = ageVerificationPreReq?.minAge ?? 0;
 
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
-
   const {preciseLocationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
     useListRecurringPaymentsQuery();
@@ -55,7 +52,7 @@ export const useShmoRequirements = (
         case PreReqType.AGE_VERIFICATION:
           return {
             requirementCode: PreReqType.AGE_VERIFICATION,
-            isLoading: ageVerifiedLoading && isShmoDeepIntegrationEnabled,
+            isLoading: ageVerifiedLoading,
             isBlocking: ageVerification !== AgeVerificationEnum.LegalAge,
           };
         case PreReqType.TERMS_AND_CONDITIONS:
@@ -73,7 +70,7 @@ export const useShmoRequirements = (
         case PreReqType.PAYMENT_METHOD:
           return {
             requirementCode: PreReqType.PAYMENT_METHOD,
-            isLoading: paymentsLoading && isShmoDeepIntegrationEnabled,
+            isLoading: paymentsLoading,
             isBlocking: recurringPayments
               ? recurringPayments?.length === 0
               : true,
@@ -90,7 +87,6 @@ export const useShmoRequirements = (
     preReqs,
     isLoggedIn,
     ageVerifiedLoading,
-    isShmoDeepIntegrationEnabled,
     ageVerification,
     givenConsent,
     preciseLocationIsAvailable,
