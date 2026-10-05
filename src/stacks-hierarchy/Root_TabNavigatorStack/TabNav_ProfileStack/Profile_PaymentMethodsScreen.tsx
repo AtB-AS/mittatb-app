@@ -10,7 +10,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
-import {useTranslation} from '@atb/translations';
+import {ProfileTexts, useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import React, {useState} from 'react';
@@ -27,6 +27,11 @@ import {Loading} from '@atb/components/loading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {useAuthContext} from '@atb/modules/auth';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
+import {Button} from '@atb/components/button';
+import {LogIn} from '@atb/assets/svg/mono-icons/profile';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -45,6 +50,11 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   } = useRecurringPayment();
   const {isApplePayEnabled, isShmoDeepIntegrationEnabled} =
     useFeatureTogglesContext();
+  const {authenticationType} = useAuthContext();
+  const isLoggedIn = authenticationType === 'phone';
+  const {enable_vipps_login} = useRemoteConfigContext();
+  const getHasReservationOrAvailableFareContract =
+    useGetHasReservationOrAvailableFareContract();
 
   const isFocused = useIsFocusedAndActive();
   const {data: activeShmoBooking, isPending: isActiveShmoBookingPending} =
@@ -76,81 +86,117 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
       )}
     >
       <View style={styles.content}>
-        {isError && (
-          <MessageInfoBox
-            a11yLiveRegion="polite"
-            type="error"
-            message={t(PaymentMethodsTexts.genericError)}
-          />
-        )}
-        {recurringPaymentIsLoading && <Loading />}
-        {recurringPayment && recurringPayment.length > 0 && (
-          <Section>
-            {recurringPayment.map((card) => (
-              <GenericSectionItem key={'card-' + card.id}>
-                <Card
-                  card={card}
-                  onDeletePress={() => {
-                    if (
-                      isShmoDeepIntegrationEnabled &&
-                      isActiveShmoBookingPending
-                    )
-                      return;
-                    if (hasActiveShmoTrip) {
-                      setShowDeleteBlockedError(true);
-                      return;
-                    }
-                    destructiveAlert({
-                      alertTitleString: t(
-                        PaymentMethodsTexts.deleteModal.title,
-                      ),
-                      alertMessageString: t(
-                        PaymentMethodsTexts.deleteModal.message,
-                      ),
-                      cancelAlertString: t(
-                        PaymentMethodsTexts.deleteModal.cancelButton,
-                      ),
-                      confirmAlertString: t(
-                        PaymentMethodsTexts.deleteModal.confirmButton,
-                      ),
-                      destructiveArrowFunction: () =>
-                        deleteRecurringPayment(card.id),
-                    });
-                  }}
-                />
-              </GenericSectionItem>
-            ))}
-          </Section>
-        )}
-        {!recurringPaymentError &&
-          !recurringPaymentFetching &&
-          (!recurringPayment || recurringPayment?.length == 0) && (
-            <NoCardsInfo />
-          )}
+        {!isLoggedIn ? (
+          <>
+            <MessageInfoBox
+              type="warning"
+              title={t(PaymentMethodsTexts.loginRequired.title)}
+              message={t(PaymentMethodsTexts.loginRequired.message)}
+            />
+            <Button
+              expanded
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.login.label,
+              )}
+              rightIcon={{svg: LogIn}}
+              onPress={() => {
+                if (getHasReservationOrAvailableFareContract()) {
+                  navigation.navigate(
+                    'Root_LoginAvailableFareContractWarningScreen',
+                    {},
+                  );
+                } else if (enable_vipps_login) {
+                  navigation.navigate('Root_LoginOptionsScreen', {
+                    showGoBack: true,
+                    transitionOverride: 'slide-from-bottom',
+                  });
+                } else {
+                  navigation.navigate('Root_LoginPhoneInputScreen', {});
+                }
+              }}
+            />
+          </>
+        ) : (
+          <>
+            {isError && (
+              <MessageInfoBox
+                a11yLiveRegion="polite"
+                type="error"
+                message={t(PaymentMethodsTexts.genericError)}
+              />
+            )}
+            {recurringPaymentIsLoading && <Loading />}
+            {recurringPayment && recurringPayment.length > 0 && (
+              <Section>
+                {recurringPayment.map((card) => (
+                  <GenericSectionItem key={'card-' + card.id}>
+                    <Card
+                      card={card}
+                      onDeletePress={() => {
+                        if (
+                          isShmoDeepIntegrationEnabled &&
+                          isActiveShmoBookingPending
+                        )
+                          return;
+                        if (hasActiveShmoTrip) {
+                          setShowDeleteBlockedError(true);
+                          return;
+                        }
+                        destructiveAlert({
+                          alertTitleString: t(
+                            PaymentMethodsTexts.deleteModal.title,
+                          ),
+                          alertMessageString: t(
+                            PaymentMethodsTexts.deleteModal.message,
+                          ),
+                          cancelAlertString: t(
+                            PaymentMethodsTexts.deleteModal.cancelButton,
+                          ),
+                          confirmAlertString: t(
+                            PaymentMethodsTexts.deleteModal.confirmButton,
+                          ),
+                          destructiveArrowFunction: () =>
+                            deleteRecurringPayment(card.id),
+                        });
+                      }}
+                    />
+                  </GenericSectionItem>
+                ))}
+              </Section>
+            )}
+            {!recurringPaymentError &&
+              !recurringPaymentFetching &&
+              (!recurringPayment || recurringPayment?.length == 0) && (
+                <NoCardsInfo />
+              )}
 
-        <Section>
-          <LinkSectionItem
-            text={t(PaymentMethodsTexts.addPaymentMethod)}
-            onPress={onAddRecurringPayment}
-            rightIcon={{svg: Add}}
-          />
-        </Section>
+            <Section>
+              <LinkSectionItem
+                text={t(PaymentMethodsTexts.addPaymentMethod)}
+                onPress={onAddRecurringPayment}
+                rightIcon={{svg: Add}}
+              />
+            </Section>
 
-        <MessageInfoBox
-          message={
-            isApplePayEnabled
-              ? t(PaymentMethodsTexts.vippsAndApplePayInfo)
-              : t(PaymentMethodsTexts.vippsInfo)
-          }
-          type="info"
-        />
+            <MessageInfoBox
+              message={
+                isApplePayEnabled
+                  ? t(PaymentMethodsTexts.vippsAndApplePayInfo)
+                  : t(PaymentMethodsTexts.vippsInfo)
+              }
+              type="info"
+            />
 
-        {showDeleteBlockedError && (
-          <MessageInfoBox
-            title={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.title)}
-            message={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.message)}
-            type="error"
-          />
+            {showDeleteBlockedError && (
+              <MessageInfoBox
+                title={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.title)}
+                message={t(
+                  PaymentMethodsTexts.deleteBlockedByActiveTrip.message,
+                )}
+                type="error"
+              />
+            )}
+          </>
         )}
       </View>
     </FullScreenView>
