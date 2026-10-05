@@ -121,6 +121,11 @@ export type ReserveOfferRequest = {
    */
   recurringPaymentId?: number;
   /**
+   * Charge an existing, active Vipps payment agreement. Mutually exclusive with
+   * `recurringPaymentId`.
+   */
+  paymentAgreementId?: number;
+  /**
    * Payment type and the store payment flag should be provided if not using a
    * previously stored payment card
    */
