@@ -275,9 +275,9 @@ const TripDetailsTexts = {
         'Går ut før du er framme',
       ),
       activateMessage: _(
-        'Du har en billett til reisen. Aktiver den rett før du går på.',
-        'You have a ticket for this trip. Activate it right before boarding.',
-        'Du har ein billett til reisa. Aktiver han rett før du går på.',
+        'Aktiver billetten rett før du går på',
+        'Activate your ticket right before boarding',
+        'Aktiver billetten rett før du går på',
       ),
       activateTicket: _('Aktiver', 'Activate', 'Aktiver'),
       availableOnOtherDevice: _(
