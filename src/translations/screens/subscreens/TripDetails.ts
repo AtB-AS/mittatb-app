@@ -260,20 +260,20 @@ const TripDetailsTexts = {
         'Denne reisa treng billett',
       ),
       buyTicket: _('Kjøp', 'Buy', 'Kjøp'),
-      validMessage: _(
-        'Du har kjøpt billett til reisen',
-        'You have bought a ticket for this trip',
-        'Du har kjøpt billett til reisa',
-      ),
+      validMessage: (time: string) =>
+        _(
+          `Du har billett, gyldig til ${time}`,
+          `You have a ticket, valid until ${time}`,
+          `Du har billett, gyldig til ${time}`,
+        ),
       showTicket: _('Vis billett', 'Show ticket', 'Vis billett'),
       validUntil: (time: string) =>
         _(`Gyldig til ${time}`, `Valid until ${time}`, `Gyldig til ${time}`),
-      expiresBeforeArrival: (time: string) =>
-        _(
-          `Utløper kl. ${time}, før du er fremme`,
-          `Expires at ${time}, before you arrive`,
-          `Går ut kl. ${time}, før du er framme`,
-        ),
+      expiresBeforeArrival: _(
+        'Går ut før du er fremme',
+        'Expires before you arrive',
+        'Går ut før du er framme',
+      ),
       activateMessage: _(
         'Du har en billett til reisen. Aktiver den rett før du går på.',
         'You have a ticket for this trip. Activate it right before boarding.',
@@ -285,18 +285,18 @@ const TripDetailsTexts = {
         'Ticket available on another device',
         'Billett tilgjengeleg frå anna eining',
       ),
-      expiresBeforeNextBoardingMessage: (time: string) =>
-        _(
-          `Billetten din går ut kl. ${time}, før neste påstigning. Sjekk om du trenger ny billett.`,
-          `Your ticket expires at ${time}, before your next boarding. Check whether you need a new ticket.`,
-          `Billetten din går ut kl. ${time}, før neste påstigning. Sjekk om du treng ny billett.`,
-        ),
-      expiredMessage: (time: string) =>
-        _(
-          `Billetten din gikk ut kl. ${time}. Sjekk om du trenger ny billett før neste påstigning.`,
-          `Your ticket expired at ${time}. Check whether you need a new ticket before your next boarding.`,
-          `Billetten din gjekk ut kl. ${time}. Sjekk om du treng ny billett før neste påstigning.`,
-        ),
+      expiresBeforeNextBoardingMessage: _(
+        'Billetten går ut før neste påstigning',
+        'Your ticket expires before your next boarding',
+        'Billetten går ut før neste påstiging',
+      ),
+      expiredMessage: _(
+        'Billetten har gått ut',
+        'Your ticket has expired',
+        'Billetten har gått ut',
+      ),
+      expiredAt: (time: string) =>
+        _(`Gikk ut kl. ${time}`, `Expired at ${time}`, `Gjekk ut kl. ${time}`),
     },
   },
   messages: {

@@ -104,6 +104,8 @@ export const Trip: React.FC<TripProps> = ({
     (isWithinSameDate(ticketCardValidUntil, new Date(now))
       ? formatToClock(ticketCardValidUntil, language, 'floor')
       : formatToShortDate(ticketCardValidUntil, language));
+  const hasTicketCardValidUntilPassed =
+    !!ticketCardValidUntil && ticketCardValidUntil.getTime() <= now;
   // The states that lead to buying a ticket are only shown when there is
   // something to buy.
   const shouldShowTicketCard =
@@ -116,7 +118,11 @@ export const Trip: React.FC<TripProps> = ({
     ticketCardMode &&
     {
       valid: {
-        message: t(TripDetailsTexts.trip.ticketCard.validMessage),
+        message: t(
+          TripDetailsTexts.trip.ticketCard.validMessage(
+            ticketCardValidUntilTime ?? '',
+          ),
+        ),
         actionText: t(TripDetailsTexts.trip.ticketCard.showTicket),
         onPress: onPressShowTicket,
       },
@@ -127,13 +133,9 @@ export const Trip: React.FC<TripProps> = ({
       },
       expired: {
         message: t(
-          ticketCardValidUntil && ticketCardValidUntil.getTime() > now
-            ? TripDetailsTexts.trip.ticketCard.expiresBeforeNextBoardingMessage(
-                ticketCardValidUntilTime ?? '',
-              )
-            : TripDetailsTexts.trip.ticketCard.expiredMessage(
-                ticketCardValidUntilTime ?? '',
-              ),
+          hasTicketCardValidUntilPassed
+            ? TripDetailsTexts.trip.ticketCard.expiredMessage
+            : TripDetailsTexts.trip.ticketCard.expiresBeforeNextBoardingMessage,
         ),
         actionText: t(TripDetailsTexts.trip.ticketCard.buyTicket),
         onPress: onPressBuyTicket,
@@ -144,24 +146,36 @@ export const Trip: React.FC<TripProps> = ({
         onPress: onPressBuyTicket,
       },
     }[ticketCardMode];
-  // A ticket that can't be inspected on this device is the bigger problem, so
-  // its warning is shown instead of when the ticket expires.
-  const ticketCardDetailText =
-    ticketCardMode !== 'valid' && ticketCardMode !== 'activate'
-      ? undefined
-      : isTicketOnOtherDevice
-        ? t(TripDetailsTexts.trip.ticketCard.availableOnOtherDevice)
-        : ticketCardMode === 'valid' && ticketCardValidUntilTime
-          ? t(
-              ticketCardExpiresBeforeArrival
-                ? TripDetailsTexts.trip.ticketCard.expiresBeforeArrival(
-                    ticketCardValidUntilTime,
-                  )
-                : TripDetailsTexts.trip.ticketCard.validUntil(
-                    ticketCardValidUntilTime,
-                  ),
-            )
-          : undefined;
+  const getTicketCardDetailText = () => {
+    switch (ticketCardMode) {
+      case 'valid':
+      case 'activate':
+        // A ticket that can't be inspected on this device is the bigger
+        // problem, so its warning is shown instead of when the ticket expires.
+        if (isTicketOnOtherDevice) {
+          return t(TripDetailsTexts.trip.ticketCard.availableOnOtherDevice);
+        }
+        // The valid message already says until when the ticket is valid
+        if (ticketCardMode === 'valid' && ticketCardExpiresBeforeArrival) {
+          return t(TripDetailsTexts.trip.ticketCard.expiresBeforeArrival);
+        }
+        return undefined;
+      case 'expired':
+        if (!ticketCardValidUntilTime) return undefined;
+        return t(
+          hasTicketCardValidUntilPassed
+            ? TripDetailsTexts.trip.ticketCard.expiredAt(
+                ticketCardValidUntilTime,
+              )
+            : TripDetailsTexts.trip.ticketCard.validUntil(
+                ticketCardValidUntilTime,
+              ),
+        );
+      default:
+        return undefined;
+    }
+  };
+  const ticketCardDetailText = getTicketCardDetailText();
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
