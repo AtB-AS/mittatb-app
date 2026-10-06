@@ -127,36 +127,7 @@ export enum FeatureCategory {
   OTHER = 'other',
 }
 
-export type Feature = {
-  geometry: {
-    coordinates: [number, number];
-    type: 'Point';
-  };
-  properties: {
-    id: string;
-    name: string;
-    label?: string;
-    borough: string;
-    accuracy: 'point';
-    layer: 'venue' | 'address';
-    borough_gid: string;
-    category: FeatureCategory[];
-    country_gid: string;
-    county: string;
-    county_gid: string;
-    gid: string;
-    housenumber?: string;
-    locality: string;
-    locality_gid: string;
-    postalcode: string;
-    source: string;
-    source_id: string;
-    street: string;
-    tariff_zones?: string[];
-  };
-};
-
-export const geocoderV3Layers = [
+export const geocoderLayers = [
   'stopPlace',
   'address',
   'street',
@@ -165,9 +136,9 @@ export const geocoderV3Layers = [
   'place',
 ] as const;
 
-export type GeocoderV3Layer = (typeof geocoderV3Layers)[number];
+export type GeocoderLayer = (typeof geocoderLayers)[number];
 
-export type FeatureV3 = {
+export type Feature = {
   geometry: {
     coordinates: [number, number];
     type: 'Point';
@@ -178,7 +149,7 @@ export type FeatureV3 = {
       default: string;
       display: string;
     };
-    layer: GeocoderV3Layer;
+    layer: GeocoderLayer;
     address?: {
       streetName?: string;
       houseNumber?: string;
