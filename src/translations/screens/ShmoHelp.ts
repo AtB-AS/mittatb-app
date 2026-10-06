@@ -9,18 +9,7 @@ export const ShmoHelpTexts = {
   ),
   phone: _('Telefon', 'Phone', 'Telefon'),
   contactForm: _('Kontaktskjema', 'Contact form', 'Kontaktskjema'),
-  chatWithOperator: (operatorName: string | undefined) =>
-    _(
-      `Chat${operatorName ? ` med ${operatorName}` : ''}`,
-      `Chat${operatorName ? ` with ${operatorName}` : ''}`,
-      `Chat${operatorName ? ` med ${operatorName}` : ''}`,
-    ),
-  readMoreAt: (domain: string) =>
-    _(
-      `Les mer på ${domain}`,
-      `Read more at ${domain}`,
-      `Les meir på ${domain}`,
-    ),
+  chatInBrowser: _('Chat i nettleser', 'Chat in browser', 'Chat i nettlesar'),
   reportParking: _(
     'Rapporter feilparkering',
     'Report parking violation',

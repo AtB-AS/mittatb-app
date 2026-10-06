@@ -307,6 +307,7 @@ export const DetailsContent: React.FC<Props> = ({
               onSupportNavigate({
                 operatorId: fc.operatorId,
                 bookingId: fc.bookingId,
+                formFactor: fc.formFactor,
               });
             }
           }}

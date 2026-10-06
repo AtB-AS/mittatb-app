@@ -316,6 +316,9 @@ export const VehicleSchema = z.object({
   benefit: BenefitSchema.nullable().optional().catch(undefined),
   bonusOffer: BonusOfferSchema.nullable().optional(),
   actionButton: ActionButtonSchema.nullable().optional(),
+  // How long a trip on this vehicle type can last, in milliseconds, before the
+  // operator ends it. Absent until the operator has configured one.
+  maxRentalDuration: z.number().nullish(),
 });
 
 export type Vehicle = z.infer<typeof VehicleSchema>;
@@ -374,6 +377,7 @@ export const AssetSchema = z.object({
   formFactor: FormFactorSchema.nullish(),
   propulsionType: PropulsionTypeSchema.nullish(),
   stationSlotName: z.string().nullish(),
+  maxRentalDuration: z.number().nullish(),
 });
 
 export const ShmoBookingSchema = z.object({
