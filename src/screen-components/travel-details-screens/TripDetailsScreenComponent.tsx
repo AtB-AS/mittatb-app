@@ -43,7 +43,6 @@ import {useTimeContext} from '@atb/modules/time';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {LegacyTripDetailsScreenComponent} from './legacy';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 export type TripDetailsScreenParams = {
@@ -73,16 +72,7 @@ type Props = TripDetailsScreenParams & {
   isFocused: boolean;
 };
 
-export const TripDetailsScreenComponent = (props: Props) => {
-  const isNewScreen = useIsExperimentalEnabled('isNewTripSearchEnabled');
-  return isNewScreen ? (
-    <NewTripDetailsScreenComponent {...props} />
-  ) : (
-    <LegacyTripDetailsScreenComponent {...props} />
-  );
-};
-
-const NewTripDetailsScreenComponent = ({
+export const TripDetailsScreenComponent = ({
   tripPattern,
   onPressDetailsMap,
   onPressBuyTicket,
