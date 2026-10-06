@@ -280,6 +280,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
 
     if (paymentMethod?.paymentType === PaymentType.ApplePay) {
+      setPaymentData(undefined);
       analytics.logEvent('Ticketing', 'Apple Pay selected', {
         paymentMethod: paymentMethod?.paymentType,
       });
