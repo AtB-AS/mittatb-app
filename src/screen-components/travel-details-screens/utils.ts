@@ -329,13 +329,28 @@ export function getFareZoneIdsPerStop(
 }
 
 /**
+ * The sub modes of the legs that we sell bus tickets for from a trip, see
+ * `getTicketInfoForBus`.
+ */
+export const BUS_TICKET_SUBMODES: string[] = [
+  'cityTram',
+  'expressBus',
+  'localBus',
+  'localTram',
+  'regionalBus',
+  'shuttleBus',
+];
+
+/**
  * Whether a fare contract's product and zones fit the trip, given the fare
  * zones of its stops from `getFareZoneIdsPerStop`. Validity in time is checked
  * separately, and the organization's full validity rules are not applied, so
  * the traveller should still check the ticket.
  * - It is a travel ticket, not a supplement or a school ticket, which is only
  *   valid between home and school.
- * - Its product type allows the mode of each of the legs that need a ticket.
+ * - Its product type allows the mode of each of the legs that need a ticket,
+ *   and each of them has a sub mode we sell bus tickets for. The sub modes in
+ *   the product type's `transportModes` are only used for display.
  * - Its fare zones include a zone of every stop.
  */
 export function isFareContractApplicableToTrip(
@@ -366,8 +381,7 @@ export function isFareContractApplicableToTrip(
       fareProductTypeConfig.transportModes.some(
         (transportMode) =>
           transportMode.mode === leg.mode &&
-          (!transportMode.subMode ||
-            transportMode.subMode === leg.transportSubmode),
+          BUS_TICKET_SUBMODES.includes(leg.transportSubmode ?? ''),
       ),
     );
     const fareZoneRefs = travelRight.fareZoneRefs ?? [];

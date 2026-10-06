@@ -46,8 +46,9 @@ const preassignedFareProducts = [
   },
 ] as PreassignedFareProduct[];
 
+// Like the single product type in Firestore, which only lists localBus
 const busModes = [
-  {mode: 'bus'},
+  {mode: 'bus', subMode: 'localBus'},
   {mode: 'tram'},
 ] as FareProductTypeConfig['transportModes'];
 const fareProductTypeConfigs = [
@@ -138,7 +139,34 @@ describe('isFareContractApplicableToTrip', () => {
       );
     });
 
-    it('matches the sub mode when the product specifies one', () => {
+    it('accepts the sub modes we sell bus tickets for', () => {
+      // Even though the product type only lists localBus
+      const fc = fareContract(travelRight());
+      const legs = [
+        leg(0, Mode.Bus, TransportSubmode.RegionalBus),
+        leg(30, Mode.Bus, TransportSubmode.ExpressBus),
+        leg(60, Mode.Tram, TransportSubmode.CityTram),
+      ];
+      expect(isApplicable(legs, zonesAtoC1, fc)).toBe(true);
+    });
+
+    it('is not applicable for sub modes we do not sell bus tickets for', () => {
+      const fc = fareContract(travelRight());
+      const nightBusLeg = leg(0, Mode.Bus, TransportSubmode.NightBus);
+      const legWithoutSubmode: Leg = {...leg(0), transportSubmode: undefined};
+      expect(isApplicable([nightBusLeg], zonesAtoC1, fc)).toBe(false);
+      expect(isApplicable([legWithoutSubmode], zonesAtoC1, fc)).toBe(false);
+    });
+
+    it('does not let a bus sub mode count for another mode', () => {
+      const fc = fareContract(
+        travelRight({fareProductRef: 'ATB:PreassignedFareProduct:boat'}),
+      );
+      const regionalBusLeg = leg(0, Mode.Bus, TransportSubmode.RegionalBus);
+      expect(isApplicable([regionalBusLeg], zonesAtoC1, fc)).toBe(false);
+    });
+
+    it('is not applicable for boat legs, which are not supported yet', () => {
       const fc = fareContract(
         travelRight({fareProductRef: 'ATB:PreassignedFareProduct:boat'}),
       );
@@ -147,13 +175,7 @@ describe('isFareContractApplicableToTrip', () => {
         Mode.Water,
         TransportSubmode.HighSpeedPassengerService,
       );
-      const otherBoatLeg = leg(
-        0,
-        Mode.Water,
-        TransportSubmode.HighSpeedVehicleService,
-      );
-      expect(isApplicable([boatLeg], zonesAtoC1, fc)).toBe(true);
-      expect(isApplicable([otherBoatLeg], zonesAtoC1, fc)).toBe(false);
+      expect(isApplicable([boatLeg], zonesAtoC1, fc)).toBe(false);
     });
 
     it('is not applicable when the product is unknown', () => {

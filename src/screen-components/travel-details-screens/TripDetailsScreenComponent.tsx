@@ -18,6 +18,7 @@ import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/screen-components/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
 import {
+  BUS_TICKET_SUBMODES,
   canSellCollabTicket,
   getNonFreeLegs,
   getRemainingLegs,
@@ -335,14 +336,10 @@ function getTicketInfoForBus(
   ticketStartTime?: string,
 ): TicketInfoForBus | undefined {
   const canSellCollab = canSellCollabTicket(tripPattern);
-  const hasOnlyValidBusLegs = !hasLegsWeCantSellTicketsFor(tripPattern, [
-    'cityTram',
-    'expressBus',
-    'localBus',
-    'localTram',
-    'regionalBus',
-    'shuttleBus',
-  ]);
+  const hasOnlyValidBusLegs = !hasLegsWeCantSellTicketsFor(
+    tripPattern,
+    BUS_TICKET_SUBMODES,
+  );
 
   if (!hasOnlyValidBusLegs && !canSellCollab) return;
 
