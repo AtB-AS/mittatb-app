@@ -105,7 +105,7 @@ export const Root_ShmoHelpScreen = ({
                 setCurrentlyOpenFaqIndex(index);
               }}
               expandContent={
-                <ThemeText isMarkdown={true} color="secondary">
+                <ThemeText isMarkdown={true} type="secondary">
                   {getTextForLanguage(item.description, language)}
                 </ThemeText>
               }
