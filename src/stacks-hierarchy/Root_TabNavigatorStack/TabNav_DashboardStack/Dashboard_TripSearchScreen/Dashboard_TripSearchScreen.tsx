@@ -450,7 +450,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           <LoadMoreButton
             loadMoreTrips={loadMoreTrips}
             isSearching={isSearching}
-            hasResults={tripPatterns.length > 0}
             tripsIsError={tripsIsError}
             tripSearchEnabled={tripSearchEnabled}
           />
