@@ -5,26 +5,26 @@ const GeoLocationTexts = {
     title: (isPrecise: boolean) =>
       isPrecise
         ? _(
-            'Endre telefoninnstillinger for å bruke presis posisjon.',
-            'Change phone settings to use precise location.',
-            'Endra telefoninnstillingar for å bruka presis posisjon.',
+            'Del presis posisjon med AtB-appen',
+            'Share your precise location with AtB',
+            'Del presis posisjon med AtB-appen',
           )
         : _(
-            'Endre telefoninnstillinger for å bruke din posisjon.',
-            'Change phone settings to use your location.',
-            'Endra telefoninnstillingar for å bruka di posisjon.',
+            'Del posisjon med AtB-appen',
+            'Share your location with AtB',
+            'Del posisjon med AtB-appen',
           ),
     message: (isPrecise: boolean) =>
       isPrecise
         ? _(
-            'Vi bruker presis posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker delte kjøretøy. For å bruke presis posisjon må du endre innstillingene for appen.',
-            'We use precise location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using shared vehicles. To use precise location, you must change the app settings.',
-            'Vi brukar presis posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar delte køyretøy. For å bruke presis posisjon må du endre innstillingane for appen.',
+            'Presis posisjon brukes i kart og søk for å finne steder i nærheten og er nødvendig for å bruke elsparkesykler og bysykler.',
+            'Precise location is used to find places nearby in map and search and is required to use e-scooters and city bikes.',
+            'Presis posisjonen vert brukt i kart og søk for å finne stader i nærleiken og er nødvendig for å bruke elsparkesyklar og bysyklar.',
           )
         : _(
-            'Vi bruker posisjon til å vise din posisjon i kart og reisesøk, til å finne holdeplasser og steder i nærheten, og til å bekrefte din posisjon når du bruker delte kjøretøy.',
-            'We use location to show your location on the map and in travel search, to find stops and places nearby, and to confirm your location when using shared vehicles.',
-            'Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne holdeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar delte køyretøy.',
+            'Din posisjon brukes i kart og søk for å finne steder i nærheten og er nødvendig for å bruke elsparkesykler og bysykler.',
+            'Your location is used to find places nearby in map and search and is required to use e-scooters and city bikes.',
+            'Posisjonen din vert brukt i kart og søk for å finne stader i nærleiken og er nødvendig for å bruke elsparkesyklar og bysyklar.',
           ),
     goToSettings: _(
       'Gå til innstillinger',

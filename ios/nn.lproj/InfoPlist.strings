@@ -1,6 +1,6 @@
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar sparkesyklar.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Posisjonen din vert brukt i kart og søk for å finne stader i nærleiken og er nødvendig for å bruke elsparkesyklar og bysyklar.";
 
-"NSLocationWhenInUseUsageDescription" = "Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, til å finne haldeplassar og stader i nærleiken, og til å bekrefte posisjonen din når du brukar sparkesyklar.";
+"NSLocationWhenInUseUsageDescription" = "Posisjonen din vert brukt i kart og søk for å finne stader i nærleiken og er nødvendig for å bruke elsparkesyklar og bysyklar.";
 
 "NSCameraUsageDescription" = "Vi bruker kamera til å ta bilete av feilparkerte elsparkesyklar og å skanne QR-koden på elsparkesyklar.";
 
