@@ -7,7 +7,6 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -52,7 +51,6 @@ export const FinishedShmoSheet = ({
     isLoading,
     isError,
   } = useShmoBookingQuery(isFocusedAndActive, bookingId);
-  const {isShmoDeepIntegrationEnabled} = useFeatureTogglesContext();
   const {mode, subMode} = getTransportModeAndSubMode(
     shmoBooking?.asset?.formFactor,
     shmoBooking?.asset?.propulsionType,
@@ -90,71 +88,63 @@ export const FinishedShmoSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
-      {isShmoDeepIntegrationEnabled && (
-        <>
-          {isLoading && (
-            <View style={styles.loading}>
-              <Loading size="large" />
-            </View>
-          )}
-          {!isLoading && !isError && shmoBooking && (
-            <>
-              <View style={styles.footer}>
-                <View style={styles.container}>
-                  <Section>
-                    <GenericSectionItem>
-                      <ThemeText typography="heading__m">
-                        {t(
-                          shmoBooking.state === ShmoBookingState.CANCELLED
-                            ? FareContractTexts.shmoDetails.tripCancelled
-                            : FareContractTexts.shmoDetails.tripEnded(),
-                        )}
-                      </ThemeText>
-                    </GenericSectionItem>
+      {isLoading && (
+        <View style={styles.loading}>
+          <Loading size="large" />
+        </View>
+      )}
+      {!isLoading && !isError && shmoBooking && (
+        <View style={styles.footer}>
+          <View style={styles.container}>
+            <Section>
+              <GenericSectionItem>
+                <ThemeText typography="heading__m">
+                  {t(
+                    shmoBooking.state === ShmoBookingState.CANCELLED
+                      ? FareContractTexts.shmoDetails.tripCancelled
+                      : FareContractTexts.shmoDetails.tripEnded(),
+                  )}
+                </ThemeText>
+              </GenericSectionItem>
 
-                    <ShmoTripDetailsSectionItem
-                      startDateTime={shmoBooking.departureTime ?? new Date()}
-                      endDateTime={new Date(shmoBooking.arrivalTime ?? '')}
-                      totalAmount={
-                        shmoBooking.pricing.finalAmount?.toString() ?? ''
-                      }
-                      currency={shmoBooking?.pricingPlan.currency}
-                      withHeader={true}
-                    />
-                  </Section>
-                </View>
-                <Button
-                  mode="primary"
-                  active={false}
-                  interactiveColor={theme.color.interactive[0]}
-                  expanded={true}
-                  type="large"
-                  accessibilityRole="button"
-                  onPress={onClose}
-                  text={t(MobilityTexts.trip.button.finishTrip)}
-                />
-
-                <SupportButton
-                  navigateToSupport={() => {
-                    navigateSupportCallback(
-                      shmoBooking.asset.operator.id,
-                      shmoBooking.bookingId,
-                      shmoBooking.asset.formFactor ?? undefined,
-                    );
-                  }}
-                />
-              </View>
-            </>
-          )}
-          {!isLoading && (isError || !shmoBooking) && (
-            <View style={styles.footer}>
-              <MessageInfoBox
-                type="error"
-                message={t(MobilityTexts.loadingFailed)}
+              <ShmoTripDetailsSectionItem
+                startDateTime={shmoBooking.departureTime ?? new Date()}
+                endDateTime={new Date(shmoBooking.arrivalTime ?? '')}
+                totalAmount={shmoBooking.pricing.finalAmount?.toString() ?? ''}
+                currency={shmoBooking?.pricingPlan.currency}
+                withHeader={true}
               />
-            </View>
-          )}
-        </>
+            </Section>
+          </View>
+          <Button
+            mode="primary"
+            active={false}
+            interactiveColor={theme.color.interactive[0]}
+            expanded={true}
+            type="large"
+            accessibilityRole="button"
+            onPress={onClose}
+            text={t(MobilityTexts.trip.button.finishTrip)}
+          />
+
+          <SupportButton
+            navigateToSupport={() => {
+              navigateSupportCallback(
+                shmoBooking.asset.operator.id,
+                shmoBooking.bookingId,
+                shmoBooking.asset.formFactor ?? undefined,
+              );
+            }}
+          />
+        </View>
+      )}
+      {!isLoading && (isError || !shmoBooking) && (
+        <View style={styles.footer}>
+          <MessageInfoBox
+            type="error"
+            message={t(MobilityTexts.loadingFailed)}
+          />
+        </View>
       )}
     </MapBottomSheet>
   );

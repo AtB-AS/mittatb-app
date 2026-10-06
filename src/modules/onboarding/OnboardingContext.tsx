@@ -31,7 +31,7 @@ import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useOnAuthStateChanged} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useVehicleRegistrationsQuery} from '../smart-park-and-ride';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 export type OnboardingState = {
@@ -300,7 +300,7 @@ const useShouldShowArgs = (
   loadedOnboardingSections: LoadedOnboardingSection[],
   currentRouteName: string,
 ): ShouldShowArgsType => {
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {isScreenReaderEnabled} = useAccessibilityContext();
   const fontScale = useFontScale();
 
   const hasFareContractWithActivatedNotification =

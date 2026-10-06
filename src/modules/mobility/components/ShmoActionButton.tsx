@@ -1,11 +1,15 @@
 import {useAuthContext} from '@atb/modules/auth';
-import {useTranslation} from '@atb/translations';
+import {ForceUpdateTexts, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React, {useCallback} from 'react';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
 import {ButtonInfoTextCombo} from './ButtonInfoTextCombo.tsx';
-import {InitShmoOneStopBookingRequestBody} from '@atb/api/types/mobility';
+import {
+  ActionButtonType,
+  InitShmoOneStopBookingRequestBody,
+  PreReqType,
+} from '@atb/api/types/mobility';
 import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-stop-booking-mutation.tsx';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -19,6 +23,8 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useMapVehicle} from '../use-map-vehicle.tsx';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {useOpenStoreListing} from '@atb/utils/use-open-store-listing';
 
 type ShmoActionButtonProps = {
   onStartOnboarding: () => void;
@@ -39,20 +45,40 @@ export const ShmoActionButton = ({
   bonusProductId,
   formFactor,
 }: ShmoActionButtonProps) => {
-  const {authenticationType, userId} = useAuthContext();
-  const {hasBlockers, numberOfBlockers, ageVerification, operatorAgeLimit} =
-    useShmoRequirements(operatorId, formFactor);
+  const {userId} = useAuthContext();
+  const {mapState} = useMapContext();
+  const {vehicle} = useMapVehicle();
+  const preReqs =
+    vehicle?.actionButton?.type === ActionButtonType.START_TRIP
+      ? vehicle.actionButton.preReqs
+      : undefined;
+  const {
+    requirements,
+    hasBlockers,
+    numberOfBlockers,
+    ageVerification,
+    operatorAgeLimit,
+  } = useShmoRequirements(preReqs, formFactor);
+  const ageVerificationRequired = requirements.some(
+    (req) => req.requirementCode === PreReqType.AGE_VERIFICATION,
+  );
+  const appUpdateRequired = requirements.some(
+    (req) => req.requirementCode === PreReqType.UNSUPPORTED,
+  );
+  const {openStoreListing, isError: openStoreListingError} =
+    useOpenStoreListing();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
   const {logEvent} = useAnalyticsContext();
-  const {mapState} = useMapContext();
-  const {vehicle} = useMapVehicle();
   const {warningMessage} = useShmoWarnings(
     // Shmo warnings not yet supported for station based vehicles.
     mapState.isStationBasedBooking ? undefined : vehicleId,
   );
+  const isLoggedInBlocking = requirements.find(
+    (req) => req.requirementCode === PreReqType.IS_LOGGED_IN,
+  )?.isBlocking;
 
   const {
     mutateAsync: initShmoOneStopBooking,
@@ -105,7 +131,35 @@ export const ShmoActionButton = ({
     bonusProductId,
   ]);
 
-  if (authenticationType != 'phone') {
+  if (appUpdateRequired) {
+    return (
+      <View style={styles.startTripWrapper}>
+        <MessageInfoBox
+          type="warning"
+          message={t(MobilityTexts.shmoRequirements.appUpdateRequiredMessage)}
+        />
+        {openStoreListingError && (
+          <MessageInfoBox
+            type="error"
+            message={t(ForceUpdateTexts.errorMessage)}
+          />
+        )}
+        <Button
+          mode="primary"
+          rightIcon={{svg: ExternalLink}}
+          active={false}
+          interactiveColor={theme.color.interactive[0]}
+          expanded={true}
+          type="large"
+          accessibilityRole="button"
+          onPress={openStoreListing}
+          text={t(MobilityTexts.shmoRequirements.appUpdateRequired)}
+        />
+      </View>
+    );
+  }
+
+  if (isLoggedInBlocking) {
     return (
       <ButtonInfoTextCombo
         onPress={loginCallback}
@@ -115,7 +169,7 @@ export const ShmoActionButton = ({
     );
   }
 
-  if (hasBlockers) {
+  if (hasBlockers && ageVerification !== AgeVerificationEnum.UnderAge) {
     return (
       <ButtonInfoTextCombo
         onPress={onStartOnboarding}
@@ -156,7 +210,8 @@ export const ShmoActionButton = ({
         active={false}
         disabled={
           initShmoOneStopBookingIsLoading ||
-          ageVerification !== AgeVerificationEnum.LegalAge
+          (ageVerificationRequired &&
+            ageVerification !== AgeVerificationEnum.LegalAge)
         }
         interactiveColor={theme.color.interactive[0]}
         expanded={true}

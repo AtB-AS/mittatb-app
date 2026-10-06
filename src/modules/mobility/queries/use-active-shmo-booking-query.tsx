@@ -22,8 +22,10 @@ export const useActiveShmoBookingQuery = (
     ? ONE_SECOND_MS * 90
     : refetchInterval;
 
-  return useQuery({
-    enabled: enabled && isShmoDeepIntegrationEnabled,
+  const queryEnabled = enabled && isShmoDeepIntegrationEnabled;
+
+  const {data, isLoading, isError, isPending, isSuccess} = useQuery({
+    enabled: queryEnabled,
     queryKey: getActiveShmoBookingQueryKey(acceptLanguage),
     queryFn: ({signal}) => getActiveShmoBooking(acceptLanguage, {signal}),
     staleTime: ONE_MINUTE_MS,
@@ -32,4 +34,14 @@ export const useActiveShmoBookingQuery = (
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: true,
   });
+
+  return {
+    data,
+    isLoading,
+    isError,
+    isSuccess,
+    // isPending stays true forever on a disabled query, so resolve it here
+    // rather than making callers account for the toggle themselves.
+    isPending: queryEnabled && isPending,
+  };
 };

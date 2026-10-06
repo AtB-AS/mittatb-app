@@ -252,8 +252,42 @@ export enum ActionButtonType {
   APP_SWITCH = 'APP_SWITCH',
 }
 
+export enum PreReqType {
+  IS_LOGGED_IN = 'IS_LOGGED_IN',
+  TERMS_AND_CONDITIONS = 'TERMS_AND_CONDITIONS',
+  AGE_VERIFICATION = 'AGE_VERIFICATION',
+  PAYMENT_METHOD = 'PAYMENT_METHOD',
+  PRECISE_LOCATION = 'PRECISE_LOCATION',
+  // Client-only value, never sent by the server. Anything the server sends that doesn't match
+  // one of the variants above is coerced into this by PreReqSchema.
+  UNSUPPORTED = 'UNSUPPORTED',
+}
+
+const SupportedPreReqSchema = z.discriminatedUnion('type', [
+  z.object({type: z.literal(PreReqType.IS_LOGGED_IN)}),
+  z.object({type: z.literal(PreReqType.TERMS_AND_CONDITIONS)}),
+  z.object({
+    type: z.literal(PreReqType.AGE_VERIFICATION),
+    minAge: z.number(),
+  }),
+  z.object({type: z.literal(PreReqType.PAYMENT_METHOD)}),
+  z.object({type: z.literal(PreReqType.PRECISE_LOCATION)}),
+]);
+
+export const PreReqSchema = z.union([
+  SupportedPreReqSchema,
+  z
+    .object({type: z.string()})
+    .transform(() => ({type: PreReqType.UNSUPPORTED as const})),
+]);
+
+export type PreReq = z.infer<typeof PreReqSchema>;
+
 export const ActionButtonSchema = z.discriminatedUnion('type', [
-  z.object({type: z.literal(ActionButtonType.START_TRIP)}),
+  z.object({
+    type: z.literal(ActionButtonType.START_TRIP),
+    preReqs: z.array(PreReqSchema).default([]),
+  }),
   z.object({
     type: z.literal(ActionButtonType.APP_SWITCH),
     url: z.string().optional(),

@@ -27,7 +27,12 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
-import {ActionButtonType, BonusOffer, Vehicle} from '@atb/api/types/mobility';
+import {
+  ActionButtonType,
+  BonusOffer,
+  PreReq,
+  Vehicle,
+} from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
@@ -56,7 +61,7 @@ type Props = {
   onClose: () => void;
   onReportParkingViolation: () => void;
   onVehicleReceived?: (vehicle: Vehicle) => void;
-  startOnboardingCallback: (formFactor: FormFactor) => void;
+  startOnboardingCallback: (formFactor: FormFactor, preReqs?: PreReq[]) => void;
   locationArrowOnPress: () => void;
   navigateToSupport: (params: ShmoHelpParams) => void;
   navigateToLogin: () => void;
@@ -110,8 +115,12 @@ export const VehicleSheet = ({
     propulsionType,
   );
 
+  const preReqs =
+    vehicle?.actionButton?.type === ActionButtonType.START_TRIP
+      ? vehicle.actionButton.preReqs
+      : undefined;
   const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements(
-    operatorId,
+    preReqs,
     formFactor,
   );
   const selectedPaymentMethod = useSelectedShmoPaymentMethod();
@@ -281,7 +290,9 @@ export const VehicleSheet = ({
           {actionButton?.type === ActionButtonType.START_TRIP && operatorId ? (
             <>
               <ShmoActionButton
-                onStartOnboarding={() => startOnboardingCallback(formFactor)}
+                onStartOnboarding={() =>
+                  startOnboardingCallback(formFactor, preReqs)
+                }
                 loginCallback={navigateToLogin}
                 vehicleId={vehicle.id}
                 operatorId={operatorId}

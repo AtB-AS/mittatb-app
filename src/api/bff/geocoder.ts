@@ -4,7 +4,7 @@ import {client} from '../client';
 import qs from 'query-string';
 import {stringifyUrl} from '../utils';
 import {AxiosRequestConfig} from 'axios';
-import {Feature, FeatureCategory, FeatureV3} from './types';
+import {Feature, FeatureCategory} from './types';
 import {SearchLocation} from '@atb/modules/favorites';
 
 export const FOCUS_ORIGIN: Coordinates = {
@@ -13,70 +13,6 @@ export const FOCUS_ORIGIN: Coordinates = {
 };
 
 export async function autocomplete(
-  text: string,
-  coordinates: Coordinates | null,
-  onlyLocalFareZoneAuthority: boolean = false,
-  onlyStopPlaces: boolean = false,
-  config?: AxiosRequestConfig,
-): Promise<SearchLocation[]> {
-  const url = 'bff/v1/geocoder/features';
-  const query = qs.stringify(
-    {
-      query: text,
-      lat: coordinates?.latitude ?? FOCUS_ORIGIN.latitude,
-      lon: coordinates?.longitude ?? FOCUS_ORIGIN.longitude,
-      limit: 10,
-      tariff_zone_authorities: onlyLocalFareZoneAuthority
-        ? TARIFF_ZONE_AUTHORITY
-        : null,
-      layers: onlyStopPlaces ? ['venue'] : undefined,
-      multiModal: 'parent',
-    },
-    {skipNull: true},
-  );
-
-  const response = await client.get<Feature[]>(
-    stringifyUrl(url, query),
-    config,
-  );
-  const data = response.data.map(mapFeatureToSearchLocation);
-  return data;
-}
-
-export async function reverse(
-  coordinates: Coordinates | null,
-  config?: AxiosRequestConfig,
-): Promise<SearchLocation[]> {
-  const url = 'bff/v1/geocoder/reverse';
-  const query = qs.stringify({
-    lat: coordinates?.latitude,
-    lon: coordinates?.longitude,
-  });
-
-  const response = await client.get<Feature[]>(
-    stringifyUrl(url, query),
-    config,
-  );
-  return response.data.map(mapFeatureToSearchLocation);
-}
-
-/**
- * Feature coordinate-array from geocoder is [long, lat]. This maps to lat/long
- * object for less bugs downstream.
- */
-const mapFeatureToSearchLocation = ({
-  geometry: {
-    coordinates: [longitude, latitude],
-  },
-  properties,
-}: Feature): SearchLocation => ({
-  ...properties,
-  coordinates: {latitude, longitude},
-  resultType: 'search',
-  fare_zones: properties.tariff_zones,
-});
-
-export async function autocompleteV3(
   text: string,
   coordinates: Coordinates | null,
   onlyLocalFareZoneAuthority: boolean = false,
@@ -99,14 +35,14 @@ export async function autocompleteV3(
     {skipNull: true},
   );
 
-  const response = await client.get<FeatureV3[]>(
+  const response = await client.get<Feature[]>(
     stringifyUrl(url, query),
     config,
   );
-  return response.data.map(mapFeatureV3ToSearchLocation);
+  return response.data.map(mapFeatureToSearchLocation);
 }
 
-export async function reverseV3(
+export async function reverse(
   coordinates: Coordinates | null,
   config?: AxiosRequestConfig,
 ): Promise<SearchLocation[]> {
@@ -116,35 +52,35 @@ export async function reverseV3(
     lon: coordinates?.longitude,
   });
 
-  const response = await client.get<FeatureV3[]>(
+  const response = await client.get<Feature[]>(
     stringifyUrl(url, query),
     config,
   );
-  return response.data.map(mapFeatureV3ToSearchLocation);
+  return response.data.map(mapFeatureToSearchLocation);
 }
 
-export async function placeV3(
+export async function place(
   ids: string[],
   config?: AxiosRequestConfig,
 ): Promise<SearchLocation[]> {
   const url = 'bff/v2/geocoder/place';
   const query = qs.stringify({ids});
 
-  const response = await client.get<FeatureV3[]>(
+  const response = await client.get<Feature[]>(
     stringifyUrl(url, query),
     config,
   );
-  return response.data.map(mapFeatureV3ToSearchLocation);
+  return response.data.map(mapFeatureToSearchLocation);
 }
 
 const featureCategories = new Set<string>(Object.values(FeatureCategory));
 
-const mapFeatureV3ToSearchLocation = ({
+const mapFeatureToSearchLocation = ({
   geometry: {
     coordinates: [longitude, latitude],
   },
   properties,
-}: FeatureV3): SearchLocation => ({
+}: Feature): SearchLocation => ({
   id: properties.id,
   name: properties.names.default,
   label: properties.names.display,

@@ -34,7 +34,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onPressLocationSearch: (location?: Location) => void;
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
-  onAddFavoritePlace: () => void;
+  onEditFavoritePlaces?: () => void;
   isLargeTitle: boolean;
   focusRef: Ref<any>;
   showFavoriteChips: boolean;
@@ -47,7 +47,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onPressLocationSearch,
   onSelectStopPlace,
   onUpdateLocation,
-  onAddFavoritePlace,
+  onEditFavoritePlaces,
   isLargeTitle,
   focusRef,
 }: Props) => {
@@ -145,7 +145,7 @@ export const NearbyStopPlacesScreenComponent = ({
                 ? onSelectStopPlace(location)
                 : onUpdateLocation(location);
             }}
-            onAddFavoritePlace={onAddFavoritePlace}
+            onEditFavoritePlaces={onEditFavoritePlaces}
           />
         </>
       )}
@@ -190,7 +190,7 @@ type HeaderProps = {
   openLocationSearch: () => void;
   setLocation: (location: Location) => void;
   showFavoriteChips: boolean;
-  onAddFavoritePlace: Props['onAddFavoritePlace'];
+  onEditFavoritePlaces: Props['onEditFavoritePlaces'];
 };
 
 const Header = React.memo(function Header({
@@ -199,7 +199,7 @@ const Header = React.memo(function Header({
   openLocationSearch,
   setLocation,
   showFavoriteChips,
-  onAddFavoritePlace,
+  onEditFavoritePlaces,
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -244,9 +244,9 @@ const Header = React.memo(function Header({
           onSelectLocation={(location) => {
             setLocation(location);
           }}
-          chipTypes={['favorites', 'add-favorite']}
+          chipTypes={['favorites', 'edit-favorites']}
           style={styles.favoriteChips}
-          onAddFavoritePlace={onAddFavoritePlace}
+          onEditFavoritePlaces={onEditFavoritePlaces}
           backgroundColor={theme.color.background.neutral[1]}
         />
       )}

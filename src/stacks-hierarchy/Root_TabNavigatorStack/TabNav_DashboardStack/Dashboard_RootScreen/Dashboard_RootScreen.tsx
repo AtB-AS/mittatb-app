@@ -174,6 +174,16 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
     navigation.navigate('Root_TabNavigatorStack', bonusScreenParams);
   }, [navigation, bonusScreenParams]);
 
+  const favoriteListScreenParams = useNestedProfileScreenParams(
+    'Profile_FavoriteListScreen',
+    undefined,
+    ['Profile_FavoriteScreen'],
+  );
+
+  const navigateToFavoriteListScreen = useCallback(() => {
+    navigation.navigate('Root_TabNavigatorStack', favoriteListScreenParams);
+  }, [navigation, favoriteListScreenParams]);
+
   const navigateToFavoriteDeparturesScreen = useCallback(() => {
     navigation.navigate('Dashboard_FavoriteDeparturesScreen');
   }, [navigation]);
@@ -268,16 +278,14 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
           <FavoriteChips
             key="favoriteChips"
             style={style.favoriteChips}
-            chipTypes={['favorites', 'add-favorite']}
+            chipTypes={['favorites', 'edit-favorites']}
             onSelectLocation={fillNextAvailableLocation}
             chipActionHint={
               t(TripSearchTexts.favorites.favoriteChip.a11yHint) +
               t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
-            onAddFavoritePlace={() =>
-              navigation.navigate('Root_SearchFavoritePlaceScreen')
-            }
+            onEditFavoritePlaces={navigateToFavoriteListScreen}
             backgroundColor={theme.color.background.neutral[1]}
           />
         </View>

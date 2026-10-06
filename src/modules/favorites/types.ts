@@ -41,7 +41,7 @@ export type LocationFavorite = {
   name?: string;
 };
 
-export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
+export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'edit-favorites';
 
 export type StoredLocationFavorite = StoredType<LocationFavorite>;
 export type UserFavorites = StoredLocationFavorite[];

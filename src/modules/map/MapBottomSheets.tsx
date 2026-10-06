@@ -1,5 +1,4 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   ActiveShmoSheet,
   BikeStationBottomSheet,
@@ -25,7 +24,11 @@ import {
 } from './utils';
 import MapboxGL from '@rnmapbox/maps';
 import {ShmoBookingState} from '@atb/api/types/mobility';
-import {MapFilterType, MapProps} from './types';
+import {
+  MapFilterType,
+  MapProps,
+  NavigateToShmoOnboardingCallback,
+} from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
 
@@ -48,7 +51,7 @@ type MapBottomSheetsProps = {
   locationArrowOnPress: () => void;
   tabBarHeight: number;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
-  navigateToShmoOnboarding: (formFactor?: FormFactor) => void;
+  navigateToShmoOnboarding: NavigateToShmoOnboardingCallback;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
   navigateToScanQrCode: () => void;

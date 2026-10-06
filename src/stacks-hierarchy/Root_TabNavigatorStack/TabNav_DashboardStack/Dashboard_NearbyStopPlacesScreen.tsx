@@ -63,9 +63,6 @@ export const Dashboard_NearbyStopPlacesScreen = ({
         [navigation, route.params.onCompleteRouteName],
       )}
       onUpdateLocation={(location) => navigation.setParams({location})}
-      onAddFavoritePlace={() =>
-        navigation.navigate('Root_SearchFavoritePlaceScreen')
-      }
     />
   );
 };

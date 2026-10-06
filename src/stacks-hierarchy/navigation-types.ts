@@ -12,6 +12,7 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {
   ParkingViolationType,
+  PreReq,
   ShmoBooking,
   ShmoPricingPlan,
 } from '@atb/api/types/mobility';
@@ -161,7 +162,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_ShmoHelpScreen: Root_ShmoHelpScreenParams;
-  Root_ShmoOnboardingScreen: {formFactor?: FormFactor};
+  Root_ShmoOnboardingScreen: {formFactor?: FormFactor; preReqs?: PreReq[]};
   Root_ShmoPricingDetailsScreen: Root_ShmoPricingDetailsScreenParams;
   Root_ContactShmoOperatorScreen: Root_ContactShmoOperatorScreenParams;
   Root_ContactShmoOperatorConfirmationScreen: Root_ContactShmoOperatorConfirmationScreenParams;

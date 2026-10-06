@@ -1,5 +1,5 @@
-import React, {createContext, useContext} from 'react';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {AccessibilityInfo} from 'react-native';
 
 type AccessibilityState = {
   isScreenReaderEnabled: boolean;
@@ -30,4 +30,33 @@ export function useAccessibilityContext() {
     );
   }
   return context;
+}
+
+/**
+ * Subscribes to the screen reader enabled state. Internal to the accessibility
+ * context; components should use `useAccessibilityContext` instead so the value
+ * is resolved once and does not start as false on every first render.
+ */
+function useIsScreenReaderEnabled() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetch = async () => {
+      const isEnabled = await AccessibilityInfo.isScreenReaderEnabled();
+      if (mounted) setEnabled(isEnabled);
+    };
+
+    fetch();
+    const accessibilityInfoSubscription = AccessibilityInfo.addEventListener(
+      'screenReaderChanged',
+      setEnabled,
+    );
+    return () => {
+      mounted = false;
+      accessibilityInfoSubscription.remove();
+    };
+  }, []);
+
+  return enabled;
 }

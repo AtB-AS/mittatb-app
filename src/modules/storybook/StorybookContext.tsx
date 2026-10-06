@@ -13,6 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ChevronLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
+import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 
 type StorybookContextState = {
   isEnabled: boolean;
@@ -40,20 +41,22 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
   return (
     <StorybookContext.Provider value={{isEnabled, setEnabled}}>
       {isEnabled ? (
-        <SafeAreaView style={{flex: 1}}>
-          <StatusBar translucent={true} />
-          <NativeTouchable
-            variant="block"
-            onPress={() => setEnabled(false)}
-            style={{flexDirection: 'row', padding: 8, alignItems: 'center'}}
-          >
-            <ThemeIcon svg={ChevronLeft} color={textColor} />
-            <ThemeText style={{marginLeft: 4, color: textColor}}>
-              Back to app
-            </ThemeText>
-          </NativeTouchable>
-          <StorybookApp />
-        </SafeAreaView>
+        <AccessibilityContextProvider>
+          <SafeAreaView style={{flex: 1}}>
+            <StatusBar translucent={true} />
+            <NativeTouchable
+              variant="block"
+              onPress={() => setEnabled(false)}
+              style={{flexDirection: 'row', padding: 8, alignItems: 'center'}}
+            >
+              <ThemeIcon svg={ChevronLeft} color={textColor} />
+              <ThemeText style={{marginLeft: 4, color: textColor}}>
+                Back to app
+              </ThemeText>
+            </NativeTouchable>
+            <StorybookApp />
+          </SafeAreaView>
+        </AccessibilityContextProvider>
       ) : (
         children
       )}

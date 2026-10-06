@@ -1,6 +1,7 @@
 export {TravelCard} from './TravelCard';
 export {WithTravelCardSkeleton} from './skeleton';
 export {getTripPatternStatus} from './utils';
+export {useTripPatternInfo} from './hooks';
 export {type TravelCardHeaderSize} from './TravelCardHeader';
 import {withCompositeAccessibility} from '@atb/modules/composite-accessibility';
 import {TravelCardHeader as TravelCardHeaderComponent} from './TravelCardHeader';

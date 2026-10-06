@@ -102,6 +102,64 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.actionButton?.type).toBe(ActionButtonType.START_TRIP);
+      expect(
+        result.data.actionButton?.type === ActionButtonType.START_TRIP &&
+          result.data.actionButton.preReqs,
+      ).toEqual([]);
+    }
+  });
+
+  it('parses a START_TRIP action button with preReqs, including AGE_VERIFICATION minAge', () => {
+    const result = VehicleSchema.safeParse({
+      ...baseVehicle,
+      actionButton: {
+        type: 'START_TRIP',
+        preReqs: [
+          {type: 'IS_LOGGED_IN'},
+          {type: 'TERMS_AND_CONDITIONS'},
+          {type: 'AGE_VERIFICATION', minAge: 18},
+          {type: 'PAYMENT_METHOD'},
+          {type: 'PRECISE_LOCATION'},
+        ],
+      },
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(
+        result.data.actionButton?.type === ActionButtonType.START_TRIP &&
+          result.data.actionButton.preReqs,
+      ).toEqual([
+        {type: 'IS_LOGGED_IN'},
+        {type: 'TERMS_AND_CONDITIONS'},
+        {type: 'AGE_VERIFICATION', minAge: 18},
+        {type: 'PAYMENT_METHOD'},
+        {type: 'PRECISE_LOCATION'},
+      ]);
+    }
+  });
+
+  it('coerces an unrecognized preReq type into UNSUPPORTED instead of failing to parse', () => {
+    const result = VehicleSchema.safeParse({
+      ...baseVehicle,
+      actionButton: {
+        type: 'START_TRIP',
+        preReqs: [
+          {type: 'IS_LOGGED_IN'},
+          {type: 'TEST'},
+          {type: 'PAYMENT_METHOD'},
+        ],
+      },
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(
+        result.data.actionButton?.type === ActionButtonType.START_TRIP &&
+          result.data.actionButton.preReqs,
+      ).toEqual([
+        {type: 'IS_LOGGED_IN'},
+        {type: 'UNSUPPORTED'},
+        {type: 'PAYMENT_METHOD'},
+      ]);
     }
   });
 

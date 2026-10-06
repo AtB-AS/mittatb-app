@@ -91,8 +91,7 @@ export const ActiveShmoSheet = ({
     mapViewRef,
   );
 
-  const {isShmoDeepIntegrationEnabled, isShmoPauseButtonEnabled} =
-    useFeatureTogglesContext();
+  const {isShmoPauseButtonEnabled} = useFeatureTogglesContext();
 
   const isPaused = activeBooking?.state === ShmoBookingState.PAUSED;
 
@@ -258,121 +257,112 @@ export const ActiveShmoSheet = ({
       }
       bottomSheetHeaderType={BottomSheetHeaderType.None}
     >
-      {isShmoDeepIntegrationEnabled && (
-        <>
-          {isLoading && (
-            <View style={styles.loading}>
-              <Loading size="large" />
-            </View>
-          )}
-          {!isLoading && !isError && activeBooking && (
-            <>
-              <View style={styles.container}>
-                {!!activeBooking?.asset?.stateOfCharge &&
-                  (activeBooking.asset.propulsionType ===
-                    PropulsionType.ElectricAssist ||
-                    activeBooking.asset.propulsionType ===
-                      PropulsionType.Electric) && (
-                    <VehicleCard
-                      currentFuelPercent={
-                        activeBooking.asset.stateOfCharge ?? 0
-                      }
-                      currentRangeMeters={
-                        activeBooking.asset?.currentRangeKm
-                          ? activeBooking.asset.currentRangeKm * 1000
-                          : 0
-                      }
-                      formFactor={activeBooking.asset.formFactor ?? undefined}
-                    />
-                  )}
-                <View style={styles.footer}>
-                  {geofencingZoneWarning && (
-                    <View style={styles.geofencingZoneWarning}>
-                      {geofencingZoneWarning.iconNode}
-                      <View style={styles.geofencingZoneWarningText}>
-                        <ThemeText typography="body__s">
-                          {geofencingZoneWarning.description}
-                        </ThemeText>
-                      </View>
-                    </View>
-                  )}
-                  {isPaused && (
-                    <MessageInfoBox
-                      type="error"
-                      message={t(ShmoWarnings.bookingPaused)}
-                    />
-                  )}
-                  {warningMessage && (
-                    <MessageInfoText type="warning" message={warningMessage} />
-                  )}
-                  {sendShmoBookingEventIsError && (
-                    <MessageInfoBox
-                      type="error"
-                      message={formatFriendlyShmoErrorMessage(
-                        sendShmoBookingEventError,
-                        t,
-                      )}
-                    />
-                  )}
-                  {isPaused && (
-                    <View style={styles.pausedButtonsRow}>
-                      <View style={styles.pausedButton}>
-                        <Button
-                          mode="primary"
-                          active={false}
-                          disabled={sendShmoBookingEventIsLoading}
-                          expanded={true}
-                          type="large"
-                          accessibilityRole="button"
-                          onPress={resumeShmoBooking}
-                          loading={sendShmoBookingEventIsLoading}
-                          text={t(MobilityTexts.trip.button.resume)}
-                        />
-                      </View>
-                      {activeBooking.asset.formFactor !==
-                        FormFactor.Bicycle && (
-                        <View style={styles.pausedButton}>{endButton}</View>
-                      )}
-                    </View>
-                  )}
-                  {activeBooking.asset.formFactor === FormFactor.Bicycle ? (
-                    <EndManualTripCard
-                      title={t(MobilityTexts.cityBike.endManualTrip.title)}
-                      summary={t(MobilityTexts.cityBike.endManualTrip.summary)}
-                      image={<ThemedCityBikeStation height={54} width={90} />}
-                    />
-                  ) : (
-                    !isPaused && endButton
-                  )}
-
-                  {isShmoPauseButtonEnabled && !isPaused && (
-                    <Button
-                      mode="secondary"
-                      backgroundColor={theme.color.background.neutral[1]}
-                      active={false}
-                      disabled={sendShmoBookingEventIsLoading}
-                      expanded={true}
-                      type="large"
-                      accessibilityRole="button"
-                      onPress={pauseShmoBooking}
-                      text="Pause"
-                    />
-                  )}
-
-                  <SupportButton navigateToSupport={navigateSupportCallback} />
+      {isLoading && (
+        <View style={styles.loading}>
+          <Loading size="large" />
+        </View>
+      )}
+      {!isLoading && !isError && activeBooking && (
+        <View style={styles.container}>
+          {!!activeBooking?.asset?.stateOfCharge &&
+            (activeBooking.asset.propulsionType ===
+              PropulsionType.ElectricAssist ||
+              activeBooking.asset.propulsionType ===
+                PropulsionType.Electric) && (
+              <VehicleCard
+                currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
+                currentRangeMeters={
+                  activeBooking.asset?.currentRangeKm
+                    ? activeBooking.asset.currentRangeKm * 1000
+                    : 0
+                }
+                formFactor={activeBooking.asset.formFactor ?? undefined}
+              />
+            )}
+          <View style={styles.footer}>
+            {geofencingZoneWarning && (
+              <View style={styles.geofencingZoneWarning}>
+                {geofencingZoneWarning.iconNode}
+                <View style={styles.geofencingZoneWarningText}>
+                  <ThemeText typography="body__s">
+                    {geofencingZoneWarning.description}
+                  </ThemeText>
                 </View>
               </View>
-            </>
-          )}
-          {!isLoading && (isError || !activeBooking) && (
-            <View style={styles.footer}>
+            )}
+            {isPaused && (
               <MessageInfoBox
                 type="error"
-                message={t(MobilityTexts.loadingFailed)}
+                message={t(ShmoWarnings.bookingPaused)}
               />
-            </View>
-          )}
-        </>
+            )}
+            {warningMessage && (
+              <MessageInfoText type="warning" message={warningMessage} />
+            )}
+            {sendShmoBookingEventIsError && (
+              <MessageInfoBox
+                type="error"
+                message={formatFriendlyShmoErrorMessage(
+                  sendShmoBookingEventError,
+                  t,
+                )}
+              />
+            )}
+            {isPaused && (
+              <View style={styles.pausedButtonsRow}>
+                <View style={styles.pausedButton}>
+                  <Button
+                    mode="primary"
+                    active={false}
+                    disabled={sendShmoBookingEventIsLoading}
+                    expanded={true}
+                    type="large"
+                    accessibilityRole="button"
+                    onPress={resumeShmoBooking}
+                    loading={sendShmoBookingEventIsLoading}
+                    text={t(MobilityTexts.trip.button.resume)}
+                  />
+                </View>
+                {activeBooking.asset.formFactor !== FormFactor.Bicycle && (
+                  <View style={styles.pausedButton}>{endButton}</View>
+                )}
+              </View>
+            )}
+            {activeBooking.asset.formFactor === FormFactor.Bicycle ? (
+              <EndManualTripCard
+                title={t(MobilityTexts.cityBike.endManualTrip.title)}
+                summary={t(MobilityTexts.cityBike.endManualTrip.summary)}
+                image={<ThemedCityBikeStation height={54} width={90} />}
+              />
+            ) : (
+              !isPaused && endButton
+            )}
+
+            {isShmoPauseButtonEnabled && !isPaused && (
+              <Button
+                mode="secondary"
+                backgroundColor={theme.color.background.neutral[1]}
+                active={false}
+                disabled={sendShmoBookingEventIsLoading}
+                expanded={true}
+                type="large"
+                accessibilityRole="button"
+                onPress={pauseShmoBooking}
+                text="Pause"
+              />
+            )}
+
+            <SupportButton navigateToSupport={navigateSupportCallback} />
+          </View>
+        </View>
+      )}
+      {!isLoading && (isError || !activeBooking) && (
+        <View style={styles.footer}>
+          <MessageInfoBox
+            type="error"
+            message={t(MobilityTexts.loadingFailed)}
+          />
+        </View>
       )}
     </MapBottomSheet>
   );

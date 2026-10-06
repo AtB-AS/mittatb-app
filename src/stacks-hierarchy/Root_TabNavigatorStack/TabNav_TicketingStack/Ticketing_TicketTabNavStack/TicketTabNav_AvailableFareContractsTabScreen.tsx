@@ -29,6 +29,8 @@ import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useNeedsRefreshStore} from '@atb/modules/ticketing';
+import type {TripPattern} from '@atb/api/types/trips';
+import {useTripPatternInfo} from '@atb/screen-components/travel-card';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_AvailableFareContractsTabScreen'>;
@@ -99,6 +101,24 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     }
   }, [showTransferCodeSuccessParam, navigation]);
 
+  const [savedTripPattern, setSavedTripPattern] = useState<TripPattern>();
+  const savedTripPatternParam = route.params?.savedTripPattern;
+  useEffect(() => {
+    if (savedTripPatternParam) {
+      setSavedTripPattern(savedTripPatternParam);
+      navigation.setParams({savedTripPattern: undefined});
+    }
+  }, [savedTripPatternParam, navigation]);
+  const dismissSavedTrip = useCallback(
+    () => setSavedTripPattern(undefined),
+    [],
+  );
+
+  useEffect(() => {
+    if (!savedTripPattern) return;
+    return navigation.addListener('blur', dismissSavedTrip);
+  }, [savedTripPattern, dismissSavedTrip, navigation]);
+
   useEffect(() => {
     if (!showTransferCodeSuccess) return;
     const timeout = setTimeout(
@@ -134,6 +154,12 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
         refreshControl={<RefreshControl {...refreshControlProps} />}
         testID="availableFCScrollView"
       >
+        {savedTripPattern && (
+          <TripSavedMessageInfoBox
+            tripPattern={savedTripPattern}
+            onDismiss={dismissSavedTrip}
+          />
+        )}
         {showTransferCodeSuccess && (
           <MessageInfoBox
             type="valid"
@@ -201,6 +227,29 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     </View>
   );
 };
+
+// Memoized so it skips the screen's once-per-second `serverNow` re-renders.
+const TripSavedMessageInfoBox = React.memo(
+  ({
+    tripPattern,
+    onDismiss,
+  }: {
+    tripPattern: TripPattern;
+    onDismiss: () => void;
+  }) => {
+    const {t} = useTranslation();
+    const {fromName, toName} = useTripPatternInfo(tripPattern);
+    return (
+      <MessageInfoBox
+        type="valid"
+        title={t(TicketingTexts.tripSaved.title)}
+        message={t(TicketingTexts.tripSaved.message(fromName, toName))}
+        onDismiss={onDismiss}
+        a11yLiveRegion="polite"
+      />
+    );
+  },
+);
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
