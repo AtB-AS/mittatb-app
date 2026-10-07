@@ -1,9 +1,17 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   MapFilterType,
   Map,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
+  MapStateActionType,
+  locationToFeature,
+  useMapContext,
 } from '@atb/modules/map';
+import {
+  toSingleLocation,
+  usePendingLocationSearchStore,
+} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {MapTexts, useTranslation} from '@atb/translations';
 import {MapScreenProps} from './navigation-types';
 import {useIsMapTabFocused} from './use-is-map-tab-focused';
 import {Quay, StopPlace} from '@atb/api/types/departures';
@@ -20,6 +28,8 @@ import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen
 import {TripSearchCallerRoute} from '../TabNav_DashboardStack/types';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+
+const LOCATION_SEARCH_RESULT_KEY = 'Map_RootScreen--searchLocation';
 
 export type MapScreenParams = {
   initialFilters?: MapFilterType;
@@ -168,6 +178,36 @@ export const Map_RootScreen = ({
     [navigation],
   );
 
+  const {t} = useTranslation();
+  const {dispatchMapState} = useMapContext();
+  const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
+
+  const navigateToLocationSearch = useCallback(() => {
+    clearPendingResult();
+    navigation.navigate('Root_LocationSearchByTextScreen', {
+      resultKey: LOCATION_SEARCH_RESULT_KEY,
+      label: t(MapTexts.search.label),
+      includeJourneyHistory: false,
+      onlyStopPlacesCheckboxInitialState: false,
+    });
+  }, [clearPendingResult, navigation, t]);
+
+  useEffect(() => {
+    if (pendingResult?.key !== LOCATION_SEARCH_RESULT_KEY) return;
+    const location = toSingleLocation(pendingResult.location);
+    clearPendingResult();
+    if (!location) return;
+
+    if (location.resultType !== 'geolocation' && location.layer === 'venue') {
+      dispatchMapState({
+        type: MapStateActionType.StopPlace,
+        feature: locationToFeature(location),
+      });
+    } else {
+      dispatchMapState({type: MapStateActionType.SelectedLocation, location});
+    }
+  }, [pendingResult, clearPendingResult, dispatchMapState]);
+
   const focusRef = useFocusOnLoad(navigation);
 
   if (isScreenReaderEnabled)
@@ -190,6 +230,7 @@ export const Map_RootScreen = ({
       navigateToPaymentMethods={navigateToPaymentMethods}
       navigateToBonusScreen={navigateToBonusScreen}
       navigateToPricingDetails={navigateToPricingDetails}
+      navigateToLocationSearch={navigateToLocationSearch}
       includeSnackbar={true}
     />
   );

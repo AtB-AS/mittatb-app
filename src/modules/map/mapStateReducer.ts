@@ -1,5 +1,7 @@
 import {Feature, Point} from 'geojson';
 import {MapBottomSheetType} from './MapContext';
+import {Location} from '@atb/modules/favorites';
+import {locationToFeature} from './location-to-feature';
 
 export enum MapStateActionType {
   Vehicle = 'VEHICLE',
@@ -14,6 +16,7 @@ export enum MapStateActionType {
   ExternalMap = 'EXTERNAL_MAP',
   FinishedBooking = 'FINISHED_BOOKING',
   Station = 'STATION',
+  SelectedLocation = 'SELECTED_LOCATION',
   //AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
   None = 'NONE',
 }
@@ -30,6 +33,7 @@ export type ReducerMapState = {
   isStationBasedBooking?: boolean;
   vehicleTypeId?: string;
   stationId?: string;
+  location?: Location;
 };
 
 export type ReducerMapStateAction =
@@ -68,6 +72,10 @@ export type ReducerMapStateAction =
   | {
       type: MapStateActionType.Station;
       feature: Feature<Point>;
+    }
+  | {
+      type: MapStateActionType.SelectedLocation;
+      location: Location;
     }
   | {
       type: MapStateActionType.ExternalMap;
@@ -145,6 +153,12 @@ export const mapStateReducer = (
       return {
         bottomSheetType: MapBottomSheetType.Station,
         feature: action.feature,
+      };
+    case MapStateActionType.SelectedLocation:
+      return {
+        bottomSheetType: MapBottomSheetType.SelectedLocation,
+        feature: locationToFeature(action.location),
+        location: action.location,
       };
     /*case MapStateActionType.AutoDispatchOnMapFocus:
       return {

@@ -80,6 +80,7 @@ export type MapProps = {
   navigateToLogin: () => void;
   navigateToPaymentMethods: () => void;
   navigateToBonusScreen?: () => void;
+  navigateToLocationSearch: () => void;
   navigateToPricingDetails: NavigateToPricingDetails;
 };
 

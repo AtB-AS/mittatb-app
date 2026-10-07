@@ -31,6 +31,8 @@ import {
 } from './types';
 import {ExternalRealtimeMapSheet} from './components/external-realtime-map/ExternalRealtimeMapSheet';
 import {DeparturesDialogSheet} from './components/DeparturesDialogSheet';
+import {SelectedLocationSheet} from './components/SelectedLocationSheet';
+import {MapSearchSheet} from './components/MapSearchSheet';
 
 import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics';
@@ -83,7 +85,8 @@ export const MapBottomSheets = ({
     currentBottomSheet,
   } = useMapContext();
   const isFocusedAndActive = useIsFocusedAndActive();
-  const {data: activeBooking} = useActiveShmoBookingQuery(isFocusedAndActive);
+  const {data: activeBooking, isLoading: activeBookingIsLoading} =
+    useActiveShmoBookingQuery(isFocusedAndActive);
   const {bottomSheetMapRef} = useBottomSheetContext();
 
   useFinishedBookingDetection(isFocusedAndActive, dispatchMapState);
@@ -361,6 +364,29 @@ export const MapBottomSheets = ({
               mapProps.navigateToQuay(...params);
             }}
             navigateToTripSearch={(...params) => {
+              mapProps.navigateToTripSearch(...params);
+            }}
+            locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
+          />
+        )}
+      {mapState.bottomSheetType === MapBottomSheetType.None &&
+        !openPaymentType &&
+        !activeBooking &&
+        !activeBookingIsLoading && (
+          <MapSearchSheet
+            onSearchPress={mapProps.navigateToLocationSearch}
+            locationArrowOnPress={locationArrowOnPress}
+            navigateToScanQrCode={navigateToScanQrCode}
+          />
+        )}
+      {mapState.bottomSheetType === MapBottomSheetType.SelectedLocation &&
+        !!mapState.location && (
+          <SelectedLocationSheet
+            location={mapState.location}
+            onClose={handleCloseSheet}
+            navigateToTripSearch={(...params) => {
+              handleCloseSheet();
               mapProps.navigateToTripSearch(...params);
             }}
             locationArrowOnPress={locationArrowOnPress}

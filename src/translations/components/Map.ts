@@ -62,6 +62,14 @@ const MapTexts = {
       heading: _('Kartfilter', 'Map Filter', 'Kartfilter'),
     },
   },
+  search: {
+    label: _('Søk', 'Search', 'Søk'),
+    placeholder: _(
+      'Søk etter sted eller adresse',
+      'Search for a place or address',
+      'Søk etter stad eller adresse',
+    ),
+  },
   externalRealtimeMap: {
     bottomSheet: {
       heading: _('Sanntidskart', 'Real-time map', 'Sanntidskart'),

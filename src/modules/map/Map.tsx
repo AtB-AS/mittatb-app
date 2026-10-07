@@ -70,6 +70,10 @@ import {
   VehiclesWithClusters,
 } from './components/mobility/VehiclesAndStations';
 import {SelectedFeatureIcon} from './components/SelectedFeatureIcon';
+import {SelectedLocationPin} from './components/SelectedLocationPin';
+import {MapBottomSheetType} from './MapContext';
+import {useFetchReverseGeocoder} from '@atb/modules/geocoder';
+import {Coordinates} from '@atb/utils/coordinates';
 import {ShmoBookingState} from '@atb/api/types/mobility';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {MapBottomSheets} from './MapBottomSheets';
@@ -292,12 +296,34 @@ export const Map = (props: MapProps) => {
    * Step 3: selected the feature
    */
 
+  const fetchReverseGeocoder = useFetchReverseGeocoder();
+  const latestLocationClickRef = useRef(0);
+
+  const selectLocationAt = useCallback(
+    async (coordinates: Coordinates) => {
+      const clickId = ++latestLocationClickRef.current;
+      try {
+        const locations = await fetchReverseGeocoder(coordinates);
+        const location = locations?.[0];
+        // Ignore results from earlier clicks that resolve after a newer one
+        if (!location || clickId !== latestLocationClickRef.current) return;
+        dispatchMapState({type: MapStateActionType.SelectedLocation, location});
+      } catch {
+        // Selecting a location is best effort, nothing to show on failure
+      }
+    },
+    [fetchReverseGeocoder, dispatchMapState],
+  );
+
   const onFeatureClick = useCallback(
     async (feature: Feature) => {
       if (!isFeaturePoint(feature)) return;
-      if (!showGeofencingZones && !isActiveTrip) return;
-
       const {coordinates: positionClicked} = feature.geometry;
+
+      if (!isActiveTrip) {
+        selectLocationAt(mapPositionToCoordinates(positionClicked));
+      }
+      if (!showGeofencingZones && !isActiveTrip) return;
 
       const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
       if (!featuresAtClick || featuresAtClick.length === 0) return;
@@ -341,6 +367,7 @@ export const Map = (props: MapProps) => {
       showGeofencingZoneSnackbar,
       showSnackbar,
       getGeofencingZoneContent,
+      selectLocationAt,
     ],
   );
 
@@ -537,9 +564,16 @@ export const Map = (props: MapProps) => {
             onMapItemClick={onMapItemClick}
           />
 
-          {!activeShmoBooking && (
-            <SelectedFeatureIcon selectedFeature={selectedFeature} />
-          )}
+          {!activeShmoBooking &&
+            mapState.bottomSheetType !==
+              MapBottomSheetType.SelectedLocation && (
+              <SelectedFeatureIcon selectedFeature={selectedFeature} />
+            )}
+
+          {mapState.bottomSheetType === MapBottomSheetType.SelectedLocation &&
+            !!mapState.location && (
+              <SelectedLocationPin location={mapState.location} />
+            )}
 
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
 

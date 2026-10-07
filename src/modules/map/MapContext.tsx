@@ -51,6 +51,7 @@ export enum MapBottomSheetType {
   ExternalMap = 'EXTERNAL_MAP',
   FinishedBooking = 'FINISHED_BOOKING',
   Station = 'STATION',
+  SelectedLocation = 'SELECTED_LOCATION',
   AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
   None = 'NONE',
 }
