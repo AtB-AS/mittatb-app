@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {IconColor, ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {InvalidFill, ValidFill} from '@atb/assets/svg/mono-icons/ticketing';
 import {Info, Warning} from '@atb/assets/svg/mono-icons/status';
@@ -13,6 +13,8 @@ export type TripTicketCardMode = 'valid' | 'activate' | 'expired' | 'invalid';
 
 type TripTicketCardProps = {
   mode: TripTicketCardMode;
+  /** Replaces the icon of the mode */
+  icon?: {svg: ThemeIconProps['svg']; color: IconColor};
   message: string;
   detailText?: string;
   actionText: string;
@@ -21,6 +23,7 @@ type TripTicketCardProps = {
 
 export const TripTicketCard: React.FC<TripTicketCardProps> = ({
   mode,
+  icon,
   message,
   detailText,
   actionText,
@@ -40,7 +43,9 @@ export const TripTicketCard: React.FC<TripTicketCardProps> = ({
       testID="tripTicketCard"
     >
       <View style={styles.content}>
-        {mode === 'valid' ? (
+        {icon ? (
+          <ThemeIcon svg={icon.svg} color={icon.color} />
+        ) : mode === 'valid' ? (
           <ThemeIcon svg={ValidFill} color="valid" />
         ) : mode === 'activate' ? (
           <ThemeIcon svg={Info} color="info" />

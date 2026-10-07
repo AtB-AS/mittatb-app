@@ -260,31 +260,36 @@ const TripDetailsTexts = {
         'Denne reisa treng billett',
       ),
       buyTicket: _('Kjøp', 'Buy', 'Kjøp'),
-      validMessage: (time: string) =>
-        _(
-          `Du har billett, gyldig til ${time}`,
-          `You have a ticket, valid until ${time}`,
-          `Du har billett, gyldig til ${time}`,
-        ),
+      validMessage: _(
+        'Du har billett til denne reisen',
+        'You have a ticket for this trip',
+        'Du har billett til denne reisa',
+      ),
       showTicket: _('Vis billett', 'Show ticket', 'Vis billett'),
       validUntil: (time: string) =>
         _(`Gyldig til ${time}`, `Valid until ${time}`, `Gyldig til ${time}`),
-      expiresBeforeArrival: _(
-        'Går ut før du er fremme',
-        'Expires before you arrive',
-        'Går ut før du er framme',
+      expiresBeforeArrivalMessage: _(
+        'Billetten går ut før du er fremme',
+        'Your ticket expires before you arrive',
+        'Billetten går ut før du er framme',
       ),
       activateMessage: _(
-        'Aktiver billetten rett før du går på',
-        'Activate your ticket right before boarding',
-        'Aktiver billetten rett før du går på',
+        'Husk å aktivere billetten før du går på',
+        'Remember to activate your ticket before boarding',
+        'Hugs å aktivere billetten før du går på',
       ),
-      activateTicket: _('Aktiver', 'Activate', 'Aktiver'),
-      availableOnOtherDevice: _(
-        'Billett tilgjengelig fra annen enhet',
-        'Ticket available on another device',
-        'Billett tilgjengeleg frå anna eining',
+      ticketOnDevice: (deviceName: string) =>
+        _(
+          `Du har billetten på din ${deviceName}`,
+          `Your ticket is on your ${deviceName}`,
+          `Du har billetten på din ${deviceName}`,
+        ),
+      ticketOnTravelCard: _(
+        'Du har billetten på t:kortet ditt',
+        'Your ticket is on your t:card',
+        'Du har billetten på t:kortet ditt',
       ),
+      showShort: _('Vis', 'Show', 'Vis'),
       expiresBeforeNextBoardingMessage: _(
         'Billetten går ut før neste påstigning',
         'Your ticket expires before your next boarding',

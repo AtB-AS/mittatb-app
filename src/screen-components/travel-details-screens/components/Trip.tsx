@@ -28,7 +28,11 @@ import {
 } from '@atb/screen-components/travel-details-map-screen';
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/modules/map';
-import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {
+  TravelTokenTexts,
+  TripDetailsTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {GlobalMessage} from '@atb/modules/global-messages';
@@ -53,6 +57,9 @@ import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {TripTicketCard, TripTicketCardMode} from './TripTicketCard';
+import {Phone} from '@atb/assets/svg/mono-icons/devices';
+import {Travelcard} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketingFill} from '@atb/assets/svg/mono-icons/tab-bar';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -96,8 +103,11 @@ export const Trip: React.FC<TripProps> = ({
   );
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
-  const {mobileTokenStatus} = useMobileTokenContext();
-  const isTicketOnOtherDevice = mobileTokenStatus === 'success-not-inspectable';
+  const {mobileTokenStatus, tokens} = useMobileTokenContext();
+  const inspectableTokenOnOtherDevice =
+    mobileTokenStatus === 'success-not-inspectable'
+      ? tokens.find((token) => token.isInspectable)
+      : undefined;
 
   const ticketCardValidUntilTime =
     ticketCardValidUntil &&
@@ -114,21 +124,48 @@ export const Trip: React.FC<TripProps> = ({
     (ticketCardMode === 'valid' ||
       ticketCardMode === 'activate' ||
       !!purchaseSelection);
+  // A ticket that can't be inspected on this device is the bigger problem, so
+  // where the ticket is replaces the rest of the card when the user has one.
+  const ticketOnOtherDeviceContent =
+    inspectableTokenOnOtherDevice &&
+    (ticketCardMode === 'valid' || ticketCardMode === 'activate')
+      ? {
+          icon:
+            inspectableTokenOnOtherDevice.type === 'travel-card'
+              ? {svg: Travelcard, color: theme.color.brand.primary.background}
+              : {svg: Phone, color: theme.color.foreground.dynamic.primary},
+          message:
+            inspectableTokenOnOtherDevice.type === 'travel-card'
+              ? t(TripDetailsTexts.trip.ticketCard.ticketOnTravelCard)
+              : t(
+                  TripDetailsTexts.trip.ticketCard.ticketOnDevice(
+                    inspectableTokenOnOtherDevice.name ||
+                      t(TravelTokenTexts.toggleToken.unnamedDevice),
+                  ),
+                ),
+          actionText: t(TripDetailsTexts.trip.ticketCard.showShort),
+          onPress: onPressShowTicket,
+        }
+      : undefined;
   const ticketCardContent =
     ticketCardMode &&
     {
       valid: {
         message: t(
-          TripDetailsTexts.trip.ticketCard.validMessage(
-            ticketCardValidUntilTime ?? '',
-          ),
+          ticketCardExpiresBeforeArrival
+            ? TripDetailsTexts.trip.ticketCard.expiresBeforeArrivalMessage
+            : TripDetailsTexts.trip.ticketCard.validMessage,
         ),
         actionText: t(TripDetailsTexts.trip.ticketCard.showTicket),
         onPress: onPressShowTicket,
       },
       activate: {
+        icon: {
+          svg: TicketingFill,
+          color: theme.color.foreground.dark.disabled,
+        },
         message: t(TripDetailsTexts.trip.ticketCard.activateMessage),
-        actionText: t(TripDetailsTexts.trip.ticketCard.activateTicket),
+        actionText: t(TripDetailsTexts.trip.ticketCard.showShort),
         onPress: onPressShowTicket,
       },
       expired: {
@@ -150,14 +187,16 @@ export const Trip: React.FC<TripProps> = ({
     switch (ticketCardMode) {
       case 'valid':
       case 'activate':
-        // A ticket that can't be inspected on this device is the bigger
-        // problem, so its warning is shown instead of when the ticket expires.
-        if (isTicketOnOtherDevice) {
-          return t(TripDetailsTexts.trip.ticketCard.availableOnOtherDevice);
-        }
-        // The valid message already says until when the ticket is valid
-        if (ticketCardMode === 'valid' && ticketCardExpiresBeforeArrival) {
-          return t(TripDetailsTexts.trip.ticketCard.expiresBeforeArrival);
+        if (
+          ticketCardMode === 'valid' &&
+          ticketCardExpiresBeforeArrival &&
+          ticketCardValidUntilTime
+        ) {
+          return t(
+            TripDetailsTexts.trip.ticketCard.validUntil(
+              ticketCardValidUntilTime,
+            ),
+          );
         }
         return undefined;
       case 'expired':
@@ -274,10 +313,10 @@ export const Trip: React.FC<TripProps> = ({
       {shouldShowTicketCard && ticketCardContent && (
         <TripTicketCard
           mode={ticketCardMode}
-          message={ticketCardContent.message}
-          detailText={ticketCardDetailText}
-          actionText={ticketCardContent.actionText}
-          onPress={ticketCardContent.onPress}
+          {...(ticketOnOtherDeviceContent ?? {
+            ...ticketCardContent,
+            detailText: ticketCardDetailText,
+          })}
         />
       )}
       {shortWaitTime && (
