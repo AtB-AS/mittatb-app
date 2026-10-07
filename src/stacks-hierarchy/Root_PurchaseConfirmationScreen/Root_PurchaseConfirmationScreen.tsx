@@ -172,6 +172,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     shouldSavePaymentMethod,
     paymentData,
   });
+
+  const isReservingRef = useRef(false);
+  function reserve() {
+    if (isReservingRef.current) return;
+    isReservingRef.current = true;
+    reserveMutation
+      .mutateAsync()
+      .catch(() => {})
+      .finally(() => {
+        isReservingRef.current = false;
+      });
+  }
+
   useDoOnceWhen(
     () => {
       if (reserveMutation.status !== 'success') return;
@@ -249,11 +262,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   ]);
 
   // Call reserve when payment data is received from the Apple Pay payment sheet
-  useDoOnceWhen(
-    () => paymentData && reserveMutation.mutate(),
-    !!paymentData,
-    false,
-  );
+  useDoOnceWhen(() => paymentData && reserve(), !!paymentData, false);
 
   // When deep link {APP_SCHEME}://purchase-callback is called, save payment
   // method and navigate to active tickets.
@@ -276,7 +285,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
     if (totalPrice === 0) {
       analytics.logEvent('Ticketing', 'Complete free purchase selected');
-      reserveMutation.mutate();
+      reserve();
       return;
     }
 
@@ -296,7 +305,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod: paymentMethod?.paymentType,
       });
-      reserveMutation.mutate();
+      reserve();
     }
   }
 
