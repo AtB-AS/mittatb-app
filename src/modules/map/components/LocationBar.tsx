@@ -68,7 +68,9 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
     <View style={styles.container}>
       <NativeTouchable variant="block" style={{flex: 1}} onPress={onPress}>
         <View style={styles.innerContainer}>
-          <View style={styles.locationContainer}>
+          {/* collapsable={false}: if the view is flattened, swapped
+              children disappear inside the RNGH Touchable on iOS */}
+          <View style={styles.locationContainer} collapsable={false}>
             <Icon
               location={location}
               isLoading={isLoading}
@@ -101,7 +103,7 @@ const Icon: React.FC<{
   return (
     <View style={{marginHorizontal: 12}}>
       {isLoading ? (
-        <Loading animating={true} />
+        <Loading animating={true} size="small" />
       ) : location ? (
         <LocationIcon location={location} />
       ) : hasError ? (
