@@ -241,6 +241,9 @@ const TripDetailsTexts = {
       showTripInMap: {
         label: _('Se i kart', 'Show on map', 'Sjå i kart'),
       },
+      followTripInMap: {
+        label: _('Følg i kart', 'Follow on map', 'Følg i kart'),
+      },
     },
     buyTicket: {
       text: _('Kjøp billett', 'Buy ticket', 'Kjøp billett'),

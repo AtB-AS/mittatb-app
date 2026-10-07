@@ -26,11 +26,9 @@ import {
 } from '@atb/screen-components/travel-details-map-screen';
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
 import {MapFilterType} from '@atb/modules/map';
-import {Divider} from '@atb/components/divider';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useAccessibilityContext} from '@atb/modules/accessibility';
-import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
 import {GlobalMessage} from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -101,6 +99,7 @@ export const Trip: React.FC<TripProps> = ({
     liveVehicleIds,
     isFocusedAndActive,
   );
+  const hasLiveVehicle = (vehiclePositions?.length ?? 0) > 0;
 
   const tripPatternLegs = tripPattern?.legs;
 
@@ -141,6 +140,40 @@ export const Trip: React.FC<TripProps> = ({
 
   return (
     <View style={styles.container}>
+      {!isScreenReaderEnabled && tripPatternLegs && (
+        <CompactTravelDetailsMap
+          serviceJourneyPolylines={tripPatternLegs}
+          fromPlace={tripPatternLegs[0]?.fromPlace}
+          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+          isLive={hasLiveVehicle}
+          buttonText={t(
+            hasLiveVehicle
+              ? TripDetailsTexts.trip.summary.followTripInMap.label
+              : TripDetailsTexts.trip.summary.showTripInMap.label,
+          )}
+          onExpand={() => {
+            shouldShowRequestReview.current = true;
+            onPressDetailsMap({
+              serviceJourneyPolylines: tripPatternLegs,
+              fromPlace: tripPatternLegs[0]?.fromPlace,
+              toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+              vehicles: vehiclePositions?.map((vehicleWithPosition) => {
+                const leg = tripPatternLegs.find(
+                  (l) =>
+                    l.serviceJourney?.id ===
+                    vehicleWithPosition.serviceJourney?.id,
+                );
+                return {
+                  vehicleWithPosition,
+                  mode: leg?.mode,
+                  subMode: leg?.transportSubmode,
+                };
+              }),
+              mapFilter,
+            });
+          }}
+        />
+      )}
       {shouldShowDate && (
         <>
           <ThemeText typography="body__s" type="secondary" style={styles.date}>
@@ -202,11 +235,6 @@ export const Trip: React.FC<TripProps> = ({
       <View style={styles.trip}>
         {tripPattern &&
           filteredLegs.map((leg, index) => {
-            const legVehiclePosition = vehiclePositions?.find(
-              (vehicle) =>
-                vehicle.serviceJourney?.id === leg.serviceJourney?.id,
-            );
-
             return (
               <TripSection
                 key={index}
@@ -217,62 +245,12 @@ export const Trip: React.FC<TripProps> = ({
                 leg={leg}
                 nextLegStartTime={nextDisplayedDeparture(filteredLegs, index)}
                 testID={'leg' + index}
-                onPressShowLive={
-                  !isScreenReaderEnabled && legVehiclePosition
-                    ? (serviceJourneyPolylines: ServiceJourneyPolylines) => {
-                        shouldShowRequestReview.current = true;
-                        onPressDetailsMap({
-                          serviceJourneyPolylines:
-                            serviceJourneyPolylines.mapLegs,
-                          fromPlace: serviceJourneyPolylines.start,
-                          toPlace: serviceJourneyPolylines.stop,
-                          vehicles: [
-                            {
-                              vehicleWithPosition: legVehiclePosition,
-                              mode: leg.mode,
-                              subMode: leg.transportSubmode,
-                            },
-                          ],
-                          followVehicle: true,
-                        });
-                      }
-                    : undefined
-                }
                 onPressDeparture={onPressDeparture}
                 onPressQuay={onPressQuay}
               />
             );
           })}
       </View>
-      <Divider />
-      {!isScreenReaderEnabled && tripPatternLegs && (
-        <CompactTravelDetailsMap
-          serviceJourneyPolylines={tripPatternLegs}
-          fromPlace={tripPatternLegs[0]?.fromPlace}
-          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
-          buttonText={t(TripDetailsTexts.trip.summary.showTripInMap.label)}
-          onExpand={() => {
-            onPressDetailsMap({
-              serviceJourneyPolylines: tripPatternLegs,
-              fromPlace: tripPatternLegs[0]?.fromPlace,
-              toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-              vehicles: vehiclePositions?.map((vehicleWithPosition) => {
-                const leg = tripPatternLegs.find(
-                  (l) =>
-                    l.serviceJourney?.id ===
-                    vehicleWithPosition.serviceJourney?.id,
-                );
-                return {
-                  vehicleWithPosition,
-                  mode: leg?.mode,
-                  subMode: leg?.transportSubmode,
-                };
-              }),
-              mapFilter,
-            });
-          }}
-        />
-      )}
       <SaveTripPatternButtonComponent tripPattern={tripPattern} now={now} />
     </View>
   );
