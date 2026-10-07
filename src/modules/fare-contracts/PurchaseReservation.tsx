@@ -5,8 +5,13 @@ import {
   Reservation,
   PaymentType,
   useTicketingContext,
+  useCancelPaymentMutation,
 } from '@atb/modules/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseConfirmationTexts,
+  TicketingTexts,
+  useTranslation,
+} from '@atb/translations';
 import {openUrl} from '@atb/utils/open-url';
 import React from 'react';
 import {View} from 'react-native';
@@ -16,6 +21,7 @@ import {NativeTouchable} from '@atb/components/native-touchable';
 import {WithValidityLine} from './components/WithValidityLine';
 import {getReservationStatus} from './utils';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = {
   reservation: Reservation;
@@ -27,6 +33,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
+  const cancelMutation = useCancelPaymentMutation();
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
@@ -81,9 +88,9 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
           <ThemeText style={styles.detail}>
             {t(TicketingTexts.reservation.orderId(reservation.orderId))}
           </ThemeText>
-          {reservation.paymentType === PaymentType.Vipps &&
-            status === 'reserving' && (
-              <View style={styles.vippsLinkContainer}>
+          {status === 'reserving' && (
+            <View style={styles.actions}>
+              {reservation.paymentType === PaymentType.Vipps && (
                 <Button
                   expanded={true}
                   onPress={async () => await openUrl(reservation.url)}
@@ -92,8 +99,27 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
                   mode="tertiary"
                   backgroundColor={theme.color.background.neutral[0]}
                 />
-              </View>
-            )}
+              )}
+              {!cancelMutation.isSuccess && (
+                <Button
+                  expanded={true}
+                  onPress={() =>
+                    cancelMutation.mutate({payment: reservation, isUser: true})
+                  }
+                  text={t(PurchaseConfirmationTexts.cancelPayment)}
+                  mode="tertiary"
+                  backgroundColor={theme.color.background.neutral[0]}
+                  loading={cancelMutation.isPending}
+                />
+              )}
+            </View>
+          )}
+          {cancelMutation.isError && (
+            <MessageInfoBox
+              type="error"
+              message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+            />
+          )}
         </GenericSectionItem>
       </Section>
     </NativeTouchable>
@@ -108,7 +134,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   detail: {
     paddingVertical: theme.spacing.xSmall,
   },
-  vippsLinkContainer: {
+  actions: {
     flex: 1,
+    rowGap: theme.spacing.small,
   },
 }));
