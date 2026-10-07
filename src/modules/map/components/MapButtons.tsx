@@ -6,6 +6,7 @@ import {
   isVehicle,
   MapFilter,
   useActiveShmoBookingQuery,
+  useGetOperatorsQuery,
   useInitShmoBookingMutationStatus,
 } from '@atb/modules/mobility';
 import {LocationArrow} from './LocationArrow';
@@ -38,7 +39,13 @@ export const MapButtons = ({
   const {isMutating: initShmoOneStopBookingIsMutating} =
     useInitShmoBookingMutationStatus();
 
+  const {data: operatorsData} = useGetOperatorsQuery();
+  const hasScannableOperators = !!operatorsData?.operators?.some(
+    (operator) => operator.qrScanEnabled,
+  );
+
   const showScanButton =
+    hasScannableOperators &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&
