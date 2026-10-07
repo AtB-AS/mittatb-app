@@ -12,6 +12,7 @@ export async function openInAppBrowser(
   successUrl?: string,
   onSuccess?: (url: string) => void,
   onCancel?: () => void,
+  onError?: () => void,
 ) {
   const statusBarStyle = StatusBar.pushStackEntry({
     barStyle: successUrl ? 'light-content' : 'dark-content',
@@ -49,6 +50,7 @@ export async function openInAppBrowser(
     }
   } catch (error: any) {
     notifyBugsnag(error);
+    onError?.();
   }
   StatusBar.popStackEntry(statusBarStyle);
 }
