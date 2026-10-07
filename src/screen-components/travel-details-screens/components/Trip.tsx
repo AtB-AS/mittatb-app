@@ -132,7 +132,7 @@ export const Trip: React.FC<TripProps> = ({
       ? {
           icon:
             inspectableTokenOnOtherDevice.type === 'travel-card'
-              ? {svg: Travelcard, color: theme.color.brand.primary.background}
+              ? {svg: Travelcard, color: 'valid'}
               : {svg: Phone, color: theme.color.foreground.dynamic.primary},
           message:
             inspectableTokenOnOtherDevice.type === 'travel-card'
