@@ -20,10 +20,7 @@ import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import type {TripSearchTime} from '../../types';
-import {ResultRow} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultRow';
 import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {getTripPatternKey} from '@atb/modules/trip-patterns';
 import {Skeleton} from '@atb/components/skeleton';
 import {
@@ -42,7 +39,6 @@ type Props = {
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   tripsIsError: boolean;
   tripsIsNetworkError: boolean;
-  searchTime: TripSearchTime;
 };
 
 export const Results: React.FC<Props> = ({
@@ -54,14 +50,10 @@ export const Results: React.FC<Props> = ({
   onDetailsPressed,
   tripsIsError,
   tripsIsNetworkError,
-  searchTime,
 }) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const now = useNow(30000);
-  const isExperimentalEnabled = useIsExperimentalEnabled(
-    'isNewTripSearchEnabled',
-  );
 
   if (showEmptyScreen) {
     return null;
@@ -102,85 +94,55 @@ export const Results: React.FC<Props> = ({
     (tp) => !getIsTooLateToBookFlexLine(tp, now),
   );
 
-  if (isExperimentalEnabled) {
-    const slotCount =
-      filteredTripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
-
-    return (
-      <View style={styles.container} testID="tripSearchContentView">
-        {Array.from({length: slotCount}, (_, i) => {
-          const tripPattern = filteredTripPatterns[i];
-          return (
-            <Fragment
-              key={
-                tripPattern ? getTripPatternKey(tripPattern) : `__skeleton_${i}`
-              }
-            >
-              {tripPattern ? (
-                <DayLabel
-                  departureTime={tripPattern.expectedStartTime}
-                  previousDepartureTime={
-                    filteredTripPatterns[i - 1]?.expectedStartTime
-                  }
-                />
-              ) : (
-                i === 0 && <Skeleton style={styles.dayLabelSkeleton} />
-              )}
-              <WithTravelCardSkeleton>
-                {tripPattern &&
-                  (({onReady}) => (
-                    <SaveableTripSearchResultRow tripPattern={tripPattern}>
-                      {(isSaved) => (
-                        <TravelCard
-                          tripPattern={tripPattern}
-                          onDetailsPressed={onDetailsPressed}
-                          testID={'tripSearchSearchResult' + i}
-                          a11yLabelPrefix={t(
-                            TravelCardTexts.card.a11yPrefix.tripSuggestion(
-                              i,
-                              filteredTripPatterns.length,
-                            ),
-                          )}
-                          a11yHint={t(
-                            TravelCardTexts.card.a11yHint.tripDetails,
-                          )}
-                          onReady={onReady}
-                          isSaved={isSaved}
-                        />
-                      )}
-                    </SaveableTripSearchResultRow>
-                  ))}
-              </WithTravelCardSkeleton>
-            </Fragment>
-          );
-        })}
-      </View>
-    );
-  }
+  const slotCount =
+    filteredTripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
-      {filteredTripPatterns.map((tripPattern, i) => (
-        <Fragment key={tripPattern.key}>
-          <DayLabel
-            departureTime={tripPattern.expectedStartTime}
-            previousDepartureTime={
-              filteredTripPatterns[i - 1]?.expectedStartTime
+      {Array.from({length: slotCount}, (_, i) => {
+        const tripPattern = filteredTripPatterns[i];
+        return (
+          <Fragment
+            key={
+              tripPattern ? getTripPatternKey(tripPattern) : `__skeleton_${i}`
             }
-          />
-          <SaveableTripSearchResultRow tripPattern={tripPattern}>
-            {() => (
-              <ResultRow
-                tripPattern={tripPattern}
-                onDetailsPressed={onDetailsPressed}
-                resultIndex={i}
-                searchTime={searchTime}
-                testID={'tripSearchSearchResult' + i}
+          >
+            {tripPattern ? (
+              <DayLabel
+                departureTime={tripPattern.expectedStartTime}
+                previousDepartureTime={
+                  filteredTripPatterns[i - 1]?.expectedStartTime
+                }
               />
+            ) : (
+              i === 0 && <Skeleton style={styles.dayLabelSkeleton} />
             )}
-          </SaveableTripSearchResultRow>
-        </Fragment>
-      ))}
+            <WithTravelCardSkeleton>
+              {tripPattern &&
+                (({onReady}) => (
+                  <SaveableTripSearchResultRow tripPattern={tripPattern}>
+                    {(isSaved) => (
+                      <TravelCard
+                        tripPattern={tripPattern}
+                        onDetailsPressed={onDetailsPressed}
+                        testID={'tripSearchSearchResult' + i}
+                        a11yLabelPrefix={t(
+                          TravelCardTexts.card.a11yPrefix.tripSuggestion(
+                            i,
+                            filteredTripPatterns.length,
+                          ),
+                        )}
+                        a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
+                        onReady={onReady}
+                        isSaved={isSaved}
+                      />
+                    )}
+                  </SaveableTripSearchResultRow>
+                ))}
+            </WithTravelCardSkeleton>
+          </Fragment>
+        );
+      })}
     </View>
   );
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import {ScrollView} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Skeleton, SkeletonBlock} from '@atb/components/skeleton';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 import {
   TranslateFunction,
@@ -32,10 +31,9 @@ export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
   const {theme} = useThemeContext();
   const interactiveColor = theme.color.interactive[2];
   const style = useStyle();
-  const isNewTripSearch = useIsExperimentalEnabled('isNewTripSearchEnabled');
   const {data: tripPatterns, isLoading} = useNonTransitTripsQuery(tripsProps);
 
-  if (isNewTripSearch && isLoading) {
+  if (isLoading) {
     return (
       <Skeleton style={[style.container, style.skeletonContainer]}>
         <SkeletonBlock style={style.skeletonPill} />

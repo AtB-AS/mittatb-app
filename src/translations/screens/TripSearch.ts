@@ -136,11 +136,6 @@ const TripSearchTexts = {
       'Load more results',
       'Last inn fleire reiseforslag',
     ),
-    fetchingMore: _(
-      'Søker etter flere reiseforslag',
-      'Loading more results',
-      'Søker etter fleire reiseforslag',
-    ),
     unableToFetchMore: _(
       'Finner ikke flere reiseforslag. Forsøk å endre dato og søketidspunkt',
       'Unable to load more results. Please try a different date and time.',
