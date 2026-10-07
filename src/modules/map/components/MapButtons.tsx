@@ -6,6 +6,7 @@ import {
   isVehicle,
   MapFilter,
   useActiveShmoBookingQuery,
+  useGetOperatorsQuery,
   useInitShmoBookingMutationStatus,
 } from '@atb/modules/mobility';
 import {LocationArrow} from './LocationArrow';
@@ -13,6 +14,7 @@ import {ScanButton} from './ScanButton';
 import {LayoutChangeEvent, View} from 'react-native';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {BonusBalanceButton} from '@atb/modules/bonus';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 
 export const MapButtons = ({
   navigateToScanQrCode,
@@ -38,7 +40,15 @@ export const MapButtons = ({
   const {isMutating: initShmoOneStopBookingIsMutating} =
     useInitShmoBookingMutationStatus();
 
+  const {data: operatorsData} = useGetOperatorsQuery();
+  const hasScannableOperators = !!operatorsData?.operators?.some(
+    (operator) => operator.qrScanEnabled,
+  );
+  const {knownQrCodeUrls} = useFirestoreConfigurationContext();
+  const hasKnownQrCodeUrls = knownQrCodeUrls.length > 0;
+
   const showScanButton =
+    (hasScannableOperators || hasKnownQrCodeUrls) &&
     !activeShmoBooking &&
     !activeShmoBookingIsLoading &&
     (!selectedFeature || selectedFeatureIsAVehicle) &&
