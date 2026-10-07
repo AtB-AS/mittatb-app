@@ -68,8 +68,16 @@ describe('Find journey', () => {
       );
       expect(departureInDetails).toContain(departure);
 
+      // Check travel time
+      const travelTimeInDep =
+        await TravelsearchDetailsPage.travelTime.getText();
+      expect(timeIsCorrect(travelTimeInDep, travelTime)).toEqual(true);
+
       // Check end time and arrival
-      await AppHelper.scrollDownUntilId('tripDetailsContentView', 'travelTime');
+      await AppHelper.scrollDownUntilId(
+        'tripDetailsContentView',
+        `leg${noLegs - 1}ToPlace`,
+      );
       const endTimeInDetails = await TravelsearchDetailsPage.getTime(
         'end',
         noLegs - 1,
@@ -82,11 +90,6 @@ describe('Find journey', () => {
         noLegs - 1,
       );
       expect(arrivalInDetails).toContain(arrival);
-
-      // Check travel time
-      const travelTimeInDep =
-        await TravelsearchDetailsPage.travelTime.getText();
-      expect(timeIsCorrect(travelTimeInDep, travelTime)).toEqual(true);
 
       await NavigationHelper.back();
 

@@ -255,7 +255,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           <AccessibleText
             style={style.a11yHelper}
             prefix={t(
-              TripDetailsTexts.legacy.trip.leg.a11yHelper(
+              TripDetailsTexts.trip.leg.a11yHelper(
                 step,
                 t(getTranslatedModeName(leg.mode)),
               ),
