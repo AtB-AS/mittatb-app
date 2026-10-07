@@ -272,6 +272,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && offerExpirationTime < Date.now()) {
       refreshOffer();
+      return;
     }
     if (totalPrice === 0) {
       analytics.logEvent('Ticketing', 'Complete free purchase selected');
