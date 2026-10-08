@@ -60,7 +60,7 @@ export const Root_ParkingPhotoScreen = ({
         event: ShmoBookingEventType.FINISH,
         fileName: 'scooterPhoto.jpg',
         fileType: 'image/jpg',
-        fileData: 'nefdjakfnajsnfsajn',
+        fileData: fileData,
       };
       logEvent('Mobility', 'Shmo booking finished', {
         bookingId: bookingId,
