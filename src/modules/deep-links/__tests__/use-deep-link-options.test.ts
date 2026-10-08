@@ -137,6 +137,13 @@ describe('privacy', () => {
   });
 });
 
+describe('payment-methods', () => {
+  it('opens the payment methods screen on top of the profile screen', () => {
+    const state = getStateFrom('payment-methods');
+    expect(findRoute(state, 'Profile_PaymentMethodsScreen')).toBeDefined();
+  });
+});
+
 describe('points', () => {
   it('opens the bonus screen when bonus is enabled', () => {
     mockIsBonusEnabled = true;

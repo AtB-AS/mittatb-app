@@ -6,7 +6,7 @@ class TravelSearchDetailsPage {
    * Get the travel time
    */
   get travelTime() {
-    const reqId = `//*[@resource-id="travelTime"]`;
+    const reqId = `//*[@resource-id="resultDuration"]`;
     return $(reqId);
   }
 

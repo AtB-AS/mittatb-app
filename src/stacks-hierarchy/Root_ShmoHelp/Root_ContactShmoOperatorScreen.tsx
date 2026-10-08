@@ -3,6 +3,8 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
+import {secondsToDuration} from '@atb/utils/date';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {
   PhoneInputSectionItem,
@@ -27,8 +29,13 @@ import {useSendSupportRequestMutation} from '@atb/modules/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {useProfileQuery} from '@atb/queries';
 import {CustomerProfile} from '@atb/api/types/profile';
-import {useNavigation} from '@react-navigation/native';
-import {useOperators} from '@atb/modules/mobility';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  isActiveTripBooking,
+  useActiveShmoBookingQuery,
+  useOperators,
+  useVehicleQuery,
+} from '@atb/modules/mobility';
 import {FullScreenView} from '@atb/components/screen-view';
 
 export type Root_ContactShmoOperatorScreenProps =
@@ -37,7 +44,7 @@ export type Root_ContactShmoOperatorScreenProps =
 export const Root_ContactShmoOperatorScreen = ({
   route,
 }: Root_ContactShmoOperatorScreenProps) => {
-  const {operatorId} = route.params;
+  const {operatorId, formFactor} = route.params;
   const vehicleId =
     'vehicleId' in route.params ? route.params?.vehicleId : undefined;
   const bookingId =
@@ -47,8 +54,20 @@ export const Root_ContactShmoOperatorScreen = ({
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
+  const isFocused = useIsFocused();
+
+  /* The trip length the operator allows is configured per vehicle type. It is read
+     off the booking while a trip is running, since a rented vehicle leaves the
+     vehicles feed for the duration of the trip, and off the vehicle otherwise. */
+  const {data: activeBooking} = useActiveShmoBookingQuery(isFocused);
+  const {data: vehicle} = useVehicleQuery(vehicleId);
+  const activeTrip = isActiveTripBooking(activeBooking)
+    ? activeBooking
+    : undefined;
+  const maxRentalDuration =
+    activeTrip?.asset.maxRentalDuration ?? vehicle?.maxRentalDuration;
 
   const onSuccess = () => {
     navigation.navigate('Root_ContactShmoOperatorConfirmationScreen', {
@@ -101,16 +120,22 @@ export const Root_ContactShmoOperatorScreen = ({
             )
           }
         />
-        {requestBody.supportType === SupportType.UNABLE_TO_CLOSE && (
-          <MessageInfoBox
-            message={t(
-              ContactShmoOperatorTexts.supportType.noEndInfo(
-                operatorName ?? '',
-              ),
-            )}
-            type="info"
-          />
-        )}
+        {requestBody.supportType === SupportType.UNABLE_TO_CLOSE &&
+          !!maxRentalDuration && (
+            <MessageInfoBox
+              message={t(
+                ContactShmoOperatorTexts.supportType.noEndInfo(
+                  operatorName ?? '',
+                  secondsToDuration(
+                    maxRentalDuration / ONE_SECOND_MS,
+                    language,
+                  ),
+                  formFactor,
+                ),
+              )}
+              type="info"
+            />
+          )}
         <ContentHeading text={t(ContactShmoOperatorTexts.comment.header)} />
         <Section>
           <TextInputSectionItem

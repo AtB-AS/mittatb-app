@@ -1,6 +1,6 @@
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "We use your location to display it on maps and in travel searches, and to find stops and places nearby.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Your location is used to find places nearby in map and search and is required to use e-scooters and city bikes.";
 
-"NSLocationWhenInUseUsageDescription" = "We use your location to display it on maps and in travel searches, and to find stops and places nearby.";
+"NSLocationWhenInUseUsageDescription" = "Your location is used to find places nearby in map and search and is required to use e-scooters and city bikes.";
 
 "NSCameraUsageDescription" = "We use camera to capture the image of wrongfully parked electric scooters, and scan the QR code on the electric scooters.";
 

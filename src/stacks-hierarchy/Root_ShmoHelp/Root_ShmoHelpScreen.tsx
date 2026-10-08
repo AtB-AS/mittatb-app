@@ -48,6 +48,7 @@ export const Root_ShmoHelpScreen = ({
 
   const contactParams = {
     operatorId,
+    formFactor,
     ...(vehicleId
       ? {vehicleId}
       : bookingId
@@ -97,14 +98,14 @@ export const Root_ShmoHelpScreen = ({
             <ExpandableSectionItem
               key={item.id}
               text={getTextForLanguage(item.title, language) ?? ''}
-              textType="body__m__strong"
+              textType="body__m"
               showIconText={false}
               expanded={currentlyOpenFaqIndex === index}
               onPress={() => {
                 setCurrentlyOpenFaqIndex(index);
               }}
               expandContent={
-                <ThemeText isMarkdown={true}>
+                <ThemeText isMarkdown={true} type="secondary">
                   {getTextForLanguage(item.description, language)}
                 </ThemeText>
               }
