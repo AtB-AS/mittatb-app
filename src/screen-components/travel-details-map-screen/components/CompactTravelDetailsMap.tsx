@@ -1,5 +1,5 @@
 import {MapCameraConfig, useMapViewConfig} from '@atb/modules/map';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
@@ -14,12 +14,16 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
+import {shadows} from '@atb/modules/map';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
   buttonText: string;
+  isLive?: boolean;
   onExpand?(): void;
 };
 
@@ -28,9 +32,11 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   fromPlace,
   toPlace,
   buttonText,
+  isLive = false,
   onExpand,
 }) => {
   const {t} = useTranslation();
+  const {themeName} = useThemeContext();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
   const features = useMemo(
@@ -92,35 +98,54 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
             />
           )}
         </MapboxGL.MapView>
+        <View style={styles.pillOverlay} pointerEvents="box-none">
+          <NativeTouchable
+            variant="block"
+            style={styles.pill}
+            onPress={onExpand}
+            accessibilityRole="button"
+          >
+            {isLive && (
+              <ThemeIcon
+                svg={themeName === 'dark' ? RealtimeDark : RealtimeLight}
+                size="small"
+              />
+            )}
+            <ThemeText typography="body__s__strong" type="primary">
+              {buttonText}
+            </ThemeText>
+            <ThemeIcon svg={ChevronRight} />
+          </NativeTouchable>
+        </View>
       </View>
-      <NativeTouchable
-        variant="block"
-        style={styles.button}
-        onPress={onExpand}
-        accessibilityRole="button"
-      >
-        <ThemeText typography="body__s__strong" type="primary">
-          {buttonText}
-        </ThemeText>
-        <ThemeIcon svg={ChevronRight} />
-      </NativeTouchable>
     </View>
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   mapContainer: {
     height: 120,
-    borderTopRightRadius: theme.border.radius.regular,
-    borderTopLeftRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
-  button: {
+  pillOverlay: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: theme.spacing.medium,
+  },
+  pill: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: theme.spacing.medium,
+    alignItems: 'center',
+    gap: theme.spacing.xSmall,
+    paddingVertical: theme.spacing.xSmall,
+    paddingHorizontal: theme.spacing.medium,
     backgroundColor: theme.color.background.neutral[0].background,
-    borderBottomRightRadius: theme.border.radius.regular,
-    borderBottomLeftRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.circle,
+    ...shadows,
   },
   map: {
     width: '100%',

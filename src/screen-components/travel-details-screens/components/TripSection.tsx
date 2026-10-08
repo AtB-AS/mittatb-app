@@ -55,9 +55,6 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from './Trip';
 import {Button} from '@atb/components/button';
-import {Map} from '@atb/assets/svg/mono-icons/map';
-import {ServiceJourneyPolylines} from '@atb/api/types/serviceJourney';
-import {useServiceJourneyPolylineQuery} from '../use-service-journey-polyline-query';
 import {useRealtimeText} from '../use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
@@ -93,7 +90,6 @@ type TripSectionProps = {
    */
   nextLegStartTime?: string;
   testID?: string;
-  onPressShowLive?(serviceJourneyPolylines: ServiceJourneyPolylines): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -106,13 +102,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
   leg,
   nextLegStartTime,
   testID,
-  onPressShowLive,
   onPressDeparture,
   onPressQuay,
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {theme, themeName} = useThemeContext();
+  const {themeName} = useThemeContext();
   const onCloseFocusRef = React.useRef(null);
   const bottomSheetModalRef = React.useRef<BottomSheetModalMethods | null>(
     null,
@@ -144,12 +139,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
-  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
-    leg.serviceJourney?.id,
-    leg.fromPlace.quay?.id,
-    leg.toPlace.quay?.id,
-  );
-
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(30000);
@@ -168,8 +157,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   function openBookingDetails() {
     bottomSheetModalRef.current?.present();
   }
-
-  const translatedModeName = getTranslatedModeName(leg.mode);
 
   const showQuayDescription =
     !!leg.fromPlace.quay?.description && !isWalkSection && !isBikeSection;
@@ -537,19 +524,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
               </TripRow>
             </View>
           )}
-          {onPressShowLive && serviceJourneyPolyline ? (
-            <TripRow dimensionOverrides={NEW_TRIP_DIMENSIONS}>
-              <Button
-                type="small"
-                expanded={false}
-                mode="secondary"
-                leftIcon={{svg: Map}}
-                text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
-                backgroundColor={theme.color.background.neutral[0]}
-                onPress={() => onPressShowLive(serviceJourneyPolyline)}
-              />
-            </TripRow>
-          ) : null}
           {hasIntermediateStops && (
             <IntermediateInfo
               leg={leg}
