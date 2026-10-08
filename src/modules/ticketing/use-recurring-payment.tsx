@@ -31,7 +31,7 @@ export const useRecurringPayment = () => {
     isError: recurringPaymentError,
     isFetching: recurringPaymentFetching,
     isLoading: recurringPaymentIsLoading,
-  } = useListRecurringPaymentsQuery();
+  } = useListRecurringPaymentsQuery(true);
 
   const {
     mutateAsync: deleteRecurringPayment,

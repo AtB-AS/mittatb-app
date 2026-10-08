@@ -32,10 +32,13 @@ export const useShmoRequirements = (
     (preReq) => preReq.type === PreReqType.AGE_VERIFICATION,
   );
   const operatorAgeLimit = ageVerificationPreReq?.minAge ?? 0;
+  const paymentMethodPreReq = preReqs?.find(
+    (preReq) => preReq.type === PreReqType.PAYMENT_METHOD,
+  );
 
   const {preciseLocationIsAvailable} = useGeolocationContext();
   const {data: recurringPayments, isLoading: paymentsLoading} =
-    useListRecurringPaymentsQuery();
+    useListRecurringPaymentsQuery(!!paymentMethodPreReq);
 
   const {data: ageVerification, isLoading: ageVerifiedLoading} =
     useGetAgeVerificationQuery(operatorAgeLimit, !!ageVerificationPreReq);

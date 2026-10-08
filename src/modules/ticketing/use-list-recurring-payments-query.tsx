@@ -5,7 +5,7 @@ import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 export const LIST_RECURRING_PAYMENTS_QUERY_KEY = 'getListRecurringPayments';
 
-export const useListRecurringPaymentsQuery = () => {
+export const useListRecurringPaymentsQuery = (enabled: boolean) => {
   const {authenticationType, abtCustomerId} = useAuthContext();
 
   return useQuery({
@@ -21,5 +21,6 @@ export const useListRecurringPaymentsQuery = () => {
       return [];
     },
     gcTime: ONE_HOUR_MS,
+    enabled,
   });
 };
