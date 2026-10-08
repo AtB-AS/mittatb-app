@@ -1,4 +1,7 @@
-<img width="500px" src="https://github.com/user-attachments/assets/ba3d33f5-58a1-4d17-b097-7bf6b589d7e1">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/336e3c7d-b8e5-45c3-b192-24ac8103e413">
+  <img width="500px" src="https://github.com/user-attachments/assets/8b0a0d69-b478-426b-af4b-c3cd0b17b6e8" alt="Logo">
+</picture>
 
 # AtB app
 
