@@ -16,7 +16,7 @@ export function usePreviousPaymentMethods(): {
   previousPaymentMethod: PaymentMethod | undefined;
 } {
   const {userId} = useAuthContext();
-  const {data: recurringPayments} = useListRecurringPaymentsQuery();
+  const {data: recurringPayments} = useListRecurringPaymentsQuery(true);
   const [previousPaymentMethod, setPreviousPaymentMethod] =
     useState<PaymentMethod>();
   const {paymentTypes} = useFirestoreConfigurationContext();
