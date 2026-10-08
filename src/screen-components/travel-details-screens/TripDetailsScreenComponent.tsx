@@ -3,7 +3,10 @@ import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
-import {hasLegsWeCantSellTicketsFor} from '@atb/modules/operator-config';
+import {
+  currentAppAuthorityId,
+  hasLegsWeCantSellTicketsFor,
+} from '@atb/modules/operator-config';
 import {
   FareProductTypeConfig,
   FareZone,
@@ -24,6 +27,7 @@ import {
   getRemainingLegs,
   getTicketInfoForExpressBoatBookingTrip,
   getTripPatternAnalytics,
+  isTripInTicketCardScope,
   type TripAnalytics,
 } from './utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
@@ -114,11 +118,20 @@ export const TripDetailsScreenComponent = ({
     fareZones,
     serverNow,
   );
+  // The ticket card only supports some trips, see `isTripInTicketCardScope`.
+  // Other trips get the regular buy ticket button.
+  const shouldUseTripTicketCard =
+    isTripTicketCardEnabled &&
+    isTripInTicketCardScope(
+      updatedTripPattern.legs,
+      fareZones,
+      currentAppAuthorityId,
+    );
 
   // With the ticket card, a trip in progress only offers a ticket for the
   // remaining part of it, like after the ticket it started with has expired.
   const purchaseSelection = usePurchaseSelectionFromTrip(
-    isTripTicketCardEnabled
+    shouldUseTripTicketCard
       ? {
           ...updatedTripPattern,
           legs: getRemainingLegs(updatedTripPattern.legs, serverNow),
@@ -190,7 +203,9 @@ export const TripDetailsScreenComponent = ({
               onPressShowTicket={() =>
                 onPressShowTicket(tripAnalytics, ticketCardState?.mode)
               }
-              ticketCardMode={ticketCardState?.mode}
+              ticketCardMode={
+                shouldUseTripTicketCard ? ticketCardState?.mode : undefined
+              }
               ticketCardValidUntil={ticketCardState?.validUntil}
               ticketCardExpiresBeforeArrival={
                 ticketCardState?.expiresBeforeArrival
@@ -200,7 +215,7 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       </FullScreenView>
-      {!isTripTicketCardEnabled && purchaseSelection && (
+      {!shouldUseTripTicketCard && purchaseSelection && (
         <View style={styles.borderTop}>
           <Button
             expanded={true}

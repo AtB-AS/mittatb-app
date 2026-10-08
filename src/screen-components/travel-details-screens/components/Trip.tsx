@@ -53,7 +53,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {TripTicketCard, TripTicketCardMode} from './TripTicketCard';
@@ -98,9 +97,6 @@ export const Trip: React.FC<TripProps> = ({
   const {theme} = useThemeContext();
   const {isScreenReaderEnabled} = useAccessibilityContext();
   const {enable_ticketing} = useRemoteConfigContext();
-  const isTripTicketCardEnabled = useIsExperimentalEnabled(
-    'isTripTicketCardEnabled',
-  );
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
   const {mobileTokenStatus, tokens} = useMobileTokenContext();
@@ -119,7 +115,6 @@ export const Trip: React.FC<TripProps> = ({
   // The states that lead to buying a ticket are only shown when there is
   // something to buy.
   const shouldShowTicketCard =
-    isTripTicketCardEnabled &&
     !!ticketCardMode &&
     (ticketCardMode === 'valid' ||
       ticketCardMode === 'activate' ||

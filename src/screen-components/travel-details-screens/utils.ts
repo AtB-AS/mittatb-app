@@ -404,6 +404,35 @@ export function hasLegsFromOtherAuthorities(
 }
 
 /**
+ * Whether the trip ticket card supports the trip. Scoped to the trips where
+ * fare rules are simplest, so it is safe to roll out to every organization.
+ * Other trips get the regular buy ticket button.
+ * - It has legs that need a ticket, all operated for the given authority.
+ * - Each of them has a sub mode we sell bus tickets for, so trams are included.
+ * - A single fare zone we sell tickets for covers every stop. A stop on a zone
+ *   border counts for each of its zones.
+ */
+export function isTripInTicketCardScope(
+  legs: Leg[],
+  fareZones: ConfigFareZone[],
+  authorityId: string,
+): boolean {
+  const nonFreeLegs = getNonFreeLegs(legs);
+  if (!nonFreeLegs.length) return false;
+  if (hasLegsFromOtherAuthorities(nonFreeLegs, authorityId)) return false;
+  const hasOnlyBusTicketLegs = nonFreeLegs.every((leg) =>
+    BUS_TICKET_SUBMODES.includes(leg.transportSubmode ?? ''),
+  );
+  if (!hasOnlyBusTicketLegs) return false;
+
+  const fareZoneIdsPerStop = getFareZoneIdsPerStop(nonFreeLegs, fareZones);
+  if (!fareZoneIdsPerStop?.length) return false;
+  return fareZoneIdsPerStop[0].some((fareZoneId) =>
+    fareZoneIdsPerStop.every((fareZoneIds) => fareZoneIds.includes(fareZoneId)),
+  );
+}
+
+/**
  * When the traveller boards the leg: when it actually departed if that is
  * known, otherwise when it is expected to depart.
  */
