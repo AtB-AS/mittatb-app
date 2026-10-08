@@ -12,6 +12,7 @@ import {
 import {
   canActivateCarnetForTrip,
   getLastAlightingTime,
+  getValidityEndAtDepartedBoardings,
   getValidityEndAtFirstBoarding,
   hasLegsFromOtherAuthorities,
   isFareContractApplicableToTrip,
@@ -308,6 +309,61 @@ describe('getValidityEndAtFirstBoarding', () => {
         at(10),
       );
     });
+  });
+});
+
+describe('getValidityEndAtDepartedBoardings', () => {
+  const legs = [leg(0), leg(30), leg(60)];
+
+  it('returns the end of a ticket valid at the first boarding', () => {
+    const fc = fareContract(travelRight({endDateTime: at(45)}));
+    expect(
+      getValidityEndAtDepartedBoardings(legs, fc, at(40).getTime()),
+    ).toEqual(at(45));
+  });
+
+  it('returns the end of a ticket bought after the first boarding', () => {
+    const fc = fareContract(
+      travelRight({startDateTime: at(20), endDateTime: at(45)}),
+    );
+    expect(
+      getValidityEndAtDepartedBoardings(legs, fc, at(50).getTime()),
+    ).toEqual(at(45));
+  });
+
+  it('only checks the boardings that have departed', () => {
+    const fc = fareContract(
+      travelRight({startDateTime: at(20), endDateTime: at(45)}),
+    );
+    expect(
+      getValidityEndAtDepartedBoardings(legs, fc, at(25).getTime()),
+    ).toBeUndefined();
+  });
+
+  it('is undefined when the ticket was not valid at any departed boarding', () => {
+    const fc = fareContract(
+      travelRight({startDateTime: at(35), endDateTime: at(55)}),
+    );
+    expect(
+      getValidityEndAtDepartedBoardings(legs, fc, at(58).getTime()),
+    ).toBeUndefined();
+  });
+
+  it('ignores the departure time of legs that do not need a ticket', () => {
+    const fc = fareContract(
+      travelRight({startDateTime: at(0), endDateTime: at(5)}),
+    );
+    const withWalk = [leg(0, Mode.Foot, undefined), leg(10)];
+    expect(
+      getValidityEndAtDepartedBoardings(withWalk, fc, at(20).getTime()),
+    ).toBeUndefined();
+  });
+
+  it('returns the end of the carnet access activated at a departed boarding', () => {
+    const fc = carnet([{startDateTime: at(25), endDateTime: at(50)}]);
+    expect(
+      getValidityEndAtDepartedBoardings(legs, fc, at(55).getTime()),
+    ).toEqual(at(50));
   });
 });
 

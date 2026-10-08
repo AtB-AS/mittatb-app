@@ -515,6 +515,33 @@ export function getValidityEndAtFirstBoarding(
 }
 
 /**
+ * When the fare contract stops, or stopped, being valid, if it was valid when
+ * any of the legs that need a ticket departed, up to now. Like when a ticket
+ * bought during a transfer runs out before the trip ends. For carnets, this is
+ * the end of the activated access at those times.
+ */
+export function getValidityEndAtDepartedBoardings(
+  legs: Leg[],
+  fareContract: FareContractType,
+  now: number,
+): Date | undefined {
+  const departedBoardingTimes = getNonFreeLegs(legs)
+    .map(getBoardingTime)
+    .filter((boardingTime) => boardingTime <= now);
+
+  const validityPeriods =
+    getAccesses(fareContract)?.usedAccesses ?? fareContract.travelRights;
+  const periodAtDepartedBoarding = validityPeriods
+    .filter((period) =>
+      departedBoardingTimes.some((boardingTime) =>
+        isWithinPeriod(boardingTime, period),
+      ),
+    )
+    .sort((a, b) => b.endDateTime.getTime() - a.endDateTime.getTime())[0];
+  return periodAtDepartedBoarding?.endDateTime;
+}
+
+/**
  * Whether the fare contract is a carnet that has no activated access when the
  * first leg that needs a ticket departs, but has accesses left and is valid
  * then, so an access can be activated for the trip.

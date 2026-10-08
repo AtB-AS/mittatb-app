@@ -17,6 +17,7 @@ import {
   getFirstBoardingTime,
   getLastAlightingTime,
   getRemainingLegs,
+  getValidityEndAtDepartedBoardings,
   getValidityEndAtFirstBoarding,
   hasLegsFromOtherAuthorities,
   isFareContractApplicableToTrip,
@@ -26,8 +27,8 @@ export type TripTicketCardState = {
   mode: TripTicketCardMode;
   /**
    * For 'valid': when the longest lasting of the valid fare contracts stops
-   * being valid. For 'expired': when the fare contract the trip started with
-   * stops, or stopped, being valid.
+   * being valid. For 'expired': when the fare contract that was valid at an
+   * earlier boarding of the trip stops, or stopped, being valid.
    */
   validUntil?: Date;
   /** Whether validUntil is before the last leg that needs a ticket arrives */
@@ -47,8 +48,9 @@ export type TripTicketCardState = {
  * - 'activate' when the user can activate a fare contract for the remaining
  *   trip, like a carnet or a ticket bought for later. This goes before
  *   'expired', since activating is better than buying a new ticket.
- * - 'expired' when the trip started with a fare contract that is not valid at
- *   the next boarding. We don't decide whether a new ticket is needed, since
+ * - 'expired' when a fare contract that fits the remaining trip was valid at
+ *   an earlier boarding of it, but is not valid at the next boarding. Like
+ *   when a ticket bought during a transfer runs out. We don't decide whether a new ticket is needed, since
  *   that depends on validity rules we don't check.
  * - 'invalid' otherwise.
  */
@@ -166,12 +168,14 @@ export const useTripTicketCardMode = (
     ].filter(
       (fareContract) => fareContract.customerAccountId === currentUserId,
     );
-    const startedWithValidUntil = getLatestValidityEnd(
-      tripLegs,
-      getApplicableFareContracts(tripLegs, ownFareContracts),
-    );
-    if (startedWithValidUntil) {
-      return {mode: 'expired', validUntil: startedWithValidUntil};
+    const earlierValidUntil = getApplicableFareContracts(legs, ownFareContracts)
+      .map((fareContract) =>
+        getValidityEndAtDepartedBoardings(tripLegs, fareContract, now),
+      )
+      .filter(isDefined)
+      .sort((a, b) => b.getTime() - a.getTime())[0];
+    if (earlierValidUntil) {
+      return {mode: 'expired', validUntil: earlierValidUntil};
     }
   }
 
