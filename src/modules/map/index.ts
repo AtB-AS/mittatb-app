@@ -67,5 +67,5 @@ export {MapStateActionType} from './mapStateReducer.ts';
 export {clearLastActiveBooking} from './last-active-booking';
 export {useMapSelectionAnalytics} from './hooks/use-map-selection-analytics.tsx';
 export {MapButtons} from './components/MapButtons.tsx';
-export {TariffZoneLinesAndLabels} from './components/TariffZoneLinesAndLabels';
+export {FareZoneLinesAndLabels} from './components/FareZoneLinesAndLabels';
 export {mapZonesToPolygonCollection} from './zone-utils';
