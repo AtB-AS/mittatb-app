@@ -15,6 +15,7 @@ type PhotoCaptureProps = {
   isLoading?: boolean;
   focusRef?: Ref<any>;
   isFocused: boolean;
+  errorMessage?: string;
 };
 
 export const PhotoCapture = ({
@@ -26,6 +27,7 @@ export const PhotoCapture = ({
   isLoading = false,
   focusRef,
   isFocused,
+  errorMessage,
 }: PhotoCaptureProps) => {
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
@@ -49,6 +51,7 @@ export const PhotoCapture = ({
       isLoading={isLoading}
       onGoBack={onGoBack}
       focusRef={focusRef}
+      errorMessage={errorMessage}
     >
       {isFocused && (
         <>

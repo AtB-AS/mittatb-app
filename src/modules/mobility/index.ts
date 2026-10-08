@@ -42,6 +42,7 @@ export {useDeleteAgeVerificationMutation} from './queries/use-remove-age-verific
 export {
   computeFreeMinuteCount,
   findOperatorBrandImageUrl,
+  formatFriendlyShmoErrorMessage,
   formatMinuteBoundaryWithUnit,
   formatMinuteRange,
   getAvailableVehicles,

@@ -7,6 +7,7 @@ import {NativeTouchable} from '../native-touchable';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
 import SvgChevronLeft from '@atb/assets/svg/mono-icons/navigation/ChevronLeft';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type CameraScreenContainerProps = PropsWithChildren<{
   title: string;
@@ -14,6 +15,7 @@ type CameraScreenContainerProps = PropsWithChildren<{
   isLoading: boolean;
   onGoBack: () => void;
   focusRef?: Ref<any>;
+  errorMessage?: string;
 }>;
 
 export const CameraScreenContainer = ({
@@ -23,6 +25,7 @@ export const CameraScreenContainer = ({
   secondaryText,
   onGoBack,
   focusRef,
+  errorMessage,
 }: CameraScreenContainerProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -64,6 +67,13 @@ export const CameraScreenContainer = ({
               <ThemeText typography="body__s" color="#ffffff">
                 {secondaryText}
               </ThemeText>
+            )}
+            {!!errorMessage && (
+              <MessageInfoBox
+                type="error"
+                message={errorMessage}
+                a11yLiveRegion="polite"
+              />
             )}
           </View>
         </View>
