@@ -81,11 +81,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     rowGap: theme.spacing.small,
   },
   validityText: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
   headerText: {
     textAlign: 'left',
