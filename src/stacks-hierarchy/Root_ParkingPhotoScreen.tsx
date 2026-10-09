@@ -3,6 +3,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {
+  formatFriendlyShmoErrorMessage,
   useSendShmoBookingEventMutation,
   useShmoBookingQuery,
 } from '@atb/modules/mobility';
@@ -43,8 +44,11 @@ export const Root_ParkingPhotoScreen = ({
     route.params.bookingId,
   );
 
-  const {mutateAsync: sendShmoBookingEvent, isPending} =
-    useSendShmoBookingEventMutation();
+  const {
+    mutateAsync: sendShmoBookingEvent,
+    isPending,
+    error: sendShmoBookingEventError,
+  } = useSendShmoBookingEventMutation();
 
   const onGoBack = useCallback(() => {
     navigation.goBack();
@@ -79,7 +83,13 @@ export const Root_ParkingPhotoScreen = ({
     const base64data = compressedBase64Image.split(',').pop();
 
     if (base64data) {
-      await onEndTrip(route.params.bookingId, base64data);
+      try {
+        await onEndTrip(route.params.bookingId, base64data);
+      } catch {
+        // The trip is still running, so we stay on the camera with the message
+        // from the failed event and let the user take a new photo and retry.
+        return;
+      }
     }
 
     // The receipt is shown right away here, so the booking disappearing from
@@ -113,6 +123,11 @@ export const Root_ParkingPhotoScreen = ({
       secondaryText={t(MobilityTexts.photo.subHeader)}
       focusRef={focusRef}
       isFocused={isFocused}
+      errorMessage={
+        sendShmoBookingEventError
+          ? formatFriendlyShmoErrorMessage(sendShmoBookingEventError, t)
+          : undefined
+      }
     />
   );
 };
