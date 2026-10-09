@@ -383,6 +383,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const isPaymentFailed = hasPaymentFailed || reserveMutation.isError;
   const isPaymentInProgress = !isPaymentFailed && !reserveMutation.isIdle;
 
+  const paymentErrorText = (() => {
+    if (cancelPaymentMutation.isError) {
+      return t(PurchaseConfirmationTexts.paymentErrors.cancelError);
+    }
+    if (vippsNotInstalledError) {
+      return t(PurchaseConfirmationTexts.paymentErrors.vippsNotInstalledError);
+    }
+    return t(PurchaseConfirmationTexts.paymentErrors.generic);
+  })();
+
   if (isPaymentInProgress || isPaymentFailed) {
     return (
       <FullScreenView
@@ -413,16 +423,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           </View>
         ) : (
           <View style={styles.container}>
-            <MessageInfoBox
-              type="error"
-              message={t(
-                cancelPaymentMutation.isError
-                  ? PurchaseConfirmationTexts.cancelPaymentError
-                  : vippsNotInstalledError
-                    ? PurchaseConfirmationTexts.vippsInstalledError
-                    : PurchaseConfirmationTexts.paymentFailed,
-              )}
-            />
+            <MessageInfoBox type="error" message={paymentErrorText} />
           </View>
         )}
       </FullScreenView>
