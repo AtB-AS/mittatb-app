@@ -1,6 +1,5 @@
 import {EstimatedCall} from '@atb/api/types/departures';
 import {screenReaderPause} from '@atb/components/text';
-import {StoredFavoriteDeparture} from '@atb/modules/favorites';
 import {Statuses, StyleSheet} from '@atb/theme';
 import {
   bookingStatusToMsgType,
@@ -38,7 +37,6 @@ import {DepartureTime, EstimatedCallInfo} from '@atb/components/estimated-call';
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
   departure: EstimatedCall;
-  existingFavorite?: StoredFavoriteDeparture;
   onPressDetails: (departure: EstimatedCall) => void;
   showBottomBorder: boolean;
   testID?: string;
@@ -86,9 +84,11 @@ export const EstimatedCallItem = memo(
       return false;
     }
 
-    if (prev.departure.situations.length !== next.departure.situations.length)
+    if (
+      getMsgTypeForEstimatedCall(prev.departure) !==
+      getMsgTypeForEstimatedCall(next.departure)
+    )
       return false;
-    if (prev.existingFavorite?.id !== next.existingFavorite?.id) return false;
     if (prev.showBottomBorder !== next.showBottomBorder) return false;
     if (
       prev.departure.expectedDepartureTime !==
