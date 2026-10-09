@@ -21,6 +21,7 @@ import {
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
+  getClockOrRelativeMinutes,
   secondsBetween,
 } from '@atb/utils/date';
 import React, {memo, type RefObject, useRef} from 'react';
@@ -77,15 +78,9 @@ export const EstimatedCallItem = memo(
     );
   },
   (prev, next) => {
-    const prevMinutesUntilDeparture = Math.floor(
-      prev.secondsUntilDeparture / 60,
-    );
-    const nextMinutesUntilDeparture = Math.floor(
-      next.secondsUntilDeparture / 60,
-    );
     if (
-      nextMinutesUntilDeparture < 10 &&
-      prevMinutesUntilDeparture !== nextMinutesUntilDeparture
+      getClockOrRelativeMinutes(prev.secondsUntilDeparture) !==
+      getClockOrRelativeMinutes(next.secondsUntilDeparture)
     ) {
       // Rerender the item if the relative departure time is changed
       return false;
