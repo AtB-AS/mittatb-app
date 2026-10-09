@@ -2,10 +2,7 @@ import {useAnalyticsContext} from '@atb/modules/analytics';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenView} from '@atb/components/screen-view';
-import {
-  getReservationStatus,
-  useOtherDeviceIsInspectableWarning,
-} from '@atb/modules/fare-contracts';
+import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {GlobalMessage} from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -15,7 +12,6 @@ import {
   PaymentType,
   ReserveOffer,
   useCancelPaymentMutation,
-  useTicketingContext,
 } from '@atb/modules/ticketing';
 import {
   PurchaseConfirmationTexts,
@@ -50,7 +46,6 @@ import {
 import {APP_SCHEME} from '@env';
 import {useAuthContext} from '@atb/modules/auth';
 import {Section} from '@atb/components/sections';
-import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 import {ThemeText} from '@atb/components/text';
 import {MutationStatus} from '@tanstack/react-query';
 import {PaymentSelectionSectionItem} from '@atb/modules/payment';
@@ -76,6 +71,7 @@ import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {TripPattern} from '@atb/api/types/trips';
 import {openUrl} from '@atb/utils/open-url';
 import queryString from 'query-string';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -98,8 +94,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
-  const [paymentNotCompletedError, setPaymentNotCompletedError] =
-    useState(false);
+  const [hasPaymentFailed, setHasPaymentFailed] = useState(false);
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const focusRef = useFocusOnLoad(navigation);
@@ -210,14 +205,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         'cancel',
         `${APP_SCHEME}://purchase-callback`,
         onPurchaseCallback,
-        () =>
-          // On in app browser cancel, try to run the cancel mutation. If that
-          // fails, navigate to active tickets.
-          cancelPaymentMutation.mutate(
-            {payment: reserveMutation.data, isUser: false},
-            {onError: () => navigateToTickets({refreshTickets: true})},
-          ),
-        () => navigateToTickets({refreshTickets: true}),
+        () => cancelFailedPayment(reserveMutation.data),
+        () => cancelFailedPayment(reserveMutation.data),
       );
     },
     reserveMutation.status === 'success',
@@ -231,6 +220,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     },
   });
 
+  function cancelFailedPayment(reserveOfferResponse: ReserveOfferResponse) {
+    setHasPaymentFailed(true);
+    cancelPaymentMutation.mutate({
+      payment: reserveOfferResponse,
+      isUser: false,
+    });
+  }
+
   async function openVipps(
     reserveOfferResponse: ReserveOfferResponse,
     url: string,
@@ -239,19 +236,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     await openUrl(url, () => {
       didFail = true;
       setVippsNotInstalledError(true);
-      cancelPaymentMutation.mutate(
-        {payment: reserveOfferResponse, isUser: false},
-        {onError: () => navigateToTickets({refreshTickets: true})},
-      );
+      cancelFailedPayment(reserveOfferResponse);
     });
     if (!didFail) onPaymentCompleted();
   }
 
   const navigateToTickets = useCallback(
-    (params: {savedTripPattern?: TripPattern; refreshTickets?: boolean}) => {
-      if (hasLeftScreenRef.current) return;
-      hasLeftScreenRef.current = true;
-      closeInAppBrowseriOS();
+    (params: {savedTripPattern?: TripPattern; refreshTickets?: boolean}) =>
       navigation.popTo('Root_TabNavigatorStack', {
         screen: 'TabNav_TicketingStack',
         params: {
@@ -261,13 +252,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             params,
           },
         },
-      });
-    },
+      }),
     [navigation],
   );
 
   const onPaymentCompleted = useCallback(async () => {
     if (hasLeftScreenRef.current) return;
+    hasLeftScreenRef.current = true;
     savePreviousPayment(
       userId,
       paymentMethod?.paymentType,
@@ -281,6 +272,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         ...params.tripAnalytics,
       });
     }
+    closeInAppBrowseriOS();
     navigateToTickets({savedTripPattern});
   }, [
     navigateToTickets,
@@ -308,19 +300,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     false,
   );
 
-  const resetReserveMutation = reserveMutation.reset;
   const onPurchaseCallback = useCallback(
     (url: string) => {
-      const responseCode = queryString.parseUrl(url).query.response_code;
-      // Without a response code the result is unknown, so don't allow a retry
-      if (!responseCode || responseCode === 'OK') {
+      if (queryString.parseUrl(url).query.response_code === 'OK') {
         onPaymentCompleted();
-        return;
+      } else {
+        setHasPaymentFailed(true);
       }
-      setPaymentNotCompletedError(true);
-      resetReserveMutation();
     },
-    [onPaymentCompleted, resetReserveMutation],
+    [onPaymentCompleted],
   );
 
   // When deep link {APP_SCHEME}://purchase-callback is called, handle it like
@@ -334,9 +322,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     callback: onPaymentCompleted,
   });
 
+  // Block the user from exiting the screen during reserve, including iOS swipe
+  // and Android back actions.
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        if (isReservingRef.current) e.preventDefault();
+      }),
+    [navigation],
+  );
+
   function goToPayment() {
     setVippsNotInstalledError(false);
-    setPaymentNotCompletedError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && offerExpirationTime < Date.now()) {
@@ -373,23 +370,71 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     bottomSheetModalRef.current?.present();
   }
 
+  function onBackPress() {
+    if (reserveMutation.data) {
+      cancelPaymentMutation.mutate({
+        payment: reserveMutation.data,
+        isUser: false,
+      });
+    }
+    navigation.pop();
+  }
+
+  const isPaymentFailed = hasPaymentFailed || reserveMutation.isError;
+  const isPaymentInProgress = !isPaymentFailed && !reserveMutation.isIdle;
+
+  if (isPaymentInProgress || isPaymentFailed) {
+    return (
+      <FullScreenView
+        focusRef={focusRef}
+        headerProps={{
+          title: t(PurchaseConfirmationTexts.title),
+          leftButton: reserveMutation.isPending
+            ? undefined
+            : {type: 'back', onPress: onBackPress},
+          globalMessageContext: GlobalMessageContextEnum.appTicketing,
+        }}
+        headerContent={(focusRef) => (
+          <ScreenHeading
+            ref={focusRef}
+            text={t(PurchaseConfirmationTexts.title)}
+          />
+        )}
+      >
+        {isPaymentInProgress ? (
+          <View style={styles.paymentInProgress}>
+            <Loading size="large" />
+            <ThemeText>
+              {t(PurchaseConfirmationTexts.paymentInProgress)}
+            </ThemeText>
+            <ScreenReaderAnnouncement
+              message={t(PurchaseConfirmationTexts.paymentInProgress)}
+            />
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <MessageInfoBox
+              type="error"
+              message={t(
+                cancelPaymentMutation.isError
+                  ? PurchaseConfirmationTexts.cancelPaymentError
+                  : vippsNotInstalledError
+                    ? PurchaseConfirmationTexts.vippsInstalledError
+                    : PurchaseConfirmationTexts.paymentFailed,
+              )}
+            />
+          </View>
+        )}
+      </FullScreenView>
+    );
+  }
+
   return (
     <FullScreenView
       focusRef={focusRef}
       headerProps={{
         title: t(PurchaseConfirmationTexts.title),
-        leftButton: {
-          type: 'back',
-          onPress: () => {
-            if (reserveMutation.data) {
-              cancelPaymentMutation.mutate({
-                payment: reserveMutation.data,
-                isUser: false,
-              });
-            }
-            navigation.pop();
-          },
-        },
+        leftButton: {type: 'back', onPress: onBackPress},
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
       headerContent={(focusRef) => (
@@ -462,18 +507,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             preassignedFareProductType: selection.preassignedFareProduct.type,
           }}
         />
-        {(reserveMutation.isError || paymentNotCompletedError) && (
-          <MessageInfoBox
-            message={t(PurchaseConfirmationTexts.reserveError)}
-            type="error"
-          />
-        )}
-        {vippsNotInstalledError && (
-          <MessageInfoBox
-            message={t(PurchaseConfirmationTexts.vippsInstalledError)}
-            type="error"
-          />
-        )}
         {paymentMethod && totalPrice > 0 && (
           <Section>
             <PaymentSelectionSectionItem
@@ -482,12 +515,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               ref={onCloseFocusRef}
             />
           </Section>
-        )}
-        {cancelPaymentMutation.status === 'error' && (
-          <MessageInfoBox
-            message={t(PurchaseConfirmationTexts.cancelPaymentError)}
-            type="error"
-          />
         )}
         {!!relevantTicketBonusProduct && !isFree && isBonusActiveForUser && (
           <PayWithBonusPointsCheckbox
@@ -509,19 +536,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
           totalPrice={totalPrice}
-          reserveOfferResponse={reserveMutation.data}
           reserveStatus={reserveMutation.status}
           paymentMethod={paymentMethod}
           onSelectPaymentMethod={selectPaymentMethod}
           onGoToPayment={goToPayment}
-          onCancelPayment={() => {
-            if (reserveMutation.data) {
-              cancelPaymentMutation.mutate({
-                payment: reserveMutation.data,
-                isUser: true,
-              });
-            }
-          }}
         />
       </View>
 
@@ -532,12 +550,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           shouldSavePaymentMethod: boolean,
         ) => {
           setVippsNotInstalledError(false);
-          if (reserveMutation.data) {
-            cancelPaymentMutation.mutate({
-              payment: reserveMutation.data,
-              isUser: false,
-            });
-          }
           setSelectedPaymentMethod(paymentMethod);
           setShouldSavePaymentMethod(shouldSavePaymentMethod);
           bottomSheetModalRef.current?.dismiss();
@@ -560,12 +572,10 @@ type PaymentButtonProps = {
   mode: 'TravelSearch' | 'Ticket' | undefined;
   tripAnalytics?: TripAnalytics;
   onCloseFocusRef: RefObject<any>;
-  reserveOfferResponse: ReserveOfferResponse | undefined;
   reserveStatus: MutationStatus;
   paymentMethod: PaymentMethod | undefined;
   onSelectPaymentMethod: () => void;
   onGoToPayment: () => void;
-  onCancelPayment: () => void;
 };
 const PaymentButton = ({
   isSearchingOffer,
@@ -574,25 +584,15 @@ const PaymentButton = ({
   mode,
   tripAnalytics,
   onCloseFocusRef,
-  reserveOfferResponse,
   reserveStatus,
   paymentMethod,
   onSelectPaymentMethod,
   onGoToPayment,
-  onCancelPayment,
 }: PaymentButtonProps) => {
   const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   const analytics = useAnalyticsContext();
-  const styles = useStyles();
   const totalPriceString = formatNumberToString(totalPrice, language);
-
-  const {reservations} = useTicketingContext();
-  const reservation = reservations.find(
-    (r) => r.orderId === reserveOfferResponse?.orderId,
-  );
-  const isReserving =
-    !!reservation && getReservationStatus(reservation) === 'reserving';
 
   if (isSearchingOffer)
     return (
@@ -622,31 +622,6 @@ const PaymentButton = ({
         testID="choosePaymentMethodButton"
         ref={onCloseFocusRef}
       />
-    );
-
-  if (isReserving)
-    return (
-      <>
-        <View style={styles.waitingForPayment}>
-          <ThemeText>
-            {t(PurchaseConfirmationTexts.waitingForPayment)}
-          </ThemeText>
-          <Loading />
-        </View>
-        <Button
-          expanded={true}
-          text={t(PurchaseConfirmationTexts.cancelPayment)}
-          mode="primary"
-          rightIcon={{svg: SvgClose}}
-          interactiveColor={theme.color.interactive.destructive}
-          onPress={() => {
-            onCancelPayment();
-          }}
-          accessibilityHint={t(
-            PurchaseConfirmationTexts.changePaymentMethod.a11yHint,
-          )}
-        />
-      </>
     );
 
   return (
@@ -680,11 +655,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
   },
-  waitingForPayment: {
-    flexDirection: 'row',
+  paymentInProgress: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: theme.spacing.medium,
-    marginVertical: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
+    padding: theme.spacing.medium,
   },
 }));

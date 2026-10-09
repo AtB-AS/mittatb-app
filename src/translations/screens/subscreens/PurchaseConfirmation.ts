@@ -150,10 +150,10 @@ const PurchaseConfirmationTexts = {
     ),
   },
 
-  waitingForPayment: _(
-    'Venter på betaling',
-    'Waiting for payment',
-    'Venter på betaling',
+  paymentInProgress: _(
+    'Betaling pågår',
+    'Payment in progress',
+    'Betaling pågår',
   ),
   cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
   cancelPaymentError: _(
@@ -196,7 +196,7 @@ const PurchaseConfirmationTexts = {
     `Ordinary price`,
     `Ordinær pris`,
   ),
-  reserveError: _(
+  paymentFailed: _(
     'Vi klarte ikke å sette i gang betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
     'We were unable to start the payment. Please try again, or contact customer service for assistance.',
     'Vi klarte ikkje å starte betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
