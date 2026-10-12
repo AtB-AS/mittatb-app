@@ -10,6 +10,7 @@ import {
   formatToClock,
   formatToClockOrRelativeMinutes,
   fullDateTime,
+  getClockOrRelativeMinutes,
 } from '@atb/utils/date';
 import {Language} from '@atb/translations/commons';
 
@@ -227,5 +228,24 @@ describe('Date rounding', () => {
     expectStringEqual(formatToClock(exact, lang, 'ceil'), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'floor'), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'round'), shouldRoundTo);
+  });
+});
+
+describe('Function getClockOrRelativeMinutes', () => {
+  it('returns now when one minute or less', () => {
+    expect(getClockOrRelativeMinutes(-30)).toBe('now');
+    expect(getClockOrRelativeMinutes(60)).toBe('now');
+  });
+
+  it('returns minutes rounded to nearest', () => {
+    expect(getClockOrRelativeMinutes(61)).toBe(1);
+    expect(getClockOrRelativeMinutes(149)).toBe(2);
+    expect(getClockOrRelativeMinutes(150)).toBe(3);
+    expect(getClockOrRelativeMinutes(9 * 60 - 1)).toBe(9);
+  });
+
+  it('returns clock from the minute threshold', () => {
+    expect(getClockOrRelativeMinutes(9 * 60)).toBe('clock');
+    expect(getClockOrRelativeMinutes(5 * 60, 5)).toBe('clock');
   });
 });

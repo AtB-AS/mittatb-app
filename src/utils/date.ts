@@ -251,16 +251,30 @@ export function formatToClockOrRelativeMinutes(
 ) {
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
+  const relativeTime = getClockOrRelativeMinutes(diff, minuteThreshold);
 
-  if (diff / 60 >= minuteThreshold) {
+  if (relativeTime === 'clock') {
     return formatLocaleTime(parsed, language);
   }
 
-  if (diff / 60 <= 1) {
+  if (relativeTime === 'now') {
     return nowText;
   }
 
-  return secondsToMinutesShort(diff, language);
+  return secondsToMinutesShort(relativeTime * 60, language);
+}
+
+/**
+ * Get what formatToClockOrRelativeMinutes shows for a time the given number
+ * of seconds from now: the clock, "now", or the number of relative minutes.
+ */
+export function getClockOrRelativeMinutes(
+  seconds: number,
+  minuteThreshold: number = 9,
+): 'clock' | 'now' | number {
+  if (seconds / 60 >= minuteThreshold) return 'clock';
+  if (seconds / 60 <= 1) return 'now';
+  return Math.round(seconds / 60);
 }
 
 /**

@@ -13,7 +13,6 @@ import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {EstimatedCallItem, EstimatedCallItemProps} from './EstimatedCallItem';
 import {
   StoredFavoriteDeparture,
-  useFavoritesContext,
   useOnMarkFavouriteDepartures,
 } from '@atb/modules/favorites';
 import {QuaySectionProps} from './QuaySection';
@@ -81,8 +80,6 @@ export const EstimatedCallList = ({
     }
   }, [alert, quay.name, selectedDeparture]);
 
-  const {getFavoriteDeparture} = useFavoritesContext();
-
   const onPressDetails = useCallback(
     (departure: EstimatedCall) => {
       navigateToDetails?.(
@@ -98,12 +95,6 @@ export const EstimatedCallList = ({
 
   const listData: EstimatedCallItemProps[] = departures.map(
     (departure, index) => {
-      const existingFavorite = getFavoriteDeparture({
-        quayId: quay.id,
-        lineId: departure.serviceJourney.line.id,
-        destinationDisplay: departure.destinationDisplay,
-      });
-
       return {
         secondsUntilDeparture: secondsBetween(
           new Date(now),
@@ -111,7 +102,6 @@ export const EstimatedCallList = ({
         ),
         departure,
         mode,
-        existingFavorite,
         onPressDetails: onPressDetails,
         showBottomBorder:
           index === departures.length - 1 && !shouldShowMoreItemsLink,
