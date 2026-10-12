@@ -274,6 +274,11 @@ export const DepartureDetailsScreenComponent = ({
               vehicleWithPosition: vehiclePosition,
               mode: serviceJourney?.transportMode,
               subMode: serviceJourney?.transportSubmode,
+              lineNumber: publicCode,
+              destination: formatDestinationDisplay(
+                t,
+                focusedEstimatedCall?.destinationDisplay,
+              ),
             },
           ]
         : undefined,

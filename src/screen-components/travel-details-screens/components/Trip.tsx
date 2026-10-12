@@ -13,6 +13,8 @@ import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
   getFilteredLegsByWalkOrWaitTime,
+  getLineDestinationName,
+  getPublicCodeFromLeg,
   getShouldShowLiveVehicle,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
@@ -167,6 +169,8 @@ export const Trip: React.FC<TripProps> = ({
                   vehicleWithPosition,
                   mode: leg?.mode,
                   subMode: leg?.transportSubmode,
+                  lineNumber: leg && getPublicCodeFromLeg(leg),
+                  destination: leg && getLineDestinationName(t, leg),
                 };
               }),
               mapFilter,
