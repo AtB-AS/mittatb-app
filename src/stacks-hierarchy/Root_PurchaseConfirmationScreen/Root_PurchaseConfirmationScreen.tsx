@@ -446,7 +446,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 cancelPaymentMutation.isError || isPaymentUnconfirmed
                   ? {
                       text: t(PurchaseConfirmationTexts.goToTickets),
-                      action: () => navigateToTickets({}),
+                      action: () => navigateToTickets({refreshTickets: true}),
                     }
                   : undefined
               }
