@@ -130,10 +130,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_server_time',
   },
   {
-    name: 'isShmoDeepIntegrationEnabled',
-    remoteConfigKey: 'enable_shmo_deep_integration',
-  },
-  {
     name: 'isShmoDeepIntegrationCitybikeEnabled',
     remoteConfigKey: 'enable_shmo_deep_integration_citybike',
   },
