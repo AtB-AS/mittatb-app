@@ -423,7 +423,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           </View>
         ) : (
           <View style={styles.container}>
-            <MessageInfoBox type="error" message={paymentErrorText} />
+            <MessageInfoBox
+              type="error"
+              message={paymentErrorText}
+              onPressConfig={
+                cancelPaymentMutation.isError
+                  ? {
+                      text: t(PurchaseConfirmationTexts.goToTickets),
+                      action: () => navigateToTickets({}),
+                    }
+                  : undefined
+              }
+            />
           </View>
         )}
       </FullScreenView>

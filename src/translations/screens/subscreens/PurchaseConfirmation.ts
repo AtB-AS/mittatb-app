@@ -208,6 +208,11 @@ const PurchaseConfirmationTexts = {
       'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
     ),
   },
+  goToTickets: _(
+    'TODO: Gå til billetter',
+    'TODO: Go to tickets',
+    'TODO: Gå til billettar',
+  ),
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   fram: {
