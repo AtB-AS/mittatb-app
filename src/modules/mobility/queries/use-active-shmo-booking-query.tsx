@@ -15,33 +15,22 @@ export const useActiveShmoBookingQuery = (
 ) => {
   const acceptLanguage = languageGlobal;
 
-  const {isShmoDeepIntegrationEnabled, isEventStreamEnabled} =
-    useFeatureTogglesContext();
+  const {isEventStreamEnabled} = useFeatureTogglesContext();
 
   const effectiveRefetchInterval = isEventStreamEnabled
     ? ONE_SECOND_MS * 90
     : refetchInterval;
 
-  const queryEnabled = enabled && isShmoDeepIntegrationEnabled;
-
-  const {data, isLoading, isError, isPending, isSuccess} = useQuery({
-    enabled: queryEnabled,
+  return useQuery({
+    enabled,
     queryKey: getActiveShmoBookingQueryKey(acceptLanguage),
     queryFn: ({signal}) => getActiveShmoBooking(acceptLanguage, {signal}),
     staleTime: ONE_MINUTE_MS,
     gcTime: ONE_MINUTE_MS,
-    refetchInterval: effectiveRefetchInterval,
+    // Only keep polling while there's actually a booking to track.
+    refetchInterval: (query) =>
+      query.state.data ? effectiveRefetchInterval : false,
     refetchOnWindowFocus: 'always',
     refetchOnReconnect: true,
   });
-
-  return {
-    data,
-    isLoading,
-    isError,
-    isSuccess,
-    // isPending stays true forever on a disabled query, so resolve it here
-    // rather than making callers account for the toggle themselves.
-    isPending: queryEnabled && isPending,
-  };
 };

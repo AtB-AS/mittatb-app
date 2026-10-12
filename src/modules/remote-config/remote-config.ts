@@ -51,7 +51,6 @@ export type RemoteConfig = {
   enable_refunds: boolean;
   enable_save_trips: boolean;
   enable_server_time: boolean;
-  enable_shmo_deep_integration: boolean;
   enable_shmo_deep_integration_citybike: boolean;
   enable_shmo_pause_button: boolean;
   enable_show_cancelled_departures: boolean;
@@ -134,7 +133,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_refunds: true,
   enable_save_trips: true,
   enable_server_time: true,
-  enable_shmo_deep_integration: false,
   enable_shmo_deep_integration_citybike: false,
   enable_shmo_pause_button: false,
   enable_show_cancelled_departures: false,
@@ -287,9 +285,6 @@ export function getConfig(): RemoteConfig {
   const enable_server_time =
     values['enable_server_time']?.asBoolean() ??
     defaultRemoteConfig.enable_server_time;
-  const enable_shmo_deep_integration =
-    values['enable_shmo_deep_integration']?.asBoolean() ??
-    defaultRemoteConfig.enable_shmo_deep_integration;
   const enable_shmo_deep_integration_citybike =
     values['enable_shmo_deep_integration_citybike']?.asBoolean() ??
     defaultRemoteConfig.enable_shmo_deep_integration_citybike;
@@ -443,7 +438,6 @@ export function getConfig(): RemoteConfig {
     enable_refunds,
     enable_save_trips,
     enable_server_time,
-    enable_shmo_deep_integration,
     enable_shmo_deep_integration_citybike,
     enable_shmo_pause_button,
     enable_show_cancelled_departures,
