@@ -212,6 +212,11 @@ const PurchaseConfirmationTexts = {
       "TODO: We couldn't confirm the payment. Check your tickets before you try again.",
       'TODO: Vi kunne ikkje stadfeste betalinga. Sjekk billettane dine før du prøver igjen.',
     ),
+    cancelled: _(
+      'TODO: Betalingen ble avbrutt. Vennligst prøv igjen.',
+      'TODO: The payment was cancelled. Please try again.',
+      'TODO: Betalinga vart avbroten. Ver venleg og prøv igjen.',
+    ),
   },
   goToTickets: _(
     'TODO: Gå til billetter',

@@ -74,6 +74,7 @@ import queryString from 'query-string';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
+type PaymentFailure = 'cancelled' | 'failed';
 
 export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   navigation,
@@ -94,7 +95,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
-  const [hasPaymentFailed, setHasPaymentFailed] = useState(false);
+  const [paymentFailure, setPaymentFailure] = useState<PaymentFailure>();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const focusRef = useFocusOnLoad(navigation);
@@ -205,8 +206,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         'cancel',
         `${APP_SCHEME}://purchase-callback`,
         onPurchaseCallback,
-        () => cancelFailedPayment(reserveMutation.data),
-        () => cancelFailedPayment(reserveMutation.data),
+        () => cancelFailedPayment(reserveMutation.data, 'cancelled'),
+        () => cancelFailedPayment(reserveMutation.data, 'failed'),
       );
     },
     reserveMutation.status === 'success',
@@ -220,8 +221,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     },
   });
 
-  function cancelFailedPayment(reserveOfferResponse: ReserveOfferResponse) {
-    setHasPaymentFailed(true);
+  function cancelFailedPayment(
+    reserveOfferResponse: ReserveOfferResponse,
+    failure: PaymentFailure,
+  ) {
+    setPaymentFailure(failure);
     cancelPaymentMutation.mutate({
       payment: reserveOfferResponse,
       isUser: false,
@@ -236,7 +240,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     await openUrl(url, () => {
       didFail = true;
       setVippsNotInstalledError(true);
-      cancelFailedPayment(reserveOfferResponse);
+      cancelFailedPayment(reserveOfferResponse, 'failed');
     });
     if (!didFail) onPaymentCompleted();
   }
@@ -302,10 +306,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const onPurchaseCallback = useCallback(
     (url: string) => {
-      if (queryString.parseUrl(url).query.response_code === 'OK') {
+      const responseCode = queryString.parseUrl(url).query.response_code;
+      if (responseCode === 'OK') {
         onPaymentCompleted();
       } else {
-        setHasPaymentFailed(true);
+        setPaymentFailure(responseCode === 'Cancel' ? 'cancelled' : 'failed');
       }
     },
     [onPaymentCompleted],
@@ -380,7 +385,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     navigation.pop();
   }
 
-  const isPaymentFailed = hasPaymentFailed || reserveMutation.isError;
+  const isPaymentFailed = !!paymentFailure || reserveMutation.isError;
   const isPaymentInProgress = !isPaymentFailed && !reserveMutation.isIdle;
 
   // For errors where there is no guarantee that the payment won't go through
@@ -397,6 +402,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }
     if (isPaymentUnconfirmed) {
       return t(PurchaseConfirmationTexts.paymentErrors.unconfirmed);
+    }
+    if (paymentFailure === 'cancelled') {
+      return t(PurchaseConfirmationTexts.paymentErrors.cancelled);
     }
     return t(PurchaseConfirmationTexts.paymentErrors.generic);
   })();
