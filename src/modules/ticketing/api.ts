@@ -9,6 +9,8 @@ import {FareContractType, type TicketOffer} from '@atb-as/utils';
 import {client} from '@atb/api';
 import {
   ReserveOfferResponse,
+  PaymentAgreement,
+  PaymentAgreementStatus,
   PaymentType,
   RecentOrderDetails,
   RecurringPayment,
@@ -86,6 +88,19 @@ export async function deleteRecurringPayment(paymentId: number) {
 export async function cancelRecurringPayment(paymentId: number) {
   const url = `sales/v1/recurring-payments/${paymentId}/cancel`;
   const response = await client.post<void>(url, {}, {authWithIdToken: true});
+  return response.data;
+}
+
+export async function listPaymentAgreements(
+  statuses?: PaymentAgreementStatus[],
+): Promise<PaymentAgreement[]> {
+  const url = 'sales/v1/payment-agreements';
+
+  const response = await client.get<PaymentAgreement[]>(url, {
+    authWithIdToken: true,
+    params: {status: statuses?.join(',')},
+  });
+
   return response.data;
 }
 

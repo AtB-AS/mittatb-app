@@ -67,6 +67,23 @@ export type RecurringPayment = {
   paymentType: number;
 };
 
+export enum PaymentAgreementStatus {
+  Created = 'CREATED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Stopped = 'STOPPED',
+  Expired = 'EXPIRED',
+}
+
+/**
+ * Defined by `PaymentAgreement` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/payment_agreements.rs
+ */
+export type PaymentAgreement = {
+  id: number;
+  status: PaymentAgreementStatus;
+};
+
 export type PaymentStatus =
   | 'AUTHENTICATE'
   | 'CANCEL'

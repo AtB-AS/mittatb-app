@@ -2,6 +2,7 @@ import {startCase} from 'lodash';
 import {
   LastUsedAccessState,
   UsedAccessStatus,
+  PaymentAgreement,
   PaymentType,
   ConsumableSchoolCarnetResponse,
 } from './types';
@@ -116,4 +117,17 @@ export function humanizePaymentTypeString(paymentType: string) {
     default:
       return startCase(paymentType.toLowerCase());
   }
+}
+
+/**
+ * The newest payment agreement, i.e. the one with the highest id.
+ */
+export function getLatestPaymentAgreement(
+  paymentAgreements: PaymentAgreement[] | undefined,
+): PaymentAgreement | undefined {
+  return paymentAgreements?.reduce<PaymentAgreement | undefined>(
+    (latest, agreement) =>
+      !latest || agreement.id > latest.id ? agreement : latest,
+    undefined,
+  );
 }
