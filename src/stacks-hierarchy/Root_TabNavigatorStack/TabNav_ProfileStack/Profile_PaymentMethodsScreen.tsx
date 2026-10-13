@@ -253,6 +253,17 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                     ))}
                   </Section>
                 )}
+                {showDeleteBlockedError && (
+                  <MessageInfoBox
+                    title={t(
+                      PaymentMethodsTexts.deleteBlockedByActiveTrip.title,
+                    )}
+                    message={t(
+                      PaymentMethodsTexts.deleteBlockedByActiveTrip.message,
+                    )}
+                    type="error"
+                  />
+                )}
                 {!recurringPaymentError &&
                   !recurringPaymentFetching &&
                   (!recurringPayment || recurringPayment?.length == 0) && (
@@ -281,16 +292,6 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
               }
               type="info"
             />
-
-            {showDeleteBlockedError && (
-              <MessageInfoBox
-                title={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.title)}
-                message={t(
-                  PaymentMethodsTexts.deleteBlockedByActiveTrip.message,
-                )}
-                type="error"
-              />
-            )}
           </>
         )}
       </View>
