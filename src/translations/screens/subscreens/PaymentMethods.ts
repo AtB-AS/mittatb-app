@@ -123,6 +123,8 @@ const PaymentMethodsTexts = {
           'You can pay with Vipps without leaving the AtB app.',
           'Du kan betale med Vipps utan å forlate AtB-appen.',
         ),
+        created: (date: string) =>
+          _(`Opprettet ${date}`, `Created ${date}`, `Oppretta ${date}`),
         stopButton: _('Avslutt', 'End', 'Avslutt'),
       },
     },

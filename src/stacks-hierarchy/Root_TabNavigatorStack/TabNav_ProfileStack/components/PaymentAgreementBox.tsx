@@ -8,6 +8,7 @@ import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
+import {formatToShortDateWithFullYear} from '@atb/utils/date';
 import {View} from 'react-native';
 
 // Placeholder until an orange Vipps logo is available in the design system,
@@ -36,7 +37,7 @@ export const PaymentAgreementBox = ({
 }: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   // Only Vipps agreements are supported for now
   if (paymentType !== PaymentType.Vipps) return null;
@@ -70,6 +71,18 @@ export const PaymentAgreementBox = ({
           <View style={styles.texts}>
             <ThemeText typography="heading__l">{title}</ThemeText>
             <ThemeText typography="body__m">{description}</ThemeText>
+            {agreement && (
+              <ThemeText typography="body__s" type="secondary">
+                {t(
+                  PaymentMethodsTexts.agreements.vipps.active.created(
+                    formatToShortDateWithFullYear(
+                      agreement.createdAt,
+                      language,
+                    ),
+                  ),
+                )}
+              </ThemeText>
+            )}
           </View>
         </View>
       </GenericSectionItem>
