@@ -10,6 +10,7 @@ import {client} from '@atb/api';
 import {
   ReserveOfferResponse,
   AddPaymentAgreementResponse,
+  AddPaymentAgreementResponseSchema,
   PaymentAgreement,
   PaymentAgreementStatus,
   PaymentType,
@@ -28,6 +29,7 @@ import {Language} from '@atb/translations/commons';
 import type {OfferSearchLeg} from '@atb/api/types/sales';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ZodError} from 'zod';
+import {parsePaymentAgreements} from './parse-payment-agreements';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -97,12 +99,12 @@ export async function listPaymentAgreements(
 ): Promise<PaymentAgreement[]> {
   const url = 'sales/v1/payment-agreements';
 
-  const response = await client.get<PaymentAgreement[]>(url, {
+  const response = await client.get<unknown>(url, {
     authWithIdToken: true,
     params: {status: statuses?.join(',')},
   });
 
-  return response.data;
+  return parsePaymentAgreements(response.data);
 }
 
 export async function addPaymentAgreement(
@@ -110,27 +112,23 @@ export async function addPaymentAgreement(
 ): Promise<AddPaymentAgreementResponse> {
   const url = 'sales/v1/payment-agreements';
 
-  const response = await client.post<AddPaymentAgreementResponse>(
+  const response = await client.post<unknown>(
     url,
     {paymentRedirectUrl},
     {authWithIdToken: true},
   );
 
-  return response.data;
+  const result = AddPaymentAgreementResponseSchema.safeParse(response.data);
+  if (!result.success) {
+    notifyBugsnag(result.error);
+    throw result.error;
+  }
+  return result.data;
 }
 
-export async function stopPaymentAgreement(
-  agreementId: number,
-): Promise<PaymentAgreement> {
+export async function stopPaymentAgreement(agreementId: number): Promise<void> {
   const url = `sales/v1/payment-agreements/${agreementId}/stop`;
-
-  const response = await client.post<PaymentAgreement>(
-    url,
-    {},
-    {authWithIdToken: true},
-  );
-
-  return response.data;
+  await client.post<void>(url, {}, {authWithIdToken: true});
 }
 
 export async function consumeCarnet(fareContractId: string) {

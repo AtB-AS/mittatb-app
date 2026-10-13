@@ -79,22 +79,26 @@ export enum PaymentAgreementStatus {
  * Defined by `PaymentAgreement` in
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/payment_agreements.rs
  */
-export type PaymentAgreement = {
-  id: number;
-  status: PaymentAgreementStatus;
+export const PaymentAgreementSchema = z.object({
+  id: z.number(),
+  status: z.enum(PaymentAgreementStatus),
   // Not set if the backend doesn't recognize the agreement provider (only Vipps
   // exists today)
-  paymentType?: PaymentType;
-};
+  paymentType: z.enum(PaymentType).optional(),
+});
+export type PaymentAgreement = z.infer<typeof PaymentAgreementSchema>;
 
 /**
  * Defined by `AddPaymentAgreementResponse` in
  * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/payment_agreements.rs
  */
-export type AddPaymentAgreementResponse = {
-  confirmationUrl: string;
-  agreementId: number;
-};
+export const AddPaymentAgreementResponseSchema = z.object({
+  confirmationUrl: z.string(),
+  agreementId: z.number(),
+});
+export type AddPaymentAgreementResponse = z.infer<
+  typeof AddPaymentAgreementResponseSchema
+>;
 
 export type PaymentStatus =
   | 'AUTHENTICATE'
