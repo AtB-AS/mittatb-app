@@ -294,6 +294,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   // Call reserve when payment data is received from the Apple Pay payment sheet
   useDoOnceWhen(() => paymentData && reserve(), !!paymentData, false);
 
+  // Apple Pay payment data is sent with reserve, so money may be withdrawn
+  // when reserve fails with an unknown result.
+  const isApplePayResultUnknown =
+    paymentMethod?.paymentType === PaymentType.ApplePay &&
+    reserveMutation.isError &&
+    !['BAD_REQUEST', 'PROFILE_ERROR'].includes(reserveMutation.error.kind);
+  useDoOnceWhen(
+    () => navigateToTickets({refreshTickets: true}),
+    isApplePayResultUnknown,
+    false,
+  );
+
   const resetReserveMutation = reserveMutation.reset;
   const onPurchaseCallback = useCallback(
     (url: string) => {
