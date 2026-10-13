@@ -52,6 +52,6 @@ export const PaymentAgreementsSection = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    rowGap: theme.spacing.medium,
+    rowGap: theme.spacing.small,
   },
 }));

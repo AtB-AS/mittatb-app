@@ -11,9 +11,7 @@ import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMet
 import {formatToShortDateWithFullYear} from '@atb/utils/date';
 import {View} from 'react-native';
 
-// Placeholder until an orange Vipps logo is available in the design system,
-// which is then shown on a light background instead.
-const VIPPS_LOGO_PLACEHOLDER_BACKGROUND_COLOR = '#FF5B24';
+const VIPPS_BACKGROUND_COLOR = '#FF5B24';
 
 type Props = {
   paymentType: PaymentType;
@@ -66,7 +64,7 @@ export const PaymentAgreementBox = ({
       <GenericSectionItem>
         <View style={styles.content}>
           <View style={styles.logoContainer}>
-            <VippsLogo width={112} height={28} />
+            <VippsLogo width={107} height={28} />
           </View>
           <View style={styles.texts}>
             <ThemeText typography="heading__l">{title}</ThemeText>
@@ -117,17 +115,17 @@ export const PaymentAgreementBox = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
     flex: 1,
-    rowGap: theme.spacing.medium,
+    rowGap: theme.spacing.large,
   },
   logoContainer: {
     height: 80,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: VIPPS_LOGO_PLACEHOLDER_BACKGROUND_COLOR,
+    borderRadius: theme.border.radius.small,
+    backgroundColor: VIPPS_BACKGROUND_COLOR,
   },
   texts: {
-    rowGap: theme.spacing.xSmall,
+    rowGap: theme.spacing.small,
   },
   button: {
     // Without this the GenericSectionItem squishes the button

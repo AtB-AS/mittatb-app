@@ -201,60 +201,63 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                 type="error"
               />
             )}
-            <View style={styles.savedCards}>
+            <View style={styles.savedCardsSection}>
               {showPaymentAgreements && (
                 <ContentHeading
+                  style={styles.savedCardsHeading}
                   text={t(PaymentMethodsTexts.savedCardsHeading)}
                 />
               )}
-              {recurringPaymentIsLoading && <Loading />}
-              {recurringPayment && recurringPayment.length > 0 && (
-                <Section>
-                  {recurringPayment.map((card) => (
-                    <GenericSectionItem key={'card-' + card.id}>
-                      <Card
-                        card={card}
-                        onDeletePress={() => {
-                          if (isActiveShmoBookingPending) return;
-                          if (hasActiveShmoTrip) {
-                            setShowDeleteBlockedError(true);
-                            return;
-                          }
-                          destructiveAlert({
-                            alertTitleString: t(
-                              PaymentMethodsTexts.deleteModal.title,
-                            ),
-                            alertMessageString: t(
-                              PaymentMethodsTexts.deleteModal.message,
-                            ),
-                            cancelAlertString: t(
-                              PaymentMethodsTexts.deleteModal.cancelButton,
-                            ),
-                            confirmAlertString: t(
-                              PaymentMethodsTexts.deleteModal.confirmButton,
-                            ),
-                            destructiveArrowFunction: () =>
-                              deleteRecurringPayment(card.id),
-                          });
-                        }}
-                      />
-                    </GenericSectionItem>
-                  ))}
-                </Section>
-              )}
-              {!recurringPaymentError &&
-                !recurringPaymentFetching &&
-                (!recurringPayment || recurringPayment?.length == 0) && (
-                  <NoCardsInfo />
+              <View style={styles.savedCards}>
+                {recurringPaymentIsLoading && <Loading />}
+                {recurringPayment && recurringPayment.length > 0 && (
+                  <Section>
+                    {recurringPayment.map((card) => (
+                      <GenericSectionItem key={'card-' + card.id}>
+                        <Card
+                          card={card}
+                          onDeletePress={() => {
+                            if (isActiveShmoBookingPending) return;
+                            if (hasActiveShmoTrip) {
+                              setShowDeleteBlockedError(true);
+                              return;
+                            }
+                            destructiveAlert({
+                              alertTitleString: t(
+                                PaymentMethodsTexts.deleteModal.title,
+                              ),
+                              alertMessageString: t(
+                                PaymentMethodsTexts.deleteModal.message,
+                              ),
+                              cancelAlertString: t(
+                                PaymentMethodsTexts.deleteModal.cancelButton,
+                              ),
+                              confirmAlertString: t(
+                                PaymentMethodsTexts.deleteModal.confirmButton,
+                              ),
+                              destructiveArrowFunction: () =>
+                                deleteRecurringPayment(card.id),
+                            });
+                          }}
+                        />
+                      </GenericSectionItem>
+                    ))}
+                  </Section>
                 )}
+                {!recurringPaymentError &&
+                  !recurringPaymentFetching &&
+                  (!recurringPayment || recurringPayment?.length == 0) && (
+                    <NoCardsInfo />
+                  )}
 
-              <Section>
-                <LinkSectionItem
-                  text={t(PaymentMethodsTexts.addPaymentMethod)}
-                  onPress={onAddRecurringPayment}
-                  rightIcon={{svg: Add}}
-                />
-              </Section>
+                <Section>
+                  <LinkSectionItem
+                    text={t(PaymentMethodsTexts.addPaymentMethod)}
+                    onPress={onAddRecurringPayment}
+                    rightIcon={{svg: Add}}
+                  />
+                </Section>
+              </View>
             </View>
 
             <MessageInfoBox
@@ -350,6 +353,13 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
+  },
+  savedCardsSection: {
+    rowGap: theme.spacing.small,
+  },
+  savedCardsHeading: {
+    // The distance to the section above is already given by the screen content
+    marginTop: 0,
   },
   savedCards: {
     rowGap: theme.spacing.medium,
