@@ -468,6 +468,15 @@ export function formatToShortDateWithYear(
   });
 }
 
+export function formatToShortDateWithFullYear(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'dd.MM.yyyy', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
