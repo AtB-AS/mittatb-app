@@ -1,6 +1,8 @@
 import {PaymentAgreement, PaymentAgreementStatus, PaymentType} from '../types';
 import {getLatestPaymentAgreement} from '../utils';
 
+const createdAt = '2026-09-01T10:15:30Z';
+
 const agreement = (
   id: number,
   paymentType: PaymentType = PaymentType.Vipps,
@@ -8,6 +10,7 @@ const agreement = (
   id,
   status: PaymentAgreementStatus.Active,
   paymentType,
+  createdAt,
 });
 
 describe('getLatestPaymentAgreement', () => {
@@ -52,6 +55,7 @@ describe('getLatestPaymentAgreement', () => {
     const withoutPaymentType: PaymentAgreement = {
       id: 9,
       status: PaymentAgreementStatus.Active,
+      createdAt,
     };
     expect(
       getLatestPaymentAgreement(

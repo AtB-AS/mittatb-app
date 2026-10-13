@@ -85,6 +85,11 @@ export const PaymentAgreementSchema = z.object({
   // Not set if the backend doesn't recognize the agreement provider (only Vipps
   // exists today)
   paymentType: z.enum(PaymentType).optional(),
+  // ISO 8601 timestamp for when the agreement was created
+  createdAt: z.iso.datetime({offset: true}),
+  // ISO 8601 timestamp for when the agreement was last updated. Not set if it
+  // has not been modified since it was created.
+  updatedAt: z.iso.datetime({offset: true}).optional(),
 });
 export type PaymentAgreement = z.infer<typeof PaymentAgreementSchema>;
 
