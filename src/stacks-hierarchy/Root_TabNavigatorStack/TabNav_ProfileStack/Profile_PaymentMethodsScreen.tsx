@@ -114,6 +114,12 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
   const focusRef = useFocusOnLoad(navigation);
 
+  const title = t(
+    isVippsPaymentAgreementEnabled
+      ? PaymentMethodsTexts.header.titleWithAgreements
+      : PaymentMethodsTexts.header.title,
+  );
+
   const refreshControlProps = useManualRefreshControlProps({
     refreshing: recurringPaymentFetching || isFetchingPaymentAgreements,
     onRefresh: () => {
@@ -126,15 +132,12 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     <FullScreenView
       focusRef={focusRef}
       headerProps={{
-        title: t(PaymentMethodsTexts.header.title),
+        title,
         leftButton: {type: 'back'},
       }}
       refreshControlProps={refreshControlProps}
       headerContent={(focusRef) => (
-        <ScreenHeading
-          ref={focusRef}
-          text={t(PaymentMethodsTexts.header.title)}
-        />
+        <ScreenHeading ref={focusRef} text={title} />
       )}
     >
       <View style={styles.content}>
@@ -252,7 +255,11 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
 
                 <Section>
                   <LinkSectionItem
-                    text={t(PaymentMethodsTexts.addPaymentMethod)}
+                    text={t(
+                      isVippsPaymentAgreementEnabled
+                        ? PaymentMethodsTexts.addPaymentMethodWithAgreements
+                        : PaymentMethodsTexts.addPaymentMethod,
+                    )}
                     onPress={onAddRecurringPayment}
                     rightIcon={{svg: Add}}
                   />

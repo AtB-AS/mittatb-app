@@ -3,6 +3,11 @@ import {translation as _} from '../../commons';
 const PaymentMethodsTexts = {
   header: {
     title: _('Betalingskort', 'Payment cards', 'Betalingskort'),
+    titleWithAgreements: _(
+      'Betalingsmåter',
+      'Payment methods',
+      'Betalingsmåtar',
+    ),
   },
   noStoredCards: _(
     'Du har ingen lagrede betalingskort.',
@@ -85,6 +90,11 @@ const PaymentMethodsTexts = {
     'Legg til betalingskort',
     'Add payment card',
     'Legg til betalingskort',
+  ),
+  addPaymentMethodWithAgreements: _(
+    'Legg til kort',
+    'Add card',
+    'Legg til kort',
   ),
   vippsInfo: _(
     'Når du kjøper billetter kan du også bruke Vipps',
