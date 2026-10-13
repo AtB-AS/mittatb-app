@@ -66,60 +66,57 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
           </WithValidityLine>
         </GenericSectionItem>
         <GenericSectionItem accessibility={{accessible: true}}>
-          {status == 'rejected' && (
-            <ThemeText typography="body__s" type="secondary">
-              {t(
-                TicketingTexts.reservation.orderDate(
-                  formatToLongDateTime(
-                    fromUnixTime(reservation.created.getTime() / 1000),
-                    language,
+          <View style={styles.detail}>
+            {status == 'rejected' && (
+              <ThemeText typography="body__s" type="secondary">
+                {t(
+                  TicketingTexts.reservation.orderDate(
+                    formatToLongDateTime(
+                      fromUnixTime(reservation.created.getTime() / 1000),
+                      language,
+                    ),
                   ),
-                ),
-              )}
-            </ThemeText>
-          )}
-          <ThemeText
-            typography="body__s"
-            type="secondary"
-            style={styles.detail}
-          >
-            {t(TicketingTexts.reservation.paymentMethod(paymentType))}
-          </ThemeText>
-          <ThemeText style={styles.detail}>
-            {t(TicketingTexts.reservation.orderId(reservation.orderId))}
-          </ThemeText>
-          {status === 'reserving' && (
-            <View style={styles.actions}>
-              {reservation.paymentType === PaymentType.Vipps && (
+                )}
+              </ThemeText>
+            )}
+            <View style={styles.detailTexts}>
+              <ThemeText typography="body__s" type="secondary">
+                {t(TicketingTexts.reservation.paymentMethod(paymentType))}
+              </ThemeText>
+              <ThemeText>
+                {t(TicketingTexts.reservation.orderId(reservation.orderId))}
+              </ThemeText>
+            </View>
+            {status === 'reserving' &&
+              reservation.paymentType === PaymentType.Vipps && (
                 <Button
                   expanded={true}
                   onPress={async () => await openUrl(reservation.url)}
                   accessibilityRole="link"
                   text={t(TicketingTexts.reservation.goToVipps)}
-                  mode="tertiary"
+                  mode="secondary"
                   backgroundColor={theme.color.background.neutral[0]}
                 />
               )}
-              {!cancelMutation.isSuccess && (
-                <Button
-                  expanded={true}
-                  onPress={() =>
-                    cancelMutation.mutate({payment: reservation, isUser: true})
-                  }
-                  text={t(PurchaseConfirmationTexts.cancelPayment)}
-                  mode="tertiary"
-                  backgroundColor={theme.color.background.neutral[0]}
-                  loading={cancelMutation.isPending}
-                />
-              )}
-            </View>
-          )}
-          {cancelMutation.isError && (
-            <MessageInfoBox
-              type="error"
-              message={t(PurchaseConfirmationTexts.cancelPaymentError)}
-            />
-          )}
+            {status === 'reserving' && !cancelMutation.isSuccess && (
+              <Button
+                expanded={true}
+                onPress={() =>
+                  cancelMutation.mutate({payment: reservation, isUser: true})
+                }
+                text={t(PurchaseConfirmationTexts.cancelPayment)}
+                mode="primary"
+                interactiveColor={theme.color.interactive.destructive}
+                loading={cancelMutation.isPending}
+              />
+            )}
+            {cancelMutation.isError && (
+              <MessageInfoBox
+                type="error"
+                message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+              />
+            )}
+          </View>
         </GenericSectionItem>
       </Section>
     </NativeTouchable>
@@ -132,10 +129,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderWidth: 0,
   },
   detail: {
-    paddingVertical: theme.spacing.xSmall,
-  },
-  actions: {
     flex: 1,
-    rowGap: theme.spacing.small,
+    gap: theme.spacing.medium,
+  },
+  detailTexts: {
+    flex: 1,
+    gap: theme.spacing.small,
   },
 }));
