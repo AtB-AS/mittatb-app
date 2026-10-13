@@ -175,7 +175,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {data: paymentAgreements, isFetching: isFetchingPaymentAgreements} =
     useListPaymentAgreementsQuery(shouldUsePaymentAgreement);
   const paymentAgreementId = shouldUsePaymentAgreement
-    ? getLatestPaymentAgreement(paymentAgreements)?.id
+    ? getLatestPaymentAgreement(paymentAgreements, PaymentType.Vipps)?.id
     : undefined;
 
   const reserveMutation = useReserveOfferMutation({

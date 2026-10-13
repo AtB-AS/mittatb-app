@@ -82,6 +82,9 @@ export enum PaymentAgreementStatus {
 export type PaymentAgreement = {
   id: number;
   status: PaymentAgreementStatus;
+  // Not set if the backend doesn't recognize the agreement provider (only Vipps
+  // exists today)
+  paymentType?: PaymentType;
 };
 
 /**

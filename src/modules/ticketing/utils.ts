@@ -1,4 +1,4 @@
-import {startCase} from 'lodash';
+import {findLast, startCase} from 'lodash';
 import {
   LastUsedAccessState,
   UsedAccessStatus,
@@ -120,14 +120,15 @@ export function humanizePaymentTypeString(paymentType: string) {
 }
 
 /**
- * The newest payment agreement, i.e. the one with the highest id.
+ * The newest payment agreement of the given type, assuming the list is ordered
+ * oldest first. Ids are not assumed to be increasing.
  */
 export function getLatestPaymentAgreement(
   paymentAgreements: PaymentAgreement[] | undefined,
+  paymentType: PaymentType,
 ): PaymentAgreement | undefined {
-  return paymentAgreements?.reduce<PaymentAgreement | undefined>(
-    (latest, agreement) =>
-      !latest || agreement.id > latest.id ? agreement : latest,
-    undefined,
+  return findLast(
+    paymentAgreements,
+    (agreement) => agreement.paymentType === paymentType,
   );
 }
