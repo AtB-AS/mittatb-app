@@ -72,12 +72,19 @@ export const PaymentAgreementBox = ({
             {agreement && (
               <ThemeText typography="body__s" type="secondary">
                 {t(
-                  PaymentMethodsTexts.agreements.vipps.active.created(
-                    formatToShortDateWithFullYear(
-                      agreement.createdAt,
-                      language,
-                    ),
-                  ),
+                  agreement.updatedAt
+                    ? PaymentMethodsTexts.agreements.vipps.active.updated(
+                        formatToShortDateWithFullYear(
+                          agreement.updatedAt,
+                          language,
+                        ),
+                      )
+                    : PaymentMethodsTexts.agreements.vipps.active.created(
+                        formatToShortDateWithFullYear(
+                          agreement.createdAt,
+                          language,
+                        ),
+                      ),
                 )}
               </ThemeText>
             )}

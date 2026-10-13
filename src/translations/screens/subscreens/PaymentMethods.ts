@@ -135,6 +135,8 @@ const PaymentMethodsTexts = {
         ),
         created: (date: string) =>
           _(`Opprettet ${date}`, `Created ${date}`, `Oppretta ${date}`),
+        updated: (date: string) =>
+          _(`Oppdatert ${date}`, `Updated ${date}`, `Oppdatert ${date}`),
         stopButton: _('Avslutt', 'End', 'Avslutt'),
       },
     },
