@@ -201,7 +201,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         (paymentMethod?.paymentType &&
           isNonRecurringPaymentType(paymentMethod.paymentType))
       ) {
-        // Free and Apple Pay purchases have nothing left to do here
+        // For free and Apple Pay purchases, no futher action is needed here.
         onPaymentCompleted();
         return;
       }
@@ -211,6 +211,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         `${APP_SCHEME}://purchase-callback`,
         onPurchaseCallback,
         () =>
+          // On in app browser cancel, try to run the cancel mutation. If that
+          // fails, navigate to active tickets.
           cancelPaymentMutation.mutate(
             {payment: reserveMutation.data, isUser: false},
             {onError: () => navigateToTickets({refreshTickets: true})},
