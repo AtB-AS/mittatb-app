@@ -87,8 +87,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
-  const hasError =
-    isError ||
+  const hasPaymentAgreementsError =
     isPaymentAgreementsError ||
     addPaymentAgreement.isError ||
     stopPaymentAgreement.isError;
@@ -173,7 +172,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
           </>
         ) : (
           <>
-            {hasError && (
+            {hasPaymentAgreementsError && (
               <MessageInfoBox
                 a11yLiveRegion="polite"
                 type="error"
@@ -212,6 +211,13 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                 />
               )}
               <View style={styles.savedCards}>
+                {isError && (
+                  <MessageInfoBox
+                    a11yLiveRegion="polite"
+                    type="error"
+                    message={t(PaymentMethodsTexts.genericError)}
+                  />
+                )}
                 {recurringPaymentIsLoading && <Loading />}
                 {recurringPayment && recurringPayment.length > 0 && (
                   <Section>
