@@ -235,10 +235,79 @@ describe('computeFreeMinuteCount', () => {
     ).toBe(11);
   });
 
-  it('caps the result at 180 minutes', () => {
+  it('applies no limit of its own beyond the budget when the last segment is open-ended', () => {
     const perMinPricing = [segment({interval: 1, rate: 1})];
     expect(
       computeFreeMinuteCount(freeMinutesAdjustment(-300), perMinPricing),
-    ).toBe(180);
+    ).toBe(300);
+  });
+
+  // Operators start the first segment at minute 1 — the first whole minute is
+  // the first billable tick — so summing segment lengths lands a minute short
+  // of where the table ends.
+  describe('with a first segment starting at minute 1', () => {
+    // The real Trondheim Bysykkel ebike plan.
+    const ebike = [
+      segment({start: 1, end: 20, interval: 1, rate: 2}),
+      segment({start: 20, end: 180, interval: 1, rate: 1.5}),
+    ];
+
+    it('reaches the end of the last segment once the budget covers them all', () => {
+      // A full 180-minute ride costs 19 * 2 + 160 * 1.5 = 278.
+      expect(computeFreeMinuteCount(freeMinutesAdjustment(-278), ebike)).toBe(
+        180,
+      );
+    });
+
+    it('does not exceed the table when given more than it costs', () => {
+      expect(computeFreeMinuteCount(freeMinutesAdjustment(-300), ebike)).toBe(
+        180,
+      );
+    });
+
+    it('still stops mid-table when the budget runs out', () => {
+      // 38 buys the first segment, the remaining 17 buys 11 more at 1.5.
+      expect(computeFreeMinuteCount(freeMinutesAdjustment(-55), ebike)).toBe(
+        30,
+      );
+    });
+
+    it('leaves an open-ended last segment budget-bound', () => {
+      // Ryde/Voi: one segment, no end, so there is no table end to reach.
+      const ryde = [segment({start: 1, interval: 1, rate: 2.5})];
+      expect(computeFreeMinuteCount(freeMinutesAdjustment(-25), ryde)).toBe(10);
+    });
+  });
+
+  // The offset start is a property of the plan, not an assumption of the
+  // calculation: an operator numbering from 0 charges for every minute it
+  // describes, and the window must not gain one it already covers.
+  describe('with a first segment starting at minute 0', () => {
+    const zeroBased = [
+      segment({start: 0, end: 20, interval: 1, rate: 2}),
+      segment({start: 20, end: 180, interval: 1, rate: 1.5}),
+    ];
+
+    it('reaches the end of the table without over-counting', () => {
+      // Every described minute is charged: 20 * 2 + 160 * 1.5 = 280.
+      expect(
+        computeFreeMinuteCount(freeMinutesAdjustment(-280), zeroBased),
+      ).toBe(180);
+    });
+
+    it('stays budget-bound one minute short of covering the table', () => {
+      expect(
+        computeFreeMinuteCount(freeMinutesAdjustment(-279), zeroBased),
+      ).toBe(179);
+    });
+
+    it('treats minutes no segment charges for as free', () => {
+      // A plan that only starts charging at minute 5 leaves 0-5 uncharged, so
+      // covering the table buys the whole 45 minutes.
+      const offset = [segment({start: 5, end: 45, interval: 1, rate: 2})];
+      expect(computeFreeMinuteCount(freeMinutesAdjustment(-80), offset)).toBe(
+        45,
+      );
+    });
   });
 });
