@@ -11,13 +11,16 @@ import {
   Route,
   PartialRoute,
 } from '@react-navigation/native';
+import {useQueryClient} from '@tanstack/react-query';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   CustomerProfile,
+  LIST_PAYMENT_AGREEMENTS_QUERY_KEY,
   PreassignedFareProduct,
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
 import {parseParamAsFormFactors, parseParamAsInt} from './utils';
@@ -42,18 +45,33 @@ export function useDeepLinks() {
   const {customerProfile} = useTicketingContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
+  const queryClient = useQueryClient();
 
   const tripSearchLocationsRef = useRef<TripSearchLocations>(undefined);
 
   /**
    * Asynchronous work that happends before getStateFromPath is called.
    */
-  const prepare = useCallback(async (url: string) => {
-    const {path, params} = parseDeepLink(url.replace(`${APP_SCHEME}://`, ''));
-    if (path === 'trip-search') {
-      tripSearchLocationsRef.current = await resolveTripSearchLocations(params);
-    }
-  }, []);
+  const prepare = useCallback(
+    async (url: string) => {
+      const {path, params} = parseDeepLink(url.replace(`${APP_SCHEME}://`, ''));
+      if (path === 'trip-search') {
+        tripSearchLocationsRef.current =
+          await resolveTripSearchLocations(params);
+      }
+      if (path === 'payment-methods') {
+        // Temporary until payment agreement events are supported. Entur can
+        // take a moment to set the agreement to active after the user has
+        // confirmed it in Vipps, which sends the user back here.
+        setTimeout(() => {
+          queryClient.invalidateQueries({
+            queryKey: [LIST_PAYMENT_AGREEMENTS_QUERY_KEY],
+          });
+        }, ONE_SECOND_MS);
+      }
+    },
+    [queryClient],
+  );
 
   const subscribe = useCallback(
     (listener: (url: string) => void) => {

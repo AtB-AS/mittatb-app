@@ -6,10 +6,13 @@ import {
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 
+export const LIST_PAYMENT_AGREEMENTS_QUERY_KEY =
+  'GET_LIST_PAYMENT_AGREEMENTS_QUERY_KEY';
+
 export const getListPaymentAgreementsQueryKey = (
   abtCustomerId: string | undefined,
   isLoggedIn: boolean,
-) => ['GET_LIST_PAYMENT_AGREEMENTS_QUERY_KEY', abtCustomerId, isLoggedIn];
+) => [LIST_PAYMENT_AGREEMENTS_QUERY_KEY, abtCustomerId, isLoggedIn];
 
 /**
  * The user's active payment agreements.
@@ -26,6 +29,9 @@ export const useListPaymentAgreementsQuery = (enabled: boolean) => {
       return [];
     },
     gcTime: ONE_HOUR_MS,
+    // The agreements can change outside of the app, e.g. when activating one in
+    // Vipps, so refetch when the app is opened again.
+    refetchOnWindowFocus: true,
     // Failing should not keep the payment button disabled; paying with Vipps
     // without an agreement still works.
     retry: false,
