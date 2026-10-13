@@ -170,7 +170,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const reserveMutation = useReserveOfferMutation({
     offers,
-    paymentMethod,
+    paymentMethod: isFree ? undefined : paymentMethod,
     recipient,
     shouldSavePaymentMethod,
     paymentData,

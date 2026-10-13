@@ -98,18 +98,20 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
                   backgroundColor={theme.color.background.neutral[0]}
                 />
               )}
-            {status === 'reserving' && !cancelMutation.isSuccess && (
-              <Button
-                expanded={true}
-                onPress={() =>
-                  cancelMutation.mutate({payment: reservation, isUser: true})
-                }
-                text={t(PurchaseConfirmationTexts.cancelPayment)}
-                mode="primary"
-                interactiveColor={theme.color.interactive.destructive}
-                loading={cancelMutation.isPending}
-              />
-            )}
+            {status === 'reserving' &&
+              !!reservation.paymentId &&
+              !cancelMutation.isSuccess && (
+                <Button
+                  expanded={true}
+                  onPress={() =>
+                    cancelMutation.mutate({payment: reservation, isUser: true})
+                  }
+                  text={t(PurchaseConfirmationTexts.cancelPayment)}
+                  mode="primary"
+                  interactiveColor={theme.color.interactive.destructive}
+                  loading={cancelMutation.isPending}
+                />
+              )}
             {cancelMutation.isError && (
               <MessageInfoBox
                 type="error"
