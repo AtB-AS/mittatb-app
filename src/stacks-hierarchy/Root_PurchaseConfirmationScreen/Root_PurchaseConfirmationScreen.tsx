@@ -388,20 +388,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const isPaymentFailed = !!paymentFailure || reserveMutation.isError;
   const isPaymentInProgress = !isPaymentFailed && !reserveMutation.isIdle;
 
-  // For errors where there is no guarantee that the payment won't go through
-  const isPaymentUnconfirmed =
-    reserveMutation.isError &&
-    !['BAD_REQUEST', 'PROFILE_ERROR'].includes(reserveMutation.error.kind);
-
   const paymentErrorText = (() => {
     if (cancelPaymentMutation.isError) {
       return t(PurchaseConfirmationTexts.paymentErrors.cancelError);
     }
     if (vippsNotInstalledError) {
       return t(PurchaseConfirmationTexts.paymentErrors.vippsNotInstalledError);
-    }
-    if (isPaymentUnconfirmed) {
-      return t(PurchaseConfirmationTexts.paymentErrors.unconfirmed);
     }
     if (paymentFailure === 'cancelled') {
       return t(PurchaseConfirmationTexts.paymentErrors.cancelled);
@@ -443,7 +435,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               type="error"
               message={paymentErrorText}
               onPressConfig={
-                cancelPaymentMutation.isError || isPaymentUnconfirmed
+                cancelPaymentMutation.isError
                   ? {
                       text: t(PurchaseConfirmationTexts.goToTickets),
                       action: () => navigateToTickets({refreshTickets: true}),

@@ -207,11 +207,6 @@ const PurchaseConfirmationTexts = {
       'We were unable to set up the payment. Do you have the Vipps app installed?',
       'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
     ),
-    unconfirmed: _(
-      'TODO: Vi kunne ikke bekrefte betalingen. Sjekk billettene dine før du prøver igjen.',
-      "TODO: We couldn't confirm the payment. Check your tickets before you try again.",
-      'TODO: Vi kunne ikkje stadfeste betalinga. Sjekk billettane dine før du prøver igjen.',
-    ),
     cancelled: _(
       'TODO: Betalingen ble avbrutt. Vennligst prøv igjen.',
       'TODO: The payment was cancelled. Please try again.',
