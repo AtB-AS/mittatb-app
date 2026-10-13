@@ -213,9 +213,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         () =>
           cancelPaymentMutation.mutate(
             {payment: reserveMutation.data, isUser: false},
-            {onError: () => navigateToTickets()},
+            {onError: () => navigateToTickets({refreshTickets: true})},
           ),
-        () => navigateToTickets(),
+        () => navigateToTickets({refreshTickets: true}),
       );
     },
     reserveMutation.status === 'success',
@@ -239,14 +239,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       setVippsNotInstalledError(true);
       cancelPaymentMutation.mutate(
         {payment: reserveOfferResponse, isUser: false},
-        {onError: () => navigateToTickets()},
+        {onError: () => navigateToTickets({refreshTickets: true})},
       );
     });
     if (!didFail) onPaymentCompleted();
   }
 
   const navigateToTickets = useCallback(
-    (savedTripPattern?: TripPattern) => {
+    (params: {savedTripPattern?: TripPattern; refreshTickets?: boolean}) => {
       if (hasLeftScreenRef.current) return;
       hasLeftScreenRef.current = true;
       closeInAppBrowseriOS();
@@ -256,7 +256,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           screen: 'Ticketing_RootScreen',
           params: {
             screen: 'TicketTabNav_AvailableFareContractsTabScreen',
-            params: {savedTripPattern},
+            params,
           },
         },
       });
@@ -279,7 +279,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         ...params.tripAnalytics,
       });
     }
-    navigateToTickets(savedTripPattern);
+    navigateToTickets({savedTripPattern});
   }, [
     navigateToTickets,
     userId,
