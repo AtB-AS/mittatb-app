@@ -9,6 +9,7 @@ import {FareContractType, type TicketOffer} from '@atb-as/utils';
 import {client} from '@atb/api';
 import {
   ReserveOfferResponse,
+  AddPaymentAgreementResponse,
   PaymentAgreement,
   PaymentAgreementStatus,
   PaymentType,
@@ -100,6 +101,34 @@ export async function listPaymentAgreements(
     authWithIdToken: true,
     params: {status: statuses?.join(',')},
   });
+
+  return response.data;
+}
+
+export async function addPaymentAgreement(
+  paymentRedirectUrl: string,
+): Promise<AddPaymentAgreementResponse> {
+  const url = 'sales/v1/payment-agreements';
+
+  const response = await client.post<AddPaymentAgreementResponse>(
+    url,
+    {paymentRedirectUrl},
+    {authWithIdToken: true},
+  );
+
+  return response.data;
+}
+
+export async function stopPaymentAgreement(
+  agreementId: number,
+): Promise<PaymentAgreement> {
+  const url = `sales/v1/payment-agreements/${agreementId}/stop`;
+
+  const response = await client.post<PaymentAgreement>(
+    url,
+    {},
+    {authWithIdToken: true},
+  );
 
   return response.data;
 }

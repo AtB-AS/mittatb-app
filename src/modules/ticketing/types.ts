@@ -84,6 +84,15 @@ export type PaymentAgreement = {
   status: PaymentAgreementStatus;
 };
 
+/**
+ * Defined by `AddPaymentAgreementResponse` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/payment_agreements.rs
+ */
+export type AddPaymentAgreementResponse = {
+  confirmationUrl: string;
+  agreementId: number;
+};
+
 export type PaymentStatus =
   | 'AUTHENTICATE'
   | 'CANCEL'
