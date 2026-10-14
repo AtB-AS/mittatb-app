@@ -6,7 +6,6 @@ import {
   getMessaging,
   getToken,
   hasPermission,
-  isDeviceRegisteredForRemoteMessages,
   registerDeviceForRemoteMessages,
   requestPermission,
 } from '@react-native-firebase/messaging';
@@ -69,18 +68,18 @@ export const NotificationContextProvider = ({children}: Props) => {
 
   const getFcmToken = useCallback(async () => {
     try {
-      // Ensures device is registered to Apple for remote messages
-      // It should be automatically registered in our workflow
-      // but if there are cases where it fails, this should safeguard it.
-      // Safe to call on Android, no need to do a platform check.
-      if (!isDeviceRegisteredForRemoteMessages(getMessaging())) {
-        await registerDeviceForRemoteMessages(getMessaging());
-      }
-
-      // On iOS, wait for the APNs token to be available before requesting
-      // the FCM token. registerDeviceForRemoteMessages resolves before the
-      // APNs token callback fires, so getToken() can fail without this.
       if (Platform.OS === 'ios') {
+        // Ensures device is registered to Apple for remote messages. It should
+        // be automatically registered, but that can fail, e.g. without
+        // connectivity at startup. Always call it instead of checking
+        // isDeviceRegisteredForRemoteMessages(), since that value is cached in
+        // JS and can be out of sync with iOS. Resolves immediately if iOS is
+        // already registered.
+        await registerDeviceForRemoteMessages(getMessaging());
+
+        // Wait for the APNs token to be available before requesting the FCM
+        // token. registerDeviceForRemoteMessages can resolve before the APNs
+        // token callback fires, so getToken() can fail without this.
         let apnsToken = await getAPNSToken(getMessaging());
         if (!apnsToken) {
           for (let i = 0; i < 5; i++) {
