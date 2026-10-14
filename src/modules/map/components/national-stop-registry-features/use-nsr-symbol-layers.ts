@@ -13,9 +13,11 @@ import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/compone
 import {useMemo} from 'react';
 import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {getFilterWhichOnlyShowsVisibleIds} from './get-filter-which-only-shows-visible-ids';
 
 export const useNsrSymbolLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
+  visibleIds: NsrProps['visibleIds'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
   const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
@@ -35,9 +37,12 @@ export const useNsrSymbolLayers = (
           id,
         );
 
-        const filter = getFilterWhichAlsoHidesSelectedFeature(
-          [...nsrSymbolLayer.filter, hideItemsInTheDistanceFilter],
-          selectedFeaturePropertyId,
+        const filter = getFilterWhichOnlyShowsVisibleIds(
+          getFilterWhichAlsoHidesSelectedFeature(
+            [...nsrSymbolLayer.filter, hideItemsInTheDistanceFilter],
+            selectedFeaturePropertyId,
+          ),
+          visibleIds,
         );
 
         // inital values are set for the case when textLocation === NsrSymbolLayerTextLocation.InsideCircle
@@ -132,6 +137,7 @@ export const useNsrSymbolLayers = (
       theme.color.transport.city.foreground.primary,
       theme.color.transport.city.foreground.secondary,
       themeName,
+      visibleIds,
     ],
   );
 };

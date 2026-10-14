@@ -23,6 +23,7 @@ import {
   FareZone as ConfigFareZone,
 } from '@atb/modules/configuration';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {EstimatedCall} from '@atb/api/types/departures';
@@ -675,3 +676,41 @@ export function getTicketInfoForExpressBoatBookingTrip(
     fareProductTypeConfig,
   };
 }
+
+type QuayWithStopPlaceId = Pick<QuayFragment, 'id'> & {
+  stopPlace?: Pick<StopPlaceFragment, 'id'>;
+};
+
+/**
+ * Get the NSR ids (quays and stop places) of the stops in the given estimated
+ * calls. Returns undefined if no ids are found.
+ */
+export const getStopIdsFromEstimatedCalls = (
+  estimatedCalls: EstimatedCallWithQuayFragment[] | undefined,
+): string[] | undefined =>
+  getStopIdsFromQuays(estimatedCalls?.map((ec) => ec.quay) ?? []);
+
+/**
+ * Get the NSR ids (quays and stop places) of the stops along the given legs.
+ * Returns undefined if no ids are found.
+ */
+export const getStopIdsFromLegs = (legs: Leg[]): string[] | undefined =>
+  getStopIdsFromQuays(
+    legs
+      .flatMap((leg) => [
+        leg.fromPlace.quay,
+        ...leg.intermediateEstimatedCalls.map((ec) => ec.quay),
+        leg.toPlace.quay,
+      ])
+      .filter(isDefined),
+  );
+
+const getStopIdsFromQuays = (
+  quays: QuayWithStopPlaceId[],
+): string[] | undefined => {
+  const stopIds = quays
+    .flatMap((quay) => [quay.id, quay.stopPlace?.id])
+    .filter(isDefined)
+    .filter(onlyUniques);
+  return stopIds.length ? stopIds : undefined;
+};
