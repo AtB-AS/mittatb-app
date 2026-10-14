@@ -32,9 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     reactNativeDelegate = delegate
     reactNativeFactory = factory
-    
-    // Initialize window
-    window = UIWindow(frame: UIScreen.main.bounds)
+    self.launchOptions = launchOptions
 
     // Initialize Intercom
     if let intercomApiKey = Bundle.main.object(forInfoDictionaryKey: "IntercomApiKey") as? String, !intercomApiKey.isEmpty {
@@ -63,18 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if let appGroupName = Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String, !appGroupName.isEmpty {
       RNCAsyncStorage.setAppGroupName(appGroupName);
     }
-    
-    factory.startReactNative(
-         withModuleName: "atb",
-         in: window,
-         launchOptions: launchOptions
-       )
 
+    // React Native is started in SceneDelegate
     return true
-  }
-  
-  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-    return RCTLinkingManager.application(app, open: url, options: options)
   }
 }
 
