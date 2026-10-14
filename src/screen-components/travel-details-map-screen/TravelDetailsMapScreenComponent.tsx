@@ -67,6 +67,11 @@ export type TravelDetailsMapScreenParams = {
   toPlace?: Coordinates | Position;
   mapFilter?: MapFilterType;
   estimatedCalls?: Array<EstimatedCallWithQuayFragment>;
+  /**
+   * NSR ids (stop places and quays) of the stops to show in the map. If not
+   * set, all stops are shown.
+   */
+  stopIds?: string[];
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -97,6 +102,7 @@ export const TravelDetailsMapScreenComponent = ({
   fromPlace,
   onPressBack,
   estimatedCalls,
+  stopIds,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -198,6 +204,7 @@ export const TravelDetailsMapScreenComponent = ({
         />
         <NationalStopRegistryFeatures
           selectedFeaturePropertyId={undefined}
+          visibleIds={stopIds}
           onMapItemClick={undefined}
         />
 

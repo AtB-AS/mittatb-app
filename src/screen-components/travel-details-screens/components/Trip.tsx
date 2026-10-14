@@ -16,6 +16,7 @@ import {
   getLineDestinationName,
   getPublicCodeFromLeg,
   getShouldShowLiveVehicle,
+  getStopIdsFromLegs,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
   nextDisplayedDeparture,
@@ -174,6 +175,7 @@ export const Trip: React.FC<TripProps> = ({
                 };
               }),
               mapFilter,
+              stopIds: getStopIdsFromLegs(tripPatternLegs),
             });
           }}
         />

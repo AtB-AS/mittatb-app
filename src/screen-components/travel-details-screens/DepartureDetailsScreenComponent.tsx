@@ -59,6 +59,7 @@ import {canSellTicketsForSubMode} from '@atb/modules/operator-config';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {
   formatDestinationDisplay,
+  getStopIdsFromEstimatedCalls,
   getBookingStatus,
   getLineAndTimeA11yLabel,
   getNoticesForServiceJourney,
@@ -284,6 +285,7 @@ export const DepartureDetailsScreenComponent = ({
         : undefined,
       followVehicle: !!vehiclePosition,
       estimatedCalls: serviceJourney?.estimatedCalls,
+      stopIds: getStopIdsFromEstimatedCalls(serviceJourney?.estimatedCalls),
     });
   };
 

@@ -11,19 +11,28 @@ import {MapSlotLayerId} from '../../hooks/use-mapbox-json-style';
 
 /**
  * @property {string} selectedFeaturePropertyId - Should be the id from properties, which is the NSR id. This is needed to hide the selected feature.
+ * @property {string[]} visibleIds - If set, only features with an NSR id in this list are shown.
  */
 export type NsrProps = {
   selectedFeaturePropertyId?: string;
+  visibleIds?: string[];
   onMapItemClick?: (e: OnPressEvent) => void;
 };
 
 // For data from National Stop Registry (NSR) (See https://stoppested.entur.org and https://developer.entur.org/pages-nsr-nsr)
 export const NationalStopRegistryFeatures = ({
   selectedFeaturePropertyId,
+  visibleIds,
   onMapItemClick,
 }: NsrProps) => {
-  const nsrCircleLayers = useNsrCircleLayers(selectedFeaturePropertyId);
-  const nsrSymbolLayers = useNsrSymbolLayers(selectedFeaturePropertyId);
+  const nsrCircleLayers = useNsrCircleLayers(
+    selectedFeaturePropertyId,
+    visibleIds,
+  );
+  const nsrSymbolLayers = useNsrSymbolLayers(
+    selectedFeaturePropertyId,
+    visibleIds,
+  );
 
   return (
     <MapboxGL.VectorSource
