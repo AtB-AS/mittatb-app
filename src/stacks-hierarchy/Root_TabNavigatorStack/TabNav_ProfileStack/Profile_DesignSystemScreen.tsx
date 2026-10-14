@@ -120,12 +120,7 @@ export const Profile_DesignSystemScreen = ({
 
   const transportSwatches = Object.entries(theme.color.transport).map(
     ([key, color]) => {
-      return <Swatch color={color.primary} name={key} key={key} />;
-    },
-  );
-  const secondaryTransportSwatches = Object.entries(theme.color.transport).map(
-    ([key, color]) => {
-      return <Swatch color={color.secondary} name={key} key={key} />;
+      return <Swatch color={color} name={key} key={key} />;
     },
   );
 
@@ -1391,7 +1386,6 @@ export const Profile_DesignSystemScreen = ({
 
         <View style={styles.swatchGroup}>{backgroundSwatches}</View>
         <View style={styles.swatchGroup}>{transportSwatches}</View>
-        <View style={styles.swatchGroup}>{secondaryTransportSwatches}</View>
         <View style={styles.swatchGroup}>{statusSwatches}</View>
         <View style={styles.swatchGroup}>
           <ThemeText>Text colors:</ThemeText>

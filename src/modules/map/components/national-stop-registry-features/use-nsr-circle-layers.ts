@@ -43,7 +43,7 @@ export const useNsrCircleLayers = (
           circleRadius,
           circleOpacity,
 
-          circleColor: theme.color.transport.city.primary.background,
+          circleColor: theme.color.transport.city.background,
           circleStrokeColor: themeName === 'light' ? '#ffffff' : '#000000',
           circleStrokeWidth: 1.1,
           circleTranslate: [0, 0] as const,
@@ -63,7 +63,7 @@ export const useNsrCircleLayers = (
     [
       mapbox_nsr_source_layer_id,
       selectedFeaturePropertyId,
-      theme.color.transport.city.primary.background,
+      theme.color.transport.city.background,
       themeName,
     ],
   );

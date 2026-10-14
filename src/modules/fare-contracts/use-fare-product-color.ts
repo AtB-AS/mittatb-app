@@ -16,5 +16,5 @@ export function useFareProductColor(fareProductType?: string): ContrastColor {
   if (!mode) {
     return theme.color.status.valid.primary;
   }
-  return transportColor.primary;
+  return transportColor;
 }
