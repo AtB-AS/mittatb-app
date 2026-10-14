@@ -147,9 +147,12 @@ describe('privacy', () => {
 describe('payment-methods', () => {
   afterEach(() => jest.useRealTimers());
 
-  it('opens the payment methods screen on top of the profile screen', () => {
+  it('opens the payment methods screen on top of the profile screen, without resetting the stack', () => {
     const state = getStateFrom('payment-methods');
-    expect(findRoute(state, 'Profile_PaymentMethodsScreen')).toBeDefined();
+    expect(findRoute(state, 'TabNav_ProfileStack')).toEqual({
+      name: 'TabNav_ProfileStack',
+      params: {screen: 'Profile_PaymentMethodsScreen', initial: false},
+    });
   });
 
   it('invalidates the payment agreements a second after being linked back', async () => {
