@@ -1,16 +1,12 @@
 import {useThemeContext} from '@atb/theme';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {
-  ContrastColor,
-  TransportColor,
-  TransportColors,
-} from '@atb/theme/colors';
+import {ContrastColor, TransportColors} from '@atb/theme/colors';
 
 export function useTransportColor(
   mode?: AnyMode,
   subMode?: AnySubMode,
   isFlexible?: boolean,
-): TransportColor<ContrastColor> {
+): ContrastColor {
   const themeColor = getTransportColorKey(mode, subMode, isFlexible);
   const {theme} = useThemeContext();
   return theme.color.transport[themeColor];

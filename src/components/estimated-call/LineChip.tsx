@@ -27,10 +27,7 @@ export function LineChip({serviceJourney, messageType}: LineChipProps) {
   const {transportMode, transportSubmode} = serviceJourney;
   const publicCode = serviceJourney.line?.publicCode;
 
-  const transportColor = useTransportColor(
-    transportMode,
-    transportSubmode,
-  ).primary;
+  const transportColor = useTransportColor(transportMode, transportSubmode);
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const icon = messageType && statusTypeToIcon(messageType, true, themeName);
 

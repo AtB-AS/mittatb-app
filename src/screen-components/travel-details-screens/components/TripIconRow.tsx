@@ -56,7 +56,7 @@ export const TripIconRow = ({
       };
 
   const boxContrast =
-    typeof color === 'object' ? color : theme.color.transport.walk.primary;
+    typeof color === 'object' ? color : theme.color.transport.walk;
 
   const icon = (
     <ThemeIcon

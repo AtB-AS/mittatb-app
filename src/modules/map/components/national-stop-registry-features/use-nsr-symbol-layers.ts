@@ -42,9 +42,9 @@ export const useNsrSymbolLayers = (
 
         // inital values are set for the case when textLocation === NsrSymbolLayerTextLocation.InsideCircle
         let textColor: SymbolLayerStyleProps['textColor'] =
-          theme.color.transport.city.primary.foreground.primary;
+          theme.color.transport.city.foreground.primary;
         let textHaloColor: SymbolLayerStyleProps['textHaloColor'] =
-          theme.color.transport.city.primary.foreground.secondary;
+          theme.color.transport.city.foreground.secondary;
         let textHaloWidth: SymbolLayerStyleProps['textHaloWidth'] = 0.3;
         let textVariableAnchor: SymbolLayerStyleProps['textVariableAnchor'] = [
           'center',
@@ -129,8 +129,8 @@ export const useNsrSymbolLayers = (
       selectedFeaturePropertyId,
       theme.color.foreground.dynamic.primary,
       theme.color.foreground.inverse.primary,
-      theme.color.transport.city.primary.foreground.primary,
-      theme.color.transport.city.primary.foreground.secondary,
+      theme.color.transport.city.foreground.primary,
+      theme.color.transport.city.foreground.secondary,
       themeName,
     ],
   );

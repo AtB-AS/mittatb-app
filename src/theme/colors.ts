@@ -20,7 +20,6 @@ export type {
   TextNames,
   InteractiveColor,
   TransportColors,
-  TransportColor,
   StatusColors,
   StatusColor,
 } from '@atb-as/theme';

@@ -53,7 +53,7 @@ export const CounterIconBox = ({
             importantForAccessibility="no-hide-descendants"
           >
             <ThemeText
-              color={getTransportColor(theme).secondary}
+              color={getTransportColor(theme)}
               typography={textType}
               testID="tripLegMore"
               style={{
@@ -74,6 +74,6 @@ export const CounterIconBox = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   counterContainer: {
-    backgroundColor: getTransportColor(theme).primary.background,
+    backgroundColor: getTransportColor(theme).background,
   },
 }));

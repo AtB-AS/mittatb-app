@@ -96,7 +96,7 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
     <TripIconRow
       boxed={!emphasisColor}
       svg={icon}
-      color={emphasisColor ?? theme.color.transport.walk.primary}
+      color={emphasisColor ?? theme.color.transport.walk}
       contentStyle={style.message}
     >
       {title && (
