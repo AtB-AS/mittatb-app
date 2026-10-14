@@ -79,7 +79,6 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
-const MIN_FOLLOW_ZOOM_LEVEL = 13;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 // Scale the vehicle markers with the zoom level: small when zoomed far out,
@@ -168,18 +167,13 @@ export const TravelDetailsMapScreenComponent = ({
     const location = followedVehicle?.location;
     if (!location) return;
     if (loadedMap) {
-      // Zoom in if zoomed further out than the minimum follow zoom level, so
-      // the camera does not follow a tiny marker. Otherwise keep the zoom level.
-      mapViewRef.current?.getZoom().then((zoom) => {
-        flyToLocation({
-          coordinates: location,
-          mapCameraRef,
-          mapViewRef,
-          zoomLevel:
-            zoom < MIN_FOLLOW_ZOOM_LEVEL ? MIN_FOLLOW_ZOOM_LEVEL : undefined,
-          animationDuration: FOLLOW_ANIMATION_DURATION,
-          animationMode: 'easeTo',
-        });
+      flyToLocation({
+        coordinates: location,
+        mapCameraRef,
+        mapViewRef,
+        zoomLevel: FOLLOW_ZOOM_LEVEL,
+        animationDuration: FOLLOW_ANIMATION_DURATION,
+        animationMode: 'easeTo',
       });
     }
   }, [followedVehicle, loadedMap]);
