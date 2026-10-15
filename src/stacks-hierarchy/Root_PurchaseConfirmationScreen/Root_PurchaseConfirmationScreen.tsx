@@ -330,14 +330,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     callback: onPaymentCompleted,
   });
 
-  // Block the user from exiting the screen during reserve, including iOS swipe
-  // and Android back actions.
+  // Block the user from exiting the screen during reserve and cancel, including
+  // iOS swipe and Android back actions. Navigating to tickets is still allowed.
+  const isCancelling = cancelPaymentMutation.isPending;
   useEffect(
     () =>
       navigation.addListener('beforeRemove', (e) => {
-        if (isReservingRef.current) e.preventDefault();
+        if (hasLeftScreenRef.current) return;
+        if (isReservingRef.current || isCancelling) e.preventDefault();
       }),
-    [navigation],
+    [navigation, isCancelling],
   );
 
   function goToPayment() {
@@ -389,7 +391,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   const isPaymentFailed = !!paymentFailure || reserveMutation.isError;
-  const isPaymentInProgress = !isPaymentFailed && !reserveMutation.isIdle;
+  const isPaymentInProgress =
+    isCancelling || (!isPaymentFailed && !reserveMutation.isIdle);
 
   const paymentErrorText = (() => {
     if (vippsNotInstalledError) {
@@ -407,9 +410,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         focusRef={focusRef}
         headerProps={{
           title: t(PurchaseConfirmationTexts.title),
-          leftButton: reserveMutation.isPending
-            ? undefined
-            : {type: 'back', onPress: onBackPress},
+          leftButton:
+            reserveMutation.isPending || isCancelling
+              ? undefined
+              : {type: 'back', onPress: onBackPress},
           globalMessageContext: GlobalMessageContextEnum.appTicketing,
         }}
         headerContent={(focusRef) => (
