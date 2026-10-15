@@ -1,7 +1,6 @@
 import {ProductSelectionByAlias} from './ProductSelectionByAlias';
 import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
-import {useThemeContext} from '@atb/theme';
 import type {
   PurchaseSelectionBuildResult,
   PurchaseSelectionType,
@@ -18,8 +17,6 @@ export function ProductSelection({
   onProductChange,
   style,
 }: ProductSelectionProps) {
-  const {theme} = useThemeContext();
-
   switch (selection.fareProductTypeConfig.configuration.productSelectionMode) {
     case 'product':
       return (
@@ -33,7 +30,6 @@ export function ProductSelection({
     case 'duration':
       return (
         <ProductSelectionByAlias
-          color={theme.color.interactive[2]}
           selection={selection}
           onProductChange={onProductChange}
           style={style}
