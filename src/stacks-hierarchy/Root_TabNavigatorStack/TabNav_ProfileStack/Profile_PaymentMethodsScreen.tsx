@@ -183,7 +183,9 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
             {showPaymentAgreements && paymentAgreements && (
               <PaymentAgreementsSection
                 agreements={paymentAgreements}
-                onActivate={() => addPaymentAgreement.mutate()}
+                onActivate={(paymentType) =>
+                  addPaymentAgreement.mutate(paymentType)
+                }
                 onStop={onStopPaymentAgreement}
                 isLoading={
                   addPaymentAgreement.isPending ||

@@ -108,13 +108,14 @@ export async function listPaymentAgreements(
 }
 
 export async function addPaymentAgreement(
+  paymentType: PaymentType,
   redirectUrl: string,
 ): Promise<AddPaymentAgreementResponse> {
   const url = 'sales/v1/payment-agreements';
 
   const response = await client.post<unknown>(
     url,
-    {redirectUrl},
+    {paymentType, redirectUrl},
     {authWithIdToken: true},
   );
 
