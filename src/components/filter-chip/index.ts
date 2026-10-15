@@ -1,0 +1,1 @@
+export {FilterChip} from './FilterChip';
