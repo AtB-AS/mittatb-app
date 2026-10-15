@@ -1,8 +1,8 @@
 import {FlatList} from 'react-native-gesture-handler';
 import {ViewStyle} from 'react-native';
-import {Button} from '@atb/components/button';
+import {FilterChip} from '@atb/components/filter-chip';
 import React from 'react';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
 import {Loading} from '@atb/components/loading';
@@ -24,8 +24,6 @@ const StopPlaceAndQuaySelection = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
 
   const isMissingQuays = place.quays === undefined;
 
@@ -42,12 +40,10 @@ const StopPlaceAndQuaySelection = ({
           {isMissingQuays ? (
             <Loading size="large" />
           ) : (
-            <Button
-              expanded={false}
+            <FilterChip
               onPress={() => onPress()}
               text={t(DeparturesTexts.quayChips.allStops)}
-              interactiveColor={interactiveColor}
-              active={!selectedQuay}
+              selected={!selectedQuay}
               accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
               testID="allStopsSelectionButton"
             />
@@ -55,12 +51,10 @@ const StopPlaceAndQuaySelection = ({
         </>
       }
       renderItem={({item}: quayChipData) => (
-        <Button
-          expanded={false}
+        <FilterChip
           onPress={() => onPress(item.id)}
           text={getQuayName(item)}
-          interactiveColor={interactiveColor}
-          active={selectedQuay?.id === item.id}
+          selected={selectedQuay?.id === item.id}
           accessibilityHint={
             t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
           }
@@ -82,7 +76,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   quayChipContentContainer: {
     alignItems: 'center',
-    gap: theme.spacing.medium,
+    gap: theme.spacing.small,
     paddingHorizontal: theme.spacing.medium,
     // On Android, buttons were slighly cut off by the scroll view container
     // when it had no extra vertical space

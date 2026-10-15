@@ -35,8 +35,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   notification,
 }) => {
   const {t} = useTranslation();
-  const transportColor = useTransportColor(mode, subMode, isFlexible);
-  const transportationColor = transportColor.primary;
+  const transportationColor = useTransportColor(mode, subMode, isFlexible);
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
   const {theme} = useThemeContext();

@@ -13,9 +13,11 @@ import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/compone
 import {useMemo} from 'react';
 import {hideItemsInTheDistanceFilter} from '../../hooks/use-map-symbol-styles';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {getFilterWhichOnlyShowsVisibleIds} from './get-filter-which-only-shows-visible-ids';
 
 export const useNsrSymbolLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
+  visibleIds: NsrProps['visibleIds'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
   const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
@@ -35,16 +37,19 @@ export const useNsrSymbolLayers = (
           id,
         );
 
-        const filter = getFilterWhichAlsoHidesSelectedFeature(
-          [...nsrSymbolLayer.filter, hideItemsInTheDistanceFilter],
-          selectedFeaturePropertyId,
+        const filter = getFilterWhichOnlyShowsVisibleIds(
+          getFilterWhichAlsoHidesSelectedFeature(
+            [...nsrSymbolLayer.filter, hideItemsInTheDistanceFilter],
+            selectedFeaturePropertyId,
+          ),
+          visibleIds,
         );
 
         // inital values are set for the case when textLocation === NsrSymbolLayerTextLocation.InsideCircle
         let textColor: SymbolLayerStyleProps['textColor'] =
-          theme.color.transport.city.primary.foreground.primary;
+          theme.color.transport.city.foreground.primary;
         let textHaloColor: SymbolLayerStyleProps['textHaloColor'] =
-          theme.color.transport.city.primary.foreground.secondary;
+          theme.color.transport.city.foreground.secondary;
         let textHaloWidth: SymbolLayerStyleProps['textHaloWidth'] = 0.3;
         let textVariableAnchor: SymbolLayerStyleProps['textVariableAnchor'] = [
           'center',
@@ -129,9 +134,10 @@ export const useNsrSymbolLayers = (
       selectedFeaturePropertyId,
       theme.color.foreground.dynamic.primary,
       theme.color.foreground.inverse.primary,
-      theme.color.transport.city.primary.foreground.primary,
-      theme.color.transport.city.primary.foreground.secondary,
+      theme.color.transport.city.foreground.primary,
+      theme.color.transport.city.foreground.secondary,
       themeName,
+      visibleIds,
     ],
   );
 };

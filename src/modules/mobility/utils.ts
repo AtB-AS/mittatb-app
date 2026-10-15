@@ -332,40 +332,59 @@ export const getFreeMinutes = (
     (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
 
+/** How long a segment lasts. Without an `end` its rate runs to the end of the trip. */
+const segmentDuration = (segment: ShmoPricingSegment): number =>
+  segment.end != null ? segment.end - segment.start : Infinity;
+
+/**
+ * How many minutes of a trip a FREE_MINUTES discount makes free.
+ */
 export const computeFreeMinuteCount = (
-  freeMinutes: PriceAdjustmentType,
+  discount: PriceAdjustmentType,
   perMinPricing: ShmoPricingSegment[],
 ): number => {
-  let budget = Math.abs(freeMinutes.amount);
-  let total = 0;
+  let remainingDiscount = Math.abs(discount.amount);
+  let freeMinutes = 0;
+
   for (const segment of perMinPricing) {
-    if (budget <= 0) break;
-    const segLengthMin =
-      segment.end != null ? segment.end - segment.start : Infinity;
+    if (remainingDiscount <= 0) break;
+    const duration = segmentDuration(segment);
+
+    // A rate of zero or less costs nothing: free, discount untouched.
     if (segment.rate <= 0) {
-      total += segLengthMin;
+      freeMinutes += duration;
       continue;
     }
+
+    // Interval zero is one charge for the whole segment: all or nothing.
     if (segment.interval === 0) {
-      // Rate is charged once for the whole segment, not per minute.
-      if (budget < segment.rate) continue;
-      total += segLengthMin;
-      budget -= segment.rate;
+      if (remainingDiscount < segment.rate) continue;
+      freeMinutes += duration;
+      remainingDiscount -= segment.rate;
       continue;
     }
-    const maxIntervalsInSegment =
-      segLengthMin === Infinity
-        ? Infinity
-        : Math.ceil(segLengthMin / segment.interval);
+
+    // Otherwise whole intervals only, and no more than the segment holds.
     const intervals = Math.min(
-      Math.floor(budget / segment.rate),
-      maxIntervalsInSegment,
+      Math.floor(remainingDiscount / segment.rate),
+      Math.ceil(duration / segment.interval),
     );
-    const minutes = Math.min(intervals * segment.interval, segLengthMin);
-    total += minutes;
-    budget -= intervals * segment.rate;
+    freeMinutes += Math.min(intervals * segment.interval, duration);
+    remainingDiscount -= intervals * segment.rate;
   }
-  return Math.min(total, 180);
+
+  // Minutes with no price — before the first segment, or in a gap between two —
+  // are free for everyone. So a discount covering every priced minute reaches
+  // the end of the pricing, which is later than the durations add up to.
+  const pricedMinutes = perMinPricing.reduce(
+    (sum, segment) => sum + segmentDuration(segment),
+    0,
+  );
+  // Undefined when the last segment never ends, leaving no end to reach.
+  const pricingEnd = perMinPricing[perMinPricing.length - 1]?.end;
+  return pricingEnd != null && freeMinutes >= pricedMinutes
+    ? pricingEnd
+    : freeMinutes;
 };
 
 export const getNewFilterState = (

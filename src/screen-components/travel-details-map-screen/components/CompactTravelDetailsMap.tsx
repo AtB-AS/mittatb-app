@@ -108,10 +108,9 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
             {isLive && (
               <ThemeIcon
                 svg={themeName === 'dark' ? RealtimeDark : RealtimeLight}
-                size="small"
               />
             )}
-            <ThemeText typography="body__s__strong" type="primary">
+            <ThemeText typography="body__m__strong" type="primary">
               {buttonText}
             </ThemeText>
             <ThemeIcon svg={ChevronRight} />
@@ -123,8 +122,10 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   mapContainer: {
-    height: 120,
+    height: 100,
     borderRadius: theme.border.radius.regular,
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.color.background.neutral[2].background,
     overflow: 'hidden',
   },
   pillOverlay: {
@@ -140,9 +141,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.xSmall,
-    paddingVertical: theme.spacing.xSmall,
-    paddingHorizontal: theme.spacing.medium,
+    gap: theme.spacing.medium,
+    padding: theme.spacing.medium,
     backgroundColor: theme.color.background.neutral[0].background,
     borderRadius: theme.border.radius.circle,
     ...shadows,

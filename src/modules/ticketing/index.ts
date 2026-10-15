@@ -20,6 +20,7 @@ export {useGetFareProductsQuery} from './use-get-fare-products-query';
 export {useGetSupplementProductsQuery} from './use-get-supplement-products-query';
 export {useDeleteRecurringPaymentMutation} from './use-delete-recurring-payment-mutation';
 export {useCancelRecurringPaymentMutation} from './use-cancel-recurring-payment-mutation';
+export {useCancelPaymentMutation} from './use-cancel-payment-mutation';
 export {useRecurringPayment} from './use-recurring-payment';
 export {useProductAlternatives} from './use-product-alternatives';
 export {

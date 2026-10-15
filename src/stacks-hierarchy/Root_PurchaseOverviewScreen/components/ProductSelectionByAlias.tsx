@@ -4,11 +4,10 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useTextForLanguage} from '@atb/translations/utils';
-import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
+import {FilterChip} from '@atb/components/filter-chip';
 import {
   useGetFareProductsQuery,
   useTicketingContext,
@@ -23,14 +22,12 @@ import {
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 
 type Props = {
-  color: InteractiveColor;
   selection: PurchaseSelectionType;
   onProductChange: (result: PurchaseSelectionBuildResult) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function ProductSelectionByAlias({
-  color,
   selection,
   onProductChange,
   style,
@@ -67,8 +64,7 @@ export function ProductSelectionByAlias({
           if (!text) return null;
 
           return (
-            <ProductAliasChip
-              color={color}
+            <FilterChip
               text={text}
               selected={
                 selection.preassignedFareProduct.productAliasId
@@ -83,6 +79,7 @@ export function ProductSelectionByAlias({
                   .build();
                 onProductChange(result);
               }}
+              testID={'chip' + text.replaceAll(' ', '')}
               key={i}
             />
           );
@@ -99,6 +96,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   durationContentContainer: {
     flexDirection: 'row',
+    gap: theme.spacing.small,
     marginLeft: theme.spacing.medium,
     paddingRight: theme.spacing.medium,
   },

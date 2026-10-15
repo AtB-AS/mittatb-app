@@ -5,8 +5,13 @@ import {
   Reservation,
   PaymentType,
   useTicketingContext,
+  useCancelPaymentMutation,
 } from '@atb/modules/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseConfirmationTexts,
+  TicketingTexts,
+  useTranslation,
+} from '@atb/translations';
 import {openUrl} from '@atb/utils/open-url';
 import React from 'react';
 import {View} from 'react-native';
@@ -16,6 +21,7 @@ import {NativeTouchable} from '@atb/components/native-touchable';
 import {WithValidityLine} from './components/WithValidityLine';
 import {getReservationStatus} from './utils';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type Props = {
   reservation: Reservation;
@@ -27,6 +33,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
+  const cancelMutation = useCancelPaymentMutation();
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
     (id) => id === reservation.customerAccountId,
@@ -59,41 +66,59 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
           </WithValidityLine>
         </GenericSectionItem>
         <GenericSectionItem accessibility={{accessible: true}}>
-          {status == 'rejected' && (
-            <ThemeText typography="body__s" type="secondary">
-              {t(
-                TicketingTexts.reservation.orderDate(
-                  formatToLongDateTime(
-                    fromUnixTime(reservation.created.getTime() / 1000),
-                    language,
+          <View style={styles.detail}>
+            {status == 'rejected' && (
+              <ThemeText typography="body__s" type="secondary">
+                {t(
+                  TicketingTexts.reservation.orderDate(
+                    formatToLongDateTime(
+                      fromUnixTime(reservation.created.getTime() / 1000),
+                      language,
+                    ),
                   ),
-                ),
-              )}
-            </ThemeText>
-          )}
-          <ThemeText
-            typography="body__s"
-            type="secondary"
-            style={styles.detail}
-          >
-            {t(TicketingTexts.reservation.paymentMethod(paymentType))}
-          </ThemeText>
-          <ThemeText style={styles.detail}>
-            {t(TicketingTexts.reservation.orderId(reservation.orderId))}
-          </ThemeText>
-          {reservation.paymentType === PaymentType.Vipps &&
-            status === 'reserving' && (
-              <View style={styles.vippsLinkContainer}>
+                )}
+              </ThemeText>
+            )}
+            <View style={styles.detailTexts}>
+              <ThemeText typography="body__s" type="secondary">
+                {t(TicketingTexts.reservation.paymentMethod(paymentType))}
+              </ThemeText>
+              <ThemeText>
+                {t(TicketingTexts.reservation.orderId(reservation.orderId))}
+              </ThemeText>
+            </View>
+            {status === 'reserving' &&
+              reservation.paymentType === PaymentType.Vipps && (
                 <Button
                   expanded={true}
                   onPress={async () => await openUrl(reservation.url)}
                   accessibilityRole="link"
                   text={t(TicketingTexts.reservation.goToVipps)}
-                  mode="tertiary"
+                  mode="secondary"
                   backgroundColor={theme.color.background.neutral[0]}
                 />
-              </View>
+              )}
+            {status === 'reserving' &&
+              !!reservation.paymentId &&
+              !cancelMutation.isSuccess && (
+                <Button
+                  expanded={true}
+                  onPress={() =>
+                    cancelMutation.mutate({payment: reservation, isUser: true})
+                  }
+                  text={t(PurchaseConfirmationTexts.cancelPayment)}
+                  mode="primary"
+                  interactiveColor={theme.color.interactive.destructive}
+                  loading={cancelMutation.isPending}
+                />
+              )}
+            {cancelMutation.isError && (
+              <MessageInfoBox
+                type="error"
+                message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+              />
             )}
+          </View>
         </GenericSectionItem>
       </Section>
     </NativeTouchable>
@@ -106,9 +131,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderWidth: 0,
   },
   detail: {
-    paddingVertical: theme.spacing.xSmall,
-  },
-  vippsLinkContainer: {
     flex: 1,
+    gap: theme.spacing.medium,
+  },
+  detailTexts: {
+    flex: 1,
+    gap: theme.spacing.small,
   },
 }));

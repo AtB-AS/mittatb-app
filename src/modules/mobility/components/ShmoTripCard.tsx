@@ -41,8 +41,8 @@ export const ShmoTripCard = ({
         <LineWithVerticalBars
           backgroundColor={
             shmoBooking?.state === ShmoBookingState.IN_USE
-              ? backgroundColor.primary.background
-              : backgroundColor.primary.foreground.disabled
+              ? backgroundColor.background
+              : backgroundColor.foreground.disabled
           }
           animate={shmoBooking?.state === ShmoBookingState.IN_USE}
         />

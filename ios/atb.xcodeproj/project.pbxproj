@@ -12,6 +12,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		22CDD79A2E682A4B009A6A01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CDD7992E682A4B009A6A01 /* AppDelegate.swift */; };
+		22CDD79C2E682A4B009A6A01 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CDD79B2E682A4B009A6A01 /* SceneDelegate.swift */; };
 		298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 298D19492AEBC45E00065733 /* InfoPlist.strings */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		4C7501D205EF7D21F5A4F624 /* Pods_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D67A4EB71FAAE4592CCD1A /* Pods_app.framework */; };
@@ -119,6 +120,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = atb/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = atb/Info.plist; sourceTree = "<group>"; };
 		22CDD7992E682A4B009A6A01 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		22CDD79B2E682A4B009A6A01 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		298D19482AEBC45E00065733 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		298D194A2AEBC45F00065733 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		298D194B2AEBC55C00065733 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				22CDD7992E682A4B009A6A01 /* AppDelegate.swift */,
+				22CDD79B2E682A4B009A6A01 /* SceneDelegate.swift */,
 				0F1FBC3125CBDED600484CA4 /* AtB.entitlements */,
 				FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */,
 				38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */,
@@ -649,6 +652,7 @@
 			files = (
 				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
 				22CDD79A2E682A4B009A6A01 /* AppDelegate.swift in Sources */,
+				22CDD79C2E682A4B009A6A01 /* SceneDelegate.swift in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,

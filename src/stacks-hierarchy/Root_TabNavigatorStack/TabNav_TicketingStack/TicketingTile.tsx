@@ -4,7 +4,7 @@ import React from 'react';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {TransportColor} from '@atb/theme/colors';
+import {ContrastColor} from '@atb/theme/colors';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
 import {NativeTouchable} from '@atb/components/native-touchable';
@@ -23,7 +23,7 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  transportColor: TransportColor;
+  transportColor: ContrastColor;
   title?: string;
   description?: string;
   accessibilityLabel?: string;
@@ -35,8 +35,6 @@ export const TicketingTile = ({
   const themeColor = accented
     ? theme.color.background.accent[3]
     : theme.color.background.neutral[0];
-  const themePrimaryColor = transportColor.primary;
-  const themeSecondaryColor = transportColor.secondary;
 
   return (
     <NativeTouchable
@@ -49,7 +47,7 @@ export const TicketingTile = ({
         styles.fareProduct,
         {
           backgroundColor: themeColor.background,
-          borderBottomColor: themePrimaryColor.background,
+          borderBottomColor: transportColor.background,
         },
       ]}
     >
@@ -75,7 +73,7 @@ export const TicketingTile = ({
         <TicketingTileIllustration
           illustrationName={illustrationName}
           style={styles.illustration}
-          fill={themeSecondaryColor.background}
+          fill={transportColor.background}
           width={theme.icon.size.large}
           height={theme.icon.size.large}
         />

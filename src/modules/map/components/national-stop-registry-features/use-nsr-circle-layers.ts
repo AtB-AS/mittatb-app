@@ -10,9 +10,11 @@ import {Props as SymbolLayerProps} from 'node_modules/@rnmapbox/maps/src/compone
 import {CircleLayerStyleProps} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {useMemo} from 'react';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {getFilterWhichOnlyShowsVisibleIds} from './get-filter-which-only-shows-visible-ids';
 
 export const useNsrCircleLayers = (
   selectedFeaturePropertyId: NsrProps['selectedFeaturePropertyId'],
+  visibleIds: NsrProps['visibleIds'],
 ): SymbolLayerProps[] => {
   const {theme, themeName} = useThemeContext();
   const {mapbox_nsr_source_layer_id} = useRemoteConfigContext();
@@ -26,9 +28,12 @@ export const useNsrCircleLayers = (
           id,
         );
 
-        const filter = getFilterWhichAlsoHidesSelectedFeature(
-          nsrCircleLayer.filter,
-          selectedFeaturePropertyId,
+        const filter = getFilterWhichOnlyShowsVisibleIds(
+          getFilterWhichAlsoHidesSelectedFeature(
+            nsrCircleLayer.filter,
+            selectedFeaturePropertyId,
+          ),
+          visibleIds,
         );
 
         const {minZoomLevel, style} = getLayerPropsDeterminedByZoomLevel({
@@ -43,7 +48,7 @@ export const useNsrCircleLayers = (
           circleRadius,
           circleOpacity,
 
-          circleColor: theme.color.transport.city.primary.background,
+          circleColor: theme.color.transport.city.background,
           circleStrokeColor: themeName === 'light' ? '#ffffff' : '#000000',
           circleStrokeWidth: 1.1,
           circleTranslate: [0, 0] as const,
@@ -63,8 +68,9 @@ export const useNsrCircleLayers = (
     [
       mapbox_nsr_source_layer_id,
       selectedFeaturePropertyId,
-      theme.color.transport.city.primary.background,
+      theme.color.transport.city.background,
       themeName,
+      visibleIds,
     ],
   );
 };

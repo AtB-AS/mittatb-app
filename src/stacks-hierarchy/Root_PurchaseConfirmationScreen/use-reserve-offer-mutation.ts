@@ -10,6 +10,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {PaymentMethod} from '@atb/modules/payment';
+import {RequestError} from '@atb/api/utils';
 
 type Args = {
   offers: ReserveOffer[];
@@ -34,7 +35,7 @@ export const useReserveOfferMutation = ({
   const {enable_auto_sale: autoSale} = useRemoteConfigContext();
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<ReserveOfferResponse, RequestError>({
     mutationFn: async (): Promise<ReserveOfferResponse> => {
       return reserveOffers({
         offers,

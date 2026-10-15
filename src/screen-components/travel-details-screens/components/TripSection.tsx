@@ -121,7 +121,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.mode,
     leg.line?.transportSubmode,
     isFlexible,
-  ).secondary.background;
+  ).background;
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
   const showTo = !isWalkSection || !!(isLast && isWalkSection);
@@ -653,8 +653,10 @@ const IntermediateInfo = ({
   const {theme} = useThemeContext();
   const style = useSectionStyles();
   const [expanded, setExpanded] = useState(false);
-  const legColor = useTransportColor(leg.mode, leg.line?.transportSubmode)
-    .secondary.background;
+  const legColor = useTransportColor(
+    leg.mode,
+    leg.line?.transportSubmode,
+  ).background;
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
 
@@ -883,7 +885,7 @@ const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
       decorated
       boxed
       svg={WalkFill}
-      color={theme.color.transport.walk.primary}
+      color={theme.color.transport.walk}
       iconAccessibilityLabel={t(getTranslatedModeName('foot'))}
       testID="footLeg"
       accessibilityLabel={a11yLabel}

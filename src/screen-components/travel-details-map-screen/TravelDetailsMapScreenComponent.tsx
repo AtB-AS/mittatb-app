@@ -67,6 +67,11 @@ export type TravelDetailsMapScreenParams = {
   toPlace?: Coordinates | Position;
   mapFilter?: MapFilterType;
   estimatedCalls?: Array<EstimatedCallWithQuayFragment>;
+  /**
+   * NSR ids (stop places and quays) of the stops to show in the map. If not
+   * set, all stops are shown.
+   */
+  stopIds?: string[];
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -74,7 +79,6 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
-const MIN_FOLLOW_ZOOM_LEVEL = 13;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 // Scale the vehicle markers with the zoom level: small when zoomed far out,
@@ -97,6 +101,7 @@ export const TravelDetailsMapScreenComponent = ({
   fromPlace,
   onPressBack,
   estimatedCalls,
+  stopIds,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -162,18 +167,13 @@ export const TravelDetailsMapScreenComponent = ({
     const location = followedVehicle?.location;
     if (!location) return;
     if (loadedMap) {
-      // Zoom in if zoomed further out than the minimum follow zoom level, so
-      // the camera does not follow a tiny marker. Otherwise keep the zoom level.
-      mapViewRef.current?.getZoom().then((zoom) => {
-        flyToLocation({
-          coordinates: location,
-          mapCameraRef,
-          mapViewRef,
-          zoomLevel:
-            zoom < MIN_FOLLOW_ZOOM_LEVEL ? MIN_FOLLOW_ZOOM_LEVEL : undefined,
-          animationDuration: FOLLOW_ANIMATION_DURATION,
-          animationMode: 'easeTo',
-        });
+      flyToLocation({
+        coordinates: location,
+        mapCameraRef,
+        mapViewRef,
+        zoomLevel: FOLLOW_ZOOM_LEVEL,
+        animationDuration: FOLLOW_ANIMATION_DURATION,
+        animationMode: 'easeTo',
       });
     }
   }, [followedVehicle, loadedMap]);
@@ -198,6 +198,7 @@ export const TravelDetailsMapScreenComponent = ({
         />
         <NationalStopRegistryFeatures
           selectedFeaturePropertyId={undefined}
+          visibleIds={stopIds}
           onMapItemClick={undefined}
         />
 
