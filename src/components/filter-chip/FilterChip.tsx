@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
+import {AccessibilityInfo, Platform, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {NativeTouchable} from '@atb/components/native-touchable';
+import {dictionary, useTranslation} from '@atb/translations';
 
 type Props = {
   text: string;
@@ -23,6 +24,7 @@ export const FilterChip = ({
 }: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
 
   const color = selected
     ? theme.color.surface.accent.subtle
@@ -32,7 +34,14 @@ export const FilterChip = ({
     <NativeTouchable
       variant="block"
       style={[styles.container, selected && styles.containerSelected, style]}
-      onPress={onPress}
+      onPress={() => {
+        // Talkback doesn't read out the updated state automatically, so we
+        // trigger it manually instead.
+        if (Platform.OS === 'android' && !selected) {
+          AccessibilityInfo.announceForAccessibility(t(dictionary.selected));
+        }
+        onPress();
+      }}
       pressedColor={theme.color.surface.accent.subtlePressed.background}
       accessible={true}
       accessibilityRole="button"
