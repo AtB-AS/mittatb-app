@@ -226,10 +226,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     failure: PaymentFailure,
   ) {
     setPaymentFailure(failure);
-    cancelPaymentMutation.mutate({
-      payment: reserveOfferResponse,
-      isUser: false,
-    });
+    // If the cancel fails, the payment may have gone through
+    cancelPaymentMutation.mutate(
+      {payment: reserveOfferResponse, isUser: false},
+      {onError: () => navigateToTickets({refreshTickets: true})},
+    );
   }
 
   async function openVipps(
@@ -246,7 +247,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   const navigateToTickets = useCallback(
-    (params: {savedTripPattern?: TripPattern; refreshTickets?: boolean}) =>
+    (params: {savedTripPattern?: TripPattern; refreshTickets?: boolean}) => {
+      if (hasLeftScreenRef.current) return;
+      hasLeftScreenRef.current = true;
+      closeInAppBrowseriOS();
       navigation.popTo('Root_TabNavigatorStack', {
         screen: 'TabNav_TicketingStack',
         params: {
@@ -256,13 +260,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             params,
           },
         },
-      }),
+      });
+    },
     [navigation],
   );
 
   const onPaymentCompleted = useCallback(async () => {
     if (hasLeftScreenRef.current) return;
-    hasLeftScreenRef.current = true;
     savePreviousPayment(
       userId,
       paymentMethod?.paymentType,
@@ -276,7 +280,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         ...params.tripAnalytics,
       });
     }
-    closeInAppBrowseriOS();
     navigateToTickets({savedTripPattern});
   }, [
     navigateToTickets,
@@ -389,9 +392,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const isPaymentInProgress = !isPaymentFailed && !reserveMutation.isIdle;
 
   const paymentErrorText = (() => {
-    if (cancelPaymentMutation.isError) {
-      return t(PurchaseConfirmationTexts.paymentErrors.cancelError);
-    }
     if (vippsNotInstalledError) {
       return t(PurchaseConfirmationTexts.paymentErrors.vippsNotInstalledError);
     }
@@ -431,18 +431,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           </View>
         ) : (
           <View style={styles.container}>
-            <MessageInfoBox
-              type="error"
-              message={paymentErrorText}
-              onPressConfig={
-                cancelPaymentMutation.isError
-                  ? {
-                      text: t(PurchaseConfirmationTexts.goToTickets),
-                      action: () => navigateToTickets({refreshTickets: true}),
-                    }
-                  : undefined
-              }
-            />
+            <MessageInfoBox type="error" message={paymentErrorText} />
           </View>
         )}
       </FullScreenView>

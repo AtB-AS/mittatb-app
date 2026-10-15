@@ -213,11 +213,6 @@ const PurchaseConfirmationTexts = {
       'TODO: Betalinga vart avbroten. Ver venleg og prøv igjen.',
     ),
   },
-  goToTickets: _(
-    'TODO: Gå til billetter',
-    'TODO: Go to tickets',
-    'TODO: Gå til billettar',
-  ),
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   fram: {
