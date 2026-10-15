@@ -1,12 +1,17 @@
 import {Touchable, TouchableProps} from 'react-native-gesture-handler';
 import React, {forwardRef} from 'react';
-import {Platform} from 'react-native';
+import {ColorValue, Platform} from 'react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 
 export type NativeTouchableVariant = 'block' | 'borderless';
 
 export type NativeTouchableProps = {
   variant: NativeTouchableVariant;
+  /**
+   * Color shown behind the content while pressed, replacing the default
+   * press feedback on both platforms.
+   */
+  pressedColor?: ColorValue;
 } & TouchableProps;
 
 const feedbackProps: Record<NativeTouchableVariant, TouchableProps> = {
@@ -23,7 +28,13 @@ const feedbackProps: Record<NativeTouchableVariant, TouchableProps> = {
 
 export const NativeTouchable = forwardRef<any, NativeTouchableProps>(
   (
-    {variant, disabled, style, ...pressableProps}: NativeTouchableProps,
+    {
+      variant,
+      disabled,
+      style,
+      pressedColor,
+      ...pressableProps
+    }: NativeTouchableProps,
     focusRef,
   ) => {
     if (variant === 'block') {
@@ -47,7 +58,9 @@ export const NativeTouchable = forwardRef<any, NativeTouchableProps>(
           }
         }}
         style={[disabled ? {opacity: 0.2} : undefined, style]}
-        {...feedbackProps[variant]}
+        {...(pressedColor
+          ? {underlayColor: pressedColor, activeUnderlayOpacity: 1}
+          : feedbackProps[variant])}
       >
         {pressableProps?.children}
       </Touchable>
