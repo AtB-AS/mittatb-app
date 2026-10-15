@@ -79,7 +79,7 @@ export function ProductSelectionByAlias({
                   .build();
                 onProductChange(result);
               }}
-              testID={'chip' + text.replace(' ', '')}
+              testID={'chip' + text.replaceAll(' ', '')}
               key={i}
             />
           );
