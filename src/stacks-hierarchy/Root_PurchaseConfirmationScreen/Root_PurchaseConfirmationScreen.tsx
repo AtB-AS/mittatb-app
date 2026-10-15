@@ -14,6 +14,7 @@ import {
   ReserveOfferResponse,
   PaymentType,
   ReserveOffer,
+  useCancelPaymentMutation,
   useTicketingContext,
 } from '@atb/modules/ticketing';
 import {
@@ -40,8 +41,6 @@ import {PreassignedFareContractSummary} from './components/PreassignedFareProduc
 import {SelectPaymentMethodSheet} from '@atb/modules/payment';
 import {PriceSummary} from './components/PriceSummary';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
-import {useCancelPaymentMutation} from './use-cancel-payment-mutation';
-import {useOpenVippsAfterReservation} from './use-open-vipps-after-reservation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
 import {
@@ -75,6 +74,8 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useStoredTripPatterns} from '@atb/modules/experimental-store-trip-patterns';
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {TripPattern} from '@atb/api/types/trips';
+import {openUrl} from '@atb/utils/open-url';
+import queryString from 'query-string';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -97,6 +98,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const [shouldSavePaymentMethod, setShouldSavePaymentMethod] = useState(false);
   const paymentMethod = selectedPaymentMethod ?? previousPaymentMethod;
   const [vippsNotInstalledError, setVippsNotInstalledError] = useState(false);
+  const [paymentNotCompletedError, setPaymentNotCompletedError] =
+    useState(false);
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const focusRef = useFocusOnLoad(navigation);
@@ -109,9 +112,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {isSaveTripsEnabled} = useFeatureTogglesContext();
   const isAutoSaveTripsEnabled = useIsExperimentalEnabled();
   const {addTripPattern, canAddTripPattern} = useStoredTripPatterns();
-  // `onPaymentCompleted` can be triggered by more than one of its sources for
-  // the same purchase, so keep the trip from being saved and logged twice.
-  const hasSavedTripRef = useRef(false);
+  // Several sources can end the same purchase, so only save the trip and
+  // navigate once.
+  const hasLeftScreenRef = useRef(false);
 
   const tripPatternToSave =
     isSaveTripsEnabled &&
@@ -167,7 +170,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const reserveMutation = useReserveOfferMutation({
     offers,
-    paymentMethod,
+    paymentMethod: isFree ? undefined : paymentMethod,
     recipient,
     shouldSavePaymentMethod,
     paymentData,
@@ -188,22 +191,33 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   useDoOnceWhen(
     () => {
       if (reserveMutation.status !== 'success') return;
-      if (!reserveMutation.data.url) return;
-      if (
-        paymentMethod?.paymentType &&
-        isNonRecurringPaymentType(paymentMethod.paymentType)
-      )
+      const {url} = reserveMutation.data;
+      if (paymentMethod?.paymentType === PaymentType.Vipps && url) {
+        openVipps(reserveMutation.data, url);
         return;
+      }
+      if (
+        !url ||
+        (paymentMethod?.paymentType &&
+          isNonRecurringPaymentType(paymentMethod.paymentType))
+      ) {
+        // For free and Apple Pay purchases, no futher action is needed here.
+        onPaymentCompleted();
+        return;
+      }
       openInAppBrowser(
-        reserveMutation.data.url,
+        url,
         'cancel',
         `${APP_SCHEME}://purchase-callback`,
-        onPaymentCompleted,
+        onPurchaseCallback,
         () =>
-          cancelPaymentMutation.mutate({
-            reserveOfferResponse: reserveMutation.data,
-            isUser: false,
-          }),
+          // On in app browser cancel, try to run the cancel mutation. If that
+          // fails, navigate to active tickets.
+          cancelPaymentMutation.mutate(
+            {payment: reserveMutation.data, isUser: false},
+            {onError: () => navigateToTickets({refreshTickets: true})},
+          ),
+        () => navigateToTickets({refreshTickets: true}),
       );
     },
     reserveMutation.status === 'success',
@@ -214,44 +228,62 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     onSuccess: () => {
       cancelPaymentMutation.reset();
       reserveMutation.reset();
-      analytics.logEvent('Ticketing', 'Payment cancelled');
     },
   });
 
-  useOpenVippsAfterReservation(
-    reserveMutation.data?.url,
-    paymentMethod?.paymentType,
-    useCallback(() => setVippsNotInstalledError(true), []),
+  async function openVipps(
+    reserveOfferResponse: ReserveOfferResponse,
+    url: string,
+  ) {
+    let didFail = false;
+    await openUrl(url, () => {
+      didFail = true;
+      setVippsNotInstalledError(true);
+      cancelPaymentMutation.mutate(
+        {payment: reserveOfferResponse, isUser: false},
+        {onError: () => navigateToTickets({refreshTickets: true})},
+      );
+    });
+    if (!didFail) onPaymentCompleted();
+  }
+
+  const navigateToTickets = useCallback(
+    (params: {savedTripPattern?: TripPattern; refreshTickets?: boolean}) => {
+      if (hasLeftScreenRef.current) return;
+      hasLeftScreenRef.current = true;
+      closeInAppBrowseriOS();
+      navigation.popTo('Root_TabNavigatorStack', {
+        screen: 'TabNav_TicketingStack',
+        params: {
+          screen: 'Ticketing_RootScreen',
+          params: {
+            screen: 'TicketTabNav_AvailableFareContractsTabScreen',
+            params,
+          },
+        },
+      });
+    },
+    [navigation],
   );
 
   const onPaymentCompleted = useCallback(async () => {
+    if (hasLeftScreenRef.current) return;
     savePreviousPayment(
       userId,
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,
     );
     let savedTripPattern: TripPattern | undefined;
-    if (tripPatternToSave && !hasSavedTripRef.current) {
-      hasSavedTripRef.current = true;
+    if (tripPatternToSave) {
       addTripPattern(tripPatternToSave);
       savedTripPattern = tripPatternToSave;
       analytics.logEvent('Ticketing', 'Trip saved after purchase', {
         ...params.tripAnalytics,
       });
     }
-    closeInAppBrowseriOS();
-    navigation.popTo('Root_TabNavigatorStack', {
-      screen: 'TabNav_TicketingStack',
-      params: {
-        screen: 'Ticketing_RootScreen',
-        params: {
-          screen: 'TicketTabNav_AvailableFareContractsTabScreen',
-          params: {savedTripPattern},
-        },
-      },
-    });
+    navigateToTickets({savedTripPattern});
   }, [
-    navigation,
+    navigateToTickets,
     userId,
     paymentMethod?.paymentType,
     reserveMutation.data?.recurringPaymentId,
@@ -264,9 +296,36 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   // Call reserve when payment data is received from the Apple Pay payment sheet
   useDoOnceWhen(() => paymentData && reserve(), !!paymentData, false);
 
-  // When deep link {APP_SCHEME}://purchase-callback is called, save payment
-  // method and navigate to active tickets.
-  usePurchaseCallbackListener(onPaymentCompleted);
+  // Apple Pay payment data is sent with reserve, so money may be withdrawn
+  // when reserve fails with an unknown result.
+  const isApplePayResultUnknown =
+    paymentMethod?.paymentType === PaymentType.ApplePay &&
+    reserveMutation.isError &&
+    !['BAD_REQUEST', 'PROFILE_ERROR'].includes(reserveMutation.error.kind);
+  useDoOnceWhen(
+    () => navigateToTickets({refreshTickets: true}),
+    isApplePayResultUnknown,
+    false,
+  );
+
+  const resetReserveMutation = reserveMutation.reset;
+  const onPurchaseCallback = useCallback(
+    (url: string) => {
+      const responseCode = queryString.parseUrl(url).query.response_code;
+      // Without a response code the result is unknown, so don't allow a retry
+      if (!responseCode || responseCode === 'OK') {
+        onPaymentCompleted();
+        return;
+      }
+      setPaymentNotCompletedError(true);
+      resetReserveMutation();
+    },
+    [onPaymentCompleted, resetReserveMutation],
+  );
+
+  // When deep link {APP_SCHEME}://purchase-callback is called, handle it like
+  // the in-app browser redirect.
+  usePurchaseCallbackListener(onPurchaseCallback);
 
   // In edge cases where the fare contract appears before the callback is
   // called, we can cancel the payment flow and navigate to active tickets.
@@ -277,6 +336,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   function goToPayment() {
     setVippsNotInstalledError(false);
+    setPaymentNotCompletedError(false);
     const offerExpirationTime =
       offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
     if (offerExpirationTime && offerExpirationTime < Date.now()) {
@@ -323,7 +383,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           onPress: () => {
             if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
-                reserveOfferResponse: reserveMutation.data,
+                payment: reserveMutation.data,
                 isUser: false,
               });
             }
@@ -402,7 +462,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             preassignedFareProductType: selection.preassignedFareProduct.type,
           }}
         />
-        {reserveMutation.isError && (
+        {(reserveMutation.isError || paymentNotCompletedError) && (
           <MessageInfoBox
             message={t(PurchaseConfirmationTexts.reserveError)}
             type="error"
@@ -457,7 +517,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           onCancelPayment={() => {
             if (reserveMutation.data) {
               cancelPaymentMutation.mutate({
-                reserveOfferResponse: reserveMutation.data,
+                payment: reserveMutation.data,
                 isUser: true,
               });
             }
@@ -474,7 +534,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           setVippsNotInstalledError(false);
           if (reserveMutation.data) {
             cancelPaymentMutation.mutate({
-              reserveOfferResponse: reserveMutation.data,
+              payment: reserveMutation.data,
               isUser: false,
             });
           }
