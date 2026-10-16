@@ -75,7 +75,7 @@ export const RulesScreenComponent = ({
 
   const onOpenTerms = () => {
     if (mobilityTermsUrl) {
-      openInAppBrowser(mobilityTermsUrl, 'close');
+      openInAppBrowser(mobilityTermsUrl);
       analytics.logEvent('Mobility', 'Open terms');
     }
   };

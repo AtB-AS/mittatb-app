@@ -184,7 +184,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
       if (match) {
         const urlToOpen = normalizeUrlForOpening(qr);
         if (match.openMode === 'in-app-browser') {
-          await openInAppBrowser(urlToOpen, 'close');
+          await openInAppBrowser(urlToOpen);
         } else {
           await openUrl(urlToOpen);
         }

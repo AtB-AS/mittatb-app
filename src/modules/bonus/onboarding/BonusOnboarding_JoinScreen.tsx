@@ -148,7 +148,6 @@ export const Terms = ({error}: {error: Error | null}) => {
           onPress={() =>
             openInAppBrowser(
               'https://www.atb.no/vilkar/personvernerklaering-for-kundetjenester/',
-              'close',
             )
           }
           accessibility={{

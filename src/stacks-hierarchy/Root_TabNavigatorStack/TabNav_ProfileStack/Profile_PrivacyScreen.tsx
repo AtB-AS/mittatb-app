@@ -56,7 +56,7 @@ export const Profile_PrivacyScreen = ({navigation}: Props) => {
             }}
             testID="privacyButton"
             onPress={async () => {
-              await openInAppBrowser(PRIVACY_POLICY_URL, 'close');
+              await openInAppBrowser(PRIVACY_POLICY_URL);
             }}
           />
         </Section>

@@ -131,7 +131,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
             rightIcon={{svg: ExternalLink}}
-            onPress={() => openInAppBrowser(flex_ticket_url, 'close')}
+            onPress={() => openInAppBrowser(flex_ticket_url)}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),
               accessibilityRole: 'link',

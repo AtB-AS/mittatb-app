@@ -169,7 +169,7 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <NativeTouchable
             variant="block"
-            onPress={() => openInAppBrowser('https://atb.no/kontakt', 'close')}
+            onPress={() => openInAppBrowser('https://atb.no/kontakt')}
             accessibilityRole="link"
             style={style.linkItem}
           >

@@ -115,8 +115,7 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
                 configurableLinks?.flexTransportInfo,
                 language,
               );
-              flexTransportInfoUrl &&
-                openInAppBrowser(flexTransportInfoUrl, 'close');
+              flexTransportInfoUrl && openInAppBrowser(flexTransportInfoUrl);
             }}
             accessibilityRole="link"
             accessibilityHint={t(

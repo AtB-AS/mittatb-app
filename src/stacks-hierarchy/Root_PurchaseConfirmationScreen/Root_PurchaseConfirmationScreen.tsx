@@ -205,20 +205,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         onPaymentCompleted();
         return;
       }
-      openInAppBrowser(
-        url,
-        'cancel',
-        `${APP_SCHEME}://purchase-callback`,
-        onPurchaseCallback,
-        () =>
+      openInAppBrowser(url, {
+        successUrl: `${APP_SCHEME}://purchase-callback`,
+        onSuccess: onPurchaseCallback,
+        onCancel: () =>
           // On in app browser cancel, try to run the cancel mutation. If that
           // fails, navigate to active tickets.
           cancelPaymentMutation.mutate(
             {payment: reserveMutation.data, isUser: false},
             {onError: () => navigateToTickets({refreshTickets: true})},
           ),
-        () => navigateToTickets({refreshTickets: true}),
-      );
+        onError: () => navigateToTickets({refreshTickets: true}),
+      });
     },
     reserveMutation.status === 'success',
     false,

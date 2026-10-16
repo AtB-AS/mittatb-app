@@ -152,7 +152,7 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
 };
 
 const openLink = async (url: string) => {
-  openInAppBrowser(url, 'close');
+  openInAppBrowser(url);
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({

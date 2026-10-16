@@ -63,7 +63,7 @@ export const Profile_InformationScreen = ({navigation}: Props) => {
                   .serviceDisruptions.label,
               )}
               testID="serviceDisruptionsButton"
-              onPress={() => openInAppBrowser(service_disruption_url, 'close')}
+              onPress={() => openInAppBrowser(service_disruption_url)}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems
@@ -81,7 +81,7 @@ export const Profile_InformationScreen = ({navigation}: Props) => {
                   .label,
               )}
               testID="ticketingInfoButton"
-              onPress={() => openInAppBrowser(ticketingInfoUrl, 'close')}
+              onPress={() => openInAppBrowser(ticketingInfoUrl)}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems.ticketing
@@ -98,7 +98,7 @@ export const Profile_InformationScreen = ({navigation}: Props) => {
                 ProfileTexts.sections.information.linkSectionItems.terms.label,
               )}
               testID="termsInfoButton"
-              onPress={() => openInAppBrowser(termsInfoUrl, 'close')}
+              onPress={() => openInAppBrowser(termsInfoUrl)}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems.terms
@@ -117,7 +117,7 @@ export const Profile_InformationScreen = ({navigation}: Props) => {
                   .label,
               )}
               testID="inspectionInfoButton"
-              onPress={() => openInAppBrowser(inspectionInfoUrl, 'close')}
+              onPress={() => openInAppBrowser(inspectionInfoUrl)}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems.inspection
@@ -136,7 +136,7 @@ export const Profile_InformationScreen = ({navigation}: Props) => {
                   .accessibilityStatement.label,
               )}
               testID="a11yStatementButton"
-              onPress={() => openInAppBrowser(a11yStatementUrl, 'close')}
+              onPress={() => openInAppBrowser(a11yStatementUrl)}
               accessibility={{
                 accessibilityHint: t(
                   ProfileTexts.sections.information.linkSectionItems

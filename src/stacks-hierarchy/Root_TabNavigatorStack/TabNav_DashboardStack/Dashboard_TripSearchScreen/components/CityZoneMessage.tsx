@@ -153,7 +153,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'book_online_action',
           orderUrl: orderUrl,
         });
-        openInAppBrowser(orderUrl, 'close');
+        openInAppBrowser(orderUrl);
       },
     });
   }
@@ -188,7 +188,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'more_info_action',
           moreInfoUrl: moreInfoUrl,
         });
-        openInAppBrowser(moreInfoUrl, 'close');
+        openInAppBrowser(moreInfoUrl);
       },
     });
   }

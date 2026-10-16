@@ -42,7 +42,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
               TripDetailsTexts.flexibleTransport.bookOnlineA11yHint,
             )}
             text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
-            onPress={() => openInAppBrowser(bookingUrl, 'close')}
+            onPress={() => openInAppBrowser(bookingUrl)}
             mode="primary"
             type="small"
             expanded={false}
