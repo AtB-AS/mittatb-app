@@ -150,17 +150,12 @@ const PurchaseConfirmationTexts = {
     ),
   },
 
-  waitingForPayment: _(
-    'Venter på betaling',
-    'Waiting for payment',
-    'Venter på betaling',
+  paymentInProgress: _(
+    'Betaling pågår',
+    'Payment in progress',
+    'Betaling pågår',
   ),
   cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
-  cancelPaymentError: _(
-    'Vi klarte ikke å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller kontakt kundesenteret.',
-    'We were unable to cancel your purchase. Please check if you have received the ticket, or contact customer service.',
-    'Vi klarte ikkje å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller ta kontakt med kundesenteret.',
-  ),
 
   choosePaymentMethod: {
     text: _('Velg betalingsmåte', 'Choose payment option', 'Vel betalingsmåte'),
@@ -196,16 +191,28 @@ const PurchaseConfirmationTexts = {
     `Ordinary price`,
     `Ordinær pris`,
   ),
-  reserveError: _(
-    'Vi klarte ikke å sette i gang betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
-    'We were unable to start the payment. Please try again, or contact customer service for assistance.',
-    'Vi klarte ikkje å starte betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
-  ),
-  vippsInstalledError: _(
-    'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
-    'We were unable to set up the payment. Do you have the Vipps app installed?',
-    'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
-  ),
+  paymentErrors: {
+    generic: _(
+      'Vi klarte ikke å sette i gang betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'We were unable to start the payment. Please try again, or contact customer service for assistance.',
+      'Vi klarte ikkje å starte betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    ),
+    cancelError: _(
+      'Vi klarte ikke å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller kontakt kundesenteret.',
+      'We were unable to cancel your purchase. Please check if you have received the ticket, or contact customer service.',
+      'Vi klarte ikkje å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller ta kontakt med kundesenteret.',
+    ),
+    vippsNotInstalledError: _(
+      'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
+      'We were unable to set up the payment. Do you have the Vipps app installed?',
+      'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
+    ),
+    cancelled: _(
+      'TODO: Betalingen ble avbrutt. Vennligst prøv igjen.',
+      'TODO: The payment was cancelled. Please try again.',
+      'TODO: Betalinga vart avbroten. Ver venleg og prøv igjen.',
+    ),
+  },
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   fram: {

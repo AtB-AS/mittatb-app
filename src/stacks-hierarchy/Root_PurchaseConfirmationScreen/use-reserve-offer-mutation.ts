@@ -9,6 +9,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/modules/on-behalf-of';
 import {PaymentMethod} from '@atb/modules/payment';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {RequestError} from '@atb/api/utils';
 
 type Args = {
@@ -45,6 +46,7 @@ export const useReserveOfferMutation = ({
         autoSale,
         recipient,
         paymentData,
+        opts: {timeout: 30 * ONE_SECOND_MS},
       });
     },
     onSuccess: (data) => {

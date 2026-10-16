@@ -115,7 +115,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
             {cancelMutation.isError && (
               <MessageInfoBox
                 type="error"
-                message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+                message={t(PurchaseConfirmationTexts.paymentErrors.cancelError)}
               />
             )}
           </View>
