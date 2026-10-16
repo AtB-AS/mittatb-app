@@ -15,19 +15,15 @@ export const getListPaymentAgreementsQueryKey = (
 ) => [LIST_PAYMENT_AGREEMENTS_QUERY_KEY, abtCustomerId, isLoggedIn];
 
 /**
- * The user's active payment agreements.
+ * The user's active payment agreements. Only fetched when the user is logged
+ * in, so there is no data until then.
  */
 export const useListPaymentAgreementsQuery = (enabled: boolean) => {
   const {abtCustomerId, isLoggedIn} = useAuthContext();
 
   return useQuery({
     queryKey: getListPaymentAgreementsQueryKey(abtCustomerId, isLoggedIn),
-    queryFn: async () => {
-      if (isLoggedIn && abtCustomerId) {
-        return await listPaymentAgreements([PaymentAgreementStatus.Active]);
-      }
-      return [];
-    },
+    queryFn: () => listPaymentAgreements([PaymentAgreementStatus.Active]),
     gcTime: ONE_HOUR_MS,
     // The agreements can change outside of the app, e.g. when activating one in
     // Vipps, so refetch when the app is opened again.
@@ -35,6 +31,6 @@ export const useListPaymentAgreementsQuery = (enabled: boolean) => {
     // Failing should not keep the payment button disabled; paying with Vipps
     // without an agreement still works.
     retry: false,
-    enabled,
+    enabled: enabled && isLoggedIn && !!abtCustomerId,
   });
 };
