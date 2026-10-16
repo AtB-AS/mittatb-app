@@ -50,7 +50,7 @@ export const DatePickerSheet = <T extends string>({
   const keyboardHeight = useKeyboardHeight();
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useThemeContext();
+  const {themeName} = useThemeContext();
   const locale = useLocaleContext();
 
   const [isSpinning, setIsSpinning] = useState(false);
@@ -85,7 +85,6 @@ export const DatePickerSheet = <T extends string>({
     >
       <View style={[styles.container, {paddingBottom: keyboardHeight}]}>
         <RadioSegments
-          color={theme.color.interactive[2]}
           activeIndex={options.findIndex((o) => o.option === selectedOptionId)}
           options={options.map((o) => ({
             text: o.text,

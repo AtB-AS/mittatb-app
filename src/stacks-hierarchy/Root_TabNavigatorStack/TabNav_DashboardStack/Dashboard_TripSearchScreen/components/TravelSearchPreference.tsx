@@ -4,7 +4,7 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   preference: TravelSearchPreferenceWithSelectionType;
@@ -18,7 +18,6 @@ export const TravelSearchPreference = ({
 }: Props) => {
   const {language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const selectedIndex = preference.options.findIndex(
     (o) => preference.selectedOption === o.id,
   );
@@ -34,7 +33,6 @@ export const TravelSearchPreference = ({
       </ThemeText>
       <RadioSegments
         activeIndex={selectedIndex}
-        color={theme.color.interactive[2]}
         options={preference.options.map((option) => ({
           text: getTextForLanguage(option.text, language) ?? '',
           onPress: () => {

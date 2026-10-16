@@ -162,23 +162,8 @@ export const Profile_DesignSystemScreen = ({
     {
       text: 'Option 3',
       onPress: () => setSegmentedSelection(2),
-      subtext: 'Subtext',
     },
   ];
-
-  const radioSegments = Object.entries(theme.color.interactive).map(
-    ([key, color]) => (
-      <RadioSegments
-        key={key}
-        activeIndex={segmentedSelection}
-        style={{
-          marginTop: theme.spacing.small,
-        }}
-        color={color as InteractiveColor}
-        options={radioSegmentsOptions}
-      />
-    ),
-  );
 
   const interactiveColorKeys: (keyof typeof theme.color.interactive)[] =
     Object.keys(
@@ -1425,7 +1410,11 @@ export const Profile_DesignSystemScreen = ({
 
         <View style={{margin: theme.spacing.medium}}>
           <ThemeText>Segmented controls:</ThemeText>
-          {radioSegments}
+          <RadioSegments
+            activeIndex={segmentedSelection}
+            style={styles.radioSegments}
+            options={radioSegmentsOptions}
+          />
         </View>
       </ScrollView>
       <BottomSheetModal
@@ -1483,6 +1472,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.large,
     marginHorizontal: theme.spacing.medium,
     marginBottom: theme.spacing.small,
+  },
+  radioSegments: {
+    marginTop: theme.spacing.small,
   },
   swatchGroup: {
     margin: theme.spacing.medium,
