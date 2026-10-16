@@ -64,7 +64,7 @@ export const Root_LoginOptionsScreen = ({
   const {completeOnboardingSection} = useOnboardingContext();
 
   const {mutateAsync: authVipps} = useAuthenticateVipps({
-    onSuccess: (url) => openInAppBrowser(url, 'cancel'),
+    onSuccess: (url) => openInAppBrowser(url),
     onError: () => setError('unknown_error'),
     onSettled: () => {
       setIsLoading(false);
@@ -224,7 +224,9 @@ export const Root_LoginOptionsScreen = ({
               backgroundColor={themeColor}
               mode="tertiary"
               rightIcon={{svg: ExternalLink}}
-              onPress={() => openInAppBrowser(termsInfoUrl, 'done')}
+              onPress={() =>
+                openInAppBrowser(termsInfoUrl, {dismissButtonStyle: 'done'})
+              }
               text={t(LoginTexts.logInOptions.termsOfUse)}
               accessibilityRole="link"
             />

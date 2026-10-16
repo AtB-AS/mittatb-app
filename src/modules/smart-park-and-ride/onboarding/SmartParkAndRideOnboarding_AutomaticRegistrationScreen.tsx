@@ -69,7 +69,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = ({
             configurableLinks?.sparReadMoreUrl,
             language,
           );
-          externalLink && openInAppBrowser(externalLink, 'close');
+          externalLink && openInAppBrowser(externalLink);
         },
       }}
       footerButton={{

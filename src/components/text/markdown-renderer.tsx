@@ -104,7 +104,7 @@ function renderToken(
       const url = token.href;
       async function openLink() {
         try {
-          await openInAppBrowser(url, 'close');
+          await openInAppBrowser(url);
         } catch (err: any) {
           Bugsnag.notify(err);
         }
