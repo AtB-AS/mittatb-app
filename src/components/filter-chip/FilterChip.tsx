@@ -3,12 +3,18 @@ import {AccessibilityInfo, Platform, StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {NativeTouchable} from '@atb/components/native-touchable';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
+
+type FilterChipIconProps = {
+  svg: ({fill}: {fill: string}) => React.JSX.Element;
+};
 
 type Props = {
   text: string;
   selected: boolean;
   onPress: () => void;
+  rightIcon?: FilterChipIconProps;
   accessibilityHint?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
@@ -18,6 +24,7 @@ export const FilterChip = ({
   text,
   selected,
   onPress,
+  rightIcon,
   accessibilityHint,
   style,
   testID,
@@ -53,6 +60,14 @@ export const FilterChip = ({
       <ThemeText color={color} typography="body__s__strong">
         {text}
       </ThemeText>
+      {rightIcon && (
+        <ThemeIcon
+          svg={rightIcon.svg}
+          color={color}
+          size="normal"
+          style={styles.rightIcon}
+        />
+      )}
     </NativeTouchable>
   );
 };
@@ -64,10 +79,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderWidth: theme.border.width.slim,
     borderColor: 'transparent',
     backgroundColor: theme.color.surface.neutral.subtle.background,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   containerSelected: {
     backgroundColor: theme.color.surface.accent.subtle.background,
     borderColor: theme.color.surface.accent.strong.background,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.xSmall,
   },
 }));

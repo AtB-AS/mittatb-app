@@ -41,6 +41,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {Tag} from '@atb/components/tag';
 import {FilterChip} from '@atb/components/filter-chip';
+import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Loading} from '@atb/components/loading';
 import {Skeleton, SkeletonBlock} from '@atb/components/skeleton';
@@ -71,6 +72,7 @@ export const Profile_DesignSystemScreen = ({
   const [selectedFilterChips, setSelectedFilterChips] = useState<string[]>([
     'Bus',
   ]);
+  const [filterChipIconSelected, setFilterChipIconSelected] = useState(false);
 
   const bottomSheetModalRef = useRef<BottomSheetModalMethods>(null);
 
@@ -632,21 +634,32 @@ export const Profile_DesignSystemScreen = ({
             textType="heading__m"
             label="new"
             expandContent={
-              <View style={styles.filterChipRow}>
-                {['Bus', 'Tram', 'Boat', 'Train'].map((text) => (
+              <View style={styles.filterChipContainer}>
+                <View style={styles.filterChipRow}>
+                  {['Bus', 'Tram', 'Boat', 'Train'].map((text) => (
+                    <FilterChip
+                      key={text}
+                      text={text}
+                      selected={selectedFilterChips.includes(text)}
+                      onPress={() =>
+                        setSelectedFilterChips((prev) =>
+                          prev.includes(text)
+                            ? prev.filter((t) => t !== text)
+                            : [...prev, text],
+                        )
+                      }
+                    />
+                  ))}
+                </View>
+                <ThemeText>With icon:</ThemeText>
+                <View style={styles.filterChipRow}>
                   <FilterChip
-                    key={text}
-                    text={text}
-                    selected={selectedFilterChips.includes(text)}
-                    onPress={() =>
-                      setSelectedFilterChips((prev) =>
-                        prev.includes(text)
-                          ? prev.filter((t) => t !== text)
-                          : [...prev, text],
-                      )
-                    }
+                    text="Flashlight"
+                    selected={filterChipIconSelected}
+                    onPress={() => setFilterChipIconSelected((prev) => !prev)}
+                    rightIcon={{svg: filterChipIconSelected ? Flash : NoFlash}}
                   />
-                ))}
+                </View>
               </View>
             }
           />
@@ -1486,6 +1499,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   swatchGroup: {
     margin: theme.spacing.medium,
+  },
+  filterChipContainer: {
+    gap: theme.spacing.small,
   },
   filterChipRow: {
     flexDirection: 'row',
