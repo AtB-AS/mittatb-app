@@ -90,6 +90,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     isSmartParkAndRideEnabled,
     isEventStreamEnabled,
     isEventStreamFareContractsEnabled,
+    isVippsPaymentAgreementEnabled,
   } = useFeatureTogglesContext();
   const unreadCount = useChatUnreadCount();
   const {theme} = useThemeContext();
@@ -262,8 +263,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             {authenticationType == 'phone' && (
               <LinkSectionItem
                 text={t(
-                  ProfileTexts.sections.account.linkSectionItems.paymentMethods
-                    .label,
+                  isVippsPaymentAgreementEnabled
+                    ? ProfileTexts.sections.account.linkSectionItems
+                        .paymentMethods.labelWithAgreements
+                    : ProfileTexts.sections.account.linkSectionItems
+                        .paymentMethods.label,
                 )}
                 leftIcon={{svg: Card}}
                 onPress={() =>

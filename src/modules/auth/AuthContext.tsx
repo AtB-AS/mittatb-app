@@ -108,6 +108,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       }
       const customerNumber = action.idTokenResult.claims['customer_number'];
       const abtId = action.idTokenResult.claims['abt_id'];
+      const phoneNumber = action.idTokenResult.claims['phone_number'];
       const authStatus = customerNumber ? 'authenticated' : 'creating-account';
       Bugsnag.leaveBreadcrumb('Retrieved id token', {
         customerNumber,
@@ -117,7 +118,11 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       idTokenGlobal = action.idTokenResult.token;
       idTokenExpirationTimeGlobal = action.idTokenResult.expirationTime;
       debugUserInfoHeaderGlobal = btoa(
-        JSON.stringify({abt_id: abtId, customer_number: customerNumber}),
+        JSON.stringify({
+          abt_id: abtId,
+          customer_number: customerNumber,
+          phone_number: phoneNumber,
+        }),
       );
 
       return {

@@ -3,6 +3,11 @@ import {translation as _} from '../../commons';
 const PaymentMethodsTexts = {
   header: {
     title: _('Betalingskort', 'Payment cards', 'Betalingskort'),
+    titleWithAgreements: _(
+      'Betalingsmåter',
+      'Payment methods',
+      'Betalingsmåtar',
+    ),
   },
   noStoredCards: _(
     'Du har ingen lagrede betalingskort.',
@@ -80,10 +85,16 @@ const PaymentMethodsTexts = {
     ),
     paymentCard: _('betalingskort', 'payment card', 'betalingskort'),
   },
+  savedCardsHeading: _('Lagrede kort', 'Saved cards', 'Lagra kort'),
   addPaymentMethod: _(
     'Legg til betalingskort',
     'Add payment card',
     'Legg til betalingskort',
+  ),
+  addPaymentMethodWithAgreements: _(
+    'Legg til kort',
+    'Add card',
+    'Legg til kort',
   ),
   vippsInfo: _(
     'Når du kjøper billetter kan du også bruke Vipps',
@@ -95,6 +106,67 @@ const PaymentMethodsTexts = {
     'When you buy a ticket you can also pay with Vipps or Apple Pay',
     'Når du kjøper billettar kan du også betale med Vipps eller Apple Pay',
   ),
+  agreements: {
+    heading: _('Avtaler', 'Agreements', 'Avtaler'),
+    vipps: {
+      inactive: {
+        title: _(
+          'Enda enklere betaling',
+          'Even easier payment',
+          'Endå enklare betaling',
+        ),
+        description: _(
+          'Betal med Vipps uten å forlate AtB-appen',
+          'Pay with Vipps without leaving the AtB app',
+          'Betal med Vipps utan å forlate AtB-appen',
+        ),
+        button: _('Aktiver i Vipps', 'Activate in Vipps', 'Aktiver i Vipps'),
+      },
+      active: {
+        title: _(
+          'Avtale med Vipps',
+          'Agreement with Vipps',
+          'Avtale med Vipps',
+        ),
+        description: _(
+          'Du kan betale med Vipps uten å forlate AtB-appen.',
+          'You can pay with Vipps without leaving the AtB app.',
+          'Du kan betale med Vipps utan å forlate AtB-appen.',
+        ),
+        created: (date: string) =>
+          _(`Opprettet ${date}`, `Created ${date}`, `Oppretta ${date}`),
+        updated: (date: string) =>
+          _(`Oppdatert ${date}`, `Updated ${date}`, `Oppdatert ${date}`),
+        stopButton: _('Avslutt', 'End', 'Avslutt'),
+      },
+    },
+    stopModal: {
+      title: _(
+        'Vil du avslutte avtalen?',
+        'Do you want to end the agreement?',
+        'Vil du avslutte avtalen?',
+      ),
+      message: _(
+        'Hvis du avslutter må du godkjenne hvert enkelt billettkjøp i Vipps',
+        'If you end it, you must approve each ticket purchase in Vipps',
+        'Om du avsluttar må du godkjenne kvart einskilt billettkjøp i Vipps',
+      ),
+      cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
+      confirmButton: _('Avslutt', 'End', 'Avslutt'),
+    },
+    stopBlockedByActiveTrip: {
+      title: _(
+        'Kan ikke avslutte avtalen nå',
+        'Unable to end the agreement right now',
+        'Kan ikkje avslutte avtalen no',
+      ),
+      message: _(
+        'Du kan ikke avslutte avtalen mens du har en aktiv tur. Fullfør turen din først.',
+        'You cannot end the agreement while you have an active trip. Please complete your trip first.',
+        'Du kan ikkje avslutte avtalen medan du har ein aktiv tur. Fullfør turen din først.',
+      ),
+    },
+  },
   expiryMessages: {
     cardExpired: _(
       'Kortet er utløpt',

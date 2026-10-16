@@ -1,12 +1,14 @@
-import {startCase} from 'lodash';
+import {last, sortBy, startCase} from 'lodash';
 import {
   LastUsedAccessState,
   UsedAccessStatus,
+  PaymentAgreement,
   PaymentType,
   ConsumableSchoolCarnetResponse,
 } from './types';
 import {FareContractType, TravelRightType, UsedAccessType} from '@atb-as/utils';
 import {getAvailabilityStatus} from '@atb-as/utils';
+import {parseDate} from '@atb/utils/date';
 
 export function isSentOrReceivedFareContract(fc: FareContractType) {
   return fc.customerAccountId !== fc.purchasedBy;
@@ -116,4 +118,26 @@ export function humanizePaymentTypeString(paymentType: string) {
     default:
       return startCase(paymentType.toLowerCase());
   }
+}
+
+/**
+ * The most recent payment agreement of the given type, by when it was last
+ * updated, or else when it was created if it has not been updated. Agreements
+ * with the same time are ordered as in the list, the last one being the latest.
+ * Neither the ids nor the order of the list are assumed to tell which is the
+ * newest.
+ */
+export function getLatestPaymentAgreement(
+  paymentAgreements: PaymentAgreement[] | undefined,
+  paymentType: PaymentType,
+): PaymentAgreement | undefined {
+  const agreementsOfType = (paymentAgreements ?? []).filter(
+    (agreement) => agreement.paymentType === paymentType,
+  );
+  // sortBy is stable, so agreements with the same time keep their order
+  return last(
+    sortBy(agreementsOfType, (agreement) =>
+      parseDate(agreement.updatedAt ?? agreement.createdAt).getTime(),
+    ),
+  );
 }

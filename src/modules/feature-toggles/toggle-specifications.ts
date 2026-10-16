@@ -178,6 +178,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_vehicles_in_map',
   },
   {
+    name: 'isVippsPaymentAgreementEnabled',
+    remoteConfigKey: 'enable_vipps_payment_agreement',
+  },
+  {
     name: 'isVirtualStationsEnabled',
     remoteConfigKey: 'enable_virtual_stations',
   },
