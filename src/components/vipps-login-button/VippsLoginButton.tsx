@@ -5,9 +5,7 @@ import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import VippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
 import {NativeTouchable} from '@atb/components/native-touchable';
-
-const VIPPS_BACKGROUND_COLOR = '#FF5B24';
-const VIPPS_TEXT_COLOR = '#FFFFFF';
+import {VIPPS_BACKGROUND_COLOR, VIPPS_TEXT_COLOR} from './vipps-colors';
 
 export const VippsLoginButton = ({
   onPress,

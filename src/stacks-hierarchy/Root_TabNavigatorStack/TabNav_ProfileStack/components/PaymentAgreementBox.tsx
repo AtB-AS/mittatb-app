@@ -3,6 +3,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
+import {VIPPS_BACKGROUND_COLOR} from '@atb/components/vipps-login-button';
 import {PaymentAgreement, PaymentType} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ContrastColor} from '@atb/theme/colors';
@@ -10,8 +11,6 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {formatToShortDateWithFullYear} from '@atb/utils/date';
 import {View} from 'react-native';
-
-const VIPPS_BACKGROUND_COLOR = '#FF5B24';
 
 type Props = {
   paymentType: PaymentType;
