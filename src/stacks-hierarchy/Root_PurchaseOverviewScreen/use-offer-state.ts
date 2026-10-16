@@ -206,10 +206,15 @@ const initialState: OfferState = {
   supplementProductsWithCountAndOffer: [],
 };
 
+/**
+ * @param options.enabled Defaults to true, should be disabled during 
+ * seat-reservation purchase overview as it is not needed.
+ */
 export function useOfferState(
   preassignedFareProductAlternatives: PreassignedFareProduct[],
   selection?: PurchaseSelectionType,
   bonusProductId?: string,
+  {enabled = true}: {enabled?: boolean} = {},
 ) {
   const offerReducer = getOfferReducer(
     selection?.userProfilesWithCount ?? [],
@@ -219,7 +224,7 @@ export function useOfferState(
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if (selection?.stopPlaces?.to?.isFree) {
+      if (!enabled || selection?.stopPlaces?.to?.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
@@ -342,7 +347,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives, bonusProductId],
+    [selection, preassignedFareProductAlternatives, bonusProductId, enabled],
   );
 
   useEffect(() => {
