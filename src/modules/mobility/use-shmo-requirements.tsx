@@ -108,5 +108,6 @@ export const useShmoRequirements = (
     isLoading,
     operatorAgeLimit,
     ageVerification,
+    hasPaymentMethodPreReq: !!paymentMethodPreReq,
   };
 };
