@@ -91,7 +91,7 @@ type Root_ParkingPhotoScreenParams = {
 type ShmoOperatorParams = {operatorId: string} & (
   | {vehicleId: string | undefined}
   | {bookingId: string | undefined}
-  | {stationId: string | undefined}
+  | {stationId: string | undefined; vehicleTypeId?: string}
 );
 export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;

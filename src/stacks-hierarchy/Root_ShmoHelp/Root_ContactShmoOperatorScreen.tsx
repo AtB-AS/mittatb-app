@@ -51,6 +51,8 @@ export const Root_ContactShmoOperatorScreen = ({
     'bookingId' in route.params ? route.params?.bookingId : undefined;
   const stationId =
     'stationId' in route.params ? route.params?.stationId : undefined;
+  const vehicleTypeId =
+    'vehicleTypeId' in route.params ? route.params?.vehicleTypeId : undefined;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();
@@ -60,9 +62,10 @@ export const Root_ContactShmoOperatorScreen = ({
 
   /* The trip length the operator allows is configured per vehicle type. It is read
      off the booking while a trip is running, since a rented vehicle leaves the
-     vehicles feed for the duration of the trip, and off the vehicle otherwise. */
+     vehicles feed for the duration of the trip, and off the vehicle otherwise -- by
+     id for a free floating vehicle, by station and vehicle type for a docked one. */
   const {data: activeBooking} = useActiveShmoBookingQuery(isFocused);
-  const {data: vehicle} = useVehicleQuery(vehicleId);
+  const {data: vehicle} = useVehicleQuery(vehicleId, vehicleTypeId, stationId);
   const activeTrip = isActiveTripBooking(activeBooking)
     ? activeBooking
     : undefined;
