@@ -207,7 +207,7 @@ const initialState: OfferState = {
 };
 
 /**
- * @param options.enabled Defaults to true, should be disabled during 
+ * @param options.enabled Defaults to true, should be disabled during
  * seat-reservation purchase overview as it is not needed.
  */
 export function useOfferState(
