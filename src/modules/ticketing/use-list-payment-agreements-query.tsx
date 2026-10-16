@@ -15,8 +15,8 @@ export const getListPaymentAgreementsQueryKey = (
 ) => [LIST_PAYMENT_AGREEMENTS_QUERY_KEY, abtCustomerId, isLoggedIn];
 
 /**
- * The user's active payment agreements. Only fetched when the user is logged
- * in, so there is no data until then.
+ * The user's active payment agreements. Like saved cards, payment agreements
+ * require the user to be logged in, so there is no data until then.
  */
 export const useListPaymentAgreementsQuery = (enabled: boolean) => {
   const {abtCustomerId, isLoggedIn} = useAuthContext();
