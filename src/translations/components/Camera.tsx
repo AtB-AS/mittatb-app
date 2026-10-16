@@ -26,8 +26,6 @@ const CameraTexts = {
   },
   flashlight: {
     default: _('Lommelykt', 'Flashlight', 'Lommelykt'),
-    on: _('Lommelykt på', 'Flashlight on', 'Lommelykt på'),
-    off: _('Lommelykt av', 'Flashlight off', 'Lommelykt av'),
   },
 };
 
