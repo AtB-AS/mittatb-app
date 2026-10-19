@@ -134,7 +134,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
     supplementProductsWithCountAndOffer,
-  } = useOfferState(productAlternatives, selection, bonusProductId);
+  } = useOfferState({
+    preassignedFareProductAlternatives: productAlternatives,
+    selection,
+    bonusProductId,
+  });
 
   const relevantTicketBonusProduct = useRelevantTicketBonusProduct(selection);
   const isBonusActiveForUser = useIsBonusActiveForUser();

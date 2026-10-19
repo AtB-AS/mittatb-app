@@ -206,11 +206,21 @@ const initialState: OfferState = {
   supplementProductsWithCountAndOffer: [],
 };
 
-export function useOfferState(
-  preassignedFareProductAlternatives: PreassignedFareProduct[],
-  selection?: PurchaseSelectionType,
-  bonusProductId?: string,
-) {
+/**
+ * @param props.enabled Defaults to true, should be disabled during
+ * seat-reservation purchase overview as it is not needed.
+ */
+export function useOfferState({
+  preassignedFareProductAlternatives,
+  selection,
+  bonusProductId,
+  enabled = true,
+}: {
+  preassignedFareProductAlternatives: PreassignedFareProduct[];
+  selection?: PurchaseSelectionType;
+  bonusProductId?: string;
+  enabled?: boolean;
+}) {
   const offerReducer = getOfferReducer(
     selection?.userProfilesWithCount ?? [],
     selection?.supplementProductsWithCount ?? [],
@@ -219,7 +229,7 @@ export function useOfferState(
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
-      if (selection?.stopPlaces?.to?.isFree) {
+      if (!enabled || selection?.stopPlaces?.to?.isFree) {
         dispatch({type: 'CLEAR_OFFER'});
         return;
       }
@@ -342,7 +352,7 @@ export function useOfferState(
         }
       }
     },
-    [selection, preassignedFareProductAlternatives, bonusProductId],
+    [selection, preassignedFareProductAlternatives, bonusProductId, enabled],
   );
 
   useEffect(() => {
