@@ -25,14 +25,14 @@ type TimeContextState = {
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
 /**
- * The number of milliseconds the device time is ahead of server time.
+ * The number of milliseconds the server time is ahead of device time.
  */
 let serverTimeOffsetGlobal = 0;
 
 /**
  * Returns the current UNIX time in milliseconds.
  */
-export const getServerNowGlobal = () => Date.now() - serverTimeOffsetGlobal;
+export const getServerNowGlobal = () => Date.now() + serverTimeOffsetGlobal;
 
 type Props = {
   children: React.ReactNode;
