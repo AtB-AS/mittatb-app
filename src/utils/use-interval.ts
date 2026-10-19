@@ -30,6 +30,9 @@ export function useInterval(
       const actualDelay = Math.max(delay ?? 0, 100);
 
       let id: NodeJS.Timeout | number = 0;
+      // Set on cleanup, so a callback that is still awaiting when the effect
+      // is cleaned up doesn't schedule a new tick that can never be cleared.
+      let cancelled = false;
 
       function tick() {
         // Uses recursive setTimout loop instead of setInterval to prevent filling the message queue with
@@ -39,7 +42,7 @@ export function useInterval(
         return setTimeout(async function innerCallback() {
           await savedCallback.current();
 
-          if (!disabled) {
+          if (!cancelled) {
             id = tick();
           }
         }, actualDelay);
@@ -49,11 +52,14 @@ export function useInterval(
         if (triggerImmediately) {
           await savedCallback.current();
         }
-        id = tick();
+        if (!cancelled) {
+          id = tick();
+        }
       }
 
       invoke();
       return () => {
+        cancelled = true;
         if (id) {
           clearTimeout(id as number);
         }
