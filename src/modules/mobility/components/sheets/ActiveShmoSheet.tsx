@@ -205,7 +205,6 @@ export const ActiveShmoSheet = ({
   const endButton = (
     <Button
       {...endButtonProps}
-      active={false}
       disabled={sendShmoBookingEventIsLoading}
       interactiveColor={theme.color.interactive.destructive}
       expanded={true}
@@ -313,7 +312,6 @@ export const ActiveShmoSheet = ({
                 <View style={styles.pausedButton}>
                   <Button
                     mode="primary"
-                    active={false}
                     disabled={sendShmoBookingEventIsLoading}
                     expanded={true}
                     type="large"
@@ -342,7 +340,6 @@ export const ActiveShmoSheet = ({
               <Button
                 mode="secondary"
                 backgroundColor={theme.color.background.neutral[1]}
-                active={false}
                 disabled={sendShmoBookingEventIsLoading}
                 expanded={true}
                 type="large"

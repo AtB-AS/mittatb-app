@@ -147,7 +147,6 @@ export const ShmoActionButton = ({
         <Button
           mode="primary"
           rightIcon={{svg: ExternalLink}}
-          active={false}
           interactiveColor={theme.color.interactive[0]}
           expanded={true}
           type="large"
@@ -207,7 +206,6 @@ export const ShmoActionButton = ({
       )}
       <Button
         mode="primary"
-        active={false}
         disabled={
           initShmoOneStopBookingIsLoading ||
           (ageVerificationRequired &&

@@ -93,7 +93,6 @@ export const FinishingScooterSheet = ({
 
           <Button
             mode="primary"
-            active={false}
             expanded={true}
             type="large"
             accessibilityRole="button"

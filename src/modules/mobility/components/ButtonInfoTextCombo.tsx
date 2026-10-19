@@ -20,7 +20,6 @@ export const ButtonInfoTextCombo = ({
       <MessageInfoText type="warning" message={message} />
       <Button
         mode="primary"
-        active={false}
         interactiveColor={theme.color.interactive[0]}
         expanded={true}
         type="large"

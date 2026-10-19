@@ -118,7 +118,6 @@ export const FinishedShmoSheet = ({
           </View>
           <Button
             mode="primary"
-            active={false}
             interactiveColor={theme.color.interactive[0]}
             expanded={true}
             type="large"
