@@ -36,6 +36,7 @@ import {DepartureTime, EstimatedCallInfo} from '@atb/components/estimated-call';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
+  now: number;
   departure: EstimatedCall;
   onPressDetails: (departure: EstimatedCall) => void;
   showBottomBorder: boolean;
@@ -48,6 +49,7 @@ export const EstimatedCallItem = memo(
     onPressDetails,
     showBottomBorder,
     testID,
+    now,
   }: EstimatedCallItemProps): React.JSX.Element => {
     const styles = useStyles();
     const {t, language} = useTranslation();
@@ -70,7 +72,7 @@ export const EstimatedCallItem = memo(
             departure={departure}
             messageType={getMsgTypeForEstimatedCall(departure)}
           />
-          <DepartureTime departure={departure} />
+          <DepartureTime departure={departure} now={now} />
         </View>
       </GenericClickableSectionItem>
     );

@@ -100,6 +100,7 @@ export const EstimatedCallList = ({
           new Date(now),
           departure.expectedDepartureTime,
         ),
+        now,
         departure,
         mode,
         onPressDetails: onPressDetails,
