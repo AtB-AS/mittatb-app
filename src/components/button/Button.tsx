@@ -40,7 +40,6 @@ export type ButtonProps = {
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   interactiveColor?: InteractiveColor;
-  active?: boolean;
   expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
@@ -235,22 +234,14 @@ const getButtonColors = (
     case 'primary':
     case undefined:
       return {
-        mainContrastColor: props.active
-          ? interactiveColor.active
-          : interactiveColor.default,
-        borderColorValue: props.active
-          ? interactiveColor.outline.background
-          : interactiveColor.default.background,
+        mainContrastColor: interactiveColor.default,
+        borderColorValue: interactiveColor.default.background,
       };
     case 'secondary': {
       const backgroundColor = props.backgroundColor ?? transparentContrastColor;
       return {
-        mainContrastColor: props.active
-          ? interactiveColor.active
-          : backgroundColor,
-        borderColorValue: props.active
-          ? interactiveColor.outline.background
-          : backgroundColor.foreground.primary,
+        mainContrastColor: backgroundColor,
+        borderColorValue: backgroundColor.foreground.primary,
       };
     }
     case 'tertiary': {

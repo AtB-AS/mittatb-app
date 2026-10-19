@@ -673,14 +673,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={true}
-                    text="Active"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
-                    interactiveColor={theme.color.interactive[0]}
-                  />
-                  <Button
-                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
@@ -701,14 +693,6 @@ export const Profile_DesignSystemScreen = ({
                     text="Default - block"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={theme.color.interactive[1]}
-                  />
-                  <Button
-                    expanded={true}
-                    text="Active"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
                     interactiveColor={theme.color.interactive[1]}
                   />
                   <Button
@@ -737,14 +721,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={true}
-                    text="Active"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
-                    interactiveColor={theme.color.interactive[2]}
-                  />
-                  <Button
-                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
@@ -765,14 +741,6 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={theme.color.interactive.destructive}
-                  />
-                  <Button
-                    expanded={true}
-                    text="Active"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
                     interactiveColor={theme.color.interactive.destructive}
                   />
                   <Button
@@ -801,14 +769,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={true}
-                    text="Active"
-                    onPress={presser}
-                    mode="secondary"
-                    active={true}
-                    backgroundColor={theme.color.background.neutral[0]}
-                  />
-                  <Button
-                    expanded={true}
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
@@ -829,14 +789,6 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="tertiary"
-                    backgroundColor={theme.color.background.neutral[0]}
-                  />
-                  <Button
-                    expanded={true}
-                    text="Active"
-                    onPress={presser}
-                    mode="tertiary"
-                    active={true}
                     backgroundColor={theme.color.background.neutral[0]}
                   />
                   <Button
@@ -866,15 +818,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={false}
-                    text="Primary - active"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
                     text="Primary - disabled"
                     onPress={presser}
                     mode="primary"
@@ -887,15 +830,6 @@ export const Profile_DesignSystemScreen = ({
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
-                    style={{margin: 4}}
-                    backgroundColor={theme.color.background.neutral[0]}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Secondary - active"
-                    onPress={presser}
-                    mode="secondary"
-                    active={true}
                     style={{margin: 4}}
                     backgroundColor={theme.color.background.neutral[0]}
                   />
@@ -936,16 +870,6 @@ export const Profile_DesignSystemScreen = ({
                   />
                   <Button
                     expanded={false}
-                    text="Primary - active"
-                    onPress={presser}
-                    mode="primary"
-                    type="small"
-                    active={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
                     text="Primary - disabled"
                     onPress={presser}
                     mode="primary"
@@ -960,16 +884,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="small"
-                    style={{margin: 4}}
-                    backgroundColor={theme.color.background.neutral[0]}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Secondary - active"
-                    onPress={presser}
-                    mode="secondary"
-                    type="small"
-                    active={true}
                     style={{margin: 4}}
                     backgroundColor={theme.color.background.neutral[0]}
                   />
@@ -1057,46 +971,6 @@ export const Profile_DesignSystemScreen = ({
                       svg: Add,
                       notificationColor: theme.color.status.valid.primary,
                     }}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Example"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    rightIcon={{svg: Delete}}
-                    style={{margin: 4}}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Example"
-                    onPress={presser}
-                    mode="secondary"
-                    active={true}
-                    rightIcon={{svg: Delete}}
-                    style={{margin: 4}}
-                    backgroundColor={theme.color.background.neutral[0]}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Example"
-                    onPress={presser}
-                    mode="tertiary"
-                    active={true}
-                    rightIcon={{svg: Delete}}
-                    style={{margin: 4}}
-                    backgroundColor={theme.color.background.neutral[0]}
-                  />
-                  <Button
-                    expanded={false}
-                    text="Example"
-                    onPress={presser}
-                    mode="primary"
-                    active={true}
-                    interactiveColor={theme.color.interactive[0]}
-                    rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
