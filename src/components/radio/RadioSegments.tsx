@@ -12,18 +12,25 @@ export type SegmentOptions = {
   accessibilityHint?: string;
   accessibilityLabel?: string;
   ref?: RefObject<any>;
+  testID?: string;
 };
 
 type RadioSegmentsProps = {
   activeIndex: number;
   options: SegmentOptions[];
   style?: StyleProp<ViewStyle>;
+  /**
+   * Use 'tab' when the segments switch between tabs. Defaults to radio
+   * semantics.
+   */
+  accessibilityRole?: 'radio' | 'tab';
 };
 
 export function RadioSegments({
   activeIndex,
   options,
   style,
+  accessibilityRole = 'radio',
 }: RadioSegmentsProps) {
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -45,11 +52,20 @@ export function RadioSegments({
             onPress={option.onPress}
             pressedColor={theme.color.surface.accent.subtlePressed.background}
             accessible={true}
-            {...getRadioA11y(a11yLabel, selected, t)}
+            {...(accessibilityRole === 'tab'
+              ? {
+                  accessibilityRole: 'tab',
+                  accessibilityLabel: a11yLabel,
+                  accessibilityState: {selected},
+                }
+              : getRadioA11y(a11yLabel, selected, t))}
             accessibilityHint={option.accessibilityHint}
             ref={option.ref}
             style={[styles.optionBox, selected && styles.optionBoxSelected]}
-            testID={`${option.text.toLowerCase().replaceAll(' ', '')}Button`}
+            testID={
+              option.testID ??
+              `${option.text.toLowerCase().replaceAll(' ', '')}Button`
+            }
           >
             <ThemeText
               typography={selected ? 'body__m__strong' : 'body__m'}
