@@ -86,9 +86,16 @@ export const mobileTokenClient = {
    - Token is expired
    - It is less than 12 hours until token expires
    - It has lived longer than 90% percent of its total time to live
+
+  Note: the percent argument is the size of the renew window counted back
+  from expiry (10 = the last 10% of the time to live), not the elapsed
+  lifetime. The SDK's doc comment says the opposite, but its implementation
+  (isWithinPreemptiveRenewWindow) behaves as described here.
+
+  see node_modules/@entur-private/abt-token-state-react-native-lib/lib/utils/preemtiveRenewCalculator.js
    */
   shouldRenew: (token: ActivatedToken) =>
-    abtClient.shouldPreemptiveRenew(token, HALF_DAY_MS, 90),
+    abtClient.shouldPreemptiveRenew(token, HALF_DAY_MS, 10),
   currentTimeMillis: () => abtClient.getCurrentTimeMillis(),
   setDebugSabotage: (attestationSabotage: AttestationSabotage) =>
     abtClient.setAttestationSabotage(attestationSabotage),
