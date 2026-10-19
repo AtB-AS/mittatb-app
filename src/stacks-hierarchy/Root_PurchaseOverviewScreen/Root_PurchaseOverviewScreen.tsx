@@ -84,10 +84,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
     supplementProductsWithCountAndOffer,
-  } = useOfferState(preassignedFareProductAlternatives, selection, undefined, {
+  } = useOfferState({
+    preassignedFareProductAlternatives,
+    selection,
     // A seat reservation for an existing ticket can't be priced before a
     // departure is chosen, so the search is made on the confirmation screen.
-    enabled: selection.originFareContract || !selection.legs.length,
+    enabled: !selection.originFareContract || selection.legs.length > 0,
   });
 
   const firstUserProfilesProductRef =

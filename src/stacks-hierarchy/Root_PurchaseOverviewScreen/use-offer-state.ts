@@ -207,15 +207,20 @@ const initialState: OfferState = {
 };
 
 /**
- * @param options.enabled Defaults to true, should be disabled during
+ * @param props.enabled Defaults to true, should be disabled during
  * seat-reservation purchase overview as it is not needed.
  */
-export function useOfferState(
-  preassignedFareProductAlternatives: PreassignedFareProduct[],
-  selection?: PurchaseSelectionType,
-  bonusProductId?: string,
-  {enabled = true}: {enabled?: boolean} = {},
-) {
+export function useOfferState({
+  preassignedFareProductAlternatives,
+  selection,
+  bonusProductId,
+  enabled = true,
+}: {
+  preassignedFareProductAlternatives: PreassignedFareProduct[];
+  selection?: PurchaseSelectionType;
+  bonusProductId?: string;
+  enabled?: boolean;
+}) {
   const offerReducer = getOfferReducer(
     selection?.userProfilesWithCount ?? [],
     selection?.supplementProductsWithCount ?? [],
