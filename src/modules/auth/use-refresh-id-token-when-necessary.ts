@@ -1,4 +1,4 @@
-import {Dispatch} from 'react';
+import {Dispatch, useEffect, useRef} from 'react';
 import {AuthReducerAction, AuthStatus} from './types';
 import {AuthReducerState} from './AuthContext';
 import {secondsToTokenExpiry} from './utils';
@@ -15,15 +15,23 @@ export const useRefreshIdTokenWhenNecessary = (
   const disableInterval =
     !isIdTokenRefreshEnabled(state.authStatus) || appStateStatus !== 'active';
 
+  // Read state through a ref, so that a new id token (e.g. from our own
+  // refresh) doesn't restart the interval and trigger an immediate re-check.
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
   useInterval(
     async () => {
-      if (state.user && state.idTokenResult) {
+      const {user, idTokenResult: currentIdTokenResult} = stateRef.current;
+      if (user && currentIdTokenResult) {
         const secondsToExpiry = secondsToTokenExpiry(
-          state.idTokenResult.expirationTime,
+          currentIdTokenResult.expirationTime,
         );
         if (secondsToExpiry < 300) {
           try {
-            const idTokenResult = await state.user.getIdTokenResult(true);
+            const idTokenResult = await user.getIdTokenResult(true);
             dispatch({type: 'SET_ID_TOKEN', idTokenResult});
           } catch (err) {
             logToBugsnag(
@@ -34,7 +42,7 @@ export const useRefreshIdTokenWhenNecessary = (
         }
       }
     },
-    [dispatch, state.user, state.idTokenResult],
+    [dispatch],
     30 * ONE_SECOND_MS,
     disableInterval,
     true,
