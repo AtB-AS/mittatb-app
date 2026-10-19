@@ -240,6 +240,7 @@ export function formatToClock(
  * second argument.
  *
  * @param isoDate date to format as clock or relative time
+ * @param now the time to calculate relative time from
  * @param minuteLimit threshold in minutes for when to show relative time
  */
 
@@ -247,10 +248,11 @@ export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   language: Language,
   nowText: string,
+  now: number = Date.now(),
   minuteThreshold: number = 9,
 ) {
   const parsed = parseIfNeeded(isoDate);
-  const diff = secondsBetween(new Date(), parsed);
+  const diff = secondsBetween(new Date(now), parsed);
   const relativeTime = getClockOrRelativeMinutes(diff, minuteThreshold);
 
   if (relativeTime === 'clock') {

@@ -72,6 +72,8 @@ import {BookingInfoBox} from './components/BookingInfoBox';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
+import {useNow} from '@atb/utils/use-now';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {
   FavouriteDepartureLine,
   useFavoritesContext,
@@ -132,6 +134,7 @@ export const DepartureDetailsScreenComponent = ({
   const {requestReview} = useInAppReviewFlow();
 
   const isFocusedAndActive = useIsFocusedAndActive();
+  const now = useNow(5 * ONE_SECOND_MS);
   const {data: serviceJourney, isLoading} = useDepartureDetailsQuery(
     isFocusedAndActive,
     activeItem,
@@ -328,7 +331,11 @@ export const DepartureDetailsScreenComponent = ({
                 ) ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
               {fromCall && shouldShowDepartureTime && (
-                <DepartureTime departure={fromCall} color={themeColor} />
+                <DepartureTime
+                  departure={fromCall}
+                  color={themeColor}
+                  now={now}
+                />
               )}
             </View>
             {shouldShowTravelAid && (
