@@ -119,11 +119,14 @@ export const VehicleSheet = ({
     vehicle?.actionButton?.type === ActionButtonType.START_TRIP
       ? vehicle.actionButton.preReqs
       : undefined;
-  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements(
-    preReqs,
-    formFactor,
+  const {
+    isLoading: shmoReqIsLoading,
+    hasBlockers,
+    hasPaymentMethodPreReq,
+  } = useShmoRequirements(preReqs, formFactor);
+  const selectedPaymentMethod = useSelectedShmoPaymentMethod(
+    hasPaymentMethodPreReq,
   );
-  const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 

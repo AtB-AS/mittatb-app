@@ -1,9 +1,9 @@
 import {usePreviousPaymentMethods} from '../previous-payment-utils';
 import {isCardPaymentMethod} from '../utils';
 
-export const useSelectedShmoPaymentMethod = () => {
+export const useSelectedShmoPaymentMethod = (enabled: boolean = true) => {
   const {previousPaymentMethod, recurringPaymentMethods} =
-    usePreviousPaymentMethods();
+    usePreviousPaymentMethods(enabled);
 
   const previousCardPaymentMethod = isCardPaymentMethod(previousPaymentMethod)
     ? previousPaymentMethod
