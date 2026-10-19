@@ -1,6 +1,7 @@
 import {User} from '@react-native-firebase/auth';
 import {AuthenticationType} from './types';
 import {secondsBetween} from '@atb/utils/date';
+import {getServerNowGlobal} from '@atb/modules/time';
 
 export const mapAuthenticationType = (
   user: User | undefined,
@@ -11,7 +12,10 @@ export const mapAuthenticationType = (
 };
 
 export const secondsToTokenExpiry = (idTokenExpirationTime: string) =>
-  secondsBetween(new Date(), new Date(idTokenExpirationTime));
+  secondsBetween(
+    new Date(getServerNowGlobal()),
+    new Date(idTokenExpirationTime),
+  );
 
 type IdTokenValidityStatus = 'valid' | 'expiring' | 'expired';
 
