@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {FilterChip} from '@atb/components/filter-chip';
+import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {
   ThemedStoryDecorator,
   ThemedStoryProps,
@@ -29,6 +30,14 @@ const FilterChipMeta: Meta<FilterChipMetaProps> = {
         <View style={styles.row}>
           <Story args={{...args, text: 'Not selected', selected: false}} />
           <Story args={{...args, text: 'Selected', selected: true}} />
+          <Story
+            args={{
+              ...args,
+              text: 'Icon',
+              selected: true,
+              rightIcon: {svg: Filter},
+            }}
+          />
         </View>
       </View>
     ),
@@ -51,6 +60,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'flex-end',
     gap: 8,
   },
 });
