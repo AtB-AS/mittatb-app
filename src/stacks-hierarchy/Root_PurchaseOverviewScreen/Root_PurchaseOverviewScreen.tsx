@@ -87,7 +87,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   } = useOfferState(preassignedFareProductAlternatives, selection, undefined, {
     // A seat reservation for an existing ticket can't be priced before a
     // departure is chosen, so the search is made on the confirmation screen.
-    enabled: !(selection.originFareContract && !selection.legs.length),
+    enabled: selection.originFareContract || !selection.legs.length,
   });
 
   const firstUserProfilesProductRef =
