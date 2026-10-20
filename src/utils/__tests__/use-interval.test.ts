@@ -104,6 +104,46 @@ describe('useInterval', () => {
     await nextTimerTick();
     expect(callback).toHaveBeenCalledTimes(3);
   });
+
+  it('should not schedule new ticks when unmounted while callback is pending', async () => {
+    let resolveCallback = () => {};
+    const pendingCallback = jest.fn(
+      () => new Promise<void>((resolve) => (resolveCallback = resolve)),
+    );
+    const hook = renderHook(() => useInterval(pendingCallback, [], 200));
+
+    await nextTimerTick();
+    expect(pendingCallback).toHaveBeenCalledTimes(1);
+
+    // Unmount while the callback is still awaiting
+    hook.unmount();
+    resolveCallback();
+    await resolvePromiseEnforceStep();
+
+    await nextTimerTick();
+    await nextTimerTick();
+    expect(pendingCallback).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not schedule new ticks when unmounted while immediate callback is pending', async () => {
+    let resolveCallback = () => {};
+    const pendingCallback = jest.fn(
+      () => new Promise<void>((resolve) => (resolveCallback = resolve)),
+    );
+    const hook = renderHook(() =>
+      useInterval(pendingCallback, [], 200, false, true),
+    );
+    expect(pendingCallback).toHaveBeenCalledTimes(1);
+
+    // Unmount while the immediate callback is still awaiting
+    hook.unmount();
+    resolveCallback();
+    await resolvePromiseEnforceStep();
+
+    await nextTimerTick();
+    await nextTimerTick();
+    expect(pendingCallback).toHaveBeenCalledTimes(1);
+  });
 });
 
 async function advanceByTimer(time: number) {
