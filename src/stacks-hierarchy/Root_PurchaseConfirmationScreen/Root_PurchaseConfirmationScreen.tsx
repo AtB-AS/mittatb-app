@@ -386,16 +386,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     bottomSheetModalRef.current?.present();
   }
 
-  function onBackPress() {
-    if (reserveMutation.data) {
-      cancelPaymentMutation.mutate({
-        payment: reserveMutation.data,
-        isUser: false,
-      });
-    }
-    navigation.pop();
-  }
-
   const isPaymentFailed = !!paymentFailure || reserveMutation.isError;
   const isPaymentInProgress =
     isCancelling || (!isPaymentFailed && !reserveMutation.isIdle);
@@ -419,7 +409,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           leftButton:
             reserveMutation.isPending || isCancelling
               ? undefined
-              : {type: 'back', onPress: onBackPress},
+              : {type: 'back', onPress: () => navigation.pop()},
           globalMessageContext: GlobalMessageContextEnum.appTicketing,
         }}
         headerContent={(focusRef) => (
@@ -453,7 +443,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       focusRef={focusRef}
       headerProps={{
         title: t(PurchaseConfirmationTexts.title),
-        leftButton: {type: 'back', onPress: onBackPress},
+        leftButton: {type: 'back', onPress: () => navigation.pop()},
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
       headerContent={(focusRef) => (
