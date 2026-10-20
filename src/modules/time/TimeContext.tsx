@@ -16,7 +16,7 @@ import {tGlobal} from '@atb/modules/locale';
 
 const TEN_SECONDS_MS = ONE_SECOND_MS * 10;
 
-const INCORRECT_DEVICE_TIME_THRESHOLD_SECONDS = 10 * ONE_MINUTE_MS;
+const INCORRECT_DEVICE_TIME_THRESHOLD_MS = 10 * ONE_MINUTE_MS;
 
 type TimeContextState = {
   /**
@@ -61,8 +61,7 @@ export const TimeContextProvider = ({children}: Props) => {
       serverTimeOffsetGlobal = timeData.timestampMs - Date.now();
 
       const isDeviceTimeIncorrect =
-        Math.abs(serverTimeOffsetGlobal) >
-        INCORRECT_DEVICE_TIME_THRESHOLD_SECONDS * ONE_SECOND_MS;
+        Math.abs(serverTimeOffsetGlobal) > INCORRECT_DEVICE_TIME_THRESHOLD_MS;
       if (isDeviceTimeIncorrect && !hasShownIncorrectDeviceTimeAlert) {
         hasShownIncorrectDeviceTimeAlert = true;
         showIncorrectDeviceTimeAlert();
