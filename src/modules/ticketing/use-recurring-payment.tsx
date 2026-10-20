@@ -77,12 +77,10 @@ export const useRecurringPayment = () => {
 
     setAwaitingRecurringPaymentId(recurringPaymentId);
 
-    await openInAppBrowser(
-      terminalUrl,
-      'cancel',
-      callbackUrl,
-      addPaymentMethodCallbackHandler,
-    );
+    await openInAppBrowser(terminalUrl, {
+      successUrl: callbackUrl,
+      onSuccess: addPaymentMethodCallbackHandler,
+    });
   };
 
   const isError =

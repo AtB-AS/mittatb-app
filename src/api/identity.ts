@@ -139,7 +139,6 @@ export const initAgeVerification = async (
       const authorisationUrl = response.data;
       openInAppBrowser(
         `${authorisationUrl}&state=${state}&nonce=${nonce}&code_challenge=${challenge}&code_challenge_method=S256`,
-        'cancel',
       );
     });
 };
