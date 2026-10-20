@@ -316,7 +316,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const onPurchaseCallback = useCallback(
     (url: string) => {
       const responseCode = queryString.parseUrl(url).query.response_code;
-      if (responseCode === 'OK') {
+      if (!responseCode || responseCode === 'OK') {
         onPaymentCompleted();
       } else {
         setPaymentFailure(responseCode === 'Cancel' ? 'cancelled' : 'failed');
