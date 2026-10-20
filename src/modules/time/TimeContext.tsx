@@ -16,10 +16,6 @@ import {tGlobal} from '@atb/modules/locale';
 
 const TEN_SECONDS_MS = ONE_SECOND_MS * 10;
 
-/**
- * How far the device time can differ from server time before the user is
- * told that their date or time is incorrect.
- */
 const INCORRECT_DEVICE_TIME_THRESHOLD_SECONDS = 10 * 60;
 
 type TimeContextState = {
@@ -43,9 +39,6 @@ let serverTimeOffsetGlobal = 0;
  */
 export const getServerNowGlobal = () => Date.now() + serverTimeOffsetGlobal;
 
-/**
- * Only show the incorrect device time alert once per app session.
- */
 let hasShownIncorrectDeviceTimeAlert = false;
 
 type Props = {
