@@ -62,7 +62,7 @@ export const FareZoneResults: React.FC<Props> = ({fareZones, onSelect}) => {
                     </ThemeText>
                   )}
                 </View>
-                  <ThemeIcon svg={Pin} width={20} />
+                <ThemeIcon svg={Pin} width={20} />
               </NativeTouchable>
             </View>
           </View>
