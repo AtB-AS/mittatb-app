@@ -10,13 +10,13 @@ import {Alert, Linking, Platform} from 'react-native';
 import {z} from 'zod';
 import {useInterval} from '@atb/utils/use-interval';
 import {useServerTimeQuery} from './use-server-time-query';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 import {DeviceClockTexts} from '@atb/translations';
 import {tGlobal} from '@atb/modules/locale';
 
 const TEN_SECONDS_MS = ONE_SECOND_MS * 10;
 
-const INCORRECT_DEVICE_TIME_THRESHOLD_SECONDS = 10 * 60;
+const INCORRECT_DEVICE_TIME_THRESHOLD_SECONDS = 10 * ONE_MINUTE_MS;
 
 type TimeContextState = {
   /**
