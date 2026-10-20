@@ -54,6 +54,7 @@ export {default as SituationsTexts} from './components/SituationsTexts';
 export {default as ActiveTokenRequiredTexts} from './screens/subscreens/ActiveTokenRequired';
 export {default as DeparturesTexts} from './screens/Departures';
 export {default as GeoLocationTexts} from './GeoLocation';
+export {default as DeviceClockTexts} from './DeviceClock';
 export {default as PhoneInputTexts} from './components/PhoneInput';
 export {default as OnBehalfOfTexts} from './screens/subscreens/OnBehalfOf';
 export {default as DatePickerSheetTexts} from './components/DatePickerSheet';
