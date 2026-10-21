@@ -1,6 +1,5 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {
   GeoLocation,
@@ -41,6 +40,7 @@ import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigat
 
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
+import {TripSearchStateAnnouncement} from './components/TripSearchStateAnnouncement';
 import {LoadMoreButton} from './components/LoadMoreButton';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -172,30 +172,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     (tripPatterns.length > 0 || tripsSearchState === 'search-empty-result') &&
     !tripsIsError;
 
-  const [searchStateMessage, setSearchStateMessage] = useState<
-    string | undefined
-  >();
-
   const screenHasFocus = useIsFocused();
-
-  useEffect(() => {
-    if (!screenHasFocus) return;
-    switch (tripsSearchState) {
-      case 'searching':
-        setSearchStateMessage(t(TripSearchTexts.searchState.searching));
-        break;
-      case 'search-success':
-        setSearchStateMessage(t(TripSearchTexts.searchState.searchSuccess));
-        break;
-      case 'search-empty-result':
-        setSearchStateMessage(t(TripSearchTexts.searchState.searchEmptyResult));
-        break;
-      default:
-        setSearchStateMessage('');
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tripsSearchState, t]);
 
   const openLocationSearch = (
     resultKey: typeof RESULT_KEY_FROM | typeof RESULT_KEY_TO,
@@ -275,6 +252,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   return (
     <View style={styles.container}>
+      <TripSearchStateAnnouncement
+        tripsSearchState={tripsSearchState}
+        screenHasFocus={screenHasFocus}
+      />
       <FullScreenView
         focusRef={focusRef}
         titleAlwaysVisible={true}
@@ -383,7 +364,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         )}
       >
         <View style={styles.contentContainer}>
-          <ScreenReaderAnnouncement message={searchStateMessage} />
           {!hasLocations && (
             <ThemeText
               type="secondary"
