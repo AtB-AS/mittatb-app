@@ -17,7 +17,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
-import {NativeTouchable} from '@atb/components/native-touchable';
 import {WithValidityLine} from './components/WithValidityLine';
 import {getReservationStatus} from './utils';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -48,80 +47,74 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
 
   const paymentType = PaymentType[reservation.paymentType];
   return (
-    <NativeTouchable
-      variant="block"
-      accessible={false}
-      importantForAccessibility="no"
-    >
-      <Section>
-        <GenericSectionItem style={styles.genericSectionItemOverrides}>
-          <WithValidityLine
-            reservation={reservation}
-            enabledLine={status !== 'rejected'}
-            now={now}
-          >
-            <ThemeText typography="heading__l">
-              {t(TicketingTexts.reservation[status])}
-            </ThemeText>
-          </WithValidityLine>
-        </GenericSectionItem>
-        <GenericSectionItem accessibility={{accessible: true}}>
-          <View style={styles.detail}>
-            {status == 'rejected' && (
-              <ThemeText typography="body__s" type="secondary">
-                {t(
-                  TicketingTexts.reservation.orderDate(
-                    formatToLongDateTime(
-                      fromUnixTime(reservation.created.getTime() / 1000),
-                      language,
-                    ),
+    <Section>
+      <GenericSectionItem style={styles.genericSectionItemOverrides}>
+        <WithValidityLine
+          reservation={reservation}
+          enabledLine={status !== 'rejected'}
+          now={now}
+        >
+          <ThemeText typography="heading__l">
+            {t(TicketingTexts.reservation[status])}
+          </ThemeText>
+        </WithValidityLine>
+      </GenericSectionItem>
+      <GenericSectionItem>
+        <View style={styles.detail}>
+          {status === 'rejected' && (
+            <ThemeText typography="body__s" type="secondary">
+              {t(
+                TicketingTexts.reservation.orderDate(
+                  formatToLongDateTime(
+                    fromUnixTime(reservation.created.getTime() / 1000),
+                    language,
                   ),
-                )}
-              </ThemeText>
-            )}
-            <View style={styles.detailTexts}>
-              <ThemeText typography="body__s" type="secondary">
-                {t(TicketingTexts.reservation.paymentMethod(paymentType))}
-              </ThemeText>
-              <ThemeText>
-                {t(TicketingTexts.reservation.orderId(reservation.orderId))}
-              </ThemeText>
-            </View>
-            {status === 'reserving' &&
-              reservation.paymentType === PaymentType.Vipps && (
-                <Button
-                  expanded={true}
-                  onPress={async () => await openUrl(reservation.url)}
-                  accessibilityRole="link"
-                  text={t(TicketingTexts.reservation.goToVipps)}
-                  mode="secondary"
-                  backgroundColor={theme.color.background.neutral[0]}
-                />
+                ),
               )}
-            {status === 'reserving' &&
-              !!reservation.paymentId &&
-              !cancelMutation.isSuccess && (
-                <Button
-                  expanded={true}
-                  onPress={() =>
-                    cancelMutation.mutate({payment: reservation, isUser: true})
-                  }
-                  text={t(PurchaseConfirmationTexts.cancelPayment)}
-                  mode="primary"
-                  interactiveColor={theme.color.interactive.destructive}
-                  loading={cancelMutation.isPending}
-                />
-              )}
-            {cancelMutation.isError && (
-              <MessageInfoBox
-                type="error"
-                message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+            </ThemeText>
+          )}
+          <View style={styles.detailTexts}>
+            <ThemeText typography="body__s" type="secondary">
+              {t(TicketingTexts.reservation.paymentMethod(paymentType))}
+            </ThemeText>
+            <ThemeText>
+              {t(TicketingTexts.reservation.orderId(reservation.orderId))}
+            </ThemeText>
+          </View>
+          {status === 'reserving' &&
+            reservation.paymentType === PaymentType.Vipps && (
+              <Button
+                expanded={true}
+                onPress={async () => await openUrl(reservation.url)}
+                accessibilityRole="link"
+                text={t(TicketingTexts.reservation.goToVipps)}
+                mode="secondary"
+                backgroundColor={theme.color.background.neutral[0]}
               />
             )}
-          </View>
-        </GenericSectionItem>
-      </Section>
-    </NativeTouchable>
+          {status === 'reserving' &&
+            !!reservation.paymentId &&
+            !cancelMutation.isSuccess && (
+              <Button
+                expanded={true}
+                onPress={() =>
+                  cancelMutation.mutate({payment: reservation, isUser: true})
+                }
+                text={t(PurchaseConfirmationTexts.cancelPayment)}
+                mode="primary"
+                interactiveColor={theme.color.interactive.destructive}
+                loading={cancelMutation.isPending}
+              />
+            )}
+          {cancelMutation.isError && (
+            <MessageInfoBox
+              type="error"
+              message={t(PurchaseConfirmationTexts.cancelPaymentError)}
+            />
+          )}
+        </View>
+      </GenericSectionItem>
+    </Section>
   );
 };
 
