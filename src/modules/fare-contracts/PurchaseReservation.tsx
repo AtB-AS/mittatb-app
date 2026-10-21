@@ -61,7 +61,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
       </GenericSectionItem>
       <GenericSectionItem>
         <View style={styles.detail}>
-          {status == 'rejected' && (
+          {status === 'rejected' && (
             <ThemeText typography="body__s" type="secondary">
               {t(
                 TicketingTexts.reservation.orderDate(
