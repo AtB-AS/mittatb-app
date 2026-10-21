@@ -208,6 +208,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     [analytics, navigation],
   );
 
+  // Stable so Results can reuse its rendered rows when the screen re-renders.
+  const onResultDetailsPressed = useCallback(
+    (tripPattern: TripPattern, resultIndex?: number) =>
+      onPressed(tripPattern, {analyticsMetadata: {resultIndex}}),
+    [onPressed],
+  );
+
   function swap() {
     log('swap', {
       newFrom: translateLocation(to),
@@ -419,9 +426,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               showEmptyScreen={showEmptyScreen}
               isEmptyResult={isEmptyResult}
               resultReasons={noResultReasons}
-              onDetailsPressed={(tripPattern, resultIndex) =>
-                onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
-              }
+              onDetailsPressed={onResultDetailsPressed}
               tripsIsError={tripsIsError}
               tripsIsNetworkError={tripsIsNetworkError}
             />
