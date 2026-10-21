@@ -41,7 +41,9 @@ export const TripSearchResultRow = ({
         departureTime={tripPattern.expectedStartTime}
         previousDepartureTime={previousDepartureTime}
       />
-      <WithTravelCardSkeleton>
+      {/* Keyed by deferral, so a card that is rendered again after being
+          deferred has to report ready again before replacing the skeleton. */}
+      <WithTravelCardSkeleton key={isDeferred ? 'deferred' : 'card'}>
         {isDeferred
           ? undefined
           : ({onReady}) => (

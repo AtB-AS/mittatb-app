@@ -5,13 +5,10 @@ import {
   useProgressiveRendering,
 } from '../use-progressive-rendering';
 
-type Props = {count: number; searchKey: string};
-
-const renderProgressiveRendering = (count: number, searchKey = 'search-a') =>
-  renderHook(
-    ({count, searchKey}: Props) => useProgressiveRendering(count, searchKey),
-    {initialProps: {count, searchKey}},
-  );
+const renderProgressiveRendering = (numberOfResults: number) =>
+  renderHook(({count}: {count: number}) => useProgressiveRendering(count), {
+    initialProps: {count: numberOfResults},
+  });
 
 const markReady = (
   hook: ReturnType<typeof renderProgressiveRendering>,
@@ -53,6 +50,15 @@ describe('useProgressiveRendering', () => {
     expect(hook.result.current.renderAll).toBe(true);
   });
 
+  it('waits for the initial rows when the results arrive after mounting', () => {
+    const hook = renderProgressiveRendering(0);
+
+    hook.rerender({count: 12});
+    expect(hook.result.current.renderAll).toBe(false);
+    markReady(hook, [0, 1, 2, 3, 4]);
+    expect(hook.result.current.renderAll).toBe(true);
+  });
+
   it('renders all results after the fallback delay if the rows never get ready', () => {
     const hook = renderProgressiveRendering(12);
 
@@ -69,67 +75,11 @@ describe('useProgressiveRendering', () => {
     expect(hook.result.current.renderAll).toBe(false);
   });
 
-  it('keeps rendering all results when more results are added to the same search', () => {
+  it('keeps rendering all results when more results are added', () => {
     const hook = renderProgressiveRendering(8);
 
     markReady(hook, [0, 1, 2, 3, 4]);
-    hook.rerender({count: 16, searchKey: 'search-a'});
-    expect(hook.result.current.renderAll).toBe(true);
-  });
-
-  it('starts over when the results are cleared for a new search', () => {
-    const hook = renderProgressiveRendering(12);
-    markReady(hook, [0, 1, 2, 3, 4]);
-
-    hook.rerender({count: 0, searchKey: 'search-b'});
-    expect(hook.result.current.renderAll).toBe(false);
-
-    hook.rerender({count: 10, searchKey: 'search-b'});
-    expect(hook.result.current.renderAll).toBe(false);
-    markReady(hook, [0, 1, 2, 3, 4]);
-    expect(hook.result.current.renderAll).toBe(true);
-  });
-
-  it('starts over when switching straight to the cached results of another search', () => {
-    const hook = renderProgressiveRendering(12);
-    markReady(hook, [0, 1, 2, 3, 4]);
-    expect(hook.result.current.renderAll).toBe(true);
-
-    hook.rerender({count: 12, searchKey: 'search-b'});
-    expect(hook.result.current.renderAll).toBe(false);
-    markReady(hook, [0, 1, 2, 3]);
-    expect(hook.result.current.renderAll).toBe(false);
-    markReady(hook, [4]);
-    expect(hook.result.current.renderAll).toBe(true);
-  });
-
-  it('starts over when switching back to a search that was already shown', () => {
-    const hook = renderProgressiveRendering(12);
-    markReady(hook, [0, 1, 2, 3, 4]);
-    hook.rerender({count: 12, searchKey: 'search-b'});
-    markReady(hook, [0, 1, 2, 3, 4]);
-
-    hook.rerender({count: 12, searchKey: 'search-a'});
-    expect(hook.result.current.renderAll).toBe(false);
-  });
-
-  it('does not count rows that were ready in the previous search', () => {
-    const hook = renderProgressiveRendering(12);
-    markReady(hook, [0, 1, 2]);
-
-    hook.rerender({count: 12, searchKey: 'search-b'});
-    markReady(hook, [3, 4]);
-    expect(hook.result.current.renderAll).toBe(false);
-  });
-
-  it('restarts the fallback delay for a new search', () => {
-    const hook = renderProgressiveRendering(12);
-    act(() => jest.advanceTimersByTime(RENDER_ALL_FALLBACK_MS - 500));
-
-    hook.rerender({count: 12, searchKey: 'search-b'});
-    act(() => jest.advanceTimersByTime(500));
-    expect(hook.result.current.renderAll).toBe(false);
-    act(() => jest.advanceTimersByTime(RENDER_ALL_FALLBACK_MS - 500));
+    hook.rerender({count: 16});
     expect(hook.result.current.renderAll).toBe(true);
   });
 });

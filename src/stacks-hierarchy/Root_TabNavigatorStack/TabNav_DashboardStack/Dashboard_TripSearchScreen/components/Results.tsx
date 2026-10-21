@@ -56,14 +56,6 @@ export const Results: React.FC<Props> = ({
   const {t} = useTranslation();
   const now = useNow(30000);
 
-  const filteredTripPatterns = tripPatterns.filter(
-    (tp) => !getIsTooLateToBookFlexLine(tp, now),
-  );
-  const {renderAll, onInitialRowReady} = useProgressiveRendering(
-    filteredTripPatterns.length,
-    searchKey,
-  );
-
   if (showEmptyScreen) {
     return null;
   }
@@ -99,13 +91,44 @@ export const Results: React.FC<Props> = ({
     );
   }
 
-  const slotCount =
-    filteredTripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
+  const filteredTripPatterns = tripPatterns.filter(
+    (tp) => !getIsTooLateToBookFlexLine(tp, now),
+  );
+
+  // Keyed by search, so each search gets a fresh list: the progressive
+  // rendering and the cards' readiness never carry over from another search,
+  // also not when switching straight to cached results. Loading more trips
+  // keeps the same key.
+  return (
+    <TripSearchResultList
+      key={searchKey}
+      tripPatterns={filteredTripPatterns}
+      isSearching={isSearching}
+      onDetailsPressed={onDetailsPressed}
+    />
+  );
+};
+
+const TripSearchResultList = ({
+  tripPatterns,
+  isSearching,
+  onDetailsPressed,
+}: {
+  tripPatterns: TripPatternWithKey[];
+  isSearching: boolean;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
+}) => {
+  const styles = useThemeStyles();
+  const {renderAll, onInitialRowReady} = useProgressiveRendering(
+    tripPatterns.length,
+  );
+
+  const slotCount = tripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
       {Array.from({length: slotCount}, (_, i) => {
-        const tripPattern = filteredTripPatterns[i];
+        const tripPattern = tripPatterns[i];
         return (
           <Fragment
             key={
@@ -115,11 +138,9 @@ export const Results: React.FC<Props> = ({
             {tripPattern ? (
               <TripSearchResultRow
                 tripPattern={tripPattern}
-                previousDepartureTime={
-                  filteredTripPatterns[i - 1]?.expectedStartTime
-                }
+                previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
                 index={i}
-                numberOfResults={filteredTripPatterns.length}
+                numberOfResults={tripPatterns.length}
                 onDetailsPressed={onDetailsPressed}
                 isDeferred={!renderAll && i >= INITIAL_RENDER_COUNT}
                 onInitialRowReady={
