@@ -7,44 +7,35 @@ export const INITIAL_RENDER_COUNT = 5;
 export const RENDER_ALL_FALLBACK_MS = 2000;
 
 /**
- * Renders the first INITIAL_RENDER_COUNT results of a search first, and the
- * rest once those are ready to be shown. Later results of the same search, e.g.
- * from loading more trips, are rendered right away.
+ * Renders the first INITIAL_RENDER_COUNT results first, and the rest once those
+ * are ready to be shown. Results added later, e.g. from loading more trips, are
+ * rendered right away.
  *
- * Tracked per `searchKey`, so every different search starts over, also when
- * its results come straight from the cache without being cleared first.
+ * The state covers a single search: the caller remounts it for every search.
  */
-export function useProgressiveRendering(
-  numberOfResults: number,
-  searchKey: string,
-) {
+export function useProgressiveRendering(numberOfResults: number) {
   const hasResults = numberOfResults > 0;
   const initialBatchSize = Math.min(INITIAL_RENDER_COUNT, numberOfResults);
-  const [renderAllForSearch, setRenderAllForSearch] = useState<string>();
-  const renderAll = renderAllForSearch === searchKey;
-  const readyInitialRows = useRef({searchKey, indexes: new Set<number>()});
+  const [renderAll, setRenderAll] = useState(false);
+  const readyInitialRows = useRef(new Set<number>());
 
   useEffect(() => {
     if (!hasResults || renderAll) return;
     const timeout = setTimeout(
-      () => setRenderAllForSearch(searchKey),
+      () => setRenderAll(true),
       RENDER_ALL_FALLBACK_MS,
     );
     return () => clearTimeout(timeout);
-  }, [hasResults, renderAll, searchKey]);
+  }, [hasResults, renderAll]);
 
   const onInitialRowReady = useCallback(
     (index: number) => {
-      if (readyInitialRows.current.searchKey !== searchKey) {
-        readyInitialRows.current = {searchKey, indexes: new Set()};
-      }
-      const {indexes} = readyInitialRows.current;
-      indexes.add(index);
-      if (indexes.size >= initialBatchSize) {
-        setRenderAllForSearch(searchKey);
+      readyInitialRows.current.add(index);
+      if (readyInitialRows.current.size >= initialBatchSize) {
+        setRenderAll(true);
       }
     },
-    [initialBatchSize, searchKey],
+    [initialBatchSize],
   );
 
   return {renderAll, onInitialRowReady};
