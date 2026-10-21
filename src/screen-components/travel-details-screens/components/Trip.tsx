@@ -134,8 +134,6 @@ export const Trip: React.FC<TripProps> = ({
       {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
           serviceJourneyPolylines={tripPatternLegs}
-          fromPlace={tripPatternLegs[0]?.fromPlace}
-          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
           isLive={hasLiveVehicle}
           buttonText={t(
             hasLiveVehicle
