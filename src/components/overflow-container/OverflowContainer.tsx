@@ -51,9 +51,12 @@ export const OverflowContainer: React.FC<Props> = ({
 
   return (
     <View style={[styles.row, {gap}]}>
-      {/* Hidden, out-of-flow measurer; onLayout keeps widthByKey fresh. */}
+      {/* Hidden, out-of-flow measurer; onLayout keeps widthByKey fresh. It is
+          not constrained to maxWidth: the children only need their natural
+          width, and while maxWidth is still 0 they would otherwise measure as
+          0 and not be measured again once it is known. */}
       <View
-        style={[styles.measureWrapper, {width: maxWidth}]}
+        style={styles.measureWrapper}
         pointerEvents="none"
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
