@@ -80,6 +80,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   const {userId} = useAuthContext();
   const [paymentData, setPaymentData] = useState<string>();
@@ -208,10 +209,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       openInAppBrowser(url, {
         successUrl: `${APP_SCHEME}://purchase-callback`,
         onSuccess: onPurchaseCallback,
-        onCancel: () => cancelFailedPayment(reserveMutation.data),
+        onCancel: () => cancelPayment(reserveMutation.data, false),
         onError: () => {
           setPaymentNotCompletedError(true);
-          cancelFailedPayment(reserveMutation.data);
+          cancelPayment(reserveMutation.data, false);
         },
       });
     },
@@ -226,9 +227,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     },
   });
 
-  function cancelFailedPayment(reserveOfferResponse: ReserveOfferResponse) {
+  function cancelPayment(
+    reserveOfferResponse: ReserveOfferResponse,
+    isUser: boolean,
+  ) {
+    closeInAppBrowseriOS();
     cancelPaymentMutation.mutate(
-      {payment: reserveOfferResponse, isUser: false},
+      {payment: reserveOfferResponse, isUser},
       {
         onError: () => {
           // If the cancel fails, the payment may have gone through
@@ -246,7 +251,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     await openUrl(url, () => {
       didFail = true;
       setVippsNotInstalledError(true);
-      cancelFailedPayment(reserveOfferResponse);
+      cancelPayment(reserveOfferResponse, false);
     });
     if (!didFail) onPaymentCompleted();
   }
@@ -337,18 +342,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     callback: onPaymentCompleted,
   });
 
-  // Block the user from exiting the screen during reserve and cancel, including
-  // iOS swipe and Android back actions. Navigating to tickets is still allowed.
-  const isCancelling = cancelPaymentMutation.isPending;
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e) => {
-        if (hasLeftScreenRef.current) return;
-        if (isReservingRef.current || isCancelling) e.preventDefault();
-      }),
-    [navigation, isCancelling],
-  );
-
   function goToPayment() {
     setVippsNotInstalledError(false);
     setPaymentNotCompletedError(false);
@@ -389,28 +382,25 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   const isPaymentInProgress =
-    isCancelling || reserveMutation.isPending || reserveMutation.isSuccess;
+    cancelPaymentMutation.isPending ||
+    reserveMutation.isPending ||
+    reserveMutation.isSuccess;
+
+  // Block the user from exiting the screen during reserve and cancel, including
+  // iOS swipe and Android back actions.
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        if (hasLeftScreenRef.current) return;
+        if (isReservingRef.current || isPaymentInProgress) e.preventDefault();
+      }),
+    [navigation, isPaymentInProgress],
+  );
 
   if (isPaymentInProgress) {
     return (
-      <FullScreenView
-        focusRef={focusRef}
-        headerProps={{
-          title: t(PurchaseConfirmationTexts.title),
-          leftButton:
-            reserveMutation.isPending || isCancelling
-              ? undefined
-              : {type: 'back', onPress: () => navigation.pop()},
-          globalMessageContext: GlobalMessageContextEnum.appTicketing,
-        }}
-        headerContent={(focusRef) => (
-          <ScreenHeading
-            ref={focusRef}
-            text={t(PurchaseConfirmationTexts.title)}
-          />
-        )}
-      >
-        <View style={styles.paymentInProgress}>
+      <View style={styles.paymentInProgressScreen}>
+        <View style={styles.loading}>
           <Loading size="large" />
           <ThemeText>
             {t(PurchaseConfirmationTexts.paymentInProgress)}
@@ -419,7 +409,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             message={t(PurchaseConfirmationTexts.paymentInProgress)}
           />
         </View>
-      </FullScreenView>
+        {reserveMutation.isSuccess &&
+          (cancelPaymentMutation.isIdle ||
+            cancelPaymentMutation.variables.isUser) && (
+            <Button
+              expanded={true}
+              onPress={() => cancelPayment(reserveMutation.data, true)}
+              text={t(PurchaseConfirmationTexts.cancelPayment)}
+              mode="primary"
+              interactiveColor={theme.color.interactive.destructive}
+              loading={cancelPaymentMutation.isPending}
+            />
+          )}
+      </View>
     );
   }
 
@@ -664,16 +666,21 @@ const PaymentButton = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, insets) => ({
   container: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
   },
-  paymentInProgress: {
+  paymentInProgressScreen: {
+    flex: 1,
+    marginHorizontal: theme.spacing.medium,
+    marginBottom: insets.bottom,
+    marginTop: insets.top,
+  },
+  loading: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     rowGap: theme.spacing.medium,
-    padding: theme.spacing.medium,
   },
 }));

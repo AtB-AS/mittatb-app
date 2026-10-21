@@ -207,9 +207,9 @@ const PurchaseConfirmationTexts = {
     'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
   ),
   paymentNotCompletedError: _(
-    'TODO: Betalingen ble ikke fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
-    'TODO: The payment was not completed. Please try again, or contact customer service for assistance.',
-    'TODO: Betalinga vart ikkje fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    'Betalingen ble ikke fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    'The payment was not completed. Please try again, or contact customer service for assistance.',
+    'Betalinga vart ikkje fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
