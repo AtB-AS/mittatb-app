@@ -9,7 +9,15 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
-import {humanizePaymentType, RecurringPayment} from '@atb/modules/ticketing';
+import {
+  humanizePaymentType,
+  PaymentAgreement,
+  PaymentType,
+  RecurringPayment,
+  useAddPaymentAgreementMutation,
+  useListPaymentAgreementsQuery,
+  useStopPaymentAgreementMutation,
+} from '@atb/modules/ticketing';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -17,7 +25,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ScreenHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -32,6 +40,8 @@ import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {Button} from '@atb/components/button';
 import {LogIn} from '@atb/assets/svg/mono-icons/profile';
+import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
+import {PaymentAgreementsSection} from './components/PaymentAgreementsSection';
 
 type Props = ProfileScreenProps<'Profile_PaymentMethodsScreen'>;
 
@@ -48,7 +58,8 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     recurringPaymentError,
     onAddRecurringPayment,
   } = useRecurringPayment();
-  const {isApplePayEnabled} = useFeatureTogglesContext();
+  const {isApplePayEnabled, isVippsPaymentAgreementEnabled} =
+    useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
   const isLoggedIn = authenticationType === 'phone';
   const {enable_vipps_login} = useRemoteConfigContext();
@@ -61,27 +72,71 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const hasActiveShmoTrip = !!activeShmoBooking;
 
   const [showDeleteBlockedError, setShowDeleteBlockedError] = useState(false);
+  const [showStopAgreementBlockedError, setShowStopAgreementBlockedError] =
+    useState(false);
+
+  const {paymentTypes} = useFirestoreConfigurationContext();
+  const showPaymentAgreements =
+    isVippsPaymentAgreementEnabled && paymentTypes.includes(PaymentType.Vipps);
+  const {
+    data: paymentAgreements,
+    isLoading: isLoadingPaymentAgreements,
+    isFetching: isFetchingPaymentAgreements,
+    isError: isPaymentAgreementsError,
+    refetch: refetchPaymentAgreements,
+  } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
+  const addPaymentAgreement = useAddPaymentAgreementMutation();
+  const stopPaymentAgreement = useStopPaymentAgreementMutation();
+  const hasPaymentAgreementsError =
+    isPaymentAgreementsError ||
+    addPaymentAgreement.isError ||
+    stopPaymentAgreement.isError;
+
+  const onStopPaymentAgreement = (agreement: PaymentAgreement) => {
+    if (isActiveShmoBookingPending) return;
+    if (hasActiveShmoTrip) {
+      setShowStopAgreementBlockedError(true);
+      return;
+    }
+    destructiveAlert({
+      alertTitleString: t(PaymentMethodsTexts.agreements.stopModal.title),
+      alertMessageString: t(PaymentMethodsTexts.agreements.stopModal.message),
+      cancelAlertString: t(
+        PaymentMethodsTexts.agreements.stopModal.cancelButton,
+      ),
+      confirmAlertString: t(
+        PaymentMethodsTexts.agreements.stopModal.confirmButton,
+      ),
+      destructiveArrowFunction: () => stopPaymentAgreement.mutate(agreement.id),
+    });
+  };
 
   const focusRef = useFocusOnLoad(navigation);
 
+  const title = t(
+    isVippsPaymentAgreementEnabled
+      ? PaymentMethodsTexts.header.titleWithAgreements
+      : PaymentMethodsTexts.header.title,
+  );
+
   const refreshControlProps = useManualRefreshControlProps({
-    refreshing: recurringPaymentFetching,
-    onRefresh: refetchRecurringPayment,
+    refreshing: recurringPaymentFetching || isFetchingPaymentAgreements,
+    onRefresh: () => {
+      refetchRecurringPayment();
+      if (showPaymentAgreements) refetchPaymentAgreements();
+    },
   });
 
   return (
     <FullScreenView
       focusRef={focusRef}
       headerProps={{
-        title: t(PaymentMethodsTexts.header.title),
+        title,
         leftButton: {type: 'back'},
       }}
       refreshControlProps={refreshControlProps}
       headerContent={(focusRef) => (
-        <ScreenHeading
-          ref={focusRef}
-          text={t(PaymentMethodsTexts.header.title)}
-        />
+        <ScreenHeading ref={focusRef} text={title} />
       )}
     >
       <View style={styles.content}>
@@ -117,61 +172,119 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
           </>
         ) : (
           <>
-            {isError && (
+            {hasPaymentAgreementsError && (
               <MessageInfoBox
                 a11yLiveRegion="polite"
                 type="error"
                 message={t(PaymentMethodsTexts.genericError)}
               />
             )}
-            {recurringPaymentIsLoading && <Loading />}
-            {recurringPayment && recurringPayment.length > 0 && (
-              <Section>
-                {recurringPayment.map((card) => (
-                  <GenericSectionItem key={'card-' + card.id}>
-                    <Card
-                      card={card}
-                      onDeletePress={() => {
-                        if (isActiveShmoBookingPending) return;
-                        if (hasActiveShmoTrip) {
-                          setShowDeleteBlockedError(true);
-                          return;
-                        }
-                        destructiveAlert({
-                          alertTitleString: t(
-                            PaymentMethodsTexts.deleteModal.title,
-                          ),
-                          alertMessageString: t(
-                            PaymentMethodsTexts.deleteModal.message,
-                          ),
-                          cancelAlertString: t(
-                            PaymentMethodsTexts.deleteModal.cancelButton,
-                          ),
-                          confirmAlertString: t(
-                            PaymentMethodsTexts.deleteModal.confirmButton,
-                          ),
-                          destructiveArrowFunction: () =>
-                            deleteRecurringPayment(card.id),
-                        });
-                      }}
-                    />
-                  </GenericSectionItem>
-                ))}
-              </Section>
-            )}
-            {!recurringPaymentError &&
-              !recurringPaymentFetching &&
-              (!recurringPayment || recurringPayment?.length == 0) && (
-                <NoCardsInfo />
-              )}
-
-            <Section>
-              <LinkSectionItem
-                text={t(PaymentMethodsTexts.addPaymentMethod)}
-                onPress={onAddRecurringPayment}
-                rightIcon={{svg: Add}}
+            {isLoadingPaymentAgreements && <Loading />}
+            {showPaymentAgreements && paymentAgreements && (
+              <PaymentAgreementsSection
+                agreements={paymentAgreements}
+                onActivate={(paymentType) =>
+                  addPaymentAgreement.mutate(paymentType)
+                }
+                onStop={onStopPaymentAgreement}
+                isLoading={
+                  addPaymentAgreement.isPending ||
+                  stopPaymentAgreement.isPending
+                }
               />
-            </Section>
+            )}
+            {showStopAgreementBlockedError && (
+              <MessageInfoBox
+                title={t(
+                  PaymentMethodsTexts.agreements.stopBlockedByActiveTrip.title,
+                )}
+                message={t(
+                  PaymentMethodsTexts.agreements.stopBlockedByActiveTrip
+                    .message,
+                )}
+                type="error"
+              />
+            )}
+            <View style={styles.savedCardsSection}>
+              {showPaymentAgreements && (
+                <ContentHeading
+                  style={styles.savedCardsHeading}
+                  text={t(PaymentMethodsTexts.savedCardsHeading)}
+                />
+              )}
+              <View style={styles.savedCards}>
+                {isError && (
+                  <MessageInfoBox
+                    a11yLiveRegion="polite"
+                    type="error"
+                    message={t(PaymentMethodsTexts.genericError)}
+                  />
+                )}
+                {recurringPaymentIsLoading && <Loading />}
+                {recurringPayment && recurringPayment.length > 0 && (
+                  <Section>
+                    {recurringPayment.map((card) => (
+                      <GenericSectionItem key={'card-' + card.id}>
+                        <Card
+                          card={card}
+                          onDeletePress={() => {
+                            if (isActiveShmoBookingPending) return;
+                            if (hasActiveShmoTrip) {
+                              setShowDeleteBlockedError(true);
+                              return;
+                            }
+                            destructiveAlert({
+                              alertTitleString: t(
+                                PaymentMethodsTexts.deleteModal.title,
+                              ),
+                              alertMessageString: t(
+                                PaymentMethodsTexts.deleteModal.message,
+                              ),
+                              cancelAlertString: t(
+                                PaymentMethodsTexts.deleteModal.cancelButton,
+                              ),
+                              confirmAlertString: t(
+                                PaymentMethodsTexts.deleteModal.confirmButton,
+                              ),
+                              destructiveArrowFunction: () =>
+                                deleteRecurringPayment(card.id),
+                            });
+                          }}
+                        />
+                      </GenericSectionItem>
+                    ))}
+                  </Section>
+                )}
+                {showDeleteBlockedError && (
+                  <MessageInfoBox
+                    title={t(
+                      PaymentMethodsTexts.deleteBlockedByActiveTrip.title,
+                    )}
+                    message={t(
+                      PaymentMethodsTexts.deleteBlockedByActiveTrip.message,
+                    )}
+                    type="error"
+                  />
+                )}
+                {!recurringPaymentError &&
+                  !recurringPaymentFetching &&
+                  (!recurringPayment || recurringPayment?.length == 0) && (
+                    <NoCardsInfo />
+                  )}
+
+                <Section>
+                  <LinkSectionItem
+                    text={t(
+                      isVippsPaymentAgreementEnabled
+                        ? PaymentMethodsTexts.addPaymentMethodWithAgreements
+                        : PaymentMethodsTexts.addPaymentMethod,
+                    )}
+                    onPress={onAddRecurringPayment}
+                    rightIcon={{svg: Add}}
+                  />
+                </Section>
+              </View>
+            </View>
 
             <MessageInfoBox
               message={
@@ -181,16 +294,6 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
               }
               type="info"
             />
-
-            {showDeleteBlockedError && (
-              <MessageInfoBox
-                title={t(PaymentMethodsTexts.deleteBlockedByActiveTrip.title)}
-                message={t(
-                  PaymentMethodsTexts.deleteBlockedByActiveTrip.message,
-                )}
-                type="error"
-              />
-            )}
           </>
         )}
       </View>
@@ -265,6 +368,16 @@ const NoCardsInfo = () => {
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
     padding: theme.spacing.medium,
+    rowGap: theme.spacing.medium,
+  },
+  savedCardsSection: {
+    rowGap: theme.spacing.small,
+  },
+  savedCardsHeading: {
+    // The distance to the section above is already given by the screen content
+    marginTop: 0,
+  },
+  savedCards: {
     rowGap: theme.spacing.medium,
   },
   card: {flex: 1},

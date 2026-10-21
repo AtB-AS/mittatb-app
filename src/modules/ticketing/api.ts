@@ -9,6 +9,10 @@ import {FareContractType, type TicketOffer} from '@atb-as/utils';
 import {client} from '@atb/api';
 import {
   ReserveOfferResponse,
+  AddPaymentAgreementResponse,
+  AddPaymentAgreementResponseSchema,
+  PaymentAgreement,
+  PaymentAgreementStatus,
   PaymentType,
   RecentOrderDetails,
   RecurringPayment,
@@ -25,6 +29,7 @@ import {Language} from '@atb/translations/commons';
 import type {OfferSearchLeg} from '@atb/api/types/sales';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {ZodError} from 'zod';
+import {parsePaymentAgreements} from './parse-payment-agreements';
 
 export async function listRecentFareContracts(): Promise<RecentOrderDetails[]> {
   const url = 'sales/v1/order/recent';
@@ -89,6 +94,44 @@ export async function cancelRecurringPayment(paymentId: number) {
   return response.data;
 }
 
+export async function listPaymentAgreements(
+  statuses?: PaymentAgreementStatus[],
+): Promise<PaymentAgreement[]> {
+  const url = 'sales/v1/payment-agreements';
+
+  const response = await client.get<unknown>(url, {
+    authWithIdToken: true,
+    params: {status: statuses?.join(',')},
+  });
+
+  return parsePaymentAgreements(response.data);
+}
+
+export async function addPaymentAgreement(
+  paymentType: PaymentType,
+  redirectUrl: string,
+): Promise<AddPaymentAgreementResponse> {
+  const url = 'sales/v1/payment-agreements';
+
+  const response = await client.post<unknown>(
+    url,
+    {paymentType, redirectUrl},
+    {authWithIdToken: true},
+  );
+
+  const result = AddPaymentAgreementResponseSchema.safeParse(response.data);
+  if (!result.success) {
+    notifyBugsnag(result.error);
+    throw result.error;
+  }
+  return result.data;
+}
+
+export async function stopPaymentAgreement(agreementId: number): Promise<void> {
+  const url = `sales/v1/payment-agreements/${agreementId}/stop`;
+  await client.post<void>(url, {}, {authWithIdToken: true});
+}
+
 export async function consumeCarnet(fareContractId: string) {
   const url = `ticket/v4/consume`;
   const response = await client.post<void>(
@@ -143,6 +186,7 @@ type ReserveOfferParams = {
   customerAccountId: string;
   shouldSavePaymentMethod: boolean;
   recurringPaymentId?: number;
+  paymentAgreementId?: number;
   autoSale: boolean;
   phoneNumber?: string;
   recipient?: TicketRecipientType;
@@ -205,6 +249,7 @@ export async function reserveOffers({
   recipient,
   shouldSavePaymentMethod,
   recurringPaymentId,
+  paymentAgreementId,
   paymentData,
 }: ReserveOfferParams): Promise<ReserveOfferResponse> {
   const url = 'sales/v1/reserve';
@@ -215,6 +260,7 @@ export async function reserveOffers({
     paymentType,
     storePayment: shouldSavePaymentMethod,
     recurringPaymentId,
+    paymentAgreementId,
     scaExemption,
     customerAccountId,
     autoSale,

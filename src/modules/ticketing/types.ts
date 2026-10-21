@@ -67,6 +67,44 @@ export type RecurringPayment = {
   paymentType: number;
 };
 
+export enum PaymentAgreementStatus {
+  Created = 'CREATED',
+  Pending = 'PENDING',
+  Active = 'ACTIVE',
+  Stopped = 'STOPPED',
+  Expired = 'EXPIRED',
+}
+
+/**
+ * Defined by `PaymentAgreement` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/payment_agreements.rs
+ */
+export const PaymentAgreementSchema = z.object({
+  id: z.number(),
+  status: z.enum(PaymentAgreementStatus),
+  // Not set if the backend doesn't recognize the agreement provider (only Vipps
+  // exists today)
+  paymentType: z.enum(PaymentType).optional(),
+  // ISO 8601 timestamp for when the agreement was created
+  createdAt: z.iso.datetime({offset: true}),
+  // ISO 8601 timestamp for when the agreement was last updated. Not set if it
+  // has not been modified since it was created.
+  updatedAt: z.iso.datetime({offset: true}).optional(),
+});
+export type PaymentAgreement = z.infer<typeof PaymentAgreementSchema>;
+
+/**
+ * Defined by `AddPaymentAgreementResponse` in
+ * https://github.com/AtB-AS/sales/blob/main/sales-service/src/handlers/sales/payment_agreements.rs
+ */
+export const AddPaymentAgreementResponseSchema = z.object({
+  confirmationUrl: z.string(),
+  agreementId: z.number(),
+});
+export type AddPaymentAgreementResponse = z.infer<
+  typeof AddPaymentAgreementResponseSchema
+>;
+
 export type PaymentStatus =
   | 'AUTHENTICATE'
   | 'CANCEL'
@@ -120,6 +158,11 @@ export type ReserveOfferRequest = {
    * payment card
    */
   recurringPaymentId?: number;
+  /**
+   * Charge an existing, active Vipps payment agreement. Mutually exclusive with
+   * `recurringPaymentId`.
+   */
+  paymentAgreementId?: number;
   /**
    * Payment type and the store payment flag should be provided if not using a
    * previously stored payment card

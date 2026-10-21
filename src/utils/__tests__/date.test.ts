@@ -9,6 +9,7 @@ import {
   dateWithReplacedTime,
   formatLocaleTime,
   formatToLongDateTime,
+  formatToShortDateWithFullYear,
   getTimeBetweenFormatted,
   isAfter,
   isBefore,
@@ -617,5 +618,32 @@ describe('arrivalRoundingMethod', () => {
     expect(
       arrivalRoundingMethod(new Date(at('10:10:11')), new Date(at('10:10:34'))),
     ).toBe('floor');
+  });
+});
+
+describe('formatToShortDateWithFullYear', () => {
+  it.each([Language.Norwegian, Language.Nynorsk, Language.English])(
+    'formats day, month and four-digit year the same way in %s',
+    (language) => {
+      expect(
+        formatToShortDateWithFullYear('2026-09-01T10:00:00Z', language),
+      ).toBe('01.09.2026');
+    },
+  );
+
+  it('accepts a Date as well as a string', () => {
+    expect(
+      formatToShortDateWithFullYear(
+        new Date('2026-09-01T10:00:00Z'),
+        Language.Norwegian,
+      ),
+    ).toBe('01.09.2026');
+  });
+
+  it('shows the local date, which is the next day late in the evening UTC', () => {
+    // The tests run in CET, which is two hours ahead of UTC in September
+    expect(
+      formatToShortDateWithFullYear('2026-09-01T22:30:00Z', Language.Norwegian),
+    ).toBe('02.09.2026');
   });
 });
