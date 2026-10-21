@@ -65,7 +65,6 @@ export type RemoteConfig = {
   enable_token_fallback: boolean;
   enable_travel_aid_stop_button: boolean;
   enable_travel_aid: boolean;
-  enable_trip_ticket_card: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
   enable_virtual_stations: boolean;
@@ -149,7 +148,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_token_fallback: true,
   enable_travel_aid_stop_button: false,
   enable_travel_aid: false,
-  enable_trip_ticket_card: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
   enable_virtual_stations: false,
@@ -325,9 +323,6 @@ export function getConfig(): RemoteConfig {
   const enable_travel_aid_stop_button =
     values['enable_travel_aid_stop_button']?.asBoolean() ??
     defaultRemoteConfig.enable_travel_aid_stop_button;
-  const enable_trip_ticket_card =
-    values['enable_trip_ticket_card']?.asBoolean() ??
-    defaultRemoteConfig.enable_trip_ticket_card;
   const enable_vehicles_in_map =
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
@@ -452,7 +447,6 @@ export function getConfig(): RemoteConfig {
     enable_token_fallback,
     enable_travel_aid_stop_button,
     enable_travel_aid,
-    enable_trip_ticket_card,
     enable_vehicles_in_map,
     enable_vipps_login,
     enable_virtual_stations,

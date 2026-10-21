@@ -43,7 +43,6 @@ import {useTimeContext} from '@atb/modules/time';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
 import {TravelCardHeaderComponent as TravelCardHeader} from '@atb/screen-components/travel-card';
 import {CompositeAccessibilityProvider} from '@atb/modules/composite-accessibility';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
@@ -84,9 +83,6 @@ export const TripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
-  const isTripTicketCardEnabled = useIsExperimentalEnabled(
-    'isTripTicketCardEnabled',
-  );
   const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useRefreshTripQuery(
@@ -156,24 +152,12 @@ export const TripDetailsScreenComponent = ({
               onPressQuay={(stopPlace, selectedQuayId) =>
                 onPressQuay(stopPlace, selectedQuayId, tripAnalytics)
               }
-              purchaseSelection={purchaseSelection}
-              onPressBuyTicket={() => {
-                if (!purchaseSelection) return;
-                logEvent(getAnalytics(), 'click_trip_ticket_card_button');
-                onPressBuyTicket(
-                  {
-                    selection: purchaseSelection,
-                    mode: 'TravelSearch',
-                  },
-                  tripAnalytics,
-                );
-              }}
               now={serverNow}
             />
           </View>
         )}
       </FullScreenView>
-      {!isTripTicketCardEnabled && purchaseSelection && (
+      {purchaseSelection && (
         <View style={styles.borderTop}>
           <Button
             expanded={true}
