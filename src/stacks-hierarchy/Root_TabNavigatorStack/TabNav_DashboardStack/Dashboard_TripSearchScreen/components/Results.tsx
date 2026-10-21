@@ -31,6 +31,7 @@ const SKELETON_COUNT = 5;
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
+  searchKey: string;
   showEmptyScreen: boolean;
   isEmptyResult: boolean;
   isSearching: boolean;
@@ -42,6 +43,7 @@ type Props = {
 
 export const Results: React.FC<Props> = ({
   tripPatterns,
+  searchKey,
   showEmptyScreen,
   isEmptyResult,
   isSearching,
@@ -59,6 +61,7 @@ export const Results: React.FC<Props> = ({
   );
   const {renderAll, onInitialRowReady} = useProgressiveRendering(
     filteredTripPatterns.length,
+    searchKey,
   );
 
   if (showEmptyScreen) {

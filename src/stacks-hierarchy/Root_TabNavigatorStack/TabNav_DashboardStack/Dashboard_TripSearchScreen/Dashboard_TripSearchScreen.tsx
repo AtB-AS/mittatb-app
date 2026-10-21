@@ -151,6 +151,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {
     tripPatterns,
+    searchKey,
     timeOfLastSearch,
     loadMoreTrips,
     refetchTrips,
@@ -422,6 +423,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           {hasLocations && (
             <Results
               tripPatterns={tripPatterns}
+              searchKey={searchKey}
               isSearching={isSearching}
               showEmptyScreen={showEmptyScreen}
               isEmptyResult={isEmptyResult}
