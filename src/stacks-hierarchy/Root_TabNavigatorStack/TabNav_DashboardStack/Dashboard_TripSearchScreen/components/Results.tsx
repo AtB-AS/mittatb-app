@@ -1,11 +1,10 @@
-import {DayLabel} from './DayLabel';
+import {TripSearchResultRow} from './TripSearchResultRow';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
 import {StyleSheet} from '@atb/theme';
 import {
   TranslateFunction,
-  TravelCardTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
@@ -20,13 +19,9 @@ import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 import {getTripPatternKey} from '@atb/modules/trip-patterns';
 import {Skeleton} from '@atb/components/skeleton';
-import {
-  TravelCard,
-  WithTravelCardSkeleton,
-} from '@atb/screen-components/travel-card';
+import {WithTravelCardSkeleton} from '@atb/screen-components/travel-card';
 
 const SKELETON_COUNT = 5;
 
@@ -108,38 +103,21 @@ export const Results: React.FC<Props> = ({
             }
           >
             {tripPattern ? (
-              <DayLabel
-                departureTime={tripPattern.expectedStartTime}
+              <TripSearchResultRow
+                tripPattern={tripPattern}
                 previousDepartureTime={
                   filteredTripPatterns[i - 1]?.expectedStartTime
                 }
+                index={i}
+                numberOfResults={filteredTripPatterns.length}
+                onDetailsPressed={onDetailsPressed}
               />
             ) : (
-              i === 0 && <Skeleton style={styles.dayLabelSkeleton} />
+              <>
+                {i === 0 && <Skeleton style={styles.dayLabelSkeleton} />}
+                <WithTravelCardSkeleton />
+              </>
             )}
-            <WithTravelCardSkeleton>
-              {tripPattern &&
-                (({onReady}) => (
-                  <SaveableTripSearchResultRow tripPattern={tripPattern}>
-                    {(isSaved) => (
-                      <TravelCard
-                        tripPattern={tripPattern}
-                        onDetailsPressed={onDetailsPressed}
-                        testID={'tripSearchSearchResult' + i}
-                        a11yLabelPrefix={t(
-                          TravelCardTexts.card.a11yPrefix.tripSuggestion(
-                            i,
-                            filteredTripPatterns.length,
-                          ),
-                        )}
-                        a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
-                        onReady={onReady}
-                        isSaved={isSaved}
-                      />
-                    )}
-                  </SaveableTripSearchResultRow>
-                ))}
-            </WithTravelCardSkeleton>
           </Fragment>
         );
       })}
