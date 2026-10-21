@@ -1,4 +1,8 @@
 import {TripSearchResultRow} from './TripSearchResultRow';
+import {
+  INITIAL_RENDER_COUNT,
+  useProgressiveRendering,
+} from '../use-progressive-rendering';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
@@ -50,6 +54,13 @@ export const Results: React.FC<Props> = ({
   const {t} = useTranslation();
   const now = useNow(30000);
 
+  const filteredTripPatterns = tripPatterns.filter(
+    (tp) => !getIsTooLateToBookFlexLine(tp, now),
+  );
+  const {renderAll, onInitialRowReady} = useProgressiveRendering(
+    filteredTripPatterns.length,
+  );
+
   if (showEmptyScreen) {
     return null;
   }
@@ -85,10 +96,6 @@ export const Results: React.FC<Props> = ({
     );
   }
 
-  const filteredTripPatterns = tripPatterns.filter(
-    (tp) => !getIsTooLateToBookFlexLine(tp, now),
-  );
-
   const slotCount =
     filteredTripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
 
@@ -111,6 +118,10 @@ export const Results: React.FC<Props> = ({
                 index={i}
                 numberOfResults={filteredTripPatterns.length}
                 onDetailsPressed={onDetailsPressed}
+                isDeferred={!renderAll && i >= INITIAL_RENDER_COUNT}
+                onInitialRowReady={
+                  i < INITIAL_RENDER_COUNT ? onInitialRowReady : undefined
+                }
               />
             ) : (
               <>

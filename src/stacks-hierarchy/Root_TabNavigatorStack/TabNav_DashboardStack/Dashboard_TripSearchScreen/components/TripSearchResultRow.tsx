@@ -15,6 +15,9 @@ type Props = {
   index: number;
   numberOfResults: number;
   onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
+  // Shows only the card skeleton until the card itself should be rendered.
+  isDeferred?: boolean;
+  onInitialRowReady?: (index: number) => void;
 };
 
 /**
@@ -27,6 +30,8 @@ export const TripSearchResultRow = ({
   index,
   numberOfResults,
   onDetailsPressed,
+  isDeferred = false,
+  onInitialRowReady,
 }: Props) => {
   const {t} = useTranslation();
 
@@ -37,26 +42,31 @@ export const TripSearchResultRow = ({
         previousDepartureTime={previousDepartureTime}
       />
       <WithTravelCardSkeleton>
-        {({onReady}) => (
-          <SaveableTripSearchResultRow tripPattern={tripPattern}>
-            {(isSaved) => (
-              <TravelCard
-                tripPattern={tripPattern}
-                onDetailsPressed={onDetailsPressed}
-                testID={'tripSearchSearchResult' + index}
-                a11yLabelPrefix={t(
-                  TravelCardTexts.card.a11yPrefix.tripSuggestion(
-                    index,
-                    numberOfResults,
-                  ),
+        {isDeferred
+          ? undefined
+          : ({onReady}) => (
+              <SaveableTripSearchResultRow tripPattern={tripPattern}>
+                {(isSaved) => (
+                  <TravelCard
+                    tripPattern={tripPattern}
+                    onDetailsPressed={onDetailsPressed}
+                    testID={'tripSearchSearchResult' + index}
+                    a11yLabelPrefix={t(
+                      TravelCardTexts.card.a11yPrefix.tripSuggestion(
+                        index,
+                        numberOfResults,
+                      ),
+                    )}
+                    a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
+                    onReady={() => {
+                      onReady();
+                      onInitialRowReady?.(index);
+                    }}
+                    isSaved={isSaved}
+                  />
                 )}
-                a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
-                onReady={onReady}
-                isSaved={isSaved}
-              />
+              </SaveableTripSearchResultRow>
             )}
-          </SaveableTripSearchResultRow>
-        )}
       </WithTravelCardSkeleton>
     </>
   );
