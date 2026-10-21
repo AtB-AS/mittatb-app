@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
 import {computeFit, FitResult} from './compute-fit';
 
@@ -39,7 +39,9 @@ export const OverflowContainer: React.FC<Props> = ({
       : null;
 
   const onReadyMemo = useCallback(() => onReady?.(), [onReady]);
-  useEffect(() => {
+  // Layout effect so the parent's reveal is committed before paint, instead of
+  // a frame later followed by an extra native layout pass.
+  useLayoutEffect(() => {
     if (fitResult != null) {
       onReadyMemo();
     }
