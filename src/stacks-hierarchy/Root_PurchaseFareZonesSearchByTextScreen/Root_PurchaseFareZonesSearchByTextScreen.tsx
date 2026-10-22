@@ -19,7 +19,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {
   FareZoneResults,
   type FareZoneWithMetadata,
+  useFareZoneFromLocation,
 } from '@atb/modules/fare-zones-selector';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Location} from '@atb/assets/svg/mono-icons/places';
 import {LocationAndFareZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
@@ -104,7 +107,22 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     if (isFocused) focusInput();
   }, [isFocused]);
 
-  const {location: geolocation} = useGeolocationContext();
+  const {location: geolocation, requestLocationPermission} =
+    useGeolocationContext();
+  const fareZoneFromLocation = useFareZoneFromLocation(fareZones);
+
+  const selectCurrentFareZoneOrRequest = () => {
+    if (geolocation) {
+      if (fareZoneFromLocation) {
+        navigateToMapScreen({
+          ...fareZoneFromLocation,
+          resultType: 'geolocation',
+        });
+      }
+    } else {
+      requestLocationPermission(false);
+    }
+  };
 
   const {
     data: locations,
@@ -162,6 +180,15 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
           autoCorrect={false}
           autoComplete="off"
           testID="searchInput"
+          icon={<ThemeIcon svg={Location} />}
+          onIconPress={selectCurrentFareZoneOrRequest}
+          iconAccessibility={{
+            accessible: true,
+            accessibilityLabel: t(
+              FareZoneSearchTexts.searchField.locationButton.a11yLabel,
+            ),
+            accessibilityRole: 'button',
+          }}
         />
       </View>
 

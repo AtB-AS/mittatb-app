@@ -1,6 +1,7 @@
 import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
+  AccessibilityProps,
   Platform,
   TextInput as InternalTextInput,
   FocusEvent,
@@ -11,7 +12,12 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {
+  NavigationIcon,
+  isNavigationIcon,
+  NavigationIconTypes,
+  ThemeIcon,
+} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
@@ -27,6 +33,9 @@ type TextProps = SectionItemProps<
     showClear?: boolean;
     onClear?: () => void;
     errorText?: string;
+    icon?: NavigationIconTypes | React.JSX.Element;
+    onIconPress?(): void;
+    iconAccessibility?: AccessibilityProps;
     /**
      * The underlying text input component to render. Defaults to react-native's
      * `TextInput`. Pass `@gorhom/bottom-sheet`'s `BottomSheetTextInput` when used
@@ -50,6 +59,9 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       onClear,
       style,
       InputComponent = InternalTextInput,
+      icon,
+      onIconPress,
+      iconAccessibility,
       ...props
     },
     forwardedRef,
@@ -115,6 +127,25 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const androidPaddingOverwrite =
       Platform.OS === 'android' ? {paddingTop: 7, paddingBottom: 8} : undefined;
 
+    const iconEl = isNavigationIcon(icon) ? (
+      <NavigationIcon mode={icon} />
+    ) : (
+      icon
+    );
+
+    const iconButton = onIconPress ? (
+      <NativeTouchable
+        variant="borderless"
+        hitSlop={insets.all(8)}
+        onPress={onIconPress}
+        {...iconAccessibility}
+      >
+        {iconEl}
+      </NativeTouchable>
+    ) : (
+      iconEl
+    );
+
     const containerPadding = {
       paddingHorizontal: theme.spacing.medium,
     };
@@ -169,6 +200,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
                 <ThemeIcon svg={Close} />
               </NativeTouchable>
             </View>
+          ) : icon ? (
+            <View style={styles.inputClear}>{iconButton}</View>
           ) : null}
         </View>
         {errorText !== undefined && (
