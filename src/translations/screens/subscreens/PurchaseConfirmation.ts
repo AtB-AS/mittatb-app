@@ -170,18 +170,6 @@ const PurchaseConfirmationTexts = {
       'Aktivér for å velje betalingsmåte',
     ),
   },
-  changePaymentMethod: {
-    text: _(
-      'Endre betalingsmåte',
-      'Change payment option',
-      'Endre betalingsmåte',
-    ),
-    a11yHint: _(
-      'Aktiver for å endre betalingsmåte',
-      'Activate to change payment option',
-      'Aktiver for å endre betalingsmåte',
-    ),
-  },
 
   payTotal: {
     text: (total: string) =>
