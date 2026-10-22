@@ -607,8 +607,8 @@ const PaymentButton = ({
   if (!paymentMethod && totalPrice > 0)
     return (
       <Button
+        surfaceColor="accent"
         expanded={true}
-        interactiveColor={theme.color.interactive[0]}
         text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
         disabled={!!isOfferError}
         accessibilityHint={t(
@@ -640,7 +640,7 @@ const PaymentButton = ({
           text={t(PurchaseConfirmationTexts.cancelPayment)}
           mode="primary"
           rightIcon={{svg: SvgClose}}
-          interactiveColor={theme.color.interactive.destructive}
+          surfaceColor="error"
           onPress={() => {
             onCancelPayment();
           }}
@@ -653,13 +653,13 @@ const PaymentButton = ({
 
   return (
     <Button
+      surfaceColor="accent"
       expanded={true}
       text={
         totalPrice > 0
           ? t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))
           : t(PurchaseConfirmationTexts.complete)
       }
-      interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
         if (paymentMethod) {

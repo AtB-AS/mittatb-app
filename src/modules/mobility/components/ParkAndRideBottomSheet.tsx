@@ -80,6 +80,7 @@ export const ParkAndRideBottomSheet = ({
       <View style={styles.buttonsContainer}>
         <View style={styles.travelButton}>
           <Button
+            surfaceColor="accent"
             expanded={true}
             text={t(DeparturesDialogSheetTexts.travelFrom.title)}
             onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
@@ -89,6 +90,7 @@ export const ParkAndRideBottomSheet = ({
         </View>
         <View style={styles.travelButton}>
           <Button
+            surfaceColor="accent"
             expanded={true}
             text={t(DeparturesDialogSheetTexts.travelTo.title)}
             onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}

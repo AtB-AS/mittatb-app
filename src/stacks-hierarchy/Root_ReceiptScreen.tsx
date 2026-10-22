@@ -5,7 +5,7 @@ import {
   MessageInfoBoxProps,
 } from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/modules/ticketing';
 import {
   FareContractTexts,
@@ -39,7 +39,6 @@ export function Root_ReceiptScreen({route}: Props) {
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const a11yContext = useAccessibilityContext();
   const analytics = useAnalyticsContext();
   const {language} = useLocaleContext();
@@ -115,11 +114,11 @@ export function Root_ReceiptScreen({route}: Props) {
           )}
         </Section>
         <Button
+          surfaceColor="accent"
           expanded={true}
           text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}
-          interactiveColor={theme.color.interactive[0]}
         />
       </View>
     </View>

@@ -21,6 +21,7 @@ export const PaymentScreenComponent = ({
       title={t(MobilityTexts.shmoRequirements.payment.title)}
       description={t(MobilityTexts.shmoRequirements.payment.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: onAddRecurringPayment,
         text: t(MobilityTexts.shmoRequirements.payment.button),
         expanded: true,

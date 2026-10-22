@@ -11,6 +11,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {ButtonProps} from '@atb/components/button';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -95,7 +96,8 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
   const themeColor = getThemeColor(theme);
 
-  const loginButton = {
+  const loginButton: ButtonProps = {
+    surfaceColor: 'accent',
     onPress: onPressLogin || (() => {}),
     text: t(AnonymousPurchasesTexts.consequences.button.login.label),
     accessibilityHint: t(
@@ -104,7 +106,8 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
     expanded: true,
   };
 
-  const continueWithoutLoginButton = {
+  const continueWithoutLoginButton: ButtonProps = {
+    surfaceColor: 'accent',
     onPress: onPressContinueWithoutLogin,
     text: t(AnonymousPurchasesTexts.consequences.button.accept.label),
     accessibilityHint: t(

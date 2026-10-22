@@ -286,7 +286,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
               screenReaderPause
             }
             onEditFavoritePlaces={navigateToFavoriteListScreen}
-            backgroundColor={theme.color.background.neutral[1]}
           />
         </View>
 

@@ -11,7 +11,7 @@ import {
 } from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import React, {Ref, useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -203,7 +203,6 @@ const Header = React.memo(function Header({
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {location: geolocation, requestLocationPermission} =
     useGeolocationContext();
   const analytics = useAnalyticsContext();
@@ -247,7 +246,6 @@ const Header = React.memo(function Header({
           chipTypes={['favorites', 'edit-favorites']}
           style={styles.favoriteChips}
           onEditFavoritePlaces={onEditFavoritePlaces}
-          backgroundColor={theme.color.background.neutral[1]}
         />
       )}
     </View>

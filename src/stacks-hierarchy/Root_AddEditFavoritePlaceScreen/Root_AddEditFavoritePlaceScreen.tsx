@@ -12,7 +12,7 @@ import {
   toSingleLocation,
   usePendingLocationSearchStore,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
@@ -44,8 +44,6 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   } = useFavoritesContext();
   const editItem = route?.params?.editItem;
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -214,11 +212,11 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         </Section>
         {emoji && (
           <Button
+            surfaceColor="accent"
             expanded={false}
             text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
             type="small"
             mode="tertiary"
-            backgroundColor={themeColor}
             onPress={() => {
               setEmoji(undefined);
             }}
@@ -232,7 +230,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             <Button
               expanded={true}
               onPress={deleteItem}
-              interactiveColor={theme.color.interactive.destructive}
+              surfaceColor="error"
               rightIcon={{svg: SvgDelete}}
               text={t(AddEditFavoriteTexts.delete.label)}
               testID="deleteButton"
@@ -240,8 +238,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           )}
 
           <Button
+            surfaceColor="accent"
             expanded={true}
-            interactiveColor={theme.color.interactive[0]}
             onPress={save}
             rightIcon={{svg: SvgConfirm}}
             text={t(AddEditFavoriteTexts.save.label)}

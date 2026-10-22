@@ -247,6 +247,7 @@ export const Root_ContactShmoOperatorScreen = ({
           />
         )}
         <Button
+          surfaceColor="accent"
           loading={supportRequestStatus === 'pending'}
           expanded={true}
           mode="primary"

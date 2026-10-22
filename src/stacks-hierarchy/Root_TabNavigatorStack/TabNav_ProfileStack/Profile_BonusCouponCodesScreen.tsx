@@ -80,6 +80,7 @@ export const Profile_BonusCouponCodesScreen = ({navigation}: Props) => {
               message={t(BonusProgramTexts.myCouponCodes.errorMessage)}
             />
             <Button
+              surfaceColor="accent"
               expanded
               style={styles.retryButton}
               text={t(BonusProgramTexts.myCouponCodes.retry)}

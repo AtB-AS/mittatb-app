@@ -15,7 +15,7 @@ import {
   NativeTouchableProps,
 } from '@atb/components/native-touchable';
 import {shadows} from '@atb/modules/map';
-import {ContrastColor, InteractiveColor} from '@atb/theme/colors';
+import {ContrastColor, SurfaceColorName} from '@atb/theme/colors';
 import {Loading} from '../loading';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
@@ -26,26 +26,19 @@ type ButtonIconProps = {
   notificationColor?: ContrastColor;
 };
 
-type ButtonModeAwareProps =
-  | {mode?: 'primary'}
-  | {
-      mode: Exclude<ButtonMode, 'primary'>;
-      backgroundColor?: ContrastColor;
-    };
-
 export type ButtonProps = {
   onPress(): void;
+  mode?: ButtonMode;
   text?: string;
   type?: ButtonType;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
-  interactiveColor?: InteractiveColor;
+  surfaceColor: SurfaceColorName;
   expanded: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
-} & ButtonModeAwareProps &
-  Omit<NativeTouchableProps, 'variant'>;
+} & Omit<NativeTouchableProps, 'variant'>;
 
 export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   const {
@@ -55,6 +48,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     leftIcon,
     rightIcon,
     text,
+    surfaceColor,
     disabled,
     loading = false,
     expanded,
@@ -66,21 +60,24 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
   const styles = useButtonStyle();
   const {theme} = useThemeContext();
 
-  const {mainContrastColor, borderColorValue} = getButtonColors(props, theme);
+  const {mainContrastColor, borderColorValue, pressedColorValue} =
+    getButtonColors(props, surfaceColor, theme);
 
   const spacing = theme.spacing.medium;
+  // Subtract the border width so the large button matches the design height,
+  // where the border is drawn inside the button.
+  const largePadding = spacing - theme.border.width.slim;
 
   const styleContainer: ViewStyle[] = [
     styles.button,
     {
       backgroundColor: mainContrastColor.background,
       borderColor: borderColorValue,
-      paddingHorizontal: spacing,
+      paddingHorizontal: type === 'small' ? spacing : largePadding,
       gap: type === 'small' ? theme.spacing.xSmall : undefined,
-      paddingVertical: type === 'small' ? theme.spacing.xSmall : spacing,
+      paddingVertical: type === 'small' ? theme.spacing.xSmall : largePadding,
       borderRadius: theme.border.radius.circle,
-      borderWidth:
-        type === 'small' ? theme.border.width.slim : theme.border.width.medium,
+      borderWidth: theme.border.width.slim,
       ...(expanded && type === 'small'
         ? {
             justifyContent: 'center',
@@ -102,13 +99,17 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     if (expanded && text && type !== 'small') {
       return {
         position: 'absolute',
-        [iconSide]: spacing,
+        [iconSide]: largePadding,
         [iconMargin]: text ? theme.spacing.xSmall : undefined,
       };
     }
 
     return {
-      [iconMargin]: text ? theme.spacing.xSmall : undefined,
+      [iconMargin]: text
+        ? type === 'small'
+          ? theme.spacing.xSmall
+          : spacing
+        : undefined,
     };
   };
 
@@ -144,6 +145,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       style={[styleContainer, hasShadow ? shadows : undefined, style]}
       onPress={disabled || loading ? undefined : onPress}
       disabled={disabled || loading}
+      pressedColor={pressedColorValue}
       ref={ref}
       {...otherProps}
     >
@@ -207,23 +209,23 @@ const ButtonIcon = ({
 );
 
 /**
- * Get the button colors based on the input props to the button. The returned
- * mainContrastColor is the ContrastColor for the background and text of the
- * button. In addition, a borderColorValue is returned for the border color. We
- * can't really use a ContrastColor for the border color since sometimes the
- * color is background color and sometimes a foreground color, based on the mode
- * and state of the button.
+ * Get the button colors based on the button mode and the selected surface
+ * color. The returned mainContrastColor is the ContrastColor for the background
+ * and text of the button. Secondary and tertiary buttons are transparent. In
+ * addition, a borderColorValue is returned for the border color, and a
+ * pressedColorValue for the background color shown while the button is
+ * pressed.
  */
 const getButtonColors = (
   props: ButtonProps,
+  surfaceColor: SurfaceColorName,
   theme: Theme,
 ): {
   mainContrastColor: ContrastColor;
   borderColorValue: ColorValue;
+  pressedColorValue: ColorValue;
 } => {
-  const interactiveColor = props.interactiveColor
-    ? props.interactiveColor
-    : theme.color.interactive[0];
+  const surface = theme.color.surface[surfaceColor];
 
   const transparentContrastColor: ContrastColor = {
     background: 'transparent',
@@ -234,23 +236,22 @@ const getButtonColors = (
     case 'primary':
     case undefined:
       return {
-        mainContrastColor: interactiveColor.default,
-        borderColorValue: interactiveColor.default.background,
+        mainContrastColor: surface.strong,
+        borderColorValue: surface.strong.background,
+        pressedColorValue: surface.strongPressed.background,
       };
-    case 'secondary': {
-      const backgroundColor = props.backgroundColor ?? transparentContrastColor;
+    case 'secondary':
       return {
-        mainContrastColor: backgroundColor,
-        borderColorValue: backgroundColor.foreground.primary,
+        mainContrastColor: transparentContrastColor,
+        borderColorValue: surface.strong.background,
+        pressedColorValue: surface.subtlePressed.background,
       };
-    }
-    case 'tertiary': {
-      const backgroundColor = props.backgroundColor ?? transparentContrastColor;
+    case 'tertiary':
       return {
-        mainContrastColor: backgroundColor,
-        borderColorValue: backgroundColor.background,
+        mainContrastColor: transparentContrastColor,
+        borderColorValue: transparentContrastColor.background,
+        pressedColorValue: surface.subtlePressed.background,
       };
-    }
   }
 };
 

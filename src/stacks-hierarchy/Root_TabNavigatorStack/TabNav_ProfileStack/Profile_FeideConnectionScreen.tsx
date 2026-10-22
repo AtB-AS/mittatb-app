@@ -126,6 +126,7 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
           ))}
 
         <Button
+          surfaceColor="accent"
           onPress={() => {
             setLocalError(false);
             initFeideConnect();

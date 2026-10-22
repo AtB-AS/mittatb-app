@@ -43,15 +43,14 @@ export const FareProductHeader = forwardRef<View, Props>(
         {isTicketInformationEnabled && (
           <View style={styles.headerSubSection}>
             <Button
+              surfaceColor="accent"
               expanded={false}
               type="small"
               mode="secondary"
               leftIcon={{svg: Info}}
-              interactiveColor={theme.color.interactive[0]}
               text={t(PurchaseOverviewTexts.ticketInformation.button)}
               onPress={onTicketInfoButtonPress}
               testID="ticketInformationButton"
-              backgroundColor={themeColor}
             />
           </View>
         )}

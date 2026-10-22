@@ -92,6 +92,7 @@ export const FinishingScooterSheet = ({
           </View>
 
           <Button
+            surfaceColor="accent"
             mode="primary"
             expanded={true}
             type="large"

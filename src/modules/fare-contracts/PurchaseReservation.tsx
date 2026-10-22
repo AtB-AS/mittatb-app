@@ -1,6 +1,6 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   Reservation,
   PaymentType,
@@ -31,7 +31,6 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
   const styles = useStyles();
   const {customerProfile} = useTicketingContext();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const cancelMutation = useCancelPaymentMutation();
 
   const isSubAccountReservation = customerProfile?.subAccounts?.some(
@@ -84,12 +83,12 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
           {status === 'reserving' &&
             reservation.paymentType === PaymentType.Vipps && (
               <Button
+                surfaceColor="accent"
                 expanded={true}
                 onPress={async () => await openUrl(reservation.url)}
                 accessibilityRole="link"
                 text={t(TicketingTexts.reservation.goToVipps)}
                 mode="secondary"
-                backgroundColor={theme.color.background.neutral[0]}
               />
             )}
           {status === 'reserving' &&
@@ -102,7 +101,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
                 }
                 text={t(PurchaseConfirmationTexts.cancelPayment)}
                 mode="primary"
-                interactiveColor={theme.color.interactive.destructive}
+                surfaceColor="error"
                 loading={cancelMutation.isPending}
               />
             )}

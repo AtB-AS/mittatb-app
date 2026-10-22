@@ -33,12 +33,14 @@ export const Root_TravelAidOnboardingScreen = ({navigation}: Props) => {
       title={t(TravelAidTexts.onboarding.title)}
       description={t(TravelAidTexts.onboarding.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: onActivate,
         text: t(TravelAidTexts.onboarding.activate),
         rightIcon: {svg: Confirm},
         expanded: true,
       }}
       secondaryFooterButton={{
+        surfaceColor: 'accent',
         onPress: onDismiss,
         text: t(TravelAidTexts.onboarding.skip),
         rightIcon: {svg: Close},

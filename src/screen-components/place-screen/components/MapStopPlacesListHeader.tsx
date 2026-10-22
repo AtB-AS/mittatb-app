@@ -29,6 +29,7 @@ export function MapStopPlacesListHeader({
       <View style={styles.buttonsContainer}>
         <View style={styles.travelButton}>
           <Button
+            surfaceColor="accent"
             expanded={true}
             text={t(DeparturesDialogSheetTexts.travelFrom.title)}
             onPress={() => {
@@ -45,6 +46,7 @@ export function MapStopPlacesListHeader({
         </View>
         <View style={styles.travelButton}>
           <Button
+            surfaceColor="accent"
             expanded={true}
             text={t(DeparturesDialogSheetTexts.travelTo.title)}
             onPress={() => {

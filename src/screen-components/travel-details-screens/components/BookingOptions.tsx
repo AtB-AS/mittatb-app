@@ -3,7 +3,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
@@ -16,7 +16,6 @@ type Props = {
 export const BookingOptions = ({bookingArrangements}: Props) => {
   const {t} = useTranslation();
   const style = useStyle();
-  const {theme} = useThemeContext();
 
   if (!bookingArrangements) return null;
 
@@ -36,6 +35,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
       {showBookOnlineOption && (
         <View style={style.flexBookingOption} accessible={false}>
           <Button
+            surfaceColor="accent"
             accessible={true}
             accessibilityRole="link"
             accessibilityHint={t(
@@ -46,7 +46,6 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
             mode="primary"
             type="small"
             expanded={false}
-            interactiveColor={theme.color.interactive[0]}
             leftIcon={{svg: ExternalLink}}
           />
         </View>
@@ -54,6 +53,7 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
       {showBookByPhoneOption && (
         <View style={style.flexBookingOption} accessible={false}>
           <Button
+            surfaceColor="neutral"
             accessible={true}
             accessibilityHint={t(
               TripDetailsTexts.flexibleTransport.bookByPhoneA11yHint,
@@ -65,7 +65,6 @@ export const BookingOptions = ({bookingArrangements}: Props) => {
             mode="secondary"
             type="small"
             expanded={false}
-            interactiveColor={theme.color.interactive[2]}
             leftIcon={{svg: Phone}}
           />
         </View>

@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useActivateFareContractNowMutation} from '@atb/modules/ticketing';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import React, {RefObject} from 'react';
@@ -31,7 +31,6 @@ export const ActivateNowBottomSheet = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const {logEvent} = useAnalyticsContext();
   const {
     mutateAsync: activateNowAsync,
@@ -72,6 +71,7 @@ export const ActivateNowBottomSheet = ({
           </GenericSectionItem>
         </Section>
         <Button
+          surfaceColor="accent"
           expanded={true}
           onPress={onActivate}
           text={t(FareContractTexts.activateNow.confirm)}
@@ -79,11 +79,11 @@ export const ActivateNowBottomSheet = ({
           loading={activateNowIsPending}
         />
         <Button
+          surfaceColor="accent"
           expanded={true}
           mode="secondary"
           onPress={() => bottomSheetModalRef.current?.dismiss()}
           text={t(dictionary.cancel)}
-          backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
     </BottomSheetModal>

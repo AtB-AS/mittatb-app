@@ -1,9 +1,8 @@
 import {Button} from '@atb/components/button';
 import {Camera, CameraScreenContainer} from '@atb/components/camera';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {getThemeColor} from '../../components/PhotoCapture/ScreenContainer';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
@@ -32,8 +31,6 @@ export const Root_ParkingViolationsQrScreen = ({
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad(navigation);
   const style = useStyles();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
   const isFocused = useIsFocused();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -184,14 +181,13 @@ export const Root_ParkingViolationsQrScreen = ({
             onCapture={handlePhotoCapture}
             bottomButtonNode={
               <Button
+                surfaceColor="neutral"
                 expanded={false}
                 disabled={isError}
                 mode="secondary"
-                backgroundColor={themeColor}
                 onPress={() => selectProvider()}
                 text={t(ParkingViolationTexts.qr.scanningNotPossible)}
                 ref={onCloseFocusRef}
-                interactiveColor={theme.color.interactive[2]}
               />
             }
           />

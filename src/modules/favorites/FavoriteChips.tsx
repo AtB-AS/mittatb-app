@@ -4,7 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationContext} from '@atb/modules/geolocation';
-import {ContrastColor, StyleSheet} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -25,7 +25,6 @@ type Props = {
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
   onEditFavoritePlaces?: () => void;
-  backgroundColor: ContrastColor;
 };
 
 export const FavoriteChips: React.FC<Props> = ({
@@ -35,7 +34,6 @@ export const FavoriteChips: React.FC<Props> = ({
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
   onEditFavoritePlaces = () => {},
-  backgroundColor,
 }) => {
   const {favorites} = useFavoritesContext();
   const {t} = useTranslation();
@@ -54,8 +52,8 @@ export const FavoriteChips: React.FC<Props> = ({
       >
         {activeType('location') && (
           <FavoriteChip
+            surfaceColor="accent"
             expanded={false}
-            backgroundColor={backgroundColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.currentLocation)}
             accessibilityRole="button"
@@ -67,12 +65,12 @@ export const FavoriteChips: React.FC<Props> = ({
         )}
         {activeType('map') && !disableMap && (
           <FavoriteChip
+            surfaceColor="accent"
             expanded={false}
             text={t(FavoriteTexts.chips.mapLocation)}
             accessibilityRole="button"
             leftIcon={{svg: Pin}}
             onPress={onMapSelection}
-            backgroundColor={backgroundColor}
             mode="secondary"
             testID="mapLocationChip"
           />
@@ -81,6 +79,7 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
+              surfaceColor="accent"
               expanded={false}
               key={fav.id}
               text={fav.name ?? ''}
@@ -102,8 +101,8 @@ export const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('edit-favorites') && (
           <FavoriteChip
+            surfaceColor="accent"
             expanded={false}
-            backgroundColor={backgroundColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.editFavorites)}
             accessibilityRole="button"

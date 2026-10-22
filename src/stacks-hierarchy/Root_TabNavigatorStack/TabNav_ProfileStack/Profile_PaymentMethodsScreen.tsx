@@ -93,6 +93,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
               message={t(PaymentMethodsTexts.loginRequired.message)}
             />
             <Button
+              surfaceColor="accent"
               expanded
               text={t(
                 ProfileTexts.sections.account.linkSectionItems.login.label,

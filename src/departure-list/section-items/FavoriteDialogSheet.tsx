@@ -9,7 +9,6 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
 import {formatDestinationDisplay} from '@atb/screen-components/travel-details-screens';
-import {useThemeContext} from '@atb/theme';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {
   BottomSheetHeaderType,
@@ -37,8 +36,6 @@ export const FavoriteDialogSheet = ({
   onCloseCallback,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
   const styles = useStyles();
   const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
 
@@ -46,8 +43,8 @@ export const FavoriteDialogSheet = ({
     <FullScreenFooter>
       <View style={styles.buttonContainer}>
         <Button
+          surfaceColor="accent"
           expanded={true}
-          interactiveColor={interactiveColor}
           onPress={() => {
             bottomSheetModalRef.current?.dismiss();
             addFavorite(true);
@@ -62,8 +59,8 @@ export const FavoriteDialogSheet = ({
           testID="onlySelectedDeparture"
         />
         <Button
+          surfaceColor="accent"
           expanded={true}
-          interactiveColor={interactiveColor}
           onPress={() => {
             bottomSheetModalRef.current?.dismiss();
             addFavorite(false);

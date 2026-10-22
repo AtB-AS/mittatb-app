@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   EnrollmentTexts,
   getTextForLanguage,
@@ -38,8 +38,6 @@ type Props = ProfileScreenProps<'Profile_EnrollmentScreen'>;
 export const Profile_EnrollmentScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
   0;
   const [inviteCode, setInviteCode] = useState<string>('');
   const fontScale = useFontScale();
@@ -106,10 +104,10 @@ export const Profile_EnrollmentScreen = ({navigation}: Props) => {
           />
         )}
         <Button
+          surfaceColor="accent"
           expanded={true}
           onPress={() => onEnroll(inviteCode, () => setInviteCode(''))}
           text={t(EnrollmentTexts.button)}
-          interactiveColor={interactiveColor}
           loading={isLoading}
         />
       </View>

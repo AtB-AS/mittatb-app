@@ -9,7 +9,7 @@ import {
 import {useFavoritesContext} from '@atb/modules/favorites';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   DeparturesTexts,
   FavoriteDeparturesTexts,
@@ -48,10 +48,8 @@ export const DeparturesWidget = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const now = useNow(10 * ONE_SECOND_MS);
 
-  const themeColor = theme.color.background.neutral[1];
   const {favoriteDepartures} = useFavoritesContext();
   const {location} = useGeolocationContext();
   const isFocused = useIsFocusedAndActive();
@@ -125,9 +123,9 @@ export const DeparturesWidget = ({
       ))}
       {!!favoriteDepartures.length && (
         <Button
+          surfaceColor="accent"
           expanded={true}
           mode="secondary"
-          backgroundColor={themeColor}
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}

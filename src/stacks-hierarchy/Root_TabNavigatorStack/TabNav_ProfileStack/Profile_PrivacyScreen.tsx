@@ -1,5 +1,5 @@
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -19,8 +19,6 @@ type Props = ProfileScreenProps<'Profile_PrivacyScreen'>;
 
 export const Profile_PrivacyScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const destructiveColor = theme.color.interactive.destructive;
 
   const style = useStyle();
   const {clearHistory} = useSearchHistoryContext();
@@ -65,7 +63,7 @@ export const Profile_PrivacyScreen = ({navigation}: Props) => {
           <Button
             expanded={true}
             leftIcon={{svg: Delete}}
-            interactiveColor={destructiveColor}
+            surfaceColor="error"
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
             )}

@@ -40,6 +40,7 @@ export const SmartParkAndRideOnboarding_InformationScreen = ({
       title={t(SmartParkAndRideTexts.onboarding.information.title)}
       description={t(SmartParkAndRideTexts.onboarding.information.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => {
           analytics.logEvent(
             'Smart Park & Ride',

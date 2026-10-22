@@ -1,5 +1,5 @@
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -28,7 +28,6 @@ export const ImageConfirmationBottomSheet = ({
   onCloseFocusRef,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
 
   return (
@@ -59,18 +58,19 @@ export const ImageConfirmationBottomSheet = ({
           </View>
         </View>
         <Button
+          surfaceColor="accent"
           expanded={true}
           style={styles.button}
           onPress={onConfirm}
           text={t(ParkingViolationTexts.imageConfirmation.confirmButton)}
         />
         <Button
+          surfaceColor="accent"
           expanded={true}
           style={styles.button}
           mode="secondary"
           onPress={() => bottomSheetModalRef.current?.dismiss()}
           text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
-          backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
     </BottomSheetModal>
