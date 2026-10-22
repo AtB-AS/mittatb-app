@@ -110,6 +110,9 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   const {location: geolocation, requestLocationPermission} =
     useGeolocationContext();
   const fareZoneFromLocation = useFareZoneFromLocation(fareZones);
+  // Hide the location button when the user's position is outside all
+  // selectable fare zones, since pressing it would have no effect.
+  const showLocationButton = !geolocation || !!fareZoneFromLocation;
 
   const selectCurrentFareZoneOrRequest = () => {
     if (geolocation) {
@@ -180,7 +183,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
           autoCorrect={false}
           autoComplete="off"
           testID="searchInput"
-          icon={<ThemeIcon svg={Location} />}
+          icon={showLocationButton ? <ThemeIcon svg={Location} /> : undefined}
           onIconPress={selectCurrentFareZoneOrRequest}
           iconAccessibility={{
             accessible: true,
