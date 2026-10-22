@@ -72,6 +72,7 @@ import type {TripPattern} from '@atb/api/types/trips';
 import {openUrl} from '@atb/utils/open-url';
 import queryString from 'query-string';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {usePreventRemove} from '@react-navigation/native';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -388,14 +389,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   // Block the user from exiting the screen during reserve and cancel, including
   // iOS swipe and Android back actions.
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', (e) => {
-        if (hasLeftScreenRef.current) return;
-        if (isReservingRef.current || isPaymentInProgress) e.preventDefault();
-      }),
-    [navigation, isPaymentInProgress],
-  );
+  usePreventRemove(isPaymentInProgress, ({data}) => {
+    // Navigation actions triggered while isPaymentInProgress is true is will be
+    // blocked. But if hasLeftScreenRef is set to true, this callback triggers
+    // the navigation again, which isn't blocked by usePreventRemove.
+    if (hasLeftScreenRef.current) navigation.dispatch(data.action);
+  });
 
   if (isPaymentInProgress) {
     return (
