@@ -286,8 +286,13 @@ export const applyProductChange = (
       ? getDefaultUserProfiles(input, product)
       : selectableProfiles;
 
+  const isTravellerSelectionVisible =
+    currentSelection.fareProductTypeConfig.configuration
+      .travellerSelectionMode !== 'none';
+
   const forcedChanges: ForcedSelectionChange[] = [];
   if (
+    isTravellerSelectionVisible &&
     !isUserProfilesWithCountEqual(
       currentSelection.userProfilesWithCount,
       userProfiles,
