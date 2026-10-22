@@ -38,25 +38,28 @@ export const OverflowContainer: React.FC<Props> = ({
       ? computeFit({widths, overflowWidth, maxWidth, gap})
       : null;
 
+  const isFitted = fitResult != null;
   const onReadyMemo = useCallback(() => onReady?.(), [onReady]);
   // Layout effect so the parent's reveal is committed before paint, instead of
   // a frame later followed by an extra native layout pass.
   useLayoutEffect(() => {
-    if (fitResult != null) {
+    if (isFitted) {
       onReadyMemo();
     }
-  }, [fitResult, onReadyMemo]);
+  }, [isFitted, onReadyMemo]);
 
   const hiddenCount = items.length - (fitResult?.visibleCount ?? 0);
 
   return (
     <View style={[styles.row, {gap}]}>
       {/* Hidden, out-of-flow measurer; onLayout keeps widthByKey fresh. It is
-          not constrained to maxWidth: the children only need their natural
-          width, and while maxWidth is still 0 they would otherwise measure as
-          0 and not be measured again once it is known. */}
+          only constrained to maxWidth once that is known: while it is still 0
+          the children would measure as 0 and not be measured again. */}
       <View
-        style={styles.measureWrapper}
+        style={[
+          styles.measureWrapper,
+          maxWidth > 0 ? {width: maxWidth} : undefined,
+        ]}
         pointerEvents="none"
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
