@@ -23,6 +23,8 @@ import {
 } from '@atb/modules/fare-zones-selector';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
+import {NativeTouchable} from '@atb/components/native-touchable';
+import {insets} from '@atb/utils/insets';
 import {LocationAndFareZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
@@ -183,15 +185,22 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
           autoCorrect={false}
           autoComplete="off"
           testID="searchInput"
-          icon={showLocationButton ? <ThemeIcon svg={Location} /> : undefined}
-          onIconPress={selectCurrentFareZoneOrRequest}
-          iconAccessibility={{
-            accessible: true,
-            accessibilityLabel: t(
-              FareZoneSearchTexts.searchField.locationButton.a11yLabel,
-            ),
-            accessibilityRole: 'button',
-          }}
+          suffixNode={
+            showLocationButton && (
+              <NativeTouchable
+                variant="borderless"
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={t(
+                  FareZoneSearchTexts.searchField.locationButton.a11yLabel,
+                )}
+                hitSlop={insets.all(8)}
+                onPress={selectCurrentFareZoneOrRequest}
+              >
+                <ThemeIcon svg={Location} />
+              </NativeTouchable>
+            )
+          }
         />
       </View>
 

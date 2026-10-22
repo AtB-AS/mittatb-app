@@ -1,7 +1,6 @@
 import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
-  AccessibilityProps,
   Platform,
   TextInput as InternalTextInput,
   FocusEvent,
@@ -29,12 +28,9 @@ type TextProps = SectionItemProps<
     onClear?: () => void;
     errorText?: string;
     /**
-     * Icon shown in place of the clear button. Hidden while `showClear` is
-     * true.
+     * Content shown in place of the clear button. Hidden while `showClear` is true.
      */
-    icon?: React.JSX.Element;
-    onIconPress?(): void;
-    iconAccessibility?: AccessibilityProps;
+    suffixNode?: React.ReactNode;
     /**
      * The underlying text input component to render. Defaults to react-native's
      * `TextInput`. Pass `@gorhom/bottom-sheet`'s `BottomSheetTextInput` when used
@@ -58,9 +54,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       onClear,
       style,
       InputComponent = InternalTextInput,
-      icon,
-      onIconPress,
-      iconAccessibility,
+      suffixNode,
       ...props
     },
     forwardedRef,
@@ -126,19 +120,6 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const androidPaddingOverwrite =
       Platform.OS === 'android' ? {paddingTop: 7, paddingBottom: 8} : undefined;
 
-    const iconButton = onIconPress ? (
-      <NativeTouchable
-        variant="borderless"
-        hitSlop={insets.all(8)}
-        onPress={onIconPress}
-        {...iconAccessibility}
-      >
-        {icon}
-      </NativeTouchable>
-    ) : (
-      icon
-    );
-
     const containerPadding = {
       paddingHorizontal: theme.spacing.medium,
     };
@@ -193,8 +174,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
                 <ThemeIcon svg={Close} />
               </NativeTouchable>
             </View>
-          ) : icon ? (
-            <View style={styles.inputAction}>{iconButton}</View>
+          ) : suffixNode ? (
+            <View style={styles.inputAction}>{suffixNode}</View>
           ) : null}
         </View>
         {errorText !== undefined && (
