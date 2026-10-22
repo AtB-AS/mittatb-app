@@ -666,7 +666,7 @@ const PaymentButton = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, insets) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {top, bottom}) => ({
   container: {
     padding: theme.spacing.medium,
     rowGap: theme.spacing.medium,
@@ -674,8 +674,8 @@ const useStyles = StyleSheet.createThemeHook((theme, insets) => ({
   paymentInProgressScreen: {
     flex: 1,
     marginHorizontal: theme.spacing.medium,
-    marginBottom: insets.bottom,
-    marginTop: insets.top,
+    marginBottom: theme.spacing.medium + bottom,
+    marginTop: top,
   },
   loading: {
     flex: 1,

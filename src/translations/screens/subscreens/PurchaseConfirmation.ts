@@ -151,9 +151,9 @@ const PurchaseConfirmationTexts = {
   },
 
   paymentInProgress: _(
-    'Betaling pågår',
-    'Payment in progress',
-    'Betaling pågår',
+    'Betaling pågår…',
+    'Payment in progress…',
+    'Betaling pågår…',
   ),
   cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
   cancelPaymentError: _(
