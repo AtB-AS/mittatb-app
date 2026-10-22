@@ -12,12 +12,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
-import {
-  NavigationIcon,
-  isNavigationIcon,
-  NavigationIconTypes,
-  ThemeIcon,
-} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
@@ -33,7 +28,11 @@ type TextProps = SectionItemProps<
     showClear?: boolean;
     onClear?: () => void;
     errorText?: string;
-    icon?: NavigationIconTypes | React.JSX.Element;
+    /**
+     * Icon shown in place of the clear button. Hidden while `showClear` is
+     * true.
+     */
+    icon?: React.JSX.Element;
     onIconPress?(): void;
     iconAccessibility?: AccessibilityProps;
     /**
@@ -127,12 +126,6 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const androidPaddingOverwrite =
       Platform.OS === 'android' ? {paddingTop: 7, paddingBottom: 8} : undefined;
 
-    const iconEl = isNavigationIcon(icon) ? (
-      <NavigationIcon mode={icon} />
-    ) : (
-      icon
-    );
-
     const iconButton = onIconPress ? (
       <NativeTouchable
         variant="borderless"
@@ -140,10 +133,10 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         onPress={onIconPress}
         {...iconAccessibility}
       >
-        {iconEl}
+        {icon}
       </NativeTouchable>
     ) : (
-      iconEl
+      icon
     );
 
     const containerPadding = {
@@ -188,7 +181,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
             {...props}
           />
           {showClear ? (
-            <View style={styles.inputClear}>
+            <View style={styles.inputAction}>
               <NativeTouchable
                 variant="borderless"
                 accessible={true}
@@ -201,7 +194,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
               </NativeTouchable>
             </View>
           ) : icon ? (
-            <View style={styles.inputClear}>{iconButton}</View>
+            <View style={styles.inputAction}>{iconButton}</View>
           ) : null}
         </View>
         {errorText !== undefined && (
@@ -250,7 +243,7 @@ const useInputStyle = StyleSheet.createThemeHook((theme) => ({
     minWidth: 60 - theme.spacing.medium,
     paddingRight: theme.spacing.xSmall,
   },
-  inputClear: {
+  inputAction: {
     position: 'absolute',
     right: 0,
   },
