@@ -21,6 +21,7 @@ import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
+import {isDefined} from '@atb/utils/presence';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {Expression} from 'node_modules/@rnmapbox/maps/src/utils/MapboxStyles';
 import {
@@ -122,7 +123,14 @@ export const TravelDetailsMapScreenComponent = ({
   const followSeedLocation = followVehicle
     ? vehicles?.[0]?.vehicleWithPosition.location
     : undefined;
-  const bounds = followVehicle ? undefined : getMapBounds(features);
+  const vehiclePositions =
+    vehicles
+      ?.map((vehicle) => vehicle.vehicleWithPosition.location)
+      .filter(isDefined)
+      .map(({longitude, latitude}) => [longitude, latitude]) ?? [];
+  const bounds = followVehicle
+    ? undefined
+    : getMapBounds(features, vehiclePositions);
   const centerPosition = followSeedLocation
     ? [followSeedLocation.longitude, followSeedLocation.latitude]
     : undefined;

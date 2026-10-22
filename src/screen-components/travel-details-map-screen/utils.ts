@@ -19,19 +19,22 @@ export interface MapLine extends Feature<LineString> {
   faded?: boolean;
 }
 
-export function getMapBounds(features: MapLine[]): CameraBounds {
-  const lineLongitudes = flatMap(features, (f) => f.geometry.coordinates).map(
-    ([lon, _]) => lon,
-  );
+export function getMapBounds(
+  features: MapLine[],
+  extraPoints: Position[] = [],
+): CameraBounds {
+  const positions = [
+    ...flatMap(features, (f) => f.geometry.coordinates),
+    ...extraPoints,
+  ];
 
-  const lineLatitudes = flatMap(features, (f) => f.geometry.coordinates).map(
-    ([_, lat]) => lat,
-  );
+  const longitudes = positions.map(([lon, _]) => lon);
+  const latitudes = positions.map(([_, lat]) => lat);
 
-  const westernMost = Math.min(...lineLongitudes);
-  const easternMost = Math.max(...lineLongitudes);
-  const northernMost = Math.max(...lineLatitudes);
-  const southernMost = Math.min(...lineLatitudes);
+  const westernMost = Math.min(...longitudes);
+  const easternMost = Math.max(...longitudes);
+  const northernMost = Math.max(...latitudes);
+  const southernMost = Math.min(...latitudes);
 
   // Dividing by 3 here is arbitrary, seems to work
   // like a fine value for "padding"
