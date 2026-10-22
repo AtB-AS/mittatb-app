@@ -65,6 +65,10 @@ export const ShmoActionButton = ({
   const appUpdateRequired = requirements.some(
     (req) => req.requirementCode === PreReqType.UNSUPPORTED,
   );
+  const openingHoursBlocking = requirements.find(
+    (req) => req.requirementCode === PreReqType.OPENING_HOURS,
+  )?.isBlocking;
+
   const {openStoreListing, isError: openStoreListingError} =
     useOpenStoreListing();
   const {t} = useTranslation();
@@ -156,6 +160,12 @@ export const ShmoActionButton = ({
         />
       </View>
     );
+  }
+
+  if (openingHoursBlocking) {
+    // Not resolvable by user action, and shown higher up in VehicleSheet (above the
+    // range/price info) instead -- so hide the button entirely
+    return null;
   }
 
   if (isLoggedInBlocking) {

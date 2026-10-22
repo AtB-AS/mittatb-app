@@ -253,6 +253,7 @@ export enum ActionButtonType {
 }
 
 export enum PreReqType {
+  OPENING_HOURS = 'OPENING_HOURS',
   IS_LOGGED_IN = 'IS_LOGGED_IN',
   TERMS_AND_CONDITIONS = 'TERMS_AND_CONDITIONS',
   AGE_VERIFICATION = 'AGE_VERIFICATION',
@@ -264,6 +265,10 @@ export enum PreReqType {
 }
 
 const SupportedPreReqSchema = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal(PreReqType.OPENING_HOURS),
+    openingTime: z.string().optional(),
+  }),
   z.object({type: z.literal(PreReqType.IS_LOGGED_IN)}),
   z.object({type: z.literal(PreReqType.TERMS_AND_CONDITIONS)}),
   z.object({
@@ -347,6 +352,11 @@ export type StationVehicleTypeAvailability = z.infer<
   typeof VehicleTypeAvailabilitySchema
 >;
 
+const StationOpeningHoursStatusSchema = z.object({
+  isClosed: z.boolean(),
+  openingTime: z.string().optional(),
+});
+
 export const StationSchema = z.object({
   id: z.string(),
   lat: z.number(),
@@ -358,6 +368,7 @@ export const StationSchema = z.object({
   rentalUris: RentalUrisSchema.optional(),
   vehicleTypesAvailable: z.array(VehicleTypeAvailabilitySchema).optional(),
   pricingPlans: z.array(ShmoPricingPlanSchema).optional(),
+  openingHoursStatus: StationOpeningHoursStatusSchema,
 });
 
 export type Station = z.infer<typeof StationSchema>;

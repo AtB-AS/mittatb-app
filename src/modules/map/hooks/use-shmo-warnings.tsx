@@ -31,7 +31,7 @@ export const useShmoWarnings = (
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {location} = useGeolocationContext();
 
-  const {vehicle} = useVehicle(vehicleId);
+  const {vehicle, operatorName} = useVehicle(vehicleId);
   const {isOpen, openingTime, closingTime} = useOpeningHours(
     vehicle?.system?.openingHours,
   );
@@ -48,15 +48,15 @@ export const useShmoWarnings = (
 
     if (!isOpen && openingTime && closingTime) {
       return t(
-        ShmoWarnings.vehicleClosed(
+        ShmoWarnings.operatorClosed(
+          operatorName,
           openingTime?.toLocaleTimeString([], timeFormatOptions),
-          closingTime?.toLocaleTimeString([], timeFormatOptions),
         ),
       );
     }
 
     return null;
-  }, [vehicle, isOpen, t, openingTime, closingTime]);
+  }, [vehicle, isOpen, t, openingTime, closingTime, operatorName]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {

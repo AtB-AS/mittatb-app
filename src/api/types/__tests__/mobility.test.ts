@@ -115,6 +115,7 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
       actionButton: {
         type: 'START_TRIP',
         preReqs: [
+          {type: 'OPENING_HOURS'},
           {type: 'IS_LOGGED_IN'},
           {type: 'TERMS_AND_CONDITIONS'},
           {type: 'AGE_VERIFICATION', minAge: 18},
@@ -129,11 +130,39 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
         result.data.actionButton?.type === ActionButtonType.START_TRIP &&
           result.data.actionButton.preReqs,
       ).toEqual([
+        {type: 'OPENING_HOURS'},
         {type: 'IS_LOGGED_IN'},
         {type: 'TERMS_AND_CONDITIONS'},
         {type: 'AGE_VERIFICATION', minAge: 18},
         {type: 'PAYMENT_METHOD'},
         {type: 'PRECISE_LOCATION'},
+      ]);
+    }
+  });
+
+  it('parses an OPENING_HOURS preReq with openingTime', () => {
+    const result = VehicleSchema.safeParse({
+      ...baseVehicle,
+      actionButton: {
+        type: 'START_TRIP',
+        preReqs: [
+          {
+            type: 'OPENING_HOURS',
+            openingTime: '2024-01-08T05:00:00Z',
+          },
+        ],
+      },
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(
+        result.data.actionButton?.type === ActionButtonType.START_TRIP &&
+          result.data.actionButton.preReqs,
+      ).toEqual([
+        {
+          type: 'OPENING_HOURS',
+          openingTime: '2024-01-08T05:00:00Z',
+        },
       ]);
     }
   });
