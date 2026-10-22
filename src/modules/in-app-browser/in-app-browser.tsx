@@ -48,7 +48,7 @@ export async function openInAppBrowser(
       if (result.type === 'success') {
         config.onSuccess?.(result.url);
       }
-      if (result.type === 'cancel' || result.type === 'dismiss') {
+      if (result.type === 'cancel') {
         config.onCancel?.();
       }
     }
