@@ -29,6 +29,7 @@ export const useVehicleQuery = (
       getVehicle(vehicleId, vehicleTypeId, stationId, {signal}),
     gcTime: ONE_MINUTE_MS,
     refetchOnMount: 'always',
+    refetchInterval: ONE_MINUTE_MS,
     retry: 5,
     enabled: !hasActiveBooking,
   });
