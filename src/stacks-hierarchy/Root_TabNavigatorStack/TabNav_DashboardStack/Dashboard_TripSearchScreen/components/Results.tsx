@@ -1,11 +1,14 @@
-import {DayLabel} from './DayLabel';
+import {TripSearchResultRow} from './TripSearchResultRow';
+import {
+  INITIAL_RENDER_COUNT,
+  useProgressiveRendering,
+} from '../use-progressive-rendering';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
 import {StyleSheet} from '@atb/theme';
 import {
   TranslateFunction,
-  TravelCardTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
@@ -20,18 +23,15 @@ import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {SaveableTripSearchResultRow} from '@atb/modules/experimental-store-trip-patterns';
 import {getTripPatternKey} from '@atb/modules/trip-patterns';
 import {Skeleton} from '@atb/components/skeleton';
-import {
-  TravelCard,
-  WithTravelCardSkeleton,
-} from '@atb/screen-components/travel-card';
+import {WithTravelCardSkeleton} from '@atb/screen-components/travel-card';
 
 const SKELETON_COUNT = 5;
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
+  searchKey: string;
   showEmptyScreen: boolean;
   isEmptyResult: boolean;
   isSearching: boolean;
@@ -43,6 +43,7 @@ type Props = {
 
 export const Results: React.FC<Props> = ({
   tripPatterns,
+  searchKey,
   showEmptyScreen,
   isEmptyResult,
   isSearching,
@@ -94,13 +95,40 @@ export const Results: React.FC<Props> = ({
     (tp) => !getIsTooLateToBookFlexLine(tp, now),
   );
 
-  const slotCount =
-    filteredTripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
+  // Keyed by search, so each search gets a fresh list: the progressive
+  // rendering and the cards' readiness never carry over from another search,
+  // also not when switching straight to cached results. Loading more trips
+  // keeps the same key.
+  return (
+    <TripSearchResultList
+      key={searchKey}
+      tripPatterns={filteredTripPatterns}
+      isSearching={isSearching}
+      onDetailsPressed={onDetailsPressed}
+    />
+  );
+};
+
+const TripSearchResultList = ({
+  tripPatterns,
+  isSearching,
+  onDetailsPressed,
+}: {
+  tripPatterns: TripPatternWithKey[];
+  isSearching: boolean;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
+}) => {
+  const styles = useThemeStyles();
+  const {renderAll, onInitialRowReady} = useProgressiveRendering(
+    tripPatterns.length,
+  );
+
+  const slotCount = tripPatterns.length + (isSearching ? SKELETON_COUNT : 0);
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
       {Array.from({length: slotCount}, (_, i) => {
-        const tripPattern = filteredTripPatterns[i];
+        const tripPattern = tripPatterns[i];
         return (
           <Fragment
             key={
@@ -108,38 +136,23 @@ export const Results: React.FC<Props> = ({
             }
           >
             {tripPattern ? (
-              <DayLabel
-                departureTime={tripPattern.expectedStartTime}
-                previousDepartureTime={
-                  filteredTripPatterns[i - 1]?.expectedStartTime
+              <TripSearchResultRow
+                tripPattern={tripPattern}
+                previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
+                index={i}
+                numberOfResults={tripPatterns.length}
+                onDetailsPressed={onDetailsPressed}
+                isDeferred={!renderAll && i >= INITIAL_RENDER_COUNT}
+                onInitialRowReady={
+                  i < INITIAL_RENDER_COUNT ? onInitialRowReady : undefined
                 }
               />
             ) : (
-              i === 0 && <Skeleton style={styles.dayLabelSkeleton} />
+              <>
+                {i === 0 && <Skeleton style={styles.dayLabelSkeleton} />}
+                <WithTravelCardSkeleton />
+              </>
             )}
-            <WithTravelCardSkeleton>
-              {tripPattern &&
-                (({onReady}) => (
-                  <SaveableTripSearchResultRow tripPattern={tripPattern}>
-                    {(isSaved) => (
-                      <TravelCard
-                        tripPattern={tripPattern}
-                        onDetailsPressed={onDetailsPressed}
-                        testID={'tripSearchSearchResult' + i}
-                        a11yLabelPrefix={t(
-                          TravelCardTexts.card.a11yPrefix.tripSuggestion(
-                            i,
-                            filteredTripPatterns.length,
-                          ),
-                        )}
-                        a11yHint={t(TravelCardTexts.card.a11yHint.tripDetails)}
-                        onReady={onReady}
-                        isSaved={isSaved}
-                      />
-                    )}
-                  </SaveableTripSearchResultRow>
-                ))}
-            </WithTravelCardSkeleton>
           </Fragment>
         );
       })}

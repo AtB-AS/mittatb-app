@@ -9,9 +9,11 @@ import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
 import {
+  getTripsInfiniteQueryKey,
   TripsInfiniteQueryProps,
   useTripsInfiniteQuery,
 } from './use-trips-infinite-query';
+import {hashKey} from '@tanstack/react-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import Bugsnag from '@bugsnag/react-native';
 import {Location} from '@atb/modules/favorites';
@@ -46,6 +48,7 @@ export function useTrips(
   enabled: boolean,
 ): {
   tripPatterns: TripPatternWithKey[];
+  searchKey: string;
   timeOfLastSearch: string;
   loadMoreTrips: (() => void) | undefined;
   refetchTrips: () => void;
@@ -64,6 +67,13 @@ export function useTrips(
       journeySearchModes,
     }),
     [journeySearchModes, tripsProps],
+  );
+
+  // Identifies the search: changes for every different search, also when its
+  // results come from the cache, but not when loading more trips.
+  const searchKey = useMemo(
+    () => hashKey(getTripsInfiniteQueryKey(tripsInfiniteQueryProps)),
+    [tripsInfiniteQueryProps],
   );
 
   const {fromLocation, toLocation} = tripsProps;
@@ -180,6 +190,7 @@ export function useTrips(
   return useMemo(
     () => ({
       tripPatterns,
+      searchKey,
       timeOfLastSearch,
       loadMoreTrips,
       refetchTrips: () => enabled && refetchTrips(),
@@ -190,6 +201,7 @@ export function useTrips(
     [
       loadMoreTrips,
       refetchTrips,
+      searchKey,
       timeOfLastSearch,
       enabled,
       tripPatterns,

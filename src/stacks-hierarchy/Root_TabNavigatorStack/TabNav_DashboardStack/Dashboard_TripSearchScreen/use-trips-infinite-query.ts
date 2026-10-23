@@ -26,11 +26,15 @@ export type TripsInfiniteQueryProps = TripsProps & {
   journeySearchModes: Modes;
 };
 
+export const getTripsInfiniteQueryKey = (
+  tripsInfiniteQueryProps: TripsInfiniteQueryProps,
+) => ['TRIPS_INFINITE_QUERY_KEY', tripsInfiniteQueryProps];
+
 export const useTripsInfiniteQuery = (
   tripsInfiniteQueryProps: TripsInfiniteQueryProps,
   enabled: boolean,
 ) => {
-  const queryKey = ['TRIPS_INFINITE_QUERY_KEY', tripsInfiniteQueryProps];
+  const queryKey = getTripsInfiniteQueryKey(tripsInfiniteQueryProps);
 
   return useInfiniteQuery<
     TripsQuery,
