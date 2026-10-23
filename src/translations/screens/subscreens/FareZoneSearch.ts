@@ -7,6 +7,13 @@ const FareZoneSearchTexts = {
       'Search for a stop place',
       'Søk etter haldeplass',
     ),
+    locationButton: {
+      a11yLabel: _(
+        'Velg sonen du er i',
+        "Select the zone you're in",
+        'Vel sona du er i',
+      ),
+    },
   },
   header: {
     title: _('Velg sone/holdeplass', 'Select zone/stop', 'Vel sone/haldeplass'),

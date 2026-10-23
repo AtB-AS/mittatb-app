@@ -28,6 +28,10 @@ type TextProps = SectionItemProps<
     onClear?: () => void;
     errorText?: string;
     /**
+     * Content shown in place of the clear button. Hidden while `showClear` is true.
+     */
+    suffixNode?: React.ReactNode;
+    /**
      * The underlying text input component to render. Defaults to react-native's
      * `TextInput`. Pass `@gorhom/bottom-sheet`'s `BottomSheetTextInput` when used
      * inside a bottom sheet so the sheet reacts to the keyboard appearance.
@@ -50,6 +54,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       onClear,
       style,
       InputComponent = InternalTextInput,
+      suffixNode,
       ...props
     },
     forwardedRef,
@@ -157,7 +162,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
             {...props}
           />
           {showClear ? (
-            <View style={styles.inputClear}>
+            <View style={styles.inputAction}>
               <NativeTouchable
                 variant="borderless"
                 accessible={true}
@@ -169,6 +174,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
                 <ThemeIcon svg={Close} />
               </NativeTouchable>
             </View>
+          ) : suffixNode ? (
+            <View style={styles.inputAction}>{suffixNode}</View>
           ) : null}
         </View>
         {errorText !== undefined && (
@@ -217,7 +224,7 @@ const useInputStyle = StyleSheet.createThemeHook((theme) => ({
     minWidth: 60 - theme.spacing.medium,
     paddingRight: theme.spacing.xSmall,
   },
-  inputClear: {
+  inputAction: {
     position: 'absolute',
     right: 0,
   },
