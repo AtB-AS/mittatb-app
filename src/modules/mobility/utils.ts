@@ -51,6 +51,11 @@ import {
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
+import {
+  formatLocaleTime,
+  formatToWeekday,
+  isWithin24Hours,
+} from '@atb/utils/date';
 import {FormattedRatePerUnit} from './types';
 import {ThemedElectricCityBike, ThemedScooter} from '@atb/theme/ThemedAssets';
 import {getCurrencySymbol} from '@atb/translations/currency';
@@ -438,6 +443,24 @@ export const formatFriendlyShmoErrorMessage = (
   return (
     detailWithMessage?.userFriendlyErrorMessage ?? t(dictionary.genericErrorMsg)
   );
+};
+
+/**
+ * Formats a future reopening time for the "vehicle/station closed" message. Beyond 24 hours away
+ * (e.g. a holiday or weekend closure), the bare clock time is ambiguous about which day it refers
+ * to, so this prefixes it with the weekday name (e.g. "fredag kl. 06:00").
+ */
+export const formatReopensAt = (
+  openingTime: string,
+  language: Language,
+  t: TFunc<typeof Language>,
+) => {
+  const time = formatLocaleTime(openingTime, language);
+  if (isWithin24Hours(new Date(), openingTime)) {
+    return time;
+  }
+  const weekday = formatToWeekday(openingTime, language, 'EEEE');
+  return `${weekday} ${t(dictionary.date.atTime)} ${time}`;
 };
 
 /**

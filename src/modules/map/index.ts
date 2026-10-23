@@ -18,7 +18,7 @@ export {useEnableFormFactorsInMapFilter} from './hooks/use-enable-form-factors-i
 export {useGeofencingZoneContent} from './hooks/use-geofencing-zone-content.tsx';
 export {useMapSymbolStyles} from './hooks/use-map-symbol-styles';
 export {useMapViewConfig} from './hooks/use-map-view-config.ts';
-export {useShmoWarnings} from './hooks/use-shmo-warnings.tsx';
+export {useGeofencingZoneWarning} from './hooks/use-geofencing-zone-warning.tsx';
 export {
   MapCameraConfig,
   SCOOTERS_CLUSTER_RADIUS,

@@ -1,7 +1,11 @@
 import React, {useCallback, useState} from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  MobilityTexts,
+  ShmoWarnings,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {formatReopensAt} from '../../utils';
 import {useMapVehicle} from '../../use-map-vehicle';
 import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -31,6 +35,7 @@ import {
   ActionButtonType,
   BonusOffer,
   PreReq,
+  PreReqType,
   Vehicle,
 } from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
@@ -122,10 +127,21 @@ export const VehicleSheet = ({
     isLoading: shmoReqIsLoading,
     hasBlockers,
     hasPaymentMethodPreReq,
+    requirements,
   } = useShmoRequirements(preReqs, formFactor);
   const selectedPaymentMethod = useSelectedShmoPaymentMethod(
     hasPaymentMethodPreReq,
   );
+
+  const openingHoursBlocking = requirements.find(
+    (req) => req.requirementCode === PreReqType.OPENING_HOURS,
+  )?.isBlocking;
+  const openingHoursPreReq = preReqs?.find(
+    (preReq) => preReq.type === PreReqType.OPENING_HOURS,
+  );
+  const openingTime = openingHoursPreReq?.openingTime
+    ? formatReopensAt(openingHoursPreReq.openingTime, language, t)
+    : undefined;
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -254,6 +270,14 @@ export const VehicleSheet = ({
       {!isLoading && !shmoReqIsLoading && !isError && vehicle && (
         <View style={styles.container}>
           <View style={styles.vehicleContent}>
+            {openingHoursBlocking && (
+              <MessageInfoBox
+                type="info"
+                message={t(
+                  ShmoWarnings.operatorClosed(operatorName, openingTime),
+                )}
+              />
+            )}
             {!!vehicle.vehicleType.vehicleImage && (
               <VehicleImage
                 uri={vehicle.vehicleType.vehicleImage}

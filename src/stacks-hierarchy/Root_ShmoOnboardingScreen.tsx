@@ -24,10 +24,15 @@ export const Root_ShmoOnboardingScreen = ({navigation, route}: Props) => {
     }
   }, [hasBlockers, navigation]);
 
-  // preReqs are sent in the order they should be presented/resolved in.
-  // IS_LOGGED_IN is excluded here as it's already resolved earlier, in ShmoActionButton.
+  // preReqs are sent in the order they should be presented/resolved in. IS_LOGGED_IN and
+  // OPENING_HOURS are excluded here: IS_LOGGED_IN is already resolved earlier, in
+  // ShmoActionButton, and OPENING_HOURS isn't resolvable by user action, so ShmoActionButton
+  // blocks on it directly instead of ever navigating here.
   const blockingRequirementCode = requirements.find(
-    (r) => r.isBlocking && r.requirementCode !== PreReqType.IS_LOGGED_IN,
+    (r) =>
+      r.isBlocking &&
+      r.requirementCode !== PreReqType.IS_LOGGED_IN &&
+      r.requirementCode !== PreReqType.OPENING_HOURS,
   )?.requirementCode;
 
   switch (blockingRequirementCode) {
