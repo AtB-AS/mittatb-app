@@ -35,7 +35,7 @@ export const FilterChip = ({
 
   const color = selected
     ? theme.color.surface.accent.subtle
-    : theme.color.surface.neutral.subtle;
+    : theme.color.surface.neutral.strong;
 
   return (
     <NativeTouchable
@@ -78,7 +78,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.medium,
     borderWidth: theme.border.width.slim,
     borderColor: 'transparent',
-    backgroundColor: theme.color.surface.neutral.subtle.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
