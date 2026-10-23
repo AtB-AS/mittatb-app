@@ -24,8 +24,7 @@ import {
   getTransportModeAndSubMode,
 } from '../../utils';
 import {MapView} from '@rnmapbox/maps';
-import {MessageInfoText} from '@atb/components/message-info-text';
-import {useShmoWarnings} from '@atb/modules/map';
+import {useGeofencingZoneWarning} from '@atb/modules/map';
 import {useKeepAwake} from '@sayem314/react-native-keep-awake';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {
@@ -86,7 +85,7 @@ export const ActiveShmoSheet = ({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const styles = useStyles();
-  const {geofencingZoneWarning, warningMessage} = useShmoWarnings(
+  const {geofencingZoneWarning} = useGeofencingZoneWarning(
     activeBooking?.asset.id ?? '',
     mapViewRef,
   );
@@ -294,9 +293,6 @@ export const ActiveShmoSheet = ({
                 type="error"
                 message={t(ShmoWarnings.bookingPaused)}
               />
-            )}
-            {warningMessage && (
-              <MessageInfoText type="warning" message={warningMessage} />
             )}
             {sendShmoBookingEventIsError && (
               <MessageInfoBox

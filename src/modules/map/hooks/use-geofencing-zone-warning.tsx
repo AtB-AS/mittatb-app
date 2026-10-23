@@ -1,4 +1,4 @@
-import {RefObject, useEffect, useMemo, useRef, useState} from 'react';
+import {RefObject, useEffect, useRef, useState} from 'react';
 import {MapView} from '@rnmapbox/maps';
 import {useGeolocationContext} from '@atb/modules/geolocation';
 import {
@@ -11,52 +11,21 @@ import {
   GeofencingZoneContent,
   useGeofencingZoneContent,
 } from './use-geofencing-zone-content';
-import {ShmoWarnings} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useTranslation} from '@atb/translations';
-import {isVirtualStationArea, useVehicle} from '@atb/modules/mobility';
+import {isVirtualStationArea} from '@atb/modules/mobility';
 import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
-import {useOpeningHours} from './use-opening-hours';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
-export const useShmoWarnings = (
+export const useGeofencingZoneWarning = (
   vehicleId?: string,
   mapViewRef?: RefObject<MapView | null>,
 ) => {
   const {isGeofencingZonesAsTilesEnabled} = useFeatureTogglesContext();
-  const {t} = useTranslation();
   const [geofencingZoneWarning, setGeofencingZoneWarning] =
     useState<GeofencingZoneContent | null>(null);
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {location} = useGeolocationContext();
-
-  const {vehicle, operatorName} = useVehicle(vehicleId);
-  const {isOpen, openingTime, closingTime} = useOpeningHours(
-    vehicle?.system?.openingHours,
-  );
-
-  const warningMessage = useMemo(() => {
-    const timeFormatOptions = {
-      hour: '2-digit' as const,
-      minute: '2-digit' as const,
-    };
-
-    if (vehicle?.isDisabled) {
-      return t(ShmoWarnings.vehicleDisabled);
-    }
-
-    if (!isOpen && openingTime && closingTime) {
-      return t(
-        ShmoWarnings.operatorClosed(
-          operatorName,
-          openingTime?.toLocaleTimeString([], timeFormatOptions),
-        ),
-      );
-    }
-
-    return null;
-  }, [vehicle, isOpen, t, openingTime, closingTime, operatorName]);
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {
@@ -116,5 +85,5 @@ export const useShmoWarnings = (
     }
   }, [location?.coordinates, throttledCallback, vehicleId, mapViewRef]);
 
-  return {geofencingZoneWarning, warningMessage};
+  return {geofencingZoneWarning};
 };
