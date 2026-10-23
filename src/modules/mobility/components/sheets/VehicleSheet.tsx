@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   MobilityTexts,
   ShmoWarnings,
@@ -87,7 +87,6 @@ export const VehicleSheet = ({
   navigateToPricingDetails,
 }: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const {mapState} = useMapContext();
 
@@ -374,12 +373,12 @@ export const VehicleSheet = ({
                 )}
                 {showParkingViolation && (
                   <Button
+                    surfaceColor="accent"
                     expanded={true}
                     text={t(MobilityTexts.reportParkingViolation)}
                     mode="secondary"
                     onPress={onReportParkingViolation}
                     rightIcon={{svg: ChevronRight}}
-                    backgroundColor={theme.color.background.neutral[1]}
                   />
                 )}
               </View>

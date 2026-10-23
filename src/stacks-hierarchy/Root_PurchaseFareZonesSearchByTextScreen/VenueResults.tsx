@@ -55,13 +55,6 @@ export const VenueResults: React.FC<Props> = ({
                 style={styles.fareZoneButton}
                 testID={'venueResult' + index}
               >
-                <View style={{flexDirection: 'column'}}>
-                  <LocationIcon
-                    location={location}
-                    fill={String(styles.locationIcon.backgroundColor)}
-                    multiple={true}
-                  />
-                </View>
                 <View style={styles.nameContainer}>
                   <ThemeText typography="body__m__strong">
                     {location.name}
@@ -74,6 +67,11 @@ export const VenueResults: React.FC<Props> = ({
                     )}
                   </ThemeText>
                 </View>
+                <LocationIcon
+                  location={location}
+                  fill={String(styles.locationIcon.backgroundColor)}
+                  multiple={true}
+                />
               </NativeTouchable>
             </View>
           </View>
@@ -94,15 +92,16 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
   },
   fareZoneButtonContainer: {
-    padding: 12,
+    padding: theme.spacing.medium,
     flex: 1,
   },
   fareZoneButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: theme.spacing.small,
   },
   nameContainer: {
-    marginLeft: theme.spacing.medium,
+    flex: 1,
   },
   locationIcon: {
     backgroundColor: theme.color.foreground.dynamic.primary,

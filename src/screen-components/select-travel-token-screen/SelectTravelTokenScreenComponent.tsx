@@ -189,10 +189,10 @@ export const SelectTravelTokenScreenComponent = ({
           <Loading size="large" />
         ) : (
           <Button
+            surfaceColor="accent"
             expanded={true}
             onPress={onSave}
             text={t(TravelTokenTexts.toggleToken.saveButton)}
-            interactiveColor={theme.color.interactive[0]}
             disabled={!selectedToken || (data?.toggleLimit ?? 0) < 1}
             testID="confirmSelectionButton"
           />

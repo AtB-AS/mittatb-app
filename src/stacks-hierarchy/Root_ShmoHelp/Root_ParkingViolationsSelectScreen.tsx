@@ -42,6 +42,7 @@ export const Root_ParkingViolationsSelectScreen = ({
       focusRef={focusRef}
       buttons={
         <Button
+          surfaceColor="accent"
           expanded={true}
           disabled={!preReqs}
           onPress={() => {

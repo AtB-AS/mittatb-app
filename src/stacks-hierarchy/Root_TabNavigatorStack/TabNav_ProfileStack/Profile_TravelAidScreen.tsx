@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {openUrl} from '@atb/utils/open-url';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
@@ -28,7 +28,6 @@ type Props = ProfileScreenProps<'Profile_TravelAidScreen'>;
 export const Profile_TravelAidScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const {setPreference, preferences} = usePreferencesContext();
   const {contactPhoneNumber} = useFirestoreConfigurationContext();
   const {isTravelAidStopButtonEnabled} = useFeatureTogglesContext();
@@ -37,7 +36,6 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
     useAccessibilityContext();
   const {completeOnboardingSection} = useOnboardingContext();
 
-  const backgroundColor = theme.color.background.neutral[0];
   const hasContactPhoneNumber = !!contactPhoneNumber;
 
   const focusRef = useFocusOnLoad(navigation);
@@ -86,9 +84,9 @@ export const Profile_TravelAidScreen = ({navigation}: Props) => {
             <GenericSectionItem style={styles.buttonContainer}>
               <View style={styles.buttonContainer}>
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   mode="secondary"
-                  backgroundColor={backgroundColor}
                   text={t(CustomerServiceText.contact.title)}
                   accessibilityHint={t(CustomerServiceText.contact.a11yHint)}
                   accessibilityRole="button"

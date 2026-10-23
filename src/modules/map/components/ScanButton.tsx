@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Qr} from '@atb/assets/svg/mono-icons/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapTexts, useTranslation} from '@atb/translations';
@@ -13,8 +13,6 @@ export const ScanButton = ({
 }: {
   navigateToScanQrCode: () => void;
 }) => {
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
   const styles = useStyles();
   const analytics = useAnalyticsContext();
   const {t} = useTranslation();
@@ -26,7 +24,7 @@ export const ScanButton = ({
       expanded={false}
       style={{...styles.scanButton, bottom: mapButtonsContainer.bottom}}
       type="large"
-      interactiveColor={interactiveColor}
+      surfaceColor="neutral"
       accessibilityRole="button"
       onPress={() => {
         analytics.logEvent('Map', 'Scan');

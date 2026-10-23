@@ -9,7 +9,6 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {useAcceptTicketTransferMutation} from '@atb/modules/ticketing';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {useThemeContext} from '@atb/theme';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
@@ -32,7 +31,6 @@ export const TransferCodeBottomSheet = ({
   onTicketsReceived,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const [code, setCode] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -91,8 +89,8 @@ export const TransferCodeBottomSheet = ({
           />
         </Section>
         <Button
+          surfaceColor="accent"
           expanded={true}
-          interactiveColor={theme.color.interactive[0]}
           text={t(TicketingTexts.transferCode.bottomSheet.submit)}
           onPress={onSubmit}
           disabled={code.length < MIN_CODE_LENGTH}

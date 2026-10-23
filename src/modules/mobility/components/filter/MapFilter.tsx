@@ -1,14 +1,12 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {MapStateActionType, useMapContext} from '@atb/modules/map';
 
 export const MapFilter = () => {
   const style = useStyle();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
   const analytics = useAnalyticsContext();
   const {dispatchMapState} = useMapContext();
 
@@ -16,7 +14,7 @@ export const MapFilter = () => {
     <Button
       expanded={false}
       style={style.filterButton}
-      interactiveColor={interactiveColor}
+      surfaceColor="neutral"
       accessibilityRole="button"
       onPress={() => {
         analytics.logEvent('Map', 'Filter button clicked');

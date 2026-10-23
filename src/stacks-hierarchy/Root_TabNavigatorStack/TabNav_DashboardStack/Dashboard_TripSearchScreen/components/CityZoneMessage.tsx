@@ -99,6 +99,7 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
               <Button
+                surfaceColor="accent"
                 expanded={false}
                 key={actionButton.id}
                 mode={actionButton.secondary ? 'secondary' : 'primary'}

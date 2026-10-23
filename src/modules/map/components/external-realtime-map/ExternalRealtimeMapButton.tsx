@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
@@ -11,8 +11,6 @@ type ExternalRealtimeMapButtonProps = {};
 export const ExternalRealtimeMapButton =
   ({}: ExternalRealtimeMapButtonProps) => {
     const style = useStyle();
-    const {theme} = useThemeContext();
-    const interactiveColor = theme.color.interactive[2];
     const {dispatchMapState} = useMapContext();
 
     const {language} = useTranslation();
@@ -32,7 +30,7 @@ export const ExternalRealtimeMapButton =
         expanded={false}
         style={style.button}
         type="small"
-        interactiveColor={interactiveColor}
+        surfaceColor="neutral"
         accessibilityRole="button"
         onPress={() =>
           dispatchMapState({

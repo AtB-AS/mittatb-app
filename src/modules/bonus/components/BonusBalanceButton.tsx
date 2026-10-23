@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
-import {useThemeContext} from '@atb/theme';
 import {BonusProgramTexts, useTranslation} from '@atb/translations';
 import {useIsBonusBalanceButtonVisible} from '../use-is-bonus-balance-button-visible';
 import {BonusStarFill} from './BonusStarFill';
@@ -16,7 +15,6 @@ export const BonusBalanceButton = ({
   style,
 }: BonusBalanceButtonProps) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const bonusInfo = useIsBonusBalanceButtonVisible();
 
   if (!bonusInfo.isVisible) return null;
@@ -27,7 +25,7 @@ export const BonusBalanceButton = ({
       text={`${bonusInfo.bonusBalance} ${t(BonusProgramTexts.points)}`}
       type="large"
       expanded={false}
-      interactiveColor={theme.color.interactive[2]}
+      surfaceColor="neutral"
       leftIcon={{svg: BonusStarFill}}
       accessibilityLabel={t(
         BonusProgramTexts.yourBonusBalanceA11yLabel(bonusInfo.bonusBalance),

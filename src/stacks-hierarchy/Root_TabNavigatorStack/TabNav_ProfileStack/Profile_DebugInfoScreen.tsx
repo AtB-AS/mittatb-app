@@ -460,18 +460,21 @@ export const Profile_DebugInfoScreen = () => {
                   Notification status: {pushNotificationPermissionStatus}
                 </ThemeText>
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   style={styles.button}
                   onPress={requestPushNotificationPermissions}
                   text="Request permissions"
                 />
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   style={styles.button}
                   onPress={checkPushNotificationPermissions}
                   text="Check permissions"
                 />
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   style={styles.button}
                   onPress={() =>
@@ -567,12 +570,14 @@ export const Profile_DebugInfoScreen = () => {
                   serverNow,
                 ).toISOString()}`}</ThemeText>
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   style={styles.button}
                   text="Create new token"
                   onPress={initToken}
                 />
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   style={styles.button}
                   text="Reload token(s)"
@@ -580,6 +585,7 @@ export const Profile_DebugInfoScreen = () => {
                 />
                 {nativeToken && (
                   <Button
+                    surfaceColor="accent"
                     expanded={true}
                     style={styles.button}
                     text="Wipe token"
@@ -588,6 +594,7 @@ export const Profile_DebugInfoScreen = () => {
                 )}
                 {nativeToken && (
                   <Button
+                    surfaceColor="accent"
                     expanded={true}
                     style={styles.button}
                     text="Renew token"
@@ -613,6 +620,7 @@ export const Profile_DebugInfoScreen = () => {
                         </ThemeText>
                       ))}
                       <Button
+                        surfaceColor="accent"
                         expanded={true}
                         onPress={() => removeRemoteToken(token.id)}
                         text="Remove"
@@ -639,18 +647,21 @@ export const Profile_DebugInfoScreen = () => {
                   expandContent={
                     <View>
                       <Button
+                        surfaceColor="accent"
                         expanded={true}
                         style={styles.button}
                         text="Set no inspectable token"
                         onPress={() => setAllTokenInspectable(false)}
                       />
                       <Button
+                        surfaceColor="accent"
                         expanded={true}
                         style={styles.button}
                         text="Set all inspectable token"
                         onPress={() => setAllTokenInspectable(true)}
                       />
                       <Button
+                        surfaceColor="accent"
                         expanded={true}
                         style={styles.button}
                         text="Reset token inspectability to default"

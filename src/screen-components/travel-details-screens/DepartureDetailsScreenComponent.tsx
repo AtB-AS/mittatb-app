@@ -116,8 +116,6 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
-  const ctaColor = theme.color.interactive[0];
   const backgroundColor = theme.color.background.neutral[1];
   const themeColor = theme.color.background.neutral[1];
 
@@ -340,11 +338,11 @@ export const DepartureDetailsScreenComponent = ({
             </View>
             {shouldShowTravelAid && (
               <Button
+                surfaceColor="accent"
                 expanded={true}
                 style={styles.travelAidButton}
                 onPress={handleTravelAidPress}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
-                interactiveColor={ctaColor}
                 testID="journeyAidButton"
               />
             )}
@@ -359,6 +357,7 @@ export const DepartureDetailsScreenComponent = ({
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
                     <Button
+                      surfaceColor="neutral"
                       mode="secondary"
                       type="small"
                       expanded={true}
@@ -368,7 +367,6 @@ export const DepartureDetailsScreenComponent = ({
                           ? DepartureDetailsTexts.live(t(translatedModeName))
                           : DepartureDetailsTexts.map,
                       )}
-                      interactiveColor={interactiveColor}
                       onPress={handleMapButtonPress}
                     />
                   </View>
@@ -404,7 +402,6 @@ export const DepartureDetailsScreenComponent = ({
                 showPagination={hasMultipleItems}
                 currentDate={activeItem?.date}
                 isTripCancelled={activeItem?.isTripCancelled}
-                backgroundColor={backgroundColor}
               />
             ) : (
               <MessageInfoBox
@@ -837,7 +834,6 @@ const FavoriteButton = ({
   line: LineFragment;
 }) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
@@ -869,12 +865,12 @@ const FavoriteButton = ({
   return (
     <>
       <Button
+        surfaceColor="accent"
         mode="secondary"
         type="small"
         expanded={false}
         leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
         text={t(FavoriteDeparturesTexts.favoriteButton)}
-        interactiveColor={theme.color.interactive['0']}
         accessibilityLabel={
           existingFavorite &&
           (existingFavorite.destinationDisplay

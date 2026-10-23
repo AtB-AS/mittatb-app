@@ -71,6 +71,7 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
             ...(args.actionButtonText
               ? {
                   actionButton: {
+                    surfaceColor: 'accent',
                     onPress: () => {},
                     text: args.actionButtonText,
                     expanded: false,
@@ -121,6 +122,7 @@ export const Maximal = {
     description: 'Some rather long and detailed description right here',
     isDismissable: true,
     actionButton: {
+      surfaceColor: 'accent',
       text: 'Action',
       onPress: () => {
         // aaand action

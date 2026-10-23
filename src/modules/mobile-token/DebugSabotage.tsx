@@ -89,18 +89,21 @@ function AndroidSabotageButtons({setSabotage}: SabotageButtonsProps) {
     <View>
       <ThemeText>Prevent creation of attestation (locally)</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onAttestationCreationErrorTransient}
         text="Transient: NetworkError"
         style={styles.button}
         expanded={true}
       />
       <Button
+        surfaceColor="accent"
         onPress={onAttestationCreationErrorUserTransient}
         text="User transient: PlayStoreVersionOutdated"
         style={styles.button}
         expanded={true}
       />
       <Button
+        surfaceColor="accent"
         onPress={onAttestationCreationErrorPermanent}
         text="Permanent: PlayStoreNotFound"
         style={styles.button}
@@ -109,6 +112,7 @@ function AndroidSabotageButtons({setSabotage}: SabotageButtonsProps) {
 
       <ThemeText>Attestation input mainpulation (fails remotely)</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onInputManipulation}
         text="Manipulate nonce"
         style={styles.button}
@@ -117,6 +121,7 @@ function AndroidSabotageButtons({setSabotage}: SabotageButtonsProps) {
 
       <ThemeText>Attestation output manipulation (fails remotely)</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onOutputManipulation}
         text="Manipulate JWT signature"
         style={styles.button}
@@ -125,6 +130,7 @@ function AndroidSabotageButtons({setSabotage}: SabotageButtonsProps) {
 
       <ThemeText>Other</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onDisable}
         text="Disable"
         style={styles.button}
@@ -178,6 +184,7 @@ function IOSSabotageButtons({setSabotage}: SabotageButtonsProps) {
     <View>
       <ThemeText>Prevent creation of attestation (locally)</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onUnknownAttestationCreationError}
         text="Unknown creation error"
         style={styles.button}
@@ -185,6 +192,7 @@ function IOSSabotageButtons({setSabotage}: SabotageButtonsProps) {
       />
 
       <Button
+        surfaceColor="accent"
         onPress={onInvalidKeyAttestationCreationError}
         text="Invalid key creation error"
         style={styles.button}
@@ -193,6 +201,7 @@ function IOSSabotageButtons({setSabotage}: SabotageButtonsProps) {
 
       <ThemeText>Attestation input mainpulation (fails remotely)</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onInputManipulation}
         text="Manipulate nonce"
         style={styles.button}
@@ -201,6 +210,7 @@ function IOSSabotageButtons({setSabotage}: SabotageButtonsProps) {
 
       <ThemeText>Attestation output manipulation (fails remotely)</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onOutputManipulation}
         text="Manipulate attestation object"
         style={styles.button}
@@ -209,6 +219,7 @@ function IOSSabotageButtons({setSabotage}: SabotageButtonsProps) {
 
       <ThemeText>Other</ThemeText>
       <Button
+        surfaceColor="accent"
         onPress={onDisable}
         text="Disable"
         style={styles.button}

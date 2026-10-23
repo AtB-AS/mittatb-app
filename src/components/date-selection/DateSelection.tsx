@@ -1,7 +1,7 @@
 import {ChevronLeft, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   formatToLongDateTime,
@@ -27,7 +27,6 @@ export const DateSelection = ({
 }: DateSelectionProps): React.JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const disablePreviousDayNavigation = isToday(
     parseISOFromCET(searchTime.date),
   );
@@ -60,7 +59,7 @@ export const DateSelection = ({
             }}
             accessibilityLabel={t(DeparturesTexts.dateNavigation.prevDay)}
             mode="primary"
-            interactiveColor={theme.color.interactive[2]}
+            surfaceColor="neutral"
             style={styles.nextPrevButtons}
             leftIcon={{svg: ChevronLeft}}
             disabled={disablePreviousDayNavigation}
@@ -99,7 +98,7 @@ export const DateSelection = ({
             setSearchTime(changeDay(searchTime, 1));
           }}
           mode="primary"
-          interactiveColor={theme.color.interactive[2]}
+          surfaceColor="neutral"
           style={styles.nextPrevButtons}
           rightIcon={{svg: ChevronRight}}
           accessibilityLabel={t(DeparturesTexts.dateNavigation.nextDay)}

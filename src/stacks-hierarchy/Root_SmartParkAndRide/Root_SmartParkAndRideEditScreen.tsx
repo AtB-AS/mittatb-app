@@ -123,6 +123,7 @@ export const Root_SmartParkAndRideEditScreen = ({
       footer={
         <View style={styles.footer}>
           <Button
+            surfaceColor="accent"
             expanded={true}
             onPress={() => {
               analytics.logEvent(
@@ -143,12 +144,12 @@ export const Root_SmartParkAndRideEditScreen = ({
             mode="primary"
           />
           <Button
+            surfaceColor="accent"
             expanded={true}
             onPress={showDeleteConfirmation}
             text={t(SmartParkAndRideTexts.edit.delete.button)}
             rightIcon={{svg: Delete}}
             mode="secondary"
-            backgroundColor={theme.color.background.neutral[1]}
           />
         </View>
       }

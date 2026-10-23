@@ -1,5 +1,4 @@
 import {TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
-import {useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
 import {ConsumeCarnetBottomSheet} from './ConsumeCarnetBottomSheet';
@@ -22,8 +21,6 @@ export function ConsumeCarnetSectionitem({
   ...sectionProps
 }: ConsumeCarnetSectionItemProps): React.JSX.Element {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
@@ -34,10 +31,10 @@ export function ConsumeCarnetSectionitem({
   return (
     <GenericSectionItem {...sectionProps}>
       <Button
+        surfaceColor="accent"
         text={t(FareContractTexts.carnet.activateCarnet)}
         ref={onCloseFocusRef}
         rightIcon={{svg: TicketValid}}
-        interactiveColor={interactiveColor}
         onPress={onPress}
         expanded={true}
         style={{width: '100%'}} // Without this the GenericSectionItem squishes the button

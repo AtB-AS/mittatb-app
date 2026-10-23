@@ -150,10 +150,10 @@ const PurchaseConfirmationTexts = {
     ),
   },
 
-  waitingForPayment: _(
-    'Venter på betaling',
-    'Waiting for payment',
-    'Venter på betaling',
+  paymentInProgress: _(
+    'Betaling pågår…',
+    'Payment in progress…',
+    'Betaling pågår…',
   ),
   cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
   cancelPaymentError: _(
@@ -168,18 +168,6 @@ const PurchaseConfirmationTexts = {
       'Aktiver for å velge betalingsmåte',
       'Activate to choose payment option',
       'Aktivér for å velje betalingsmåte',
-    ),
-  },
-  changePaymentMethod: {
-    text: _(
-      'Endre betalingsmåte',
-      'Change payment option',
-      'Endre betalingsmåte',
-    ),
-    a11yHint: _(
-      'Aktiver for å endre betalingsmåte',
-      'Activate to change payment option',
-      'Aktiver for å endre betalingsmåte',
     ),
   },
 
@@ -205,6 +193,11 @@ const PurchaseConfirmationTexts = {
     'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
     'We were unable to set up the payment. Do you have the Vipps app installed?',
     'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
+  ),
+  paymentNotCompletedError: _(
+    'Betalingen ble ikke fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    'The payment was not completed. Please try again, or contact customer service for assistance.',
+    'Betalinga vart ikkje fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {

@@ -42,6 +42,7 @@ export const ForceUpdateScreen = () => {
             {t(ForceUpdateTexts.subText)}
           </ThemeText>
           <Button
+            surfaceColor="accent"
             expanded={true}
             rightIcon={{svg: ExternalLink}}
             onPress={openStoreListing}

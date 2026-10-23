@@ -147,9 +147,9 @@ export const Root_LoginPhoneInputScreen = ({
 
             {!isSubmitting && (
               <Button
+                surfaceColor="accent"
                 expanded={true}
                 style={styles.submitButton}
-                interactiveColor={theme.color.interactive[0]}
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
                 disabled={!isValidPhoneNumber || isRateLimited}

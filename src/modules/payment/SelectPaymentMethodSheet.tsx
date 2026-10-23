@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {useTranslation} from '@atb/translations';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -50,7 +50,6 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onCloseFocusRef,
 }) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const [shouldSave, setShouldSave] = useState(
     currentOptions?.shouldSavePaymentMethod ?? false,
@@ -88,8 +87,8 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
   const Footer = () => (
     <FullScreenFooter>
       <Button
+        surfaceColor="accent"
         expanded={true}
-        interactiveColor={theme.color.interactive[0]}
         text={t(SelectPaymentMethodTexts.confirm_button.text)}
         accessibilityHint={t(SelectPaymentMethodTexts.confirm_button.a11yhint)}
         onPress={() => {

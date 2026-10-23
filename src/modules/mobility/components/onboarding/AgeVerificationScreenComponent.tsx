@@ -94,6 +94,7 @@ export const AgeVerificationScreenComponent = ({focusRef}: Props) => {
         MobilityTexts.shmoRequirements.ageVerification.description,
       )}
       vippsButton={{
+        surfaceColor: 'accent',
         onPress: () => initAgeVerification(),
         expanded: true,
         loading: isInitting || isCompleting,

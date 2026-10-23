@@ -3,7 +3,7 @@ import {
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types';
 import {TicketRecipientType} from '@atb/modules/ticketing';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   OnBehalfOfTexts,
   PhoneInputTexts,
@@ -32,7 +32,6 @@ export const SubmitButton = ({
   onError: (c?: OnBehalfOfErrorCode) => void;
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -142,8 +141,8 @@ export const SubmitButton = ({
 
       {!isSubmitting && (
         <Button
+          surfaceColor="accent"
           expanded={true}
-          interactiveColor={theme.color.interactive[0]}
           onPress={onPress}
           text={t(PurchaseOverviewTexts.summary.button.payment)}
           testID="toPaymentButton"

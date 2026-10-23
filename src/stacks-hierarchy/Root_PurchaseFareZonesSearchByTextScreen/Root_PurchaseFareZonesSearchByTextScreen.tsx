@@ -19,7 +19,12 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {
   FareZoneResults,
   type FareZoneWithMetadata,
+  useFareZoneFromLocation,
 } from '@atb/modules/fare-zones-selector';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Location} from '@atb/assets/svg/mono-icons/places';
+import {NativeTouchable} from '@atb/components/native-touchable';
+import {insets} from '@atb/utils/insets';
 import {LocationAndFareZone, VenueResults} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
@@ -104,7 +109,25 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
     if (isFocused) focusInput();
   }, [isFocused]);
 
-  const {location: geolocation} = useGeolocationContext();
+  const {location: geolocation, requestLocationPermission} =
+    useGeolocationContext();
+  const fareZoneFromLocation = useFareZoneFromLocation(fareZones);
+  // Hide the location button when the user's position is outside all
+  // selectable fare zones, since pressing it would have no effect.
+  const showLocationButton = !geolocation || !!fareZoneFromLocation;
+
+  const selectCurrentFareZoneOrRequest = () => {
+    if (geolocation) {
+      if (fareZoneFromLocation) {
+        navigateToMapScreen({
+          ...fareZoneFromLocation,
+          resultType: 'geolocation',
+        });
+      }
+    } else {
+      requestLocationPermission(false);
+    }
+  };
 
   const {
     data: locations,
@@ -162,6 +185,22 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
           autoCorrect={false}
           autoComplete="off"
           testID="searchInput"
+          suffixNode={
+            showLocationButton && (
+              <NativeTouchable
+                variant="borderless"
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={t(
+                  FareZoneSearchTexts.searchField.locationButton.a11yLabel,
+                )}
+                hitSlop={insets.all(8)}
+                onPress={selectCurrentFareZoneOrRequest}
+              >
+                <ThemeIcon svg={Location} />
+              </NativeTouchable>
+            )
+          }
         />
       </View>
 
