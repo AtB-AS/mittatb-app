@@ -222,9 +222,9 @@ const TicketingTexts = {
   },
   reservation: {
     reserving: _(
-      'Venter på prosessering...',
-      'Waiting for processing...',
-      'Ventar på prosessering...',
+      'Venter på betaling...',
+      'Waiting for payment...',
+      'Ventar på betaling...',
     ),
     approved: _(
       'Betaling godkjent. Henter billett...',
