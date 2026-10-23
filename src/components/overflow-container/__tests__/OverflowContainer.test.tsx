@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {
   fireEvent,
   render,
@@ -24,6 +24,15 @@ const reportWidths = (view: RenderResult, width = 30) =>
       nativeEvent: {layout: {x: 0, y: 0, width, height: 20}},
     }),
   );
+
+const measurerWidth = (view: RenderResult) =>
+  StyleSheet.flatten(
+    view.UNSAFE_root.find(
+      (n) =>
+        typeof n.type === 'string' &&
+        n.props?.importantForAccessibility === 'no-hide-descendants',
+    ).props.style,
+  ).width;
 
 const hasOnLayoutAncestor = (node: ReactTestInstance) => {
   for (let p = node.parent; p; p = p.parent) {
@@ -88,5 +97,39 @@ describe('OverflowContainer', () => {
     expect(onReady).not.toHaveBeenCalled();
     reportWidths(view);
     expect(onReady).toHaveBeenCalledTimes(1);
+  });
+
+  // A parent re-render passes new (but equal) children, like the legs in
+  // TravelCard every time Results re-renders.
+  it('does not fire onReady again when the parent re-renders', () => {
+    const onReady = jest.fn();
+    const element = () => (
+      <OverflowContainer maxWidth={200} overflow={overflow} onReady={onReady}>
+        {legs(3)}
+      </OverflowContainer>
+    );
+    const view = render(element());
+    reportWidths(view);
+    view.rerender(element());
+
+    expect(onReady).toHaveBeenCalledTimes(1);
+  });
+
+  // While maxWidth is 0 the children would measure as 0 wide and not be
+  // measured again, which broke the "+N" counter.
+  it('only constrains the measurer to maxWidth once it is known', () => {
+    const view = render(
+      <OverflowContainer maxWidth={0} overflow={overflow}>
+        {legs(3)}
+      </OverflowContainer>,
+    );
+    expect(measurerWidth(view)).toBeUndefined();
+
+    view.rerender(
+      <OverflowContainer maxWidth={200} overflow={overflow}>
+        {legs(3)}
+      </OverflowContainer>,
+    );
+    expect(measurerWidth(view)).toBe(200);
   });
 });
