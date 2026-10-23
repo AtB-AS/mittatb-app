@@ -42,7 +42,7 @@ export function RadioSegments({
         const selected = activeIndex === i;
         const textColor = selected
           ? theme.color.surface.accent.subtle
-          : theme.color.surface.neutral.subtle;
+          : theme.color.surface.neutral.strong;
         const a11yLabel = getAccessibilityLabel(option);
 
         return (
@@ -92,7 +92,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'center',
     padding: theme.spacing.xSmall,
-    backgroundColor: theme.color.surface.neutral.subtle.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   optionBox: {
     flexGrow: 1,
@@ -103,7 +103,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.small,
     borderWidth: theme.border.width.medium,
     borderColor: 'transparent',
-    backgroundColor: theme.color.surface.neutral.subtle.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   optionBoxSelected: {
     backgroundColor: theme.color.surface.accent.subtle.background,
