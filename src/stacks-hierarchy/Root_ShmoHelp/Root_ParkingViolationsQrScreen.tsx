@@ -184,7 +184,7 @@ export const Root_ParkingViolationsQrScreen = ({
                 surfaceColor="neutral"
                 expanded={false}
                 disabled={isError}
-                mode="secondary"
+                mode="primary"
                 onPress={() => selectProvider()}
                 text={t(ParkingViolationTexts.qr.scanningNotPossible)}
                 ref={onCloseFocusRef}
