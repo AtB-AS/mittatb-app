@@ -368,7 +368,7 @@ export const StationSchema = z.object({
   rentalUris: RentalUrisSchema.optional(),
   vehicleTypesAvailable: z.array(VehicleTypeAvailabilitySchema).optional(),
   pricingPlans: z.array(ShmoPricingPlanSchema).optional(),
-  openingHoursStatus: StationOpeningHoursStatusSchema,
+  openingHoursStatus: StationOpeningHoursStatusSchema.optional(),
 });
 
 export type Station = z.infer<typeof StationSchema>;

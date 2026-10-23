@@ -67,7 +67,7 @@ export const BikeStationIntegrationView = ({
   const isLoading = vehicleQueries.some((q) => q.isLoading);
   const isError = vehicleQueries.some((q) => q.isError);
 
-  const openingTime = station.openingHoursStatus.openingTime
+  const openingTime = station.openingHoursStatus?.openingTime
     ? formatReopensAt(station.openingHoursStatus.openingTime, language, t)
     : undefined;
 
@@ -91,7 +91,7 @@ export const BikeStationIntegrationView = ({
       )}
 
       <View style={styles.container}>
-        {!!station.openingHoursStatus.isClosed && (
+        {station.openingHoursStatus?.isClosed && (
           <MessageInfoBox
             type="info"
             message={t(ShmoWarnings.operatorClosed(operatorName, openingTime))}
