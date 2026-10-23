@@ -1,15 +1,14 @@
 import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {Ref, useEffect, useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
-import {Coordinates} from '@atb/utils/coordinates';
-import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
+import {useTranslation} from '@atb/translations';
+import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {View} from 'react-native';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
   onGoBack: () => void;
-  coordinates?: Coordinates;
   title: string;
   secondaryText: string;
   isLoading?: boolean;
@@ -21,7 +20,6 @@ type PhotoCaptureProps = {
 export const PhotoCapture = ({
   onConfirmImage,
   onGoBack,
-  coordinates,
   title,
   secondaryText,
   isLoading = false,
@@ -29,10 +27,10 @@ export const PhotoCapture = ({
   isFocused,
   errorMessage,
 }: PhotoCaptureProps) => {
+  const {t} = useTranslation();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
   const [file, setFile] = useState<PhotoFile | null>(null);
-  const userCoordinates = getCurrentCoordinatesGlobal();
 
   const handlePhotoCapture = async (file: PhotoFile) => {
     setFile(file);
@@ -68,10 +66,12 @@ export const PhotoCapture = ({
             bottomSheetModalRef.current?.dismiss();
             onConfirmImage(file);
           }}
-          coordinates={coordinates ?? userCoordinates}
           file={file.path}
           onCloseFocusRef={onCloseFocusRef}
           bottomSheetModalRef={bottomSheetModalRef}
+          heading={t(ParkingViolationTexts.imageConfirmation.title)}
+          confirmText={t(ParkingViolationTexts.imageConfirmation.confirmButton)}
+          dismissText={t(ParkingViolationTexts.imageConfirmation.retryButton)}
         />
       )}
     </CameraScreenContainer>

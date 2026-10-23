@@ -46,6 +46,7 @@ import {
   Root_ParkingViolationsPhotoScreen,
   Root_ParkingViolationsQrScreen,
   Root_ParkingViolationsSelectScreen,
+  Root_SupportPhotoScreen,
 } from '@atb/stacks-hierarchy/Root_ShmoHelp';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
@@ -321,6 +322,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ParkingPhotoScreen"
                 component={Root_ParkingPhotoScreen}
+              />
+              <Stack.Screen
+                name="Root_SupportPhotoScreen"
+                component={Root_SupportPhotoScreen}
               />
               <Stack.Screen
                 name="Root_SmartParkAndRideAddScreen"
