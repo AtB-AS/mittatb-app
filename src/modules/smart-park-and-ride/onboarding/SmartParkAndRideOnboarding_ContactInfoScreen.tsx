@@ -58,6 +58,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = ({
       title={t(SmartParkAndRideTexts.onboarding.contactInfo.title)}
       contentNode={<ContactInfoContent />}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => {
           analytics.logEvent(
             'Smart Park & Ride',

@@ -101,6 +101,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           />
         )}
         <Button
+          surfaceColor="accent"
           expanded={true}
           onPress={() => {
             analytics.logEvent('Smart Park & Ride', 'Add vehicle clicked');

@@ -29,6 +29,7 @@ export function NoTravelTokenInfo({
   return (
     <OnboardingFullScreenView
       footerButton={{
+        surfaceColor: 'accent',
         onPress: onPressFooterButton,
         text: t(MobileTokenOnboardingTexts.ok),
         expanded: true,

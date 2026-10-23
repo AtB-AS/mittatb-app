@@ -114,16 +114,16 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
       <FullScreenFooter>
         <Button
           expanded={true}
-          interactiveColor={theme.color.interactive.destructive}
+          surfaceColor="error"
           onPress={onNext}
           text={t(LoginTexts.availableFareContractPrompt.logInAndDeleteButton)}
           style={styles.logInAndDeleteButton}
         />
         <Button
+          surfaceColor="accent"
           expanded={true}
           onPress={navigation.goBack}
           text={t(LoginTexts.availableFareContractPrompt.cancelButton)}
-          interactiveColor={theme.color.interactive[0]}
         />
       </FullScreenFooter>
     </View>

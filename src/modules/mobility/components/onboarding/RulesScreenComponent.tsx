@@ -84,6 +84,7 @@ export const RulesScreenComponent = ({
     <OnboardingScreenComponent
       title={t(MobilityTexts.shmoRequirements.terms.title)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => setGivenConsent(true),
         text: t(MobilityTexts.shmoRequirements.terms.buttonOne),
         expanded: true,

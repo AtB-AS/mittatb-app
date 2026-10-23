@@ -68,6 +68,7 @@ export const CompactFareContracts: React.FC<Props> = ({
       <ContentHeading text={t(TicketingTexts.header.title)} />
       {validFareContracts.length == 0 ? (
         <Button
+          surfaceColor="accent"
           expanded={true}
           text={t(DashboardTexts.buyButton)}
           onPress={onPressBuy}

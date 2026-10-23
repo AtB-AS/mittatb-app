@@ -81,7 +81,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   const {userId} = useAuthContext();
   const [paymentData, setPaymentData] = useState<string>();
@@ -416,7 +415,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               onPress={() => cancelPayment(reserveMutation.data, true)}
               text={t(PurchaseConfirmationTexts.cancelPayment)}
               mode="primary"
-              interactiveColor={theme.color.interactive.destructive}
+              surfaceColor="error"
               loading={cancelPaymentMutation.isPending}
             />
           )}
@@ -620,8 +619,8 @@ const PaymentButton = ({
   if (!paymentMethod && totalPrice > 0)
     return (
       <Button
+        surfaceColor="accent"
         expanded={true}
-        interactiveColor={theme.color.interactive[0]}
         text={t(PurchaseConfirmationTexts.choosePaymentMethod.text)}
         disabled={!!isOfferError}
         accessibilityHint={t(
@@ -641,13 +640,13 @@ const PaymentButton = ({
 
   return (
     <Button
+      surfaceColor="accent"
       expanded={true}
       text={
         totalPrice > 0
           ? t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))
           : t(PurchaseConfirmationTexts.complete)
       }
-      interactiveColor={theme.color.interactive[0]}
       disabled={!!isOfferError || reserveStatus === 'success'}
       onPress={() => {
         if (paymentMethod) {

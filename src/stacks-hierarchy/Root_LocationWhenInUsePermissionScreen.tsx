@@ -32,6 +32,7 @@ export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
       title={t(LocationWhenInUsePermissionTexts.title)}
       description={t(LocationWhenInUsePermissionTexts.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: buttonOnPress,
         text: t(LocationWhenInUsePermissionTexts.button),
         expanded: true,

@@ -4,7 +4,6 @@ import {Loading} from '@atb/components/loading';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useTranslation} from '@atb/translations';
-import {useThemeContext} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type AppSwitchActionButtonProps = {
@@ -21,7 +20,6 @@ export const AppSwitchActionButton = ({
   hasError,
 }: AppSwitchActionButtonProps) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
 
   if (isLoading) {
     return <Loading />;
@@ -42,11 +40,11 @@ export const AppSwitchActionButton = ({
 
   return (
     <Button
+      surfaceColor="accent"
       expanded={true}
       text={label}
       onPress={onPress}
       mode="primary"
-      interactiveColor={theme.color.interactive[0]}
       rightIcon={{svg: ExternalLink}}
       accessibilityRole="link"
     />

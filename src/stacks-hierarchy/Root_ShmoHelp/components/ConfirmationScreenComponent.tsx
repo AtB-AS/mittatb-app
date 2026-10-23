@@ -60,6 +60,7 @@ export const ConfirmationScreenComponent = ({
         </View>
         <View style={styles.buttonContainer}>
           <Button
+            surfaceColor="accent"
             expanded={true}
             text={t(dictionary.appNavigation.close.text)}
             accessibilityHint={t(dictionary.appNavigation.close.a11yHint)}

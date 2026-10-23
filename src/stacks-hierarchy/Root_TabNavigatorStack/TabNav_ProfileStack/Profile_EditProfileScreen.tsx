@@ -281,6 +281,7 @@ export const Profile_EditProfileScreen = ({
 
               <View style={styles.submitSection}>
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   mode="primary"
                   text={t(EditProfileTexts.button.save)}
@@ -344,7 +345,7 @@ export const Profile_EditProfileScreen = ({
             <Button
               expanded={true}
               mode="primary"
-              interactiveColor={theme.color.interactive.destructive}
+              surfaceColor="error"
               leftIcon={{svg: Delete}}
               text={t(EditProfileTexts.button.deleteProfile)}
               onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}

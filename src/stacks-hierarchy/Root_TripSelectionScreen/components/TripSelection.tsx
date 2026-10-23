@@ -8,7 +8,7 @@ import {
 } from '@atb/modules/booking';
 import type {TripPatternLegs} from '../types';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext, Statuses} from '@atb/theme';
+import {StyleSheet, Statuses} from '@atb/theme';
 import {SectionSeparator} from '@atb/components/sections';
 import {TripPatternWithBooking} from '@atb/api/types/trips';
 import {Tag} from '@atb/components/tag';
@@ -169,7 +169,6 @@ type BookingTripProps = {
 };
 
 function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
-  const {theme} = useThemeContext();
   const styles = useBookingTripStyles();
   const {t, language} = useTranslation();
 
@@ -241,12 +240,12 @@ function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
             ]}
           >
             <Button
+              surfaceColor="accent"
               text={t(TicketingTexts.booking.select)}
               expanded={false}
               type="small"
               mode="tertiary"
               onPress={onPress}
-              backgroundColor={theme.color.interactive[2].default}
               style={{
                 marginLeft: 'auto',
               }}

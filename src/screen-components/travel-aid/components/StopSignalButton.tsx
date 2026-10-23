@@ -1,5 +1,5 @@
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {TravelAidTexts} from '@atb/translations';
@@ -30,7 +30,6 @@ export const StopSignalButton = ({
   status: MutationStatus;
 }) => {
   const {isTravelAidStopButtonEnabled} = useFeatureTogglesContext();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const styles = useStyles();
   const {stopSignalButtonConfig: config} = useFirestoreConfigurationContext();
@@ -61,8 +60,8 @@ export const StopSignalButton = ({
       )}
       {status !== 'success' && (
         <Button
+          surfaceColor="accent"
           expanded={true}
-          interactiveColor={theme.color.interactive['0']}
           text={t(TravelAidTexts.stopButton.text)}
           onPress={() => {
             analytics.logEvent('Journey aid', 'Stop signal button pressed');

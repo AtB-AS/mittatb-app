@@ -48,6 +48,7 @@ export const ExternalRealtimeMapSheet = ({
           </GenericSectionItem>
         </Section>
         <Button
+          surfaceColor="accent"
           expanded={true}
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {

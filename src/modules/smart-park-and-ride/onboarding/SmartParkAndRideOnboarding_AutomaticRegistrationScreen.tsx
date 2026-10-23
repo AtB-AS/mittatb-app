@@ -73,6 +73,7 @@ export const SmartParkAndRideOnboarding_AutomaticRegistrationScreen = ({
         },
       }}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => {
           analytics.logEvent(
             'Smart Park & Ride',

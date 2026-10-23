@@ -1,7 +1,7 @@
 import {shadows} from '@atb/modules/map';
 import {ThemeText} from '@atb/components/text';
 import {Animated, View, ViewStyle} from 'react-native';
-import {StyleSheet, type Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, type Theme} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -76,8 +76,6 @@ const SnackbarInstance = ({
 }: SnackbarInstanceProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const themeColor = getThemeColor(theme);
 
   const stableContent = useStableValue(content, isDisabled); // avoid triggering useEffects if no text has been changed
 
@@ -151,7 +149,6 @@ const SnackbarInstance = ({
                     hideSnackbar();
                   }
                 }}
-                backgroundColor={themeColor}
               />
             )}
 

@@ -1,6 +1,5 @@
 import {Button} from '@atb/components/button';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {useThemeContext} from '@atb/theme';
 import React from 'react';
 
 interface ButtonInfoTextComboProps {
@@ -14,13 +13,12 @@ export const ButtonInfoTextCombo = ({
   buttonText,
   onPress,
 }: ButtonInfoTextComboProps) => {
-  const {theme} = useThemeContext();
   return (
     <>
       <MessageInfoText type="warning" message={message} />
       <Button
+        surfaceColor="accent"
         mode="primary"
-        interactiveColor={theme.color.interactive[0]}
         expanded={true}
         type="large"
         accessibilityRole="button"

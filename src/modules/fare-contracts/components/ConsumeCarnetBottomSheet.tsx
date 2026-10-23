@@ -4,7 +4,7 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {consumeCarnet} from '@atb/modules/ticketing';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
@@ -37,7 +37,6 @@ export const ConsumeCarnetBottomSheet = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setError] = useState<boolean>(false);
   const [isSchoolError, setSchoolError] = useState<boolean>(false);
-  const {theme} = useThemeContext();
   const {logEvent} = useAnalyticsContext();
 
   const onConsume = async () => {
@@ -92,6 +91,7 @@ export const ConsumeCarnetBottomSheet = ({
           </GenericSectionItem>
         </Section>
         <Button
+          surfaceColor="accent"
           expanded={true}
           onPress={onConsume}
           text={t(FareContractTexts.carnet.activateCarnet)}
@@ -99,11 +99,11 @@ export const ConsumeCarnetBottomSheet = ({
           loading={isLoading}
         />
         <Button
+          surfaceColor="accent"
           expanded={true}
           mode="secondary"
           onPress={() => bottomSheetModalRef.current?.dismiss()}
           text={t(dictionary.cancel)}
-          backgroundColor={theme.color.background.neutral[1]}
         />
       </View>
     </BottomSheetModal>

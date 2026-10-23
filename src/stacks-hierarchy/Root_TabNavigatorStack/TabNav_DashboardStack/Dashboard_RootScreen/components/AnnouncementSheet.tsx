@@ -73,7 +73,12 @@ export const AnnouncementSheet = ({
           </GenericSectionItem>
         </Section>
         {primaryButtonProps && (
-          <Button expanded={true} mode="primary" {...primaryButtonProps} />
+          <Button
+            surfaceColor="accent"
+            expanded={true}
+            mode="primary"
+            {...primaryButtonProps}
+          />
         )}
       </View>
     </BottomSheetModal>

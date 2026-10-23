@@ -3,7 +3,7 @@ import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {Loading} from '@atb/components/loading';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
@@ -31,7 +31,6 @@ export function Summary({
 }: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
 
   const formattedPrice = !!price
     ? formatNumberToString(price, language)
@@ -70,8 +69,8 @@ export function Summary({
         </ThemeText>
       )}
       <Button
+        surfaceColor="accent"
         expanded={true}
-        interactiveColor={theme.color.interactive[0]}
         text={summaryButtonText}
         disabled={isDisabled || isLoading || isFree}
         onPress={toPaymentFunction}

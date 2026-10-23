@@ -75,17 +75,17 @@ export const Root_LoginRequiredForFareProductScreen = ({
       </View>
       <View style={styles.buttonView}>
         <Button
+          surfaceColor="accent"
           expanded={true}
-          interactiveColor={theme.color.interactive[0]}
           onPress={onNext}
           text={t(LoginTexts.onboarding.button)}
           rightIcon={{svg: LogIn}}
           testID="logInButton"
         />
         <Button
+          surfaceColor="accent"
           expanded={true}
           mode="secondary"
-          backgroundColor={theme.color.background.neutral[2]}
           onPress={navigation.goBack}
           text={t(LoginTexts.onboarding.laterButton)}
           testID="logInLaterButton"

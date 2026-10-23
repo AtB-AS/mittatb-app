@@ -38,7 +38,6 @@ export const OnboardingFullScreenView = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = theme.color.background.neutral[1];
-  const interactiveColor = theme.color.interactive[0];
 
   return (
     <FullScreenView
@@ -64,7 +63,6 @@ export const OnboardingFullScreenView = ({
           {footerButton && (
             <Button
               {...footerButton}
-              interactiveColor={interactiveColor}
               mode="primary"
               style={styles.footerButton}
               text={footerButton.text || ''}
@@ -75,7 +73,6 @@ export const OnboardingFullScreenView = ({
           {secondaryFooterButton && (
             <Button
               {...secondaryFooterButton}
-              backgroundColor={themeColor}
               mode="secondary"
               style={styles.footerButton}
               text={secondaryFooterButton.text || ''}

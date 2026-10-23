@@ -119,6 +119,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
               </GenericSectionItem>
             </Section>
             <Button
+              surfaceColor="accent"
               expanded
               text={
                 isLoggedIn

@@ -142,6 +142,7 @@ export function DebugServerOverrides() {
         </ThemeText>
       )}
       <Button
+        surfaceColor="accent"
         text="Add server override"
         expanded={true}
         onPress={() => {
@@ -263,7 +264,6 @@ function DebugServerInput(props: {
   const [newValue, setNewValue] = useState<string>('');
   const [headers, setHeaders] = useState<HeaderOverride[]>([]);
   const styles = useStyles();
-  const {theme} = useThemeContext();
 
   function addExistingOverride(o: DebugServerOverride) {
     setMatch(o.match.source);
@@ -287,6 +287,7 @@ function DebugServerInput(props: {
       <View style={styles.oftenUsedOptions}>
         {oftenUsedOverrides.map((o) => (
           <Button
+            surfaceColor="accent"
             key={o.label}
             type="small"
             expanded={false}
@@ -342,6 +343,7 @@ function DebugServerInput(props: {
         />
       ))}
       <Button
+        surfaceColor="accent"
         onPress={() => {
           setHeaders((prev) => {
             return [...prev, {key: '', value: ''}];
@@ -353,6 +355,7 @@ function DebugServerInput(props: {
         disabled={headers.some((h) => h.key === '')}
       />
       <Button
+        surfaceColor="accent"
         text="Save Override"
         expanded={true}
         onPress={() => {
@@ -367,7 +370,7 @@ function DebugServerInput(props: {
         <Button
           text="Delete Override"
           expanded={true}
-          interactiveColor={theme.color.interactive.destructive}
+          surfaceColor="error"
           onPress={props.onDelete}
         />
       )}

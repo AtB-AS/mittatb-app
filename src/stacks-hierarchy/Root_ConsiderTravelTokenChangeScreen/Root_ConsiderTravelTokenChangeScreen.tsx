@@ -62,6 +62,7 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   return (
     <OnboardingFullScreenView
       footerButton={{
+        surfaceColor: 'accent',
         onPress: onPressContinue,
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
         expanded: true,

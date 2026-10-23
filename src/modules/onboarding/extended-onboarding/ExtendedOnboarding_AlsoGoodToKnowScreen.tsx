@@ -26,6 +26,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = ({
       title={t(ExtendedOnboardingTexts.alsoGoodToKnow.title)}
       description={t(ExtendedOnboardingTexts.alsoGoodToKnow.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => continueFromOnboardingSection('extendedOnboarding'),
         text: t(ExtendedOnboardingTexts.goodToKnow.mainButton),
         expanded: true,

@@ -1,5 +1,4 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {useThemeContext} from '@atb/theme';
 import {translation as _, useTranslation} from '@atb/translations';
 import {useMemo} from 'react';
 import {useStoredTripPatterns} from './StoredTripPatternsContext';
@@ -28,7 +27,6 @@ export const SaveTripPatternButtonComponent: React.FC<
     canAddTripPattern,
   } = useStoredTripPatterns();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const posthogAnalytics = useAnalyticsContext();
   const {fareZones} = useFirestoreConfigurationContext();
 
@@ -50,6 +48,7 @@ export const SaveTripPatternButtonComponent: React.FC<
 
   return (
     <Button
+      surfaceColor="accent"
       accessibilityHint={
         isStored
           ? t(SaveTripPatternButtonComponentTexts.removeTrip.a11yHint)
@@ -103,11 +102,6 @@ export const SaveTripPatternButtonComponent: React.FC<
       accessibilityRole="button"
       accessible={true}
       mode="secondary"
-      backgroundColor={
-        isStored
-          ? theme.color.interactive[0].active
-          : theme.color.background.neutral[1]
-      }
     />
   );
 };

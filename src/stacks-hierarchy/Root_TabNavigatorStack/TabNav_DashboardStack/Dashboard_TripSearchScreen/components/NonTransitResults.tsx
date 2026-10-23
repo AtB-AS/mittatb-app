@@ -8,7 +8,7 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TripPattern} from '@atb/api/types/trips';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import ChevronRight from '@atb/assets/svg/mono-icons/navigation/ChevronRight';
@@ -28,8 +28,6 @@ type Props = {
 
 export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
   const style = useStyle();
   const {data: tripPatterns, isLoading} = useNonTransitTripsQuery(tripsProps);
 
@@ -65,7 +63,7 @@ export const NonTransitResults = ({tripsProps, onDetailsPressed}: Props) => {
             style={style.tripMode}
             key={modeText}
             type="small"
-            interactiveColor={interactiveColor}
+            surfaceColor="neutral"
             text={`${modeText} ${durationShort}`}
             leftIcon={{svg: getTransportModeSvg(mode).svg}}
             rightIcon={{svg: ChevronRight}}

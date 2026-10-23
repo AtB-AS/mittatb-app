@@ -4,7 +4,7 @@ import {
   ShmoBookingEvent,
   ShmoBookingEventType,
 } from '@atb/api/types/mobility';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useGetAssetFromQrCodeMutation} from '@atb/modules/mobility';
@@ -38,10 +38,6 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
   );
   const [vehicleCode, setVehicleCode] = useState<string>('146030');
   const {operatorId} = useVehicle(vehicleId ?? '');
-
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
-  const destructiveColor = theme.color.interactive.destructive;
 
   const styles = useStyles();
   const {height: windowHeight} = useWindowDimensions();
@@ -149,9 +145,7 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
         expanded={false}
         style={styles.filterButton}
         type="small"
-        interactiveColor={
-          initShmoOneStopBookingIsError ? destructiveColor : interactiveColor
-        }
+        surfaceColor={initShmoOneStopBookingIsError ? 'error' : 'neutral'}
         accessibilityRole="button"
         onPress={() => {
           //analytics.logEvent('Map', 'Init Booking Pressed');
@@ -166,9 +160,7 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
         expanded={false}
         style={styles.filterButton}
         type="small"
-        interactiveColor={
-          sendShmoBookingEventIsError ? destructiveColor : interactiveColor
-        }
+        surfaceColor={sendShmoBookingEventIsError ? 'error' : 'neutral'}
         accessibilityRole="button"
         onPress={() => {
           //analytics.logEvent('Map', 'Start Finishing Pressed');
@@ -183,9 +175,7 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
         expanded={false}
         style={styles.filterButton}
         type="small"
-        interactiveColor={
-          sendShmoBookingEventIsError ? destructiveColor : interactiveColor
-        }
+        surfaceColor={sendShmoBookingEventIsError ? 'error' : 'neutral'}
         accessibilityRole="button"
         onPress={() => {
           //analytics.logEvent('Map', 'Finish Pressed');
@@ -206,9 +196,7 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
         expanded={false}
         style={styles.filterButton}
         type="small"
-        interactiveColor={
-          getAssetFromQrCodeIsError ? destructiveColor : interactiveColor
-        }
+        surfaceColor={getAssetFromQrCodeIsError ? 'error' : 'neutral'}
         accessibilityRole="button"
         onPress={async () => {
           //analytics.logEvent('Map', 'Qr to Ids Pressed');
@@ -224,7 +212,7 @@ export const ShmoTesting = ({navigateToShmoSupport}: ShmoTestingProps) => {
         expanded={false}
         style={styles.filterButton}
         type="small"
-        interactiveColor={interactiveColor}
+        surfaceColor="neutral"
         accessibilityRole="button"
         onPress={() => {
           if (vehicleId) {

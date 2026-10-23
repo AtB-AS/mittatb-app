@@ -19,6 +19,7 @@ export type {
   ContrastColor,
   TextNames,
   InteractiveColor,
+  SurfaceColorName,
   TransportColors,
   StatusColors,
   StatusColor,

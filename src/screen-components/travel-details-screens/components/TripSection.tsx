@@ -650,7 +650,6 @@ const IntermediateInfo = ({
   onPressQuay: TripProps['onPressQuay'];
 }) => {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const style = useSectionStyles();
   const [expanded, setExpanded] = useState(false);
   const legColor = useTransportColor(
@@ -681,10 +680,10 @@ const IntermediateInfo = ({
         accessible={false}
       >
         <Button
+          surfaceColor="accent"
           type="small"
           expanded={false}
           mode="secondary"
-          backgroundColor={theme.color.background.neutral[0]}
           rightIcon={{svg: expanded ? ExpandLess : ExpandMore}}
           text={t(
             TripDetailsTexts.trip.leg.intermediateStops.label(
@@ -950,7 +949,6 @@ const BikeSection = ({leg, timeRounding = 'floor'}: BikeSectionProps) => {
 const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
   const style = useSectionStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
 
   if (id === AUTHORITY) return null;
   if (!url) {
@@ -973,6 +971,7 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           </ThemeText>
         </View>
         <Button
+          surfaceColor="accent"
           accessibilityRole="link"
           accessibilityLabel={t(
             TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
@@ -982,7 +981,6 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
           mode="secondary"
           type="small"
           expanded={false}
-          backgroundColor={theme.color.background.neutral[0]}
           text={name}
         />
       </View>
