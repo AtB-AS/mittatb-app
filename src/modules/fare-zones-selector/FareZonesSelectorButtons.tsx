@@ -5,8 +5,6 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
 import {getReferenceDataName} from '@atb/modules/configuration';
 import {FareZoneWithMetadata} from './types';
