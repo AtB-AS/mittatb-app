@@ -37,6 +37,8 @@ import {
   useVehicleQuery,
 } from '@atb/modules/mobility';
 import {FullScreenView} from '@atb/components/screen-view';
+import {SupportImageSection} from './components/SupportImageSection';
+import {SUPPORT_IMAGE_FILE_TYPE, useSupportImages} from './use-support-images';
 
 export type Root_ContactShmoOperatorScreenProps =
   RootStackScreenProps<'Root_ContactShmoOperatorScreen'>;
@@ -89,6 +91,11 @@ export const Root_ContactShmoOperatorScreen = ({
     onSubmit,
     showError,
     supportRequestStatus,
+    isAddingImages,
+    hasPickerError,
+    images,
+    pickFromLibrary,
+    removeImage,
   } = useShmoContactFormController(
     operatorId,
     vehicleId,
@@ -164,6 +171,14 @@ export const Root_ContactShmoOperatorScreen = ({
             }
           />
         </Section>
+        <SupportImageSection
+          images={images}
+          isAddingImages={isAddingImages}
+          hasPickerError={hasPickerError}
+          onPickFromLibrary={pickFromLibrary}
+          onRemoveImage={removeImage}
+          onTakePhoto={() => navigation.navigate('Root_SupportPhotoScreen')}
+        />
         <ContentHeading text={t(ContactShmoOperatorTexts.contactInfo.header)} />
         <Section>
           <TextInputSectionItem
@@ -316,6 +331,9 @@ const useShmoContactFormController = (
 
   const [showError, setShowError] = useState(false);
 
+  const {images, isAddingImages, hasPickerError, pickFromLibrary, removeImage} =
+    useSupportImages();
+
   const {
     isCommentValid,
     isPhoneNumberValid,
@@ -327,14 +345,21 @@ const useShmoContactFormController = (
   const {mutate: sendSupportRequest, status: supportRequestStatus} =
     useSendSupportRequestMutation(operatorId, onSuccess);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
+      const files = images.map((image, index) => ({
+        fileName: `supportPhoto${index + 1}.jpg`,
+        fileType: SUPPORT_IMAGE_FILE_TYPE,
+        fileData: image.fileData,
+      }));
+
       const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
         assetId: vehicleId,
         bookingId,
         stationId,
+        ...(files.length > 0 && {files}),
         ...(currentUserCoordinates && {
           place: {
             coordinates: {
@@ -359,6 +384,11 @@ const useShmoContactFormController = (
     onSubmit,
     showError,
     supportRequestStatus,
+    isAddingImages,
+    hasPickerError,
+    images,
+    pickFromLibrary,
+    removeImage,
   };
 };
 

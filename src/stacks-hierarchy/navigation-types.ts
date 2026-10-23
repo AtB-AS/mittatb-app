@@ -171,6 +171,7 @@ export type RootStackParamList = StackParams<{
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
   Root_ParkingPhotoScreen: Root_ParkingPhotoScreenParams;
+  Root_SupportPhotoScreen: undefined;
   Root_TripSelectionScreen: Root_TripSearchScreenParams;
   Root_SmartParkAndRideAddScreen: undefined;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;

@@ -6,7 +6,14 @@ jest.mock('@atb/utils/image', () => {
   return {Base64ImageSchema: z.string()};
 });
 
-import {ActionButtonType, BonusOfferSchema, VehicleSchema} from '../mobility';
+import {
+  ActionButtonType,
+  BonusOfferSchema,
+  MAX_UPLOAD_IMAGE_COUNT,
+  SendSupportRequestBodySchema,
+  SupportType,
+  VehicleSchema,
+} from '../mobility';
 
 const baseVehicle = {
   id: 'vehicle-1',
@@ -200,5 +207,41 @@ describe('BonusOfferSchema', () => {
       priceAdjustments: [],
     });
     expect(result.success).toBe(true);
+  });
+});
+
+describe('SendSupportRequestBodySchema files', () => {
+  const baseSupportRequest = {
+    assetId: 'asset-1',
+    supportType: SupportType.ACCIDENT_OR_BROKEN,
+    contactInformationEndUser: {email: 'someone@example.com'},
+  };
+  const image = {
+    fileName: 'supportPhoto1.jpg',
+    fileType: 'image/jpeg',
+    fileData: 'dGVzdA==',
+  };
+
+  it('parses a request without any images', () => {
+    const result = SendSupportRequestBodySchema.safeParse(baseSupportRequest);
+    expect(result.success).toBe(true);
+    expect(result.data?.files).toBeUndefined();
+  });
+
+  it('parses a request with the maximum number of images', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseSupportRequest,
+      files: new Array(MAX_UPLOAD_IMAGE_COUNT).fill(image),
+    });
+    expect(result.success).toBe(true);
+    expect(result.data?.files).toHaveLength(MAX_UPLOAD_IMAGE_COUNT);
+  });
+
+  it('rejects more images than the endpoint is allowed to carry', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseSupportRequest,
+      files: new Array(MAX_UPLOAD_IMAGE_COUNT + 1).fill(image),
+    });
+    expect(result.success).toBe(false);
   });
 });
