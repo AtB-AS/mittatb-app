@@ -6,7 +6,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ButtonSectionItem, Section} from '@atb/components/sections';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {ImageConfirmationBottomSheet} from '@atb/components/PhotoCapture';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {ContactShmoOperatorTexts} from '@atb/translations/screens/ContactScooterOperator';
 import {MAX_UPLOAD_IMAGE_COUNT} from '@atb/api/types/mobility';
@@ -30,7 +30,6 @@ export const SupportImageSection = ({
   onTakePhoto,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const isFull = images.length >= MAX_UPLOAD_IMAGE_COUNT;
 
@@ -77,12 +76,12 @@ export const SupportImageSection = ({
       />
       {!isFull && (
         <Button
+          surfaceColor="accent"
           mode="secondary"
           expanded={true}
           onPress={promptForSource}
           loading={isAddingImages}
           text={t(ContactShmoOperatorTexts.image.addButton)}
-          backgroundColor={theme.color.background.neutral[0]}
         />
       )}
       {hasPickerError && (
