@@ -46,11 +46,6 @@ const FareZonesSelectorButtons = ({
         )}
         accessibilityHint={t(FareZonesTexts.location.zonePicker.a11yHintFrom)}
         onPress={() => onVenueSearchClick('from')}
-        icon={
-          selection.zones?.from.resultType === 'geolocation' ? (
-            <ThemeIcon svg={Location} />
-          ) : undefined
-        }
         highlighted={selectNext === 'from'}
         testID="searchFromButton"
       />
@@ -65,11 +60,6 @@ const FareZonesSelectorButtons = ({
           )}
           accessibilityHint={t(FareZonesTexts.location.zonePicker.a11yHintTo)}
           onPress={() => onVenueSearchClick('to')}
-          icon={
-            selection.zones?.to.resultType === 'geolocation' ? (
-              <ThemeIcon svg={Location} />
-            ) : undefined
-          }
           highlighted={selectNext === 'to'}
           testID="searchToButton"
         />
