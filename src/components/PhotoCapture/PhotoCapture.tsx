@@ -5,6 +5,7 @@ import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {View} from 'react-native';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 
 type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
@@ -69,9 +70,9 @@ export const PhotoCapture = ({
           file={file.path}
           onCloseFocusRef={onCloseFocusRef}
           bottomSheetModalRef={bottomSheetModalRef}
-          heading={t(ParkingViolationTexts.imageConfirmation.title)}
-          confirmText={t(ParkingViolationTexts.imageConfirmation.confirmButton)}
-          dismissText={t(ParkingViolationTexts.imageConfirmation.retryButton)}
+          heading={t(MobilityTexts.imageConfirmation.title)}
+          confirmText={t(MobilityTexts.imageConfirmation.confirmButton)}
+          dismissText={t(MobilityTexts.imageConfirmation.retryButton)}
         />
       )}
     </CameraScreenContainer>
