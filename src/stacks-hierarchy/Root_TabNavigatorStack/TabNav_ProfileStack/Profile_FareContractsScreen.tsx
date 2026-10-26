@@ -15,6 +15,7 @@ import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen
 import {ProfileScreenProps} from './navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {useScrollBorder} from '@atb/utils/use-scroll-border';
+import {PreReservationCard} from '@atb/modules/fare-contracts';
 
 type Props = ProfileScreenProps<'Profile_FareContractsScreen'>;
 
@@ -224,6 +225,15 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
+        <ThemeText typography="heading__2xl">PreReservation</ThemeText>
+        <PreReservationCard
+          now={Date.now()}
+          preReservation={{
+            created: new Date(),
+            orderId: RESERVATION.orderId,
+            paymentType: RESERVATION.paymentType,
+          }}
+        />
         <ThemeText typography="heading__2xl">Reservation</ThemeText>
         <FareContractOrReservation
           index={0}

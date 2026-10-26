@@ -43,6 +43,13 @@ export type Reservation = {
   url: string;
 };
 
+/** Local placeholder for a purchase whose reservation hasn't arrived yet */
+export type PreReservation = {
+  orderId: string;
+  created: Date;
+  paymentType?: PaymentType;
+};
+
 export enum PaymentType {
   PaymentCard = 1,
   Vipps = 2,

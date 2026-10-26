@@ -4,6 +4,7 @@ import {View} from 'react-native';
 import React, {type PropsWithChildren} from 'react';
 import {
   useGetFareProductsQuery,
+  type PreReservation,
   type Reservation,
 } from '@atb/modules/ticketing';
 import {FareContractType} from '@atb-as/utils';
@@ -17,6 +18,7 @@ type Props = PropsWithChildren<
         fc: FareContractType;
       }
     | ({reservation: Reservation} & {enabledLine?: boolean})
+    | {preReservation: PreReservation}
   ) & {now: number}
 >;
 
@@ -25,7 +27,16 @@ export const WithValidityLine = (props: Props) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
 
-  if ('reservation' in props) {
+  if ('preReservation' in props) {
+    return (
+      <View style={styles.container} testID="preReservationTicket">
+        <ValidityLine status="reserving" />
+        {!!props.children ? (
+          <View style={styles.content}>{props.children}</View>
+        ) : null}
+      </View>
+    );
+  } else if ('reservation' in props) {
     return (
       <View
         style={styles.container}

@@ -3,6 +3,7 @@ import {
   useFareContracts,
   useGetFareProductsQuery,
   useTicketingContext,
+  type PreReservation,
 } from '@atb/modules/ticketing';
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
@@ -119,6 +120,24 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
     return navigation.addListener('blur', dismissSavedTrip);
   }, [savedTripPattern, dismissSavedTrip, navigation]);
 
+  const [preReservation, setPreReservation] = useState<PreReservation>();
+  const preReservationParam = route.params?.preReservation;
+  useEffect(() => {
+    if (preReservationParam) {
+      setPreReservation({...preReservationParam, created: new Date()});
+      navigation.setParams({preReservation: undefined});
+    }
+  }, [preReservationParam, navigation]);
+
+  const isPreReservationReceived =
+    !!preReservation &&
+    [...reservations, ...availableFareContracts].some(
+      (r) => r.orderId === preReservation.orderId,
+    );
+  useEffect(() => {
+    if (isPreReservationReceived) setPreReservation(undefined);
+  }, [isPreReservationReceived]);
+
   useEffect(() => {
     if (!showTransferCodeSuccess) return;
     const timeout = setTimeout(
@@ -189,6 +208,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           )}
         <FareContractAndReservationsList
           reservations={reservations}
+          preReservation={isPreReservationReceived ? undefined : preReservation}
           fareContracts={availableFareContracts}
           now={serverNow}
           onNavigateToBonusScreen={navigateToBonusScreen}

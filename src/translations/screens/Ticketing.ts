@@ -221,6 +221,11 @@ const TicketingTexts = {
     ),
   },
   reservation: {
+    preReservation: _(
+      'Behandler kjøp...',
+      'Processing purchase...',
+      'Behandlar kjøp...',
+    ),
     reserving: _(
       'Venter på betaling...',
       'Waiting for payment...',
