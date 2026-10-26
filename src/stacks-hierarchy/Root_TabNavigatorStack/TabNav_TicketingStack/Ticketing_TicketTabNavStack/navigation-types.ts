@@ -4,6 +4,7 @@ import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TicketingScreenProps} from '../navigation-types';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import type {TripPattern} from '@atb/api/types/trips';
+import type {PreReservation} from '@atb/modules/ticketing';
 
 export type TicketTabNavStackParams = StackParams<{
   TicketTabNav_PurchaseTabScreen: undefined;
@@ -11,6 +12,7 @@ export type TicketTabNavStackParams = StackParams<{
     refreshTickets?: boolean;
     showTransferCodeSuccess?: boolean;
     savedTripPattern?: TripPattern;
+    preReservation?: Omit<PreReservation, 'created'>;
   };
   TicketTabNav_TripSelectionScreen: {
     selection: PurchaseSelectionType;
