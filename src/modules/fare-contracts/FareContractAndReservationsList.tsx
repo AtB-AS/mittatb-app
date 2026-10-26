@@ -10,7 +10,7 @@ import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {PreReservationCard} from './PreReservationCard';
-import {ONE_HOUR_MS} from '@atb/utils/durations';
+import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 type Props = {
   reservations: Reservation[];
@@ -45,10 +45,10 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
     now,
   );
 
-  // Hide pre-reservation that never got a reservation or fare contract, e.g.
-  // if the Firestore listener failed.
+  // Hide stale PreReservations in case a reservation or fare contract never
+  // appeared.
   const showPreReservation =
-    !!preReservation && now - preReservation.created.getTime() < ONE_HOUR_MS;
+    !!preReservation && now - preReservation.created.getTime() < ONE_MINUTE_MS;
 
   return (
     <View style={styles.container}>
