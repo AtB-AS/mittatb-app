@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {LayoutChangeEvent, StyleSheet, View} from 'react-native';
 import {computeFit, FitResult} from './compute-fit';
 
@@ -38,20 +38,28 @@ export const OverflowContainer: React.FC<Props> = ({
       ? computeFit({widths, overflowWidth, maxWidth, gap})
       : null;
 
+  const isFitted = fitResult != null;
   const onReadyMemo = useCallback(() => onReady?.(), [onReady]);
-  useEffect(() => {
-    if (fitResult != null) {
+  // Layout effect so the parent's reveal is committed before paint, instead of
+  // a frame later followed by an extra native layout pass.
+  useLayoutEffect(() => {
+    if (isFitted) {
       onReadyMemo();
     }
-  }, [fitResult, onReadyMemo]);
+  }, [isFitted, onReadyMemo]);
 
   const hiddenCount = items.length - (fitResult?.visibleCount ?? 0);
 
   return (
     <View style={[styles.row, {gap}]}>
-      {/* Hidden, out-of-flow measurer; onLayout keeps widthByKey fresh. */}
+      {/* Hidden, out-of-flow measurer; onLayout keeps widthByKey fresh. It is
+          only constrained to maxWidth once that is known: while it is still 0
+          the children would measure as 0 and not be measured again. */}
       <View
-        style={[styles.measureWrapper, {width: maxWidth}]}
+        style={[
+          styles.measureWrapper,
+          maxWidth > 0 ? {width: maxWidth} : undefined,
+        ]}
         pointerEvents="none"
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
