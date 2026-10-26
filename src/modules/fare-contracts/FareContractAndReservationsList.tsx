@@ -1,6 +1,6 @@
 import React from 'react';
 import {FareContractOrReservation} from './FareContractOrReservation';
-import {Reservation} from '@atb/modules/ticketing';
+import {PreReservation, Reservation} from '@atb/modules/ticketing';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {EmptyState} from '@atb/components/empty-state';
 import {getSortedFareContractsAndReservations} from './sort-fc-or-reservation';
@@ -9,9 +9,12 @@ import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import {PreReservationCard} from './PreReservationCard';
+import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 type Props = {
   reservations: Reservation[];
+  preReservations?: PreReservation[];
   fareContracts: FareContractType[];
   now: number;
   onPressFareContract: (orderId: string) => void;
@@ -26,6 +29,7 @@ type Props = {
 export const FareContractAndReservationsList: React.FC<Props> = ({
   fareContracts,
   reservations,
+  preReservations,
   now,
   onPressFareContract,
   onNavigateToBonusScreen,
@@ -41,11 +45,24 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
     now,
   );
 
+  // Hide pre-reservations that never got a reservation or fare contract, e.g.
+  // if the Firestore listener failed.
+  const recentPreReservations = preReservations?.filter(
+    (r) => now - r.created.getTime() < ONE_HOUR_MS,
+  );
+
   return (
     <View style={styles.container}>
-      {!fcAndReservations.length && (
+      {!fcAndReservations.length && !recentPreReservations?.length && (
         <EmptyState {...emptyStateConfig} testID="fareContracts" />
       )}
+      {recentPreReservations?.map((preReservation) => (
+        <PreReservationCard
+          key={preReservation.orderId}
+          preReservation={preReservation}
+          now={now}
+        />
+      ))}
       {fcAndReservations?.map((fcOrReservation, index) => (
         <FareContractOrReservation
           now={now}

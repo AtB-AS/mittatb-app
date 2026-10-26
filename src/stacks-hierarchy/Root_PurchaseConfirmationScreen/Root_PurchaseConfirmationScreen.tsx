@@ -12,6 +12,7 @@ import {
   PaymentType,
   ReserveOffer,
   useCancelPaymentMutation,
+  useTicketingContext,
 } from '@atb/modules/ticketing';
 import {
   PurchaseConfirmationTexts,
@@ -83,6 +84,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {userId} = useAuthContext();
+  const {addPreReservation} = useTicketingContext();
   const [paymentData, setPaymentData] = useState<string>();
 
   const {previousPaymentMethod, recurringPaymentMethods} =
@@ -237,6 +239,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       {
         onError: () => {
           // If the cancel fails, the payment may have gone through
+          addPreReservation(
+            reserveOfferResponse.orderId,
+            paymentMethod?.paymentType,
+          );
           navigateToTickets({refreshTickets: true});
         },
       },
@@ -282,6 +288,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentMethod?.paymentType,
       reserveMutation.data?.recurringPaymentId,
     );
+    if (reserveMutation.data?.orderId) {
+      addPreReservation(
+        reserveMutation.data.orderId,
+        isFree ? undefined : paymentMethod?.paymentType,
+      );
+    }
     let savedTripPattern: TripPattern | undefined;
     if (tripPatternToSave) {
       addTripPattern(tripPatternToSave);
@@ -296,6 +308,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userId,
     paymentMethod?.paymentType,
     reserveMutation.data?.recurringPaymentId,
+    reserveMutation.data?.orderId,
+    addPreReservation,
+    isFree,
     tripPatternToSave,
     params.tripAnalytics,
     addTripPattern,

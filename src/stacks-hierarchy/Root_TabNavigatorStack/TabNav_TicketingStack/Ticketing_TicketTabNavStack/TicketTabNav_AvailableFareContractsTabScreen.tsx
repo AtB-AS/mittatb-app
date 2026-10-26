@@ -40,7 +40,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
   route,
 }: Props) => {
   const isFocused = useIsFocusedAndActive();
-  const {reservations} = useTicketingContext();
+  const {reservations, preReservations} = useTicketingContext();
   const {serverNow} = useTimeContext(
     isFocused ? ONE_SECOND_MS : ONE_SECOND_MS * 10,
   );
@@ -189,6 +189,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           )}
         <FareContractAndReservationsList
           reservations={reservations}
+          preReservations={preReservations}
           fareContracts={availableFareContracts}
           now={serverNow}
           onNavigateToBonusScreen={navigateToBonusScreen}

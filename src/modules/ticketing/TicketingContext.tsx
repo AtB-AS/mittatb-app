@@ -1,6 +1,12 @@
-import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 import {useAuthContext} from '@atb/modules/auth';
-import {Reservation, PaymentStatus} from './types';
+import {Reservation, PaymentStatus, PaymentType, PreReservation} from './types';
 import {FareContractType} from '@atb-as/utils';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {differenceInMinutes} from 'date-fns';
@@ -22,6 +28,7 @@ type TicketingReducerState = {
   sentFareContracts: FareContractType[];
   reservations: Reservation[];
   rejectedReservations: Reservation[];
+  preReservations: PreReservation[];
   customerProfile: CustomerProfile | undefined;
 };
 
@@ -37,6 +44,7 @@ type TicketingReducerAction =
   | {
       type: 'UPDATE_RESERVATIONS';
       reservations: Reservation[];
+      receivedOrderIds: string[];
     }
   | {
       type: 'UPDATE_REJECTED_RESERVATIONS';
@@ -45,6 +53,13 @@ type TicketingReducerAction =
   | {
       type: 'UPDATE_CUSTOMER_PROFILE';
       customerProfile: CustomerProfile | undefined;
+    }
+  | {
+      type: 'ADD_PRE_RESERVATION';
+      preReservation: PreReservation;
+    }
+  | {
+      type: 'CLEAR_PRE_RESERVATIONS';
     };
 
 type TicketingReducer = (
@@ -70,6 +85,9 @@ const ticketingReducer: TicketingReducer = (
         reservations: prevState.reservations.filter(
           (r) => !currentFareContractOrderIds.includes(r.orderId),
         ),
+        preReservations: prevState.preReservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
       };
     }
     case 'UPDATE_SENT_FARE_CONTRACTS': {
@@ -80,6 +98,9 @@ const ticketingReducer: TicketingReducer = (
         ...prevState,
         sentFareContracts: action.fareContracts,
         reservations: prevState.reservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
+        preReservations: prevState.preReservations.filter(
           (r) => !currentFareContractOrderIds.includes(r.orderId),
         ),
       };
@@ -100,6 +121,9 @@ const ticketingReducer: TicketingReducer = (
         reservations: action.reservations.filter(
           (r) => !combinedOrderIds.includes(r.orderId),
         ),
+        preReservations: prevState.preReservations.filter(
+          (r) => !action.receivedOrderIds.includes(r.orderId),
+        ),
       };
     }
     case 'UPDATE_REJECTED_RESERVATIONS': {
@@ -119,6 +143,23 @@ const ticketingReducer: TicketingReducer = (
         customerProfile: action.customerProfile,
       };
     }
+    case 'ADD_PRE_RESERVATION': {
+      const knownOrderIds = [
+        ...prevState.fareContracts,
+        ...prevState.sentFareContracts,
+        ...prevState.reservations,
+      ].map((r) => r.orderId);
+      if (knownOrderIds.includes(action.preReservation.orderId)) {
+        return prevState;
+      }
+      return {
+        ...prevState,
+        preReservations: [action.preReservation, ...prevState.preReservations],
+      };
+    }
+    case 'CLEAR_PRE_RESERVATIONS': {
+      return {...prevState, preReservations: []};
+    }
   }
 };
 
@@ -126,9 +167,13 @@ type TicketingState = {
   fareContracts: FareContractType[];
   sentFareContracts: FareContractType[];
   findFareContractById: (id: string) => FareContractType | undefined;
+  addPreReservation: (orderId: string, paymentType?: PaymentType) => void;
 } & Pick<
   TicketingReducerState,
-  'reservations' | 'customerProfile' | 'rejectedReservations'
+  | 'reservations'
+  | 'customerProfile'
+  | 'rejectedReservations'
+  | 'preReservations'
 >;
 
 const initialReducerState: TicketingReducerState = {
@@ -136,6 +181,7 @@ const initialReducerState: TicketingReducerState = {
   sentFareContracts: [],
   reservations: [],
   rejectedReservations: [],
+  preReservations: [],
   customerProfile: undefined,
 };
 
@@ -171,6 +217,19 @@ export const TicketingContextProvider = ({children}: Props) => {
       fareContracts: fareContracts ?? [],
     });
   }, [fareContracts]);
+
+  useEffect(() => {
+    dispatch({type: 'CLEAR_PRE_RESERVATIONS'});
+  }, [userId]);
+
+  const addPreReservation = useCallback(
+    (orderId: string, paymentType?: PaymentType) =>
+      dispatch({
+        type: 'ADD_PRE_RESERVATION',
+        preReservation: {orderId, paymentType, created: new Date()},
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (userId && enable_ticketing) {
@@ -217,6 +276,9 @@ export const TicketingContextProvider = ({children}: Props) => {
                   !isAbortedPaymentStatus(r.paymentStatus) &&
                   !isOlderThanAnHour(r.created),
               ),
+              receivedOrderIds: reservations
+                .filter((r) => !!r.paymentStatus)
+                .map((r) => r.orderId),
             }),
           onError: (err) =>
             notifyBugsnag(err, {
@@ -273,6 +335,7 @@ export const TicketingContextProvider = ({children}: Props) => {
           state.fareContracts
             .concat(state.sentFareContracts)
             .find((fc) => fc.id === id),
+        addPreReservation,
       }}
     >
       {children}
