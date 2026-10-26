@@ -102,7 +102,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
         return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
-          borderColor: theme.color.interactive.destructive.default.background,
+          borderColor: theme.color.surface.error.strong.background,
         };
       } else {
         return undefined;
@@ -191,7 +191,9 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
               <InternalTextInput
                 ref={combinedRef}
                 style={styles.inputPhoneNumber}
-                placeholderTextColor={theme.color.foreground.dynamic.secondary}
+                placeholderTextColor={
+                  theme.color.surface.neutral.strong.foreground.secondary
+                }
                 onFocus={onFocusEvent}
                 onBlur={onBlurEvent}
                 maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -257,9 +259,9 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
 
 const useInputStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.color.background.neutral[0].background,
+    borderColor: theme.color.surface.neutral.strong.background,
   },
   containerMultiline: {
     paddingTop: theme.spacing.small,
@@ -283,7 +285,7 @@ const useInputStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   inputPhoneNumber: {
-    color: theme.color.foreground.dynamic.primary,
+    color: theme.color.surface.neutral.strong.foreground.primary,
     fontSize: theme.typography.body__m.fontSize,
     flex: 1,
   },

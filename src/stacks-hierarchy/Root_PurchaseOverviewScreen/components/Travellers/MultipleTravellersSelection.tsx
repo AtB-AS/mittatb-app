@@ -80,7 +80,6 @@ export function MultipleTravellersSelection(props: Props) {
             addCount={() => onIncrementTraveller(u)}
             removeCount={() => onDecrementTraveller(u)}
             testID={'counterInput_' + u.userTypeString.toLowerCase()}
-            color={theme.color.interactive[2]}
             subtext={getTextForLanguage(u.alternativeDescriptions, language)}
           />
         ))}
@@ -93,7 +92,6 @@ export function MultipleTravellersSelection(props: Props) {
             count={s.count}
             addCount={() => onIncrementBaggage(s)}
             removeCount={() => onDecrementBaggage(s)}
-            color={theme.color.interactive[2]}
             subtext={getTextForLanguage(s.description, language)}
             baggageType={s.baggageType}
           />

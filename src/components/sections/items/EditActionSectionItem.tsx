@@ -48,7 +48,7 @@ export const EditActionSectionItem = forwardRef<any, Props>(
         <ThemeIcon
           svg={rightIcon ?? Edit}
           size="normal"
-          color={theme.color.interactive[0].default.background}
+          color={theme.color.surface.accent.strong.background}
         />
       </NativeTouchable>
     );

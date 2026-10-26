@@ -1,10 +1,5 @@
 import {ViewStyle} from 'react-native';
-import {
-  ContrastColor,
-  InteractiveColor,
-  Theme,
-  useThemeContext,
-} from '@atb/theme';
+import {Theme, useThemeContext} from '@atb/theme';
 import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
@@ -14,16 +9,12 @@ export type BaseSectionItemProps = {
   radiusSize?: keyof Theme['border']['radius'];
   testID?: string;
   active?: boolean;
-  interactiveColor?: InteractiveColor;
 };
 
 export type SectionReturnType = {
   topContainer: ViewStyle;
   contentContainer: ViewStyle;
-  interactiveColor: InteractiveColor<ContrastColor>;
 };
-
-const getInteractiveColor = (theme: Theme) => theme.color.interactive[2];
 
 export function useSectionItem({
   transparent = false,
@@ -31,22 +22,23 @@ export function useSectionItem({
   radius,
   radiusSize,
   active,
-  interactiveColor: customInteractiveColor,
 }: BaseSectionItemProps): SectionReturnType {
   const {theme} = useThemeContext();
-  const interactiveColor = customInteractiveColor ?? getInteractiveColor(theme);
+  const {neutral, accent} = theme.color.surface;
 
   const topContainer: ViewStyle = {
     ...mapToPadding(theme, type),
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
-      : interactiveColor[active ? 'active' : 'default'].background,
+      : active
+        ? accent.subtle.background
+        : neutral.strong.background,
     borderColor: active
-      ? interactiveColor.outline.background
+      ? accent.strong.background
       : transparent
         ? 'transparent'
-        : interactiveColor.default.background,
+        : neutral.strong.background,
     borderWidth: theme.border.width.slim,
   };
   const contentContainer: ViewStyle = {
@@ -56,7 +48,6 @@ export function useSectionItem({
   return {
     topContainer,
     contentContainer,
-    interactiveColor,
   };
 }
 
