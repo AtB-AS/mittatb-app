@@ -221,6 +221,11 @@ const TicketingTexts = {
     ),
   },
   reservation: {
+    preReservation: _(
+      'Behandler kjøp...',
+      'Processing purchase...',
+      'Behandlar kjøp...',
+    ),
     reserving: _(
       'Venter på betaling...',
       'Waiting for payment...',
@@ -235,11 +240,6 @@ const TicketingTexts = {
       'Billetten er ikke gyldig. Betaling avvist.',
       'Ticket is not valid. Payment rejected',
       'Billetten er ikkje gyldig. Betaling avvist.',
-    ),
-    processing: _(
-      'Behandler kjøp...',
-      'Processing purchase...',
-      'Behandlar kjøp...',
     ),
     orderId: (orderId: string) =>
       _(`Ordre-ID: ${orderId}`, `Order ID: ${orderId}`, `Ordre-ID: ${orderId}`),

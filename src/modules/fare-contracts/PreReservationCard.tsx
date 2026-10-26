@@ -21,7 +21,7 @@ export const PreReservationCard: React.FC<Props> = ({preReservation, now}) => {
       <GenericSectionItem style={styles.genericSectionItemOverrides}>
         <WithValidityLine preReservation={preReservation} now={now}>
           <ThemeText typography="heading__l">
-            {t(TicketingTexts.reservation.processing)}
+            {t(TicketingTexts.reservation.preReservation)}
           </ThemeText>
         </WithValidityLine>
       </GenericSectionItem>

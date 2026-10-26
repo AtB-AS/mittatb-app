@@ -43,10 +43,7 @@ export type Reservation = {
   url: string;
 };
 
-/**
- * Local placeholder for a purchase whose reservation hasn't arrived from
- * Firestore yet.
- */
+/** Local placeholder for a purchase whose reservation hasn't arrived yet */
 export type PreReservation = {
   orderId: string;
   created: Date;
