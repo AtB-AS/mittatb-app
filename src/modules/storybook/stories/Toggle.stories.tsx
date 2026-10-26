@@ -8,37 +8,22 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
-import {themes} from '@atb/theme/colors';
 
 type ToggleProps = React.ComponentProps<typeof Toggle>;
 
-type ToggleMetaProps = ThemedStoryProps<
-  ToggleProps & {interactiveColorType: string}
->;
+type ToggleMetaProps = ThemedStoryProps<ToggleProps>;
 
 const ToggleMeta: Meta<ToggleMetaProps> = {
   title: 'Toggle',
   component: Toggle,
   argTypes: {
-    interactiveColorType: {
-      options: [...Object.keys(themes['light'].color.interactive)],
-      control: {
-        type: 'select',
-      },
-    },
     ...themedStoryControls,
   },
   args: {
-    interactiveColorType: '2',
     ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => {
-      const interactiveColors = themes[args.theme].color.interactive;
-      const storyInteractiveColor =
-        interactiveColors[
-          args.interactiveColorType as keyof typeof interactiveColors
-        ];
       return (
         <View
           style={{
@@ -53,14 +38,12 @@ const ToggleMeta: Meta<ToggleMetaProps> = {
             args={{
               ...args,
               value: true,
-              interactiveColor: storyInteractiveColor,
             }}
           />
           <Story
             args={{
               ...args,
               value: false,
-              interactiveColor: storyInteractiveColor,
             }}
           />
           <Story
@@ -68,7 +51,6 @@ const ToggleMeta: Meta<ToggleMetaProps> = {
               ...args,
               value: true,
               disabled: true,
-              interactiveColor: storyInteractiveColor,
             }}
           />
           <Story
@@ -76,7 +58,6 @@ const ToggleMeta: Meta<ToggleMetaProps> = {
               ...args,
               value: false,
               disabled: true,
-              interactiveColor: storyInteractiveColor,
             }}
           />
         </View>

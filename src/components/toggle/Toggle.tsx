@@ -3,27 +3,19 @@ import React, {useEffect, useState} from 'react';
 import {AccessibilityProps, Switch, SwitchProps, Platform} from 'react-native';
 import {useThemeContext} from '@atb/theme';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {InteractiveColor} from '@atb/theme/colors';
 
 type Props = Pick<
   SwitchProps,
   'value' | 'onValueChange' | 'testID' | 'disabled'
-> & {
-  interactiveColor?: InteractiveColor;
-} & AccessibilityProps;
+> &
+  AccessibilityProps;
 
 // A bug in RN borks Switch animations when Switch is used inside react navigation
 // for Android. A small delay to render and setting value through state
 // seems to mitigate the bug
-export function Toggle({
-  value,
-  onValueChange,
-  interactiveColor,
-  ...props
-}: Props) {
+export function Toggle({value, onValueChange, ...props}: Props) {
   const [checked, setChecked] = useState(value);
   const {theme} = useThemeContext();
-  const interactiveColorValue = interactiveColor ?? theme.color.interactive[2];
   const backgroundColor = theme.color.background.neutral[3].background;
   const fontScale = useFontScale();
   const scale = Math.min(1.5, Math.max(fontScale, 1));
@@ -56,7 +48,7 @@ export function Toggle({
       value={checked}
       onValueChange={(value) => handleValueChange(value)}
       trackColor={{
-        true: interactiveColorValue.outline.background,
+        true: theme.color.surface.accent.strong.background,
         false: backgroundColor,
       }}
       thumbColor="white"
