@@ -11,7 +11,9 @@ import {
   ReserveOfferResponse,
   PaymentType,
   ReserveOffer,
+  getLatestPaymentAgreement,
   useCancelPaymentMutation,
+  useListPaymentAgreementsQuery,
   type PreReservation,
 } from '@atb/modules/ticketing';
 import {
@@ -107,7 +109,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {recipient} = params;
   const productAlternatives = useProductAlternatives(selection);
 
-  const {isSaveTripsEnabled} = useFeatureTogglesContext();
+  const {isSaveTripsEnabled, isVippsPaymentAgreementEnabled} =
+    useFeatureTogglesContext();
   const isAutoSaveTripsEnabled = useIsExperimentalEnabled();
   const {addTripPattern, canAddTripPattern} = useStoredTripPatterns();
   // Several sources can end the same purchase, so only save the trip and
@@ -170,9 +173,20 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     ...baggageProductOffers,
   ];
 
+  const shouldUsePaymentAgreement =
+    isVippsPaymentAgreementEnabled &&
+    paymentMethod?.paymentType === PaymentType.Vipps &&
+    !isFree;
+  const {data: paymentAgreements, isFetching: isFetchingPaymentAgreements} =
+    useListPaymentAgreementsQuery(shouldUsePaymentAgreement);
+  const paymentAgreementId = shouldUsePaymentAgreement
+    ? getLatestPaymentAgreement(paymentAgreements, PaymentType.Vipps)?.id
+    : undefined;
+
   const reserveMutation = useReserveOfferMutation({
     offers,
     paymentMethod: isFree ? undefined : paymentMethod,
+    paymentAgreementId,
     recipient,
     shouldSavePaymentMethod,
     paymentData,
@@ -565,6 +579,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         <PaymentButton
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}
+          isFetchingPaymentAgreements={
+            shouldUsePaymentAgreement && isFetchingPaymentAgreements
+          }
           mode={params.mode}
           tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
@@ -603,6 +620,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 type PaymentButtonProps = {
   isSearchingOffer: boolean;
   isOfferError: boolean;
+  isFetchingPaymentAgreements: boolean;
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
   tripAnalytics?: TripAnalytics;
@@ -615,6 +633,7 @@ type PaymentButtonProps = {
 const PaymentButton = ({
   isSearchingOffer,
   isOfferError,
+  isFetchingPaymentAgreements,
   totalPrice,
   mode,
   tripAnalytics,
@@ -668,7 +687,11 @@ const PaymentButton = ({
           ? t(PurchaseConfirmationTexts.payTotal.text(totalPriceString))
           : t(PurchaseConfirmationTexts.complete)
       }
-      disabled={!!isOfferError || reserveStatus === 'success'}
+      disabled={
+        !!isOfferError ||
+        reserveStatus === 'success' ||
+        isFetchingPaymentAgreements
+      }
       onPress={() => {
         if (paymentMethod) {
           analytics.logEvent('Ticketing', 'Confirm payment button clicked', {

@@ -81,7 +81,8 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
             </ThemeText>
           </View>
           {status === 'reserving' &&
-            reservation.paymentType === PaymentType.Vipps && (
+            reservation.paymentType === PaymentType.Vipps &&
+            !!reservation.url && (
               <Button
                 surfaceColor="accent"
                 expanded={true}

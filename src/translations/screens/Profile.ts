@@ -50,6 +50,11 @@ const ProfileTexts = {
         },
         paymentMethods: {
           label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
+          labelWithAgreements: _(
+            'Betalingsmåter',
+            'Payment methods',
+            'Betalingsmåtar',
+          ),
         },
         editProfile: {
           label: _('Rediger profil', 'Edit profile', 'Rediger profil'),
