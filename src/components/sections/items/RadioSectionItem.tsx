@@ -56,13 +56,11 @@ export function RadioSectionItem({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const color = theme.color.interactive[2];
+  const {neutral, accent} = theme.color.surface;
 
   const textColor = selected
-    ? color.active.foreground.primary
-    : color.default.foreground.primary;
-
-  const selectedRadioColor = color.outline.background;
+    ? accent.subtle.foreground.primary
+    : neutral.strong.foreground.primary;
 
   const a11yLabel = accessibilityLabel || `${text}, ${subtext || ''}`;
 
@@ -89,7 +87,7 @@ export function RadioSectionItem({
     >
       <View style={style.spaceBetween}>
         <View style={styles.radioIcon}>
-          <RadioIcon checked={selected} color={selectedRadioColor || 'black'} />
+          <RadioIcon checked={selected} />
         </View>
         {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
         <View style={styles.textContainer}>
