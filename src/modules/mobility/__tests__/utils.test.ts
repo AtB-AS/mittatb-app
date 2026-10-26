@@ -322,8 +322,8 @@ describe('formatRange', () => {
     expect(formatRange(2500, Language.Norwegian)).toBe('2,5 km');
   });
 
-  it('shows a dash when the range is unknown rather than claiming 0 km', () => {
-    expect(formatRange(null, Language.Norwegian)).toBe('–');
-    expect(formatRange(undefined, Language.Norwegian)).toBe('–');
+  it('shows "- -" when the range is unknown rather than claiming 0 km', () => {
+    expect(formatRange(null, Language.Norwegian)).toBe('- -');
+    expect(formatRange(undefined, Language.Norwegian)).toBe('- -');
   });
 });
