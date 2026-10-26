@@ -5,8 +5,6 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
 import {getReferenceDataName} from '@atb/modules/configuration';
 import {FareZoneWithMetadata} from './types';
@@ -46,11 +44,6 @@ const FareZonesSelectorButtons = ({
         )}
         accessibilityHint={t(FareZonesTexts.location.zonePicker.a11yHintFrom)}
         onPress={() => onVenueSearchClick('from')}
-        icon={
-          selection.zones?.from.resultType === 'geolocation' ? (
-            <ThemeIcon svg={Location} />
-          ) : undefined
-        }
         highlighted={selectNext === 'from'}
         testID="searchFromButton"
       />
@@ -65,11 +58,6 @@ const FareZonesSelectorButtons = ({
           )}
           accessibilityHint={t(FareZonesTexts.location.zonePicker.a11yHintTo)}
           onPress={() => onVenueSearchClick('to')}
-          icon={
-            selection.zones?.to.resultType === 'geolocation' ? (
-              <ThemeIcon svg={Location} />
-            ) : undefined
-          }
           highlighted={selectNext === 'to'}
           testID="searchToButton"
         />

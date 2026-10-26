@@ -32,6 +32,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: buttonOnPress,
         text: t(NotificationPermissionTexts.button),
         expanded: true,

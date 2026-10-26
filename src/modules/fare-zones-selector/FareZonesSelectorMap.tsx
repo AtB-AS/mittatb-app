@@ -51,7 +51,6 @@ const FareZonesSelectorMap = ({
 
   const {t, language} = useTranslation();
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[0];
   const a11yContext = useAccessibilityContext();
 
   const {location} = useGeolocationContext();
@@ -110,9 +109,9 @@ const FareZonesSelectorMap = ({
               ]}
             >
               <Button
+                surfaceColor="accent"
                 expanded={true}
                 onPress={onSave}
-                interactiveColor={interactiveColor}
                 text={t(FareZonesTexts.saveButton.text)}
                 accessibilityHint={t(FareZonesTexts.saveButton.a11yHint)}
                 testID="saveZonesButton"
@@ -199,9 +198,9 @@ const FareZonesSelectorMap = ({
             {onSave && (
               <View style={styles.saveButton}>
                 <Button
+                  surfaceColor="accent"
                   expanded={true}
                   onPress={onSave}
-                  interactiveColor={interactiveColor}
                   text={t(FareZonesTexts.saveButton.text)}
                   accessibilityHint={t(FareZonesTexts.saveButton.a11yHint)}
                   testID="saveZonesButton"

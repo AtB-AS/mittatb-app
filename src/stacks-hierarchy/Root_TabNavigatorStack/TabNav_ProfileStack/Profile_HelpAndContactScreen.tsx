@@ -4,7 +4,7 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
 import {View} from 'react-native';
@@ -25,7 +25,6 @@ type Props = ProfileScreenProps<'Profile_HelpAndContactScreen'>;
 export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
   const style = useStyle();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const {contactPhoneNumber, configurableLinks} =
     useFirestoreConfigurationContext();
 
@@ -47,7 +46,6 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
   );
 
   const hasContactPhoneNumber = !!contactPhoneNumber;
-  const backgroundColor = theme.color.background.neutral[1];
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -133,9 +131,9 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
           {hasContactPhoneNumber && (
             <View style={style.buttonContainer}>
               <Button
+                surfaceColor="accent"
                 expanded={true}
                 mode="secondary"
-                backgroundColor={backgroundColor}
                 text={t(CustomerServiceText.contact.title)}
                 accessibilityHint={t(CustomerServiceText.contact.a11yHint)}
                 rightIcon={{svg: Support}}
@@ -152,7 +150,7 @@ export const Profile_HelpAndContactScreen = ({navigation}: Props) => {
 };
 
 const openLink = async (url: string) => {
-  openInAppBrowser(url, 'close');
+  openInAppBrowser(url);
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({

@@ -156,9 +156,9 @@ const PurchaseOverviewTexts = {
         ),
       message: (changedItems: string) =>
         _(
-          `Produktet er ikke tilgjengelig for valgt ${changedItems}, og har derfor blitt endret.`,
-          `The product is not available for the selected ${changedItems}, and has therefore been changed.`,
-          `Produktet er ikkje tilgjengeleg for valt ${changedItems}, og har difor blitt endra.`,
+          `${capitalizeFirstLetter(changedItems)} ble endret fordi tidligere valg ikke gjelder for denne billetten.`,
+          `${capitalizeFirstLetter(changedItems)} changed because the previous selection doesn't apply to this ticket.`,
+          `${capitalizeFirstLetter(changedItems)} vart endra fordi tidlegare val ikkje gjeld for denne billetten.`,
         ),
       items: {
         userProfile: _('reisekategori', 'traveller category', 'reisekategori'),

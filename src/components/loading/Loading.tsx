@@ -63,7 +63,7 @@ export const Loading: React.FC<LoadingProps> = ({
 
   const rotationTransform = useDerivedValue(() => {
     return [{rotate: progress.value * 2 * Math.PI}];
-  }, []);
+  });
 
   if (!animating && hidesWhenStopped) return null;
 

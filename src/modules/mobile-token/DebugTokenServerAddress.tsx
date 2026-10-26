@@ -38,6 +38,7 @@ export const DebugTokenServerAddress = () => {
         clearButtonMode="always"
       />
       <Button
+        surfaceColor="accent"
         onPress={async () => await saveDebugIpAddress(ipAddress)}
         text="Use IP Address"
         style={styles.button}

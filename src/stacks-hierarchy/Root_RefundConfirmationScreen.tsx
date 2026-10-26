@@ -9,7 +9,7 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   useRefundFareContractMutation,
   useRefundOptionsQuery,
@@ -37,7 +37,6 @@ type Props = RootStackScreenProps<'Root_RefundConfirmationScreen'>;
 export function Root_RefundConfirmationScreen({navigation, route}: Props) {
   const {orderId, fareProductType, state} = route.params;
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   const {logEvent} = useAnalyticsContext();
   const focusRef = useFocusOnLoad(navigation);
@@ -143,7 +142,7 @@ export function Root_RefundConfirmationScreen({navigation, route}: Props) {
           text={t(FareContractTexts.refund.confirm)}
           loading={refundStatus === 'pending' || optionsQuery.isPending}
           disabled={noLongerRefundable}
-          interactiveColor={theme.color.interactive.destructive}
+          surfaceColor="error"
         />
       </View>
     </FullScreenView>

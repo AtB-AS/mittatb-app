@@ -30,6 +30,8 @@ export const Root_ShmoHelpScreen = ({
     'bookingId' in route.params ? route.params?.bookingId : undefined;
   const stationId =
     'stationId' in route.params ? route.params?.stationId : undefined;
+  const vehicleTypeId =
+    'vehicleTypeId' in route.params ? route.params?.vehicleTypeId : undefined;
 
   const isBicycle = formFactor === FormFactor.Bicycle;
 
@@ -54,7 +56,7 @@ export const Root_ShmoHelpScreen = ({
       : bookingId
         ? {bookingId}
         : stationId
-          ? {stationId}
+          ? {stationId, vehicleTypeId}
           : {vehicleId: undefined}),
   };
 

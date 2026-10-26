@@ -1,5 +1,5 @@
 import {getAll, getRemoteConfig} from '@react-native-firebase/remote-config';
-import {ENABLE_TICKETING, CUSTOMER_SERVICE_URL} from '@env';
+import {ENABLE_TICKETING} from '@env';
 import {
   MAPBOX_API_TOKEN,
   MAPBOX_NSR_SOURCE_LAYER_ID,
@@ -8,7 +8,6 @@ import {
 } from '@env';
 
 export type RemoteConfig = {
-  customer_service_url: string;
   default_map_filter: string;
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
@@ -65,7 +64,6 @@ export type RemoteConfig = {
   enable_token_fallback: boolean;
   enable_travel_aid_stop_button: boolean;
   enable_travel_aid: boolean;
-  enable_trip_ticket_card: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
   enable_vipps_payment_agreement: boolean;
@@ -92,7 +90,6 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
     mobility: {
       CAR: {showAll: true},
@@ -150,7 +147,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_token_fallback: true,
   enable_travel_aid_stop_button: false,
   enable_travel_aid: false,
-  enable_trip_ticket_card: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
   enable_vipps_payment_agreement: false,
@@ -181,9 +177,6 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = getAll(getRemoteConfig());
 
-  const customer_service_url =
-    values['customer_service_url']?.asString() ??
-    defaultRemoteConfig.customer_service_url;
   const default_map_filter =
     values['default_map_filter']?.asString() ??
     defaultRemoteConfig.default_map_filter;
@@ -327,9 +320,6 @@ export function getConfig(): RemoteConfig {
   const enable_travel_aid_stop_button =
     values['enable_travel_aid_stop_button']?.asBoolean() ??
     defaultRemoteConfig.enable_travel_aid_stop_button;
-  const enable_trip_ticket_card =
-    values['enable_trip_ticket_card']?.asBoolean() ??
-    defaultRemoteConfig.enable_trip_ticket_card;
   const enable_vehicles_in_map =
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
@@ -405,7 +395,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.use_trygg_overgang_qr_code;
 
   return {
-    customer_service_url,
     default_map_filter,
     disable_email_field_in_profile_page,
     disable_travelcard,
@@ -457,7 +446,6 @@ export function getConfig(): RemoteConfig {
     enable_token_fallback,
     enable_travel_aid_stop_button,
     enable_travel_aid,
-    enable_trip_ticket_card,
     enable_vehicles_in_map,
     enable_vipps_login,
     enable_vipps_payment_agreement,

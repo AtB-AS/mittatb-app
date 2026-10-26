@@ -72,6 +72,8 @@ import {BookingInfoBox} from './components/BookingInfoBox';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {DepartureTime, LineChip} from '@atb/components/estimated-call';
+import {useNow} from '@atb/utils/use-now';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {
   FavouriteDepartureLine,
   useFavoritesContext,
@@ -114,8 +116,6 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
-  const ctaColor = theme.color.interactive[0];
   const backgroundColor = theme.color.background.neutral[1];
   const themeColor = theme.color.background.neutral[1];
 
@@ -132,6 +132,7 @@ export const DepartureDetailsScreenComponent = ({
   const {requestReview} = useInAppReviewFlow();
 
   const isFocusedAndActive = useIsFocusedAndActive();
+  const now = useNow(5 * ONE_SECOND_MS);
   const {data: serviceJourney, isLoading} = useDepartureDetailsQuery(
     isFocusedAndActive,
     activeItem,
@@ -328,16 +329,20 @@ export const DepartureDetailsScreenComponent = ({
                 ) ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
               {fromCall && shouldShowDepartureTime && (
-                <DepartureTime departure={fromCall} color={themeColor} />
+                <DepartureTime
+                  departure={fromCall}
+                  color={themeColor}
+                  now={now}
+                />
               )}
             </View>
             {shouldShowTravelAid && (
               <Button
+                surfaceColor="accent"
                 expanded={true}
                 style={styles.travelAidButton}
                 onPress={handleTravelAidPress}
                 text={t(DepartureDetailsTexts.header.journeyAid)}
-                interactiveColor={ctaColor}
                 testID="journeyAidButton"
               />
             )}
@@ -352,6 +357,7 @@ export const DepartureDetailsScreenComponent = ({
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
                     <Button
+                      surfaceColor="accent"
                       mode="secondary"
                       type="small"
                       expanded={true}
@@ -361,7 +367,6 @@ export const DepartureDetailsScreenComponent = ({
                           ? DepartureDetailsTexts.live(t(translatedModeName))
                           : DepartureDetailsTexts.map,
                       )}
-                      interactiveColor={interactiveColor}
                       onPress={handleMapButtonPress}
                     />
                   </View>
@@ -397,7 +402,6 @@ export const DepartureDetailsScreenComponent = ({
                 showPagination={hasMultipleItems}
                 currentDate={activeItem?.date}
                 isTripCancelled={activeItem?.isTripCancelled}
-                backgroundColor={backgroundColor}
               />
             ) : (
               <MessageInfoBox
@@ -830,7 +834,6 @@ const FavoriteButton = ({
   line: LineFragment;
 }) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
@@ -862,12 +865,12 @@ const FavoriteButton = ({
   return (
     <>
       <Button
+        surfaceColor="accent"
         mode="secondary"
         type="small"
         expanded={false}
         leftIcon={{svg: getFavoriteIcon(existingFavorite)}}
         text={t(FavoriteDeparturesTexts.favoriteButton)}
-        interactiveColor={theme.color.interactive['0']}
         accessibilityLabel={
           existingFavorite &&
           (existingFavorite.destinationDisplay

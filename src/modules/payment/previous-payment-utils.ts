@@ -11,12 +11,12 @@ import {onlyUniques} from '@atb/utils/only-uniques';
 import {isNonRecurringPaymentType} from './utils';
 import {useFeatureTogglesContext} from '../feature-toggles';
 
-export function usePreviousPaymentMethods(): {
+export function usePreviousPaymentMethods(enabled: boolean = true): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
   previousPaymentMethod: PaymentMethod | undefined;
 } {
   const {userId} = useAuthContext();
-  const {data: recurringPayments} = useListRecurringPaymentsQuery(true);
+  const {data: recurringPayments} = useListRecurringPaymentsQuery(enabled);
   const [previousPaymentMethod, setPreviousPaymentMethod] =
     useState<PaymentMethod>();
   const {paymentTypes} = useFirestoreConfigurationContext();

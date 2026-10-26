@@ -6,12 +6,17 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {Alert, Linking, Platform} from 'react-native';
 import {z} from 'zod';
 import {useInterval} from '@atb/utils/use-interval';
 import {useServerTimeQuery} from './use-server-time-query';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {DeviceClockTexts} from '@atb/translations';
+import {tGlobal} from '@atb/modules/locale';
 
 const TEN_SECONDS_MS = ONE_SECOND_MS * 10;
+
+const INCORRECT_DEVICE_TIME_THRESHOLD_MS = 10 * ONE_MINUTE_MS;
 
 type TimeContextState = {
   /**
@@ -25,14 +30,16 @@ type TimeContextState = {
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
 /**
- * The number of milliseconds the device time is ahead of server time.
+ * The number of milliseconds the server time is ahead of device time.
  */
 let serverTimeOffsetGlobal = 0;
 
 /**
  * Returns the current UNIX time in milliseconds.
  */
-export const getServerNowGlobal = () => Date.now() - serverTimeOffsetGlobal;
+export const getServerNowGlobal = () => Date.now() + serverTimeOffsetGlobal;
+
+let hasShownIncorrectDeviceTimeAlert = false;
 
 type Props = {
   children: React.ReactNode;
@@ -52,6 +59,13 @@ export const TimeContextProvider = ({children}: Props) => {
     const timeData = TimeResult.safeParse(data).data;
     if (timeData?.timestampMs) {
       serverTimeOffsetGlobal = timeData.timestampMs - Date.now();
+
+      const isDeviceTimeIncorrect =
+        Math.abs(serverTimeOffsetGlobal) > INCORRECT_DEVICE_TIME_THRESHOLD_MS;
+      if (isDeviceTimeIncorrect && !hasShownIncorrectDeviceTimeAlert) {
+        hasShownIncorrectDeviceTimeAlert = true;
+        showIncorrectDeviceTimeAlert();
+      }
     }
   }, [data]);
 
@@ -112,3 +126,26 @@ export function useTimeContext(updateInterval: number = TEN_SECONDS_MS) {
 
   return {serverNow};
 }
+
+const showIncorrectDeviceTimeAlert = () => {
+  Alert.alert(
+    tGlobal(DeviceClockTexts.incorrectTimeAlert.title),
+    tGlobal(DeviceClockTexts.incorrectTimeAlert.message),
+    // iOS doesn't allow opening the Date & Time settings directly
+    Platform.OS === 'android'
+      ? [
+          {
+            text: tGlobal(DeviceClockTexts.incorrectTimeAlert.close),
+            style: 'cancel',
+          },
+          {
+            text: tGlobal(DeviceClockTexts.incorrectTimeAlert.openSettings),
+            onPress: () =>
+              Linking.sendIntent('android.settings.DATE_SETTINGS').catch(() =>
+                Linking.openSettings(),
+              ),
+          },
+        ]
+      : [{text: tGlobal(DeviceClockTexts.incorrectTimeAlert.ok)}],
+  );
+};

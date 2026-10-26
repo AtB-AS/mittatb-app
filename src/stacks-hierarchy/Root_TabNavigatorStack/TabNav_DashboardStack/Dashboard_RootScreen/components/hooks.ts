@@ -56,7 +56,7 @@ export const useActionButtonProps = (
 
   const actionHandlers = {
     [ActionType.external]: async (url: string) => {
-      await openInAppBrowser(url, 'close');
+      await openInAppBrowser(url);
     },
     [ActionType.deeplink]: async (url: string) => {
       await openUrl(url);

@@ -4,7 +4,6 @@ import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
 import {NativeTouchable} from '@atb/components/native-touchable';
-import {InteractiveColor} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import {getRadioA11y} from './utils';
 
@@ -22,7 +21,6 @@ type Props = {
   onPress: () => void;
   style?: ViewStyle;
   testID?: string;
-  interactiveColor?: InteractiveColor;
 };
 export function RadioBox({
   title,
@@ -36,20 +34,15 @@ export function RadioBox({
   onPress,
   style,
   testID,
-  interactiveColor,
 }: Props) {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const spacing = useSpacing(type);
 
-  const currentInteractiveColor =
-    interactiveColor ?? theme.color.interactive[2];
-  const themeColor = currentInteractiveColor[selected ? 'active' : 'default'];
-  const {
-    background: backgroundColor,
-    foreground: {primary: textColor},
-  } = themeColor;
+  const {neutral, accent} = theme.color.surface;
+  const themeColor = selected ? accent.subtle : neutral.strong;
+  const {background: backgroundColor} = themeColor;
 
   return (
     <NativeTouchable
@@ -85,7 +78,7 @@ export function RadioBox({
         {description}
       </ThemeText>
       <View style={styles.radioIcon} testID={`${testID}Radio`}>
-        <RadioIcon checked={selected} color={textColor} />
+        <RadioIcon checked={selected} />
       </View>
     </NativeTouchable>
   );

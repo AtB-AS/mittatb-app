@@ -3,7 +3,11 @@ import {View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
 import {usePreferencesContext} from '@atb/modules/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
-import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  UserProfileSettingsTexts,
+  useTranslation,
+} from '@atb/translations';
 import {
   getReferenceDataName,
   useFirestoreConfigurationContext,
@@ -57,6 +61,9 @@ export const Profile_DefaultUserProfileScreen = ({navigation}: Props) => {
           items={selectableUserProfiles}
           keyExtractor={(u) => u.id}
           itemToText={(u) => getReferenceDataName(u, language)}
+          itemToSubtext={(u) =>
+            getTextForLanguage(u.alternativeDescriptions, language)
+          }
           selected={selectedProfile}
           onSelect={(u) =>
             setPreference({defaultUserTypeString: u.userTypeString})

@@ -14,7 +14,7 @@ import {useInitShmoOneStopBookingMutation} from '../queries/use-init-shmo-one-st
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {formatFriendlyShmoErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
@@ -68,7 +68,6 @@ export const ShmoActionButton = ({
   const {openStoreListing, isError: openStoreListingError} =
     useOpenStoreListing();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
   const {logEvent} = useAnalyticsContext();
@@ -145,10 +144,9 @@ export const ShmoActionButton = ({
           />
         )}
         <Button
+          surfaceColor="accent"
           mode="primary"
           rightIcon={{svg: ExternalLink}}
-          active={false}
-          interactiveColor={theme.color.interactive[0]}
           expanded={true}
           type="large"
           accessibilityRole="button"
@@ -206,14 +204,13 @@ export const ShmoActionButton = ({
         />
       )}
       <Button
+        surfaceColor="accent"
         mode="primary"
-        active={false}
         disabled={
           initShmoOneStopBookingIsLoading ||
           (ageVerificationRequired &&
             ageVerification !== AgeVerificationEnum.LegalAge)
         }
-        interactiveColor={theme.color.interactive[0]}
         expanded={true}
         type="large"
         accessibilityRole="button"

@@ -58,6 +58,7 @@ export const SmartParkAndRideOnboarding_ContactInfoScreen = ({
       title={t(SmartParkAndRideTexts.onboarding.contactInfo.title)}
       contentNode={<ContactInfoContent />}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => {
           analytics.logEvent(
             'Smart Park & Ride',
@@ -169,7 +170,7 @@ const ContactInfoContent = () => {
         <GenericSectionItem>
           <NativeTouchable
             variant="block"
-            onPress={() => openInAppBrowser('https://atb.no/kontakt', 'close')}
+            onPress={() => openInAppBrowser('https://atb.no/kontakt')}
             accessibilityRole="link"
             style={style.linkItem}
           >

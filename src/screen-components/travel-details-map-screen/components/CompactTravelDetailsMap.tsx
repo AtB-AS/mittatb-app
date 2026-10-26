@@ -1,14 +1,10 @@
 import {MapCameraConfig, useMapViewConfig} from '@atb/modules/map';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {MapTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
-import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {Platform, View} from 'react-native';
-import {MapLabel} from './MapLabel';
 import {MapRoute} from './MapRoute';
-import {createMapLines, getMapBounds, pointOf} from '../utils';
-import {Coordinates} from '@atb/utils/coordinates';
+import {createMapLines, getMapBounds} from '../utils';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -20,8 +16,6 @@ import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/ligh
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
-  fromPlace?: Coordinates | Position;
-  toPlace?: Coordinates | Position;
   buttonText: string;
   isLive?: boolean;
   onExpand?(): void;
@@ -29,13 +23,10 @@ export type MapProps = {
 
 export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   serviceJourneyPolylines,
-  fromPlace,
-  toPlace,
   buttonText,
   isLive = false,
   onExpand,
 }) => {
-  const {t} = useTranslation();
   const {themeName} = useThemeContext();
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
@@ -83,20 +74,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
             ref={cameraRef}
           />
           <MapRoute lines={features} />
-          {toPlace && (
-            <MapLabel
-              point={pointOf(toPlace)}
-              id="end"
-              text={t(MapTexts.endPoint.label)}
-            />
-          )}
-          {fromPlace && (
-            <MapLabel
-              point={pointOf(fromPlace)}
-              id="start"
-              text={t(MapTexts.startPoint.label)}
-            />
-          )}
         </MapboxGL.MapView>
         <View style={styles.pillOverlay} pointerEvents="box-none">
           <NativeTouchable

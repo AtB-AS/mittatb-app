@@ -5,8 +5,7 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {VIPPS_BACKGROUND_COLOR} from '@atb/components/vipps-login-button';
 import {PaymentAgreement, PaymentType} from '@atb/modules/ticketing';
-import {StyleSheet, useThemeContext} from '@atb/theme';
-import {ContrastColor} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {formatToShortDateWithFullYear} from '@atb/utils/date';
@@ -33,7 +32,6 @@ export const PaymentAgreementBox = ({
   isLoading,
 }: Props) => {
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
 
   // Only Vipps agreements are supported for now
@@ -49,14 +47,6 @@ export const PaymentAgreementBox = ({
       ? PaymentMethodsTexts.agreements.vipps.active.description
       : PaymentMethodsTexts.agreements.vipps.inactive.description,
   );
-
-  const destructiveOutline: ContrastColor = {
-    background: theme.color.background.neutral[0].background,
-    foreground: {
-      ...theme.color.background.neutral[0].foreground,
-      primary: theme.color.interactive.destructive.default.background,
-    },
-  };
 
   return (
     <Section>
@@ -93,9 +83,9 @@ export const PaymentAgreementBox = ({
       <GenericSectionItem>
         {agreement ? (
           <Button
+            surfaceColor="error"
             expanded={true}
             mode="secondary"
-            backgroundColor={destructiveOutline}
             text={t(PaymentMethodsTexts.agreements.vipps.active.stopButton)}
             loading={isLoading}
             onPress={() => onStop(agreement)}
@@ -104,6 +94,7 @@ export const PaymentAgreementBox = ({
           />
         ) : (
           <Button
+            surfaceColor="accent"
             expanded={true}
             text={t(PaymentMethodsTexts.agreements.vipps.inactive.button)}
             rightIcon={{svg: ExternalLink}}

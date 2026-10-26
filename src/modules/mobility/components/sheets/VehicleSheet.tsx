@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useMapVehicle} from '../../use-map-vehicle';
 import {Linking, View} from 'react-native';
@@ -82,7 +82,6 @@ export const VehicleSheet = ({
   navigateToPricingDetails,
 }: Props) => {
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const {mapState} = useMapContext();
 
@@ -119,11 +118,14 @@ export const VehicleSheet = ({
     vehicle?.actionButton?.type === ActionButtonType.START_TRIP
       ? vehicle.actionButton.preReqs
       : undefined;
-  const {isLoading: shmoReqIsLoading, hasBlockers} = useShmoRequirements(
-    preReqs,
-    formFactor,
+  const {
+    isLoading: shmoReqIsLoading,
+    hasBlockers,
+    hasPaymentMethodPreReq,
+  } = useShmoRequirements(preReqs, formFactor);
+  const selectedPaymentMethod = useSelectedShmoPaymentMethod(
+    hasPaymentMethodPreReq,
   );
-  const selectedPaymentMethod = useSelectedShmoPaymentMethod();
 
   useDoOnceOnItemReceived(onVehicleReceived, vehicle);
 
@@ -315,9 +317,17 @@ export const VehicleSheet = ({
                 <SupportButton
                   navigateToSupport={() => {
                     navigateToSupport({
-                      vehicleId: vehicle.id,
                       operatorId,
                       formFactor,
+                      /* A station based booking has no real vehicle: its id is
+                         synthesised from the station and vehicle type, which is what
+                         the support screens resolve it by. */
+                      ...(vehicleId
+                        ? {vehicleId}
+                        : {
+                            stationId: mapState.stationId,
+                            vehicleTypeId: mapState.vehicleTypeId,
+                          }),
                     });
                   }}
                 />
@@ -339,12 +349,12 @@ export const VehicleSheet = ({
                 )}
                 {showParkingViolation && (
                   <Button
+                    surfaceColor="accent"
                     expanded={true}
                     text={t(MobilityTexts.reportParkingViolation)}
                     mode="secondary"
                     onPress={onReportParkingViolation}
                     rightIcon={{svg: ChevronRight}}
-                    backgroundColor={theme.color.background.neutral[1]}
                   />
                 )}
               </View>

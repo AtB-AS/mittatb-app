@@ -206,7 +206,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
   return (
     <NativeTouchable
       variant="block"
-      onPress={() => openInAppBrowser(infoLink.uri, 'close')}
+      onPress={() => openInAppBrowser(infoLink.uri)}
       accessibilityRole="link"
       style={styles.infoLink}
     >

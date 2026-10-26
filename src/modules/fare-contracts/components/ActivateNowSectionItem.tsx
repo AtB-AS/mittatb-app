@@ -2,7 +2,6 @@ import {TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React, {useRef} from 'react';
 import {ActivateNowBottomSheet} from './ActivateNowBottomSheet';
-import {useThemeContext} from '@atb/theme';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
@@ -21,7 +20,6 @@ export function ActivateNowButton({
   fareProductType,
 }: ActivateNowButtonProps): React.JSX.Element {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const onCloseFocusRef = useRef<View | null>(null);
   const bottomSheetModalRef = useRef<BottomSheetModalMethods | null>(null);
 
@@ -32,10 +30,10 @@ export function ActivateNowButton({
   return (
     <>
       <Button
+        surfaceColor="accent"
         expanded={true}
         text={t(FareContractTexts.activateNow.startNow)}
         onPress={onPress}
-        interactiveColor={theme.color.interactive[0]}
         rightIcon={{
           svg: TicketValid,
         }}

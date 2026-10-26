@@ -183,11 +183,6 @@ const TripSearchTexts = {
       },
     },
     resultItem: {
-      passedTrip: _(
-        'Avgangstid passert',
-        'Departure time passed',
-        'Avgangstid passert',
-      ),
       header: {
         title: (mode: string, placeName: string) =>
           _(
@@ -209,7 +204,6 @@ const TripSearchTexts = {
             `Frå klokka ${startTime}, til klokka ${endTime}`,
           ),
       },
-      tripCancelled: _('Reisen innstilt', 'Trip cancelled', 'Reisa innstilt'),
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
         'There are service messages affecting your journey. See details for more info ',
@@ -224,12 +218,6 @@ const TripSearchTexts = {
           ),
         walkLabel: (time: string) =>
           _(`Gå ${time}`, `Walk ${time}`, `Gå ${time}`),
-        walkToStopLabel: (distance: string, stopPlace: string) =>
-          _(
-            `Gå til ${stopPlace}`,
-            `Walk ${distance} to ${stopPlace}`,
-            `Gå ${distance} til ${stopPlace}`,
-          ),
         waitLabel: (time: string) =>
           _(`Vent ${time}`, `Wait ${time}`, `Vent ${time}`),
       },
@@ -248,99 +236,11 @@ const TripSearchTexts = {
             `From ${place} ${time}`,
             `Frå ${place} ${time}`,
           ),
-        detailsLabel: _('Detaljer', 'Details', 'Detaljar'),
-        detailsHint: _(
-          'Aktivér for å vise flere reisedetaljer',
-          'Activate to show more trip details',
-          'Trykk for meir informasjon om reisa.',
-        ),
         requiresBooking: _(
           `Krever reservasjon`,
           `Requires booking`,
           `Krev reservasjon`,
         ),
-        toLateForBooking: _(
-          `Reservasjonsfrist utløpt`,
-          `Reservation deadline expired`,
-          `Reservasjonsfrist utgått`,
-        ),
-      },
-      journeySummary: {
-        resultNumber: (number: number) =>
-          _(
-            `Reiseresultat ${number}`,
-            `Result number ${number}`,
-            `Reiseresultat ${number}`,
-          ),
-        duration: (duration: string) =>
-          _(
-            `Reisetid: ${duration}`,
-            `Travel time: ${duration}`,
-            `Reisetid: ${duration}`,
-          ),
-        legsDescription: {
-          footLegsOnly: _(
-            'Hele reisen til fots',
-            'Foot legs only',
-            'Heile reisa til fots',
-          ),
-          noSwitching: _('Ingen bytter', 'No transfers', 'Ingen bytter'),
-          oneSwitch: _('Ett bytte', 'One transfer', 'Eitt bytte'),
-          someSwitches: (switchCount: number) =>
-            _(
-              `${switchCount} bytter`,
-              `${switchCount} transfers`,
-              `${switchCount} bytte`,
-            ),
-        },
-        prefixedLineNumber: (number: string) =>
-          _(`nummer ${number}`, `number ${number}`, `nummer ${number}`),
-        totalWalkDistance: (meters: string) =>
-          _(
-            `Totalt ${meters} meter å gå`,
-            `Total of ${meters} meters to walk`,
-            `Totalt ${meters} meter å gå`,
-          ),
-        travelTimes: (
-          startTime: string,
-          endTime: string,
-          duration: string,
-          startTimeIsApproximation: boolean,
-          endTimeIsApproximation: boolean,
-        ) => {
-          const circaPrefix = 'ca. ';
-          const startTimeCircaPrefix = startTimeIsApproximation
-            ? circaPrefix
-            : '';
-          const endTimeCircaPrefix = endTimeIsApproximation ? circaPrefix : '';
-          const totalTimeCircaPrefix =
-            startTimeIsApproximation || endTimeIsApproximation
-              ? circaPrefix
-              : '';
-          return _(
-            `Start ${startTimeCircaPrefix}klokken ${startTime}, ankomst ${endTimeCircaPrefix}klokken ${endTime}. Total reisetid ${
-              totalTimeCircaPrefix + duration
-            }.`,
-            `Start time ${startTimeCircaPrefix + startTime}, arrival time ${
-              endTimeCircaPrefix + endTime
-            }. Total travel time ${totalTimeCircaPrefix + duration}`,
-            `Start ${startTimeCircaPrefix}klokka ${startTime}, framkomst ${endTimeCircaPrefix}klokka ${endTime}. Total reisetid ${
-              totalTimeCircaPrefix + duration
-            }.`,
-          );
-        },
-        realtime: (
-          fromPlace: string,
-          realtimeDepartureTime: string,
-          scheduledDepartureTime: string,
-        ) =>
-          _(
-            `Klokken ${realtimeDepartureTime} sanntid, klokken ${scheduledDepartureTime} rutetid`,
-            `At ${realtimeDepartureTime} realtime, at ${scheduledDepartureTime} scheduled time`,
-            `Klokka ${realtimeDepartureTime} sanntid, klokka ${scheduledDepartureTime} rutetid`,
-          ),
-        noRealTime: (placeName: string, aimedTime: string) =>
-          _(`Klokken ${aimedTime}`, `At ${aimedTime}`, `Klokka ${aimedTime}`),
       },
     },
     dayHeader: {

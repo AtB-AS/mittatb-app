@@ -46,15 +46,6 @@ export const ParkingViolationTexts = {
       'Hald ein avstand på ca. 5 meter. Unngå folk i biletet',
     ),
   },
-  imageConfirmation: {
-    title: _(
-      'Er du fornøyd med bildet?',
-      'Are you satisfied with the photo?',
-      'Er du nøgd med biletet?',
-    ),
-    confirmButton: _('Ja', 'Yes', 'Ja'),
-    retryButton: _('Ta nytt bilde', 'Retake photo', 'Ta nytt bilete'),
-  },
   qr: {
     title: _('Skann QR-kode', 'Scan the QR code', 'Skann QR-kode'),
     instructions: _(

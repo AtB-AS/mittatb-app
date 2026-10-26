@@ -15,7 +15,7 @@ export const Root_ParkingViolationsPhotoScreen = ({
   route: {params},
 }: PhotoScreenProps) => {
   const {t} = useTranslation();
-  const {coordinates, isLoading} = useParkingViolations();
+  const {isLoading} = useParkingViolations();
   const isFocused = useIsFocused();
 
   const onGoBack = useCallback(() => {
@@ -33,7 +33,6 @@ export const Root_ParkingViolationsPhotoScreen = ({
     <PhotoCapture
       onConfirmImage={onConfirmImage}
       onGoBack={onGoBack}
-      coordinates={coordinates}
       title={t(ParkingViolationTexts.photo.title)}
       secondaryText={t(ParkingViolationTexts.photo.instruction)}
       isLoading={isLoading}

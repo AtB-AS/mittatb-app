@@ -50,9 +50,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ErrorResponse} from '@atb-as/utils';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {SaveTripPatternButtonComponent} from '@atb/modules/experimental-store-trip-patterns';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
-import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {TripTicketCard} from './TripTicketCard';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -63,8 +60,6 @@ export type TripProps = {
     activeItemIndex: number,
   ) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
-  purchaseSelection?: PurchaseSelectionType;
-  onPressBuyTicket: () => void;
   now: number;
 };
 export const Trip: React.FC<TripProps> = ({
@@ -73,8 +68,6 @@ export const Trip: React.FC<TripProps> = ({
   onPressDetailsMap,
   onPressDeparture,
   onPressQuay,
-  purchaseSelection,
-  onPressBuyTicket,
   now,
 }) => {
   const styles = useStyle();
@@ -82,13 +75,8 @@ export const Trip: React.FC<TripProps> = ({
   const {theme} = useThemeContext();
   const {isScreenReaderEnabled} = useAccessibilityContext();
   const {enable_ticketing} = useRemoteConfigContext();
-  const isTripTicketCardEnabled = useIsExperimentalEnabled(
-    'isTripTicketCardEnabled',
-  );
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
   const {requestReview} = useInAppReviewFlow();
-
-  const shouldShowTicketCard = isTripTicketCardEnabled && !!purchaseSelection;
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
@@ -146,8 +134,6 @@ export const Trip: React.FC<TripProps> = ({
       {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
           serviceJourneyPolylines={tripPatternLegs}
-          fromPlace={tripPatternLegs[0]?.fromPlace}
-          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
           isLive={hasLiveVehicle}
           buttonText={t(
             hasLiveVehicle
@@ -186,13 +172,6 @@ export const Trip: React.FC<TripProps> = ({
             {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
           </ThemeText>
         </>
-      )}
-      {shouldShowTicketCard && (
-        <TripTicketCard
-          message={t(TripDetailsTexts.trip.ticketCard.message)}
-          actionText={t(TripDetailsTexts.trip.ticketCard.buyAction)}
-          onPress={onPressBuyTicket}
-        />
       )}
       {shortWaitTime && (
         <MessageInfoBox

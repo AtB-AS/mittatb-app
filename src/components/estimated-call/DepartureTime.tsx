@@ -17,8 +17,9 @@ import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/
 type DepartureTimeProps = {
   color?: ContrastColor;
   departure: EstimatedCall | EstimatedCallWithQuayFragment;
+  now?: number;
 };
-export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
+export const DepartureTime = ({departure, color, now}: DepartureTimeProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {themeName} = useThemeContext();
@@ -44,6 +45,7 @@ export const DepartureTime = ({departure, color}: DepartureTimeProps) => {
             departure.expectedDepartureTime,
             language,
             t(dictionary.date.units.now),
+            now,
           )}
         </ThemeText>
       </View>

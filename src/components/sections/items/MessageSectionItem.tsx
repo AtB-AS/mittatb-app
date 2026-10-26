@@ -44,7 +44,7 @@ export function MessageSectionItem({
     onPressConfig &&
     ('action' in onPressConfig
       ? onPressConfig.action
-      : () => openInAppBrowser(onPressConfig.url, 'close'));
+      : () => openInAppBrowser(onPressConfig.url));
   const accessibilityRole =
     onPressConfig && 'action' in onPressConfig ? 'button' : 'link';
 

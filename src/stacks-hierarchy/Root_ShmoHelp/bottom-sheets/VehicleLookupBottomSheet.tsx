@@ -49,6 +49,7 @@ export const VehicleLookupConfirmationBottomSheet = ({
       </View>
       <View style={styles.footer}>
         <Button
+          surfaceColor="accent"
           expanded={true}
           text="Send inn rapport"
           onPress={() => onReportSubmit(Number(provider.id))}

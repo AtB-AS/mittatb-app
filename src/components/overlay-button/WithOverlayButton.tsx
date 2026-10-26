@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import type {PropsWithChildren} from 'react';
 import type {SvgProps} from 'react-native-svg';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {Loading} from '../loading';
 
@@ -29,7 +29,6 @@ export function WithOverlayButton({
   overlayStyleOverride,
   ...props
 }: Props) {
-  const {theme} = useThemeContext();
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -51,7 +50,7 @@ export function WithOverlayButton({
             mode="primary"
             expanded={false}
             onPress={onPress}
-            interactiveColor={theme.color.interactive[2]}
+            surfaceColor="neutral"
             style={styles.border}
             {...props}
           />

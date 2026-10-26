@@ -5,8 +5,6 @@ import {useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {View} from 'react-native';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {BoatFill} from '@atb/assets/svg/mono-icons/transportation';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {sortBy} from 'lodash';
 import {GeoLocation} from '@atb/modules/favorites';
@@ -17,6 +15,11 @@ import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {StopPlaceFragmentWithIsFree} from '@atb/modules/harbors';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type Props = {
   harbors: StopPlaceFragment[];
@@ -79,12 +82,16 @@ export const HarborResults: React.FC<Props> = ({
                 style={styles.button}
                 testID={'harborResult' + index}
               >
-                <ThemeIcon svg={BoatFill} />
                 <View style={styles.nameContainer}>
                   <ThemeText typography="body__m__strong">
                     {harbor.name}
                   </ThemeText>
                 </View>
+                <TransportationIconBox
+                  mode={TransportMode.Water}
+                  subMode={TransportSubmode.LocalPassengerFerry}
+                  iconSize="small"
+                />
               </NativeTouchable>
             </View>
           </View>
@@ -154,8 +161,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: theme.spacing.small,
   },
   nameContainer: {
-    marginHorizontal: theme.spacing.medium,
+    flex: 1,
   },
 }));

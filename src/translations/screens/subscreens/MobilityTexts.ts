@@ -516,6 +516,15 @@ export const MobilityTexts = {
         );
     }
   },
+  imageConfirmation: {
+    title: _(
+      'Er du fornøyd med bildet?',
+      'Are you satisfied with the photo?',
+      'Er du nøgd med biletet?',
+    ),
+    confirmButton: _('Ja', 'Yes', 'Ja'),
+    retryButton: _('Ta nytt bilde', 'Retake photo', 'Ta nytt bilete'),
+  },
 };
 
 export const BicycleTexts = {

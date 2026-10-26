@@ -85,7 +85,7 @@ export const MessageInfoBox = ({
     onPressConfig &&
     ('action' in onPressConfig
       ? onPressConfig.action
-      : () => openInAppBrowser(onPressConfig.url, 'close'));
+      : () => openInAppBrowser(onPressConfig.url));
 
   const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
   const a11yLabelInternal = [

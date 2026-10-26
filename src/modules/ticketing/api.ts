@@ -25,6 +25,7 @@ import {
 import {SupplementProduct} from '@atb/modules/configuration';
 import {convertIsoStringFieldsToDate} from '@atb/utils/date';
 import {isDefined} from '@atb/utils/presence';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {Language} from '@atb/translations/commons';
 import type {OfferSearchLeg} from '@atb/api/types/sales';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
@@ -285,7 +286,10 @@ export async function cancelPayment(
   isUser: boolean,
 ): Promise<void> {
   const url = `sales/v1/payments/${paymentId}/transactions/${transactionId}/cancel?isUser=${isUser}`;
-  await client.put(url, undefined, {authWithIdToken: true});
+  await client.put(url, undefined, {
+    authWithIdToken: true,
+    timeout: 30 * ONE_SECOND_MS,
+  });
 }
 
 export async function getFareProducts(

@@ -6,7 +6,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
-import {InteractiveColor, TextNames} from '@atb/theme/colors';
+import {TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {Tag} from '@atb/components/tag';
@@ -19,7 +19,6 @@ type Props = SectionItemProps<{
   onValueChange: (checked: boolean) => void;
   value?: boolean;
   leftImage?: React.JSX.Element;
-  interactiveColor?: InteractiveColor;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
   disabled?: boolean;
@@ -34,7 +33,6 @@ export function ToggleSectionItem({
   value = false,
   accessibility,
   testID,
-  interactiveColor,
   textType,
   disabled = false,
   ...props
@@ -113,7 +111,6 @@ export function ToggleSectionItem({
               value={checked}
               onValueChange={onChange}
               testID={testID}
-              interactiveColor={interactiveColor}
               disabled={disabled}
             />
           </View>

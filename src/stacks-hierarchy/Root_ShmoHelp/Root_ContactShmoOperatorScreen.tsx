@@ -37,6 +37,8 @@ import {
   useVehicleQuery,
 } from '@atb/modules/mobility';
 import {FullScreenView} from '@atb/components/screen-view';
+import {SupportImageSection} from './components/SupportImageSection';
+import {SUPPORT_IMAGE_FILE_TYPE, useSupportImages} from './use-support-images';
 
 export type Root_ContactShmoOperatorScreenProps =
   RootStackScreenProps<'Root_ContactShmoOperatorScreen'>;
@@ -51,6 +53,8 @@ export const Root_ContactShmoOperatorScreen = ({
     'bookingId' in route.params ? route.params?.bookingId : undefined;
   const stationId =
     'stationId' in route.params ? route.params?.stationId : undefined;
+  const vehicleTypeId =
+    'vehicleTypeId' in route.params ? route.params?.vehicleTypeId : undefined;
   const operators = useOperators();
   const operatorName = operators.byId(operatorId)?.name;
   const styles = useStyles();
@@ -60,9 +64,10 @@ export const Root_ContactShmoOperatorScreen = ({
 
   /* The trip length the operator allows is configured per vehicle type. It is read
      off the booking while a trip is running, since a rented vehicle leaves the
-     vehicles feed for the duration of the trip, and off the vehicle otherwise. */
+     vehicles feed for the duration of the trip, and off the vehicle otherwise -- by
+     id for a free floating vehicle, by station and vehicle type for a docked one. */
   const {data: activeBooking} = useActiveShmoBookingQuery(isFocused);
-  const {data: vehicle} = useVehicleQuery(vehicleId);
+  const {data: vehicle} = useVehicleQuery(vehicleId, vehicleTypeId, stationId);
   const activeTrip = isActiveTripBooking(activeBooking)
     ? activeBooking
     : undefined;
@@ -86,6 +91,11 @@ export const Root_ContactShmoOperatorScreen = ({
     onSubmit,
     showError,
     supportRequestStatus,
+    isAddingImages,
+    hasImageError,
+    images,
+    pickFromLibrary,
+    removeImage,
   } = useShmoContactFormController(
     operatorId,
     vehicleId,
@@ -161,6 +171,14 @@ export const Root_ContactShmoOperatorScreen = ({
             }
           />
         </Section>
+        <SupportImageSection
+          images={images}
+          isAddingImages={isAddingImages}
+          hasImageError={hasImageError}
+          onPickFromLibrary={pickFromLibrary}
+          onRemoveImage={removeImage}
+          onTakePhoto={() => navigation.navigate('Root_SupportPhotoScreen')}
+        />
         <ContentHeading text={t(ContactShmoOperatorTexts.contactInfo.header)} />
         <Section>
           <TextInputSectionItem
@@ -244,7 +262,9 @@ export const Root_ContactShmoOperatorScreen = ({
           />
         )}
         <Button
+          surfaceColor="accent"
           loading={supportRequestStatus === 'pending'}
+          disabled={isAddingImages}
           expanded={true}
           mode="primary"
           text={t(ContactShmoOperatorTexts.submitButton)}
@@ -313,6 +333,9 @@ const useShmoContactFormController = (
 
   const [showError, setShowError] = useState(false);
 
+  const {images, isAddingImages, hasImageError, pickFromLibrary, removeImage} =
+    useSupportImages();
+
   const {
     isCommentValid,
     isPhoneNumberValid,
@@ -324,14 +347,22 @@ const useShmoContactFormController = (
   const {mutate: sendSupportRequest, status: supportRequestStatus} =
     useSendSupportRequestMutation(operatorId, onSuccess);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
+    if (isAddingImages) return;
     if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
+      const files = images.map((image, index) => ({
+        fileName: `supportPhoto${index + 1}.jpg`,
+        fileType: SUPPORT_IMAGE_FILE_TYPE,
+        fileData: image.fileData,
+      }));
+
       const requestBody: SendSupportRequestBody = {
         ...validatedRequestBody,
         assetId: vehicleId,
         bookingId,
         stationId,
+        ...(files.length > 0 && {files}),
         ...(currentUserCoordinates && {
           place: {
             coordinates: {
@@ -356,6 +387,11 @@ const useShmoContactFormController = (
     onSubmit,
     showError,
     supportRequestStatus,
+    isAddingImages,
+    hasImageError,
+    images,
+    pickFromLibrary,
+    removeImage,
   };
 };
 

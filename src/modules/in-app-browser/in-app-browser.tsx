@@ -2,38 +2,42 @@ import {StatusBar} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
+type InAppBrowserConfig = {
+  dismissButtonStyle?: 'cancel' | 'close' | 'done';
+  successUrl?: string;
+  onSuccess?: (url: string) => void;
+  onCancel?: () => void;
+  onError?: () => void;
+};
+
 /**
  * Wrapper around `react-native-inappbrowser-reborn`. See docs at:
  * https://github.com/proyecto26/react-native-inappbrowser
  */
 export async function openInAppBrowser(
   url: string,
-  dismissButtonStyle: 'cancel' | 'close' | 'done',
-  successUrl?: string,
-  onSuccess?: (url: string) => void,
-  onCancel?: () => void,
-  onError?: () => void,
+  config?: InAppBrowserConfig,
 ) {
   const statusBarStyle = StatusBar.pushStackEntry({
-    barStyle: successUrl ? 'light-content' : 'dark-content',
+    barStyle: config?.successUrl ? 'light-content' : 'dark-content',
     animated: true,
   });
   try {
-    if (!successUrl) {
+    if (!config?.successUrl) {
       const result = await InAppBrowser.open(url, {
         animated: true,
-        dismissButtonStyle,
+        dismissButtonStyle: config?.dismissButtonStyle ?? 'cancel',
         // Android: Makes the InAppBrowser stay open after the app goes to
         // background. Needs to be true for Vipps login and BankID.
         showInRecents: true,
       });
       if (result.type === 'cancel') {
-        onCancel?.();
+        config?.onCancel?.();
       }
     } else {
-      const result = await InAppBrowser.openAuth(url, successUrl, {
+      const result = await InAppBrowser.openAuth(url, config.successUrl, {
         animated: true,
-        dismissButtonStyle,
+        dismissButtonStyle: config.dismissButtonStyle ?? 'cancel',
         // Android: Makes the InAppBrowser stay open after the app goes to
         // background. Needs to be true for Vipps login and BankID.
         showInRecents: true,
@@ -42,15 +46,15 @@ export async function openInAppBrowser(
         ephemeralWebSession: true,
       });
       if (result.type === 'success') {
-        onSuccess?.(result.url);
+        config.onSuccess?.(result.url);
       }
       if (result.type === 'cancel') {
-        onCancel?.();
+        config.onCancel?.();
       }
     }
   } catch (error: any) {
     notifyBugsnag(error);
-    onError?.();
+    config?.onError?.();
   }
   StatusBar.popStackEntry(statusBarStyle);
 }

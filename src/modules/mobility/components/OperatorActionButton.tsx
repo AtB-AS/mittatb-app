@@ -9,7 +9,6 @@ import {Linking} from 'react-native';
 import {useValueCodeMutation} from '../queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '../use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useThemeContext} from '@atb/theme';
 import {useClaimBonusProductVoucherMutation} from '@atb/modules/bonus';
 import {stringifyUrl} from '@atb/api/utils';
 import {useOperators} from '../use-operators';
@@ -38,7 +37,6 @@ export const OperatorActionButton = ({
 }: OperatorActionButtonProps) => {
   const {logEvent} = useAnalyticsContext();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const operator = useOperators().byId(operatorId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
   const extendedRentalAppUri = stringifyUrl(
@@ -177,11 +175,11 @@ export const OperatorActionButton = ({
 
   return (
     <Button
+      surfaceColor="accent"
       expanded={true}
       text={buttonText}
       onPress={buttonOnPress}
       mode="primary"
-      interactiveColor={theme.color.interactive[0]}
       rightIcon={{svg: ExternalLink}}
       accessibilityRole="link"
     />

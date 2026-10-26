@@ -99,6 +99,7 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
               <Button
+                surfaceColor="accent"
                 expanded={false}
                 key={actionButton.id}
                 mode={actionButton.secondary ? 'secondary' : 'primary'}
@@ -153,7 +154,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'book_online_action',
           orderUrl: orderUrl,
         });
-        openInAppBrowser(orderUrl, 'close');
+        openInAppBrowser(orderUrl);
       },
     });
   }
@@ -188,7 +189,7 @@ const useActionButtons = (cityZone?: CityZone) => {
           name: 'more_info_action',
           moreInfoUrl: moreInfoUrl,
         });
-        openInAppBrowser(moreInfoUrl, 'close');
+        openInAppBrowser(moreInfoUrl);
       },
     });
   }

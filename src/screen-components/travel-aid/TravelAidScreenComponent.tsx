@@ -102,12 +102,12 @@ export const TravelAidScreenComponent = ({
       }}
     >
       <Button
+        surfaceColor="accent"
         expanded={false}
         onPress={goBack}
         text={t(TravelAidTexts.close)}
         leftIcon={{svg: Close}}
         mode="tertiary"
-        backgroundColor={bgContrastColor}
         testID="closeJourneyAidButton"
       />
       <ScrollView contentContainerStyle={styles.scrollView}>

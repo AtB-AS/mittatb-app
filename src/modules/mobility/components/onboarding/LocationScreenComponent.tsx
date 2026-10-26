@@ -22,6 +22,7 @@ export const LocationScreenComponent = ({
       title={t(MobilityTexts.shmoRequirements.location.title)}
       description={t(MobilityTexts.shmoRequirements.location.description)}
       footerButton={{
+        surfaceColor: 'accent',
         onPress: () => requestLocationPermission(false),
         text: t(MobilityTexts.shmoRequirements.location.button),
         expanded: true,

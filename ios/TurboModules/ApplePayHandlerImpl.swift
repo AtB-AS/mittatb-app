@@ -18,7 +18,7 @@ class ApplePayHandlerImpl: NSObject {
   var paymentController: PKPaymentAuthorizationController?
   var paymentSummaryItems = [PKPaymentSummaryItem]()
   var paymentStatus = PKPaymentAuthorizationStatus.failure
-  var completionHandler: PaymentCompletionHandler!
+  var completionHandler: PaymentCompletionHandler?
   var paymentData: Data?
 
   override init() {
@@ -33,6 +33,8 @@ class ApplePayHandlerImpl: NSObject {
 
   @objc func startPayment(items: [[String: Any]], completionHandler: @escaping (String?) -> Void) -> Void {
     if self.merchantIdentifier == nil { return }
+    // Ignore payments started while the payment sheet is active, e.g. on double tap
+    if self.paymentController != nil { return }
 
     // Reset state from any previous payment
     self.paymentData = nil
@@ -65,6 +67,7 @@ class ApplePayHandlerImpl: NSObject {
         debugPrint("Presented payment controller")
       } else {
         debugPrint("Failed to present payment controller")
+        self.complete(nil)
         let error = NSError(
           domain: ApplePayHandlerImpl.errorDomain,
           code: 0,
@@ -80,6 +83,14 @@ class ApplePayHandlerImpl: NSObject {
   @objc func canMakePayments() -> Bool {
     if self.merchantIdentifier == nil { return false }
     return PKPaymentAuthorizationController.canMakePayments()
+  }
+
+  // React Native crashes if a callback is called more than once
+  private func complete(_ paymentData: String?) {
+    let completionHandler = self.completionHandler
+    self.completionHandler = nil
+    self.paymentController = nil
+    completionHandler?(paymentData)
   }
 }
 
@@ -99,11 +110,11 @@ extension ApplePayHandlerImpl: PKPaymentAuthorizationControllerDelegate {
       DispatchQueue.main.async {
         if self.paymentStatus == .success {
           if let paymentData = self.paymentData {
-            self.completionHandler!(paymentData.base64EncodedString())
+            self.complete(paymentData.base64EncodedString())
             return
           }
         }
-        self.completionHandler!(nil)
+        self.complete(nil)
       }
     }
   }

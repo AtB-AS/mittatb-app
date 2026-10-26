@@ -2,7 +2,6 @@ import {Button} from '@atb/components/button';
 import {useSupplementProductPurchaseSelection} from '@atb/modules/fare-contracts';
 import type {FareContractType} from '@atb-as/utils';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
-import {useThemeContext} from '@atb/theme';
 import {
   useGetFareProductsQuery,
   useGetSupplementProductsQuery,
@@ -19,7 +18,6 @@ export function SupplementPurchaseButton({
   existingFareContract,
   navigateToPurchaseFlow,
 }: Props) {
-  const {theme} = useThemeContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {data: supplementProducts} = useGetSupplementProductsQuery();
   const hasReservationProduct = hasReservationTypeSupplementProduct(
@@ -39,6 +37,7 @@ export function SupplementPurchaseButton({
 
   return (
     <Button
+      surfaceColor="accent"
       onPress={() =>
         bookingPurchaseSelection &&
         navigateToPurchaseFlow?.(bookingPurchaseSelection)
@@ -46,7 +45,6 @@ export function SupplementPurchaseButton({
       expanded={true}
       text={buttonText}
       mode={buttonMode}
-      backgroundColor={theme.color.background.neutral[0]}
     />
   );
 }

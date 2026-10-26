@@ -91,7 +91,7 @@ type Root_ParkingPhotoScreenParams = {
 type ShmoOperatorParams = {operatorId: string} & (
   | {vehicleId: string | undefined}
   | {bookingId: string | undefined}
-  | {stationId: string | undefined}
+  | {stationId: string | undefined; vehicleTypeId?: string}
 );
 export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
@@ -171,6 +171,7 @@ export type RootStackParamList = StackParams<{
   Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
   Root_ParkingPhotoScreen: Root_ParkingPhotoScreenParams;
+  Root_SupportPhotoScreen: undefined;
   Root_TripSelectionScreen: Root_TripSearchScreenParams;
   Root_SmartParkAndRideAddScreen: undefined;
   Root_SmartParkAndRideEditScreen: Root_SmartParkAndRideEditScreenParams;

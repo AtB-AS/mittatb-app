@@ -76,7 +76,6 @@ export const Root_ChooseTicketRecipientScreen = ({
             animateNextChange();
             dispatch({type: 'SELECT_SEND_TO_OTHER'});
           }}
-          themeColor={themeColor}
         />
 
         <PhoneAndNameInputSection

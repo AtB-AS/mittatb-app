@@ -388,6 +388,41 @@ describe('purchaseSelectionBuilder - product forced changes', () => {
     expect(forcedChanges).toEqual(['userProfile']);
   });
 
+  it('Should not report userProfile when traveller selection mode is none', () => {
+    const input = {
+      ...TEST_INPUT,
+      userProfiles: [
+        {...TEST_USER_PROFILE, id: 'UP1', userTypeString: 'ADULT'},
+        {...TEST_USER_PROFILE, id: 'UP2', userTypeString: 'CHILD'},
+      ],
+      defaultUserTypeString: 'ADULT',
+    };
+
+    const {selection, forcedChanges} = createEmptyBuilder(input)
+      .fromSelection({
+        ...TEST_SELECTION,
+        fareProductTypeConfig: {
+          ...TEST_SELECTION.fareProductTypeConfig,
+          configuration: {
+            ...TEST_SELECTION.fareProductTypeConfig.configuration,
+            travellerSelectionMode: 'none',
+          },
+        },
+      })
+      .product({
+        ...TEST_PRODUCT,
+        limitations: {
+          ...TEST_PRODUCT.limitations,
+          userProfiles: [{userProfileRef: 'UP2'}],
+        },
+        id: 'P2',
+      })
+      .build();
+
+    expect(selection.userProfilesWithCount[0].id).toBe('UP2');
+    expect(forcedChanges).toEqual([]);
+  });
+
   it('Should report userProfile when invalid profiles are filtered out', () => {
     const input = {
       ...TEST_INPUT,

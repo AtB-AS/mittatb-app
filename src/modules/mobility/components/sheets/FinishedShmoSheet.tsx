@@ -1,6 +1,6 @@
 import React from 'react';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -43,7 +43,6 @@ export const FinishedShmoSheet = ({
   locationArrowOnPress,
 }: Props) => {
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
@@ -117,9 +116,8 @@ export const FinishedShmoSheet = ({
             </Section>
           </View>
           <Button
+            surfaceColor="accent"
             mode="primary"
-            active={false}
-            interactiveColor={theme.color.interactive[0]}
             expanded={true}
             type="large"
             accessibilityRole="button"

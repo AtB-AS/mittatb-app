@@ -2,7 +2,7 @@ import React, {memo, RefObject, useCallback, useRef} from 'react';
 import {View} from 'react-native';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext, type Theme} from '@atb/theme';
+import {StyleSheet, type Theme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -94,7 +94,6 @@ const SelectFavouritesBottomSheetComponent = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const {favoriteDepartures, setFavoriteDepartures} = useFavoritesContext();
   const favouriteItems = favoriteDepartures ?? [];
   const shouldRestoreFocusRef = useRef(true);
@@ -111,6 +110,7 @@ const SelectFavouritesBottomSheetComponent = ({
     () => (
       <FullScreenFooter>
         <Button
+          surfaceColor="accent"
           expanded={true}
           text={t(SelectFavouriteDeparturesText.edit_button.text)}
           accessibilityHint={t(
@@ -124,11 +124,10 @@ const SelectFavouritesBottomSheetComponent = ({
           rightIcon={{svg: SvgChevronRight}}
           testID="editButton"
           mode="secondary"
-          backgroundColor={theme.color.background.neutral[1]}
         />
       </FullScreenFooter>
     ),
-    [bottomSheetModalRef, onEditFavouriteDeparture, t, theme],
+    [bottomSheetModalRef, onEditFavouriteDeparture, t],
   );
 
   return (

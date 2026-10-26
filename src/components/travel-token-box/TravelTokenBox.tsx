@@ -106,9 +106,9 @@ export function TravelTokenBox({
         />
       )}
       <Button
+        surfaceColor="accent"
         expanded={true}
         mode="secondary"
-        backgroundColor={interactiveColor.default}
         onPress={onPressChangeButton}
         text={
           inspectableToken

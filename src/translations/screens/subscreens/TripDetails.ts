@@ -253,14 +253,6 @@ const TripDetailsTexts = {
         'Aktiver for å kjøpe billett',
       ),
     },
-    ticketCard: {
-      message: _(
-        'Denne reisen trenger billett',
-        'This trip requires a ticket',
-        'Denne reisa treng billett',
-      ),
-      buyAction: _('Kjøp', 'Buy', 'Kjøp'),
-    },
   },
   messages: {
     shortTime: _(

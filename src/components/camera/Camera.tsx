@@ -8,7 +8,7 @@ import {PhotoFile} from './types';
 import {usePermissions} from './use-permissions';
 import CameraTexts from '@atb/translations/components/Camera';
 import {useTranslation} from '@atb/translations';
-import {Button} from '../button';
+import {FilterChip} from '../filter-chip';
 import {
   Camera as CameraApi,
   Camera as VisionCamera,
@@ -116,8 +116,7 @@ export const Camera = ({
             {mode === 'qr' && (
               <View pointerEvents="none" style={styles.qrFrame} />
             )}
-            <Button
-              mode="primary"
+            <FilterChip
               onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}
               style={[
                 styles.flashlightButton,
@@ -126,11 +125,8 @@ export const Camera = ({
                   : {marginBottom: safeBottomInset + theme.spacing.medium},
               ]}
               text={t(CameraTexts.flashlight.default)}
-              expanded={false}
-              active={torch === 'on'}
-              interactiveColor={theme.color.interactive[2]}
+              selected={torch === 'on'}
               rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
-              accessibilityLabel={t(CameraTexts.flashlight[torch])}
             />
           </View>
         )}

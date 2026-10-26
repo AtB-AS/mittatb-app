@@ -9,24 +9,20 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
-import {getColorByOption} from '../utils';
 import {themes} from '@atb/theme/colors';
 
-type ButtonMetaProps = ThemedStoryProps<
-  ButtonProps & {interactiveColorType: string}
->;
+type ButtonMetaProps = ThemedStoryProps<ButtonProps>;
 
 const ButtonMeta: Meta<ButtonMetaProps> = {
   title: 'Button',
   component: Button,
   argTypes: {
     expanded: {control: 'boolean'},
-    active: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
     hasShadow: {control: 'boolean'},
-    interactiveColorType: {
-      options: [...Object.keys(themes['light'].color.interactive)],
+    surfaceColor: {
+      options: [...Object.keys(themes['light'].color.surface)],
       control: {
         type: 'select',
       },
@@ -35,17 +31,11 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
   },
   args: {
     text: 'text',
-    interactiveColorType: '0',
+    surfaceColor: 'accent',
     ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => {
-      const storyContrastColor = getColorByOption(args.theme, args.storyColor);
-      const interactiveColors = themes[args.theme].color.interactive;
-      const storyInteractiveColor =
-        interactiveColors[
-          args.interactiveColorType as keyof typeof interactiveColors
-        ];
       return (
         <ScrollView
           contentContainerStyle={{
@@ -59,7 +49,6 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
             args={{
               ...args,
               mode: 'primary',
-              interactiveColor: storyInteractiveColor,
             }}
           />
           <Story
@@ -67,7 +56,6 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               leftIcon: {svg: Add},
               mode: 'primary',
-              interactiveColor: storyInteractiveColor,
             }}
           />
           <Story
@@ -75,15 +63,12 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               rightIcon: {svg: Add},
               mode: 'primary',
-              interactiveColor: storyInteractiveColor,
             }}
           />
           <Story
             args={{
               ...args,
               mode: 'secondary',
-              interactiveColor: storyInteractiveColor,
-              backgroundColor: storyContrastColor,
             }}
           />
           <Story
@@ -91,8 +76,6 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'secondary',
               leftIcon: {svg: Add},
-              interactiveColor: storyInteractiveColor,
-              backgroundColor: storyContrastColor,
             }}
           />
           <Story
@@ -100,16 +83,12 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'secondary',
               rightIcon: {svg: Add},
-              interactiveColor: storyInteractiveColor,
-              backgroundColor: storyContrastColor,
             }}
           />
           <Story
             args={{
               ...args,
               mode: 'tertiary',
-              interactiveColor: storyInteractiveColor,
-              backgroundColor: storyContrastColor,
             }}
           />
           <Story
@@ -117,8 +96,6 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'tertiary',
               leftIcon: {svg: Add},
-              interactiveColor: storyInteractiveColor,
-              backgroundColor: storyContrastColor,
             }}
           />
           <Story
@@ -126,8 +103,6 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
               ...args,
               mode: 'tertiary',
               rightIcon: {svg: Add},
-              interactiveColor: storyInteractiveColor,
-              backgroundColor: storyContrastColor,
             }}
           />
         </ScrollView>

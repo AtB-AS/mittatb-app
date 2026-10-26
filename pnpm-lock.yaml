@@ -127,10 +127,10 @@ importers:
         version: 18.20.0
       '@atb-as/mapbox-shared':
         specifier: ^1.0.4
-        version: 1.0.4(@atb-as/theme@16.0.0)
+        version: 1.0.4(@atb-as/theme@16.4.0)
       '@atb-as/theme':
-        specifier: ^16.0.0
-        version: 16.0.0
+        specifier: ^16.4.0
+        version: 16.4.0
       '@atb-as/utils':
         specifier: ^8.0.1
         version: 8.0.1(zod@4.1.11)
@@ -332,6 +332,9 @@ importers:
       react-native-get-random-values:
         specifier: ^1.11.0
         version: 1.11.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))
+      react-native-image-picker:
+        specifier: ^8.3.0
+        version: 8.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-in-app-review:
         specifier: 4.4.2
         version: 4.4.2
@@ -619,8 +622,8 @@ packages:
   '@atb-as/theme@14.0.1':
     resolution: {integrity: sha512-NYL92rDfXfkc4OAOWZNdhMvlCrqe6RExPbLGICkXHhpFQgEK77pzJNFO85Rj43+DRYeu32nGOBtEjJsIe1rINA==}
 
-  '@atb-as/theme@16.0.0':
-    resolution: {integrity: sha512-98sh3LfWwV2dAoAAusE/k4262Xn4Te8qXT1Kx9iqfLyDdWw0UWIWwVVPMwr90nPal2TRP4BCaaPH5oeshnd4Ww==}
+  '@atb-as/theme@16.4.0':
+    resolution: {integrity: sha512-O/istl76B/Q7cVTy3kBwjlpTWZJo1j/rUVLU0/+MeyKNyCcGrsp5m7nuVkGdgkAq2h8FIZOw2cUpPWxdSwdEcg==}
 
   '@atb-as/utils@8.0.1':
     resolution: {integrity: sha512-3SsBVVpwSOHFFfFGMC7a2ufWzGd8IDx+Uz2SnPoKHr1FGncwGU/ul2P32V37/31pdqQWa33AAP7IIHApqYt/yg==}
@@ -6464,6 +6467,12 @@ packages:
     peerDependencies:
       react-native: '>=0.56'
 
+  react-native-image-picker@8.3.0:
+    resolution: {integrity: sha512-f45QERBBWAFS8BEIKeQ9bcuBQFr3myWaNlkTnG4bY8BtsYJa/ChM0jzN6V9xBKzNPjMo9uFyUuNKjQWddNKZ9w==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   react-native-in-app-review@4.4.2:
     resolution: {integrity: sha512-iUoZnP4cgpbiNMLpqPgK40AcT7xluJhlwEPKFEfcCZsWT4MzGygS8p1dxf6e1NH/LUgUEtjsZQ8ka/SbF1pE8Q==}
 
@@ -7800,9 +7809,9 @@ snapshots:
       normalize-path: 3.0.0
       stream-editor: 1.11.0
 
-  '@atb-as/mapbox-shared@1.0.4(@atb-as/theme@16.0.0)':
+  '@atb-as/mapbox-shared@1.0.4(@atb-as/theme@16.4.0)':
     dependencies:
-      '@atb-as/theme': 16.0.0
+      '@atb-as/theme': 16.4.0
 
   '@atb-as/theme@14.0.1':
     dependencies:
@@ -7810,7 +7819,7 @@ snapshots:
       hex-to-rgba: 2.0.1
       ts-deepmerge: 4.0.0
 
-  '@atb-as/theme@16.0.0':
+  '@atb-as/theme@16.4.0':
     dependencies:
       '@tfk-samf/figma-to-dtcg': 0.4.4
       hex-to-rgba: 2.0.1
@@ -14949,6 +14958,11 @@ snapshots:
   react-native-get-random-values@1.11.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)):
     dependencies:
       fast-base64-decode: 1.0.0
+      react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
+
+  react-native-image-picker@8.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
 
   react-native-in-app-review@4.4.2: {}

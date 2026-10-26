@@ -210,6 +210,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
             {authenticationType === 'anonymous' && (
               <Button
+                surfaceColor="accent"
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
@@ -373,6 +374,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           </Section>
           {externalChatUrl && (
             <Button
+              surfaceColor="accent"
               mode="secondary"
               text={t(ProfileTexts.sections.contact.externalChat)}
               rightIcon={{svg: ExternalLink}}
@@ -381,7 +383,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 dictionary.appNavigation.a11yHintForExternalContent,
               )}
               expanded={true}
-              backgroundColor={neutralContrastColor}
               onPress={() => {
                 analytics.logEvent('Profile', 'External chat clicked');
                 openUrl(externalChatUrl);
@@ -424,6 +425,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           )}
           {authenticationType === 'phone' && (
             <Button
+              surfaceColor="accent"
               text={t(
                 ProfileTexts.sections.account.linkSectionItems.logout.label,
               )}

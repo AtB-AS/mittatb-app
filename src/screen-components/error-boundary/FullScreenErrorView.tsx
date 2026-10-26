@@ -1,6 +1,6 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, themes} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ThemedCrashSmall} from '@atb/theme/ThemedAssets';
 import React from 'react';
 import {View} from 'react-native';
@@ -31,14 +31,15 @@ export function FullScreenErrorView({onRestartApp}: ErrorProps) {
       </View>
       <View style={styles.container}>
         <Button
+          surfaceColor="accent"
           expanded={true}
           text="Start på nytt"
           onPress={onRestartApp}
           style={styles.button}
         />
         <Button
+          surfaceColor="accent"
           mode="secondary"
-          backgroundColor={themes['light'].color.background.neutral[2]}
           expanded={true}
           text={getContactButtonText(CUSTOMER_SERVICE_URL)}
           rightIcon={{svg: ExternalLink}}

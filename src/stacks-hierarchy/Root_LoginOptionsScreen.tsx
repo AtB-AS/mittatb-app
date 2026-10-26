@@ -64,7 +64,7 @@ export const Root_LoginOptionsScreen = ({
   const {completeOnboardingSection} = useOnboardingContext();
 
   const {mutateAsync: authVipps} = useAuthenticateVipps({
-    onSuccess: (url) => openInAppBrowser(url, 'cancel'),
+    onSuccess: (url) => openInAppBrowser(url),
     onError: () => setError('unknown_error'),
     onSettled: () => {
       setIsLoading(false);
@@ -187,8 +187,8 @@ export const Root_LoginOptionsScreen = ({
         <View style={styles.buttonContainer}>
           <VippsLoginButton onPress={authVipps} disabled={isLoading} />
           <Button
+            surfaceColor="accent"
             expanded={true}
-            interactiveColor={theme.color.interactive[0]}
             mode="primary"
             onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
             text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
@@ -200,9 +200,9 @@ export const Root_LoginOptionsScreen = ({
             testID="chooseLoginPhoneButton"
           />
           <Button
+            surfaceColor="accent"
             expanded={true}
             mode="secondary"
-            backgroundColor={themeColor}
             onPress={() =>
               navigation.push('Root_PurchaseAsAnonymousConsequencesScreen', {
                 showLoginButton: false,
@@ -220,11 +220,13 @@ export const Root_LoginOptionsScreen = ({
         {termsInfoUrl && (
           <View style={styles.termsOfUseLinkContainer}>
             <Button
+              surfaceColor="accent"
               expanded={true}
-              backgroundColor={themeColor}
               mode="tertiary"
               rightIcon={{svg: ExternalLink}}
-              onPress={() => openInAppBrowser(termsInfoUrl, 'done')}
+              onPress={() =>
+                openInAppBrowser(termsInfoUrl, {dismissButtonStyle: 'done'})
+              }
               text={t(LoginTexts.logInOptions.termsOfUse)}
               accessibilityRole="link"
             />

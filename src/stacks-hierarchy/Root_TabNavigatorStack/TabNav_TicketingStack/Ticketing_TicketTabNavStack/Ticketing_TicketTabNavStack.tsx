@@ -9,9 +9,9 @@ import React, {createContext, useContext, useMemo} from 'react';
 import {TicketTabNavStackParams} from './navigation-types';
 import {useFareContracts} from '@atb/modules/ticketing';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {View, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import {Route} from '@react-navigation/native';
-import {Button} from '@atb/components/button';
+import {RadioSegments} from '@atb/components/radio';
 import {getServerNowGlobal} from '@atb/modules/time';
 import Animated, {
   useAnimatedScrollHandler,
@@ -161,19 +161,14 @@ const TabBar: React.FC<
   }
 > = ({state, descriptors, navigation, borderStyle, onTabSwitch}) => {
   const styles = useStyles();
-  const theme = useThemeContext();
   return (
     <Animated.View style={borderStyle}>
-      <View style={styles.container}>
-        {state.routes.map((route: Route<string>, index: number) => {
+      <RadioSegments
+        activeIndex={state.index}
+        accessibilityRole="tab"
+        style={styles.container}
+        options={state.routes.map((route: Route<string>, index: number) => {
           const {options} = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-                ? options.title
-                : route.name;
-
           const isFocused = state.index === index;
 
           const onPress = () => {
@@ -189,38 +184,23 @@ const TabBar: React.FC<
             }
           };
 
-          return (
-            <Button
-              key={index}
-              text={typeof label === 'string' ? label : route.name}
-              type="large"
-              active={isFocused}
-              expanded={true}
-              onPress={onPress}
-              interactiveColor={theme.theme.color.interactive[2]}
-              accessibilityRole="tab"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityHint={options.tabBarAccessibilityLabel}
-              testID={options.tabBarButtonTestID}
-              style={styles.button}
-            />
-          );
+          return {
+            text:
+              typeof options.tabBarLabel === 'string'
+                ? options.tabBarLabel
+                : route.name,
+            onPress,
+            accessibilityHint: options.tabBarAccessibilityLabel,
+            testID: options.tabBarButtonTestID,
+          };
         })}
-      </View>
+      />
     </Animated.View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexDirection: 'row',
     margin: theme.spacing.medium,
-    gap: theme.spacing.small,
-    backgroundColor: theme.color.background.neutral[0].background,
-    borderRadius: theme.border.radius.circle,
-    padding: theme.spacing.xSmall,
-  },
-  button: {
-    flex: 1,
   },
 }));

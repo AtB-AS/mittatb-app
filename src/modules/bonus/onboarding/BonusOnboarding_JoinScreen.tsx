@@ -50,6 +50,7 @@ export const BonusOnboarding_JoinScreen = () => {
   return (
     <OnboardingScreenComponent
       footerButton={{
+        surfaceColor: 'accent',
         onPress,
         text: t(BonusProgramTexts.terms.button.text),
         expanded: true,
@@ -148,7 +149,6 @@ export const Terms = ({error}: {error: Error | null}) => {
           onPress={() =>
             openInAppBrowser(
               'https://www.atb.no/vilkar/personvernerklaering-for-kundetjenester/',
-              'close',
             )
           }
           accessibility={{
