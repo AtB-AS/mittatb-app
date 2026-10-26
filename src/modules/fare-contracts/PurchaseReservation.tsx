@@ -80,7 +80,6 @@ export const PurchaseReservation: React.FC<Props> = ({reservation, now}) => {
               {t(TicketingTexts.reservation.orderId(reservation.orderId))}
             </ThemeText>
           </View>
-          {/* Without a url, e.g. when paid with a payment agreement, there is nothing to open */}
           {status === 'reserving' &&
             reservation.paymentType === PaymentType.Vipps &&
             !!reservation.url && (

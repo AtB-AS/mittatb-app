@@ -10,7 +10,6 @@ import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMet
 import {View} from 'react-native';
 import {PaymentAgreementBox} from './PaymentAgreementBox';
 
-// Only Vipps agreements are supported for now
 const SUPPORTED_PAYMENT_TYPES = [PaymentType.Vipps];
 
 type Props = {

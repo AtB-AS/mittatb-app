@@ -89,7 +89,6 @@ export const PaymentAgreementBox = ({
             text={t(PaymentMethodsTexts.agreements.vipps.active.stopButton)}
             loading={isLoading}
             onPress={() => onStop(agreement)}
-            style={styles.button}
             testID="stopVippsAgreementButton"
           />
         ) : (
@@ -100,7 +99,6 @@ export const PaymentAgreementBox = ({
             rightIcon={{svg: ExternalLink}}
             loading={isLoading}
             onPress={onActivate}
-            style={styles.button}
             testID="activateVippsAgreementButton"
           />
         )}
@@ -123,9 +121,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   texts: {
     rowGap: theme.spacing.small,
-  },
-  button: {
-    // Without this the GenericSectionItem squishes the button
-    width: '100%',
   },
 }));

@@ -220,9 +220,6 @@ function routeForPaymentMethods(): ResultState | undefined {
           routes: [
             {
               name: 'TabNav_ProfileStack',
-              // Navigates to the screen, on top of the profile screen, instead
-              // of resetting the profile stack, which would animate in the
-              // screen even if it is already shown.
               params: {screen: 'Profile_PaymentMethodsScreen', initial: false},
             },
           ],
