@@ -2,7 +2,6 @@ import {Camera, CameraScreenContainer, PhotoFile} from '@atb/components/camera';
 import {Ref, useEffect, useRef, useState} from 'react';
 import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {useTranslation} from '@atb/translations';
-import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {View} from 'react-native';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';

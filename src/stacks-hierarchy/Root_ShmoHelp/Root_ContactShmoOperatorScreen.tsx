@@ -264,6 +264,7 @@ export const Root_ContactShmoOperatorScreen = ({
         <Button
           surfaceColor="accent"
           loading={supportRequestStatus === 'pending'}
+          disabled={isAddingImages}
           expanded={true}
           mode="primary"
           text={t(ContactShmoOperatorTexts.submitButton)}
