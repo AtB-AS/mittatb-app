@@ -249,7 +249,11 @@ export const formatMinuteRange = (
   return `${formatMinuteBoundaryWithUnit(start, t)}-${formatMinuteBoundaryWithUnit(end, t)}`;
 };
 
-export const formatRange = (rangeInMeters: number, language: Language) => {
+export const formatRange = (
+  rangeInMeters: number | null | undefined,
+  language: Language,
+) => {
+  if (rangeInMeters == null) return '- -';
   const rangeInKm =
     rangeInMeters > 5000
       ? (rangeInMeters / 1000).toFixed(0)
