@@ -271,9 +271,7 @@ export const ActiveShmoSheet = ({
               <VehicleCard
                 currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
                 currentRangeMeters={
-                  activeBooking.asset?.currentRangeKm
-                    ? activeBooking.asset.currentRangeKm * 1000
-                    : 0
+                  activeBooking.asset?.currentRangeMeters ?? 0
                 }
                 formFactor={activeBooking.asset.formFactor ?? undefined}
               />

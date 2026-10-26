@@ -371,7 +371,7 @@ export const AssetSchema = z.object({
   stationId: z.string().nullish(),
   licensePlate: z.string().nullish(),
   stateOfCharge: z.number().int().nullish(),
-  currentRangeKm: z.number().int().nullish(),
+  currentRangeMeters: z.number().int().nullish(),
   formFactor: FormFactorSchema.nullish(),
   propulsionType: PropulsionTypeSchema.nullish(),
   stationSlotName: z.string().nullish(),
