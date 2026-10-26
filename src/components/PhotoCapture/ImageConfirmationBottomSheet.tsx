@@ -1,10 +1,6 @@
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
-import {Coordinates} from '@atb/utils/coordinates';
-import {UserCoordinatesMap} from '../../stacks-hierarchy/Root_ShmoHelp/components/UserCoordinatesMap';
-import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
@@ -13,64 +9,62 @@ import {
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = {
-  file: string;
-  coordinates: Coordinates | undefined;
+  file: string | undefined;
   onConfirm: () => void;
   bottomSheetModalRef: React.RefObject<BottomSheetModalMethods | null>;
   onCloseFocusRef: React.RefObject<View | null>;
+  heading: string | undefined;
+  confirmText: string;
+  dismissText: string;
+  onDismiss?: () => void;
 };
 
 export const ImageConfirmationBottomSheet = ({
   file,
-  coordinates,
   onConfirm,
   bottomSheetModalRef,
   onCloseFocusRef,
+  heading,
+  confirmText,
+  dismissText,
+  onDismiss,
 }: Props) => {
-  const {t} = useTranslation();
   const styles = useStyles();
 
   return (
     <BottomSheetModal
       bottomSheetModalRef={bottomSheetModalRef}
-      heading={t(ParkingViolationTexts.imageConfirmation.title)}
+      heading={heading}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       closeCallback={() => {
         giveFocus(onCloseFocusRef);
       }}
     >
       <View style={styles.container}>
-        <View style={styles.imageAndPosition}>
-          <View style={styles.fullHeight}>
-            <Image
-              source={{uri: file}}
-              style={{
-                resizeMode: 'cover',
-                aspectRatio: 3 / 4,
-              }}
-            />
-          </View>
-          <View style={styles.fullHeight}>
-            <UserCoordinatesMap
-              style={styles.fullHeight}
-              userCoordinates={coordinates}
-            />
-          </View>
-        </View>
+        {!!file && (
+          <Image
+            source={{uri: file}}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        )}
         <Button
           surfaceColor="accent"
           expanded={true}
           style={styles.button}
           onPress={onConfirm}
-          text={t(ParkingViolationTexts.imageConfirmation.confirmButton)}
+          text={confirmText}
         />
         <Button
           surfaceColor="accent"
           expanded={true}
           style={styles.button}
           mode="secondary"
-          onPress={() => bottomSheetModalRef.current?.dismiss()}
-          text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
+          onPress={() => {
+            bottomSheetModalRef.current?.dismiss();
+            onDismiss?.();
+          }}
+          text={dismissText}
         />
       </View>
     </BottomSheetModal>
@@ -82,12 +76,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       marginHorizontal: theme.spacing.medium,
     },
-    imageAndPosition: {
-      flexDirection: 'row',
-      columnGap: theme.spacing.medium,
-    },
-    fullHeight: {
-      flex: 1,
+    image: {
+      width: '100%',
+      aspectRatio: 4 / 3,
+      backgroundColor: theme.color.background.neutral[1].background,
     },
     button: {
       marginTop: theme.spacing.medium,

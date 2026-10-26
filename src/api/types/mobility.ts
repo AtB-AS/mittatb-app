@@ -447,6 +447,8 @@ export enum SupportType {
 }
 
 export const MAX_SUPPORT_COMMENT_LENGTH = 400;
+export const MAX_UPLOAD_IMAGE_COUNT = 3;
+export const SUPPORT_IMAGE_MAX_SIZE = 1024;
 
 export const VehiclesRequestBodySchema = z.object({
   stationId: z.string().nullish(),
@@ -500,6 +502,7 @@ export const SendSupportRequestBodySchema = z.object({
       name: z.string().nullish(),
     })
     .nullish(),
+  files: z.array(ShmoImageFileSchema).max(MAX_UPLOAD_IMAGE_COUNT).nullish(),
 });
 
 export type SendSupportRequestBodyInput = z.input<

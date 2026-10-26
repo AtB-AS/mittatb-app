@@ -76,6 +76,47 @@ export const ContactShmoOperatorTexts = {
         `Kommentaren er for lang. Det er maks ${maxCommentLength} teikn.`,
       ),
   },
+  image: {
+    header: (maxFiles: number) =>
+      _(
+        `Legg ved bilde (maks ${maxFiles} bilder)`,
+        `Attach image (max ${maxFiles} images)`,
+        `Legg ved bilete (maks ${maxFiles} bilete)`,
+      ),
+    addButton: _('Legg ved bilde', 'Attach image', 'Legg ved bilete'),
+    label: (index: number) =>
+      _(`Bilde ${index}`, `Image ${index}`, `Bilete ${index}`),
+    view: _('Vis', 'View', 'Vis'),
+    keep: _('Behold', 'Keep', 'Behald'),
+    removeA11yHint: (index: number) =>
+      _(
+        `Trykk for å se eller fjerne bilde ${index}`,
+        `Press to view or remove image ${index}`,
+        `Trykk for å sjå eller fjerne bilete ${index}`,
+      ),
+    source: {
+      title: _('Legg ved bilde', 'Attach image', 'Legg ved bilete'),
+      camera: _('Ta bilde', 'Take photo', 'Ta bilete'),
+      library: _(
+        'Velg fra bildegalleri',
+        'Choose from photo library',
+        'Vel frå biletgalleri',
+      ),
+    },
+    camera: {
+      title: _('Ta bilde', 'Take photo', 'Ta bilete'),
+      instruction: _(
+        'Vis gjerne hele kjøretøyet og det som er galt.',
+        'Try to show the whole vehicle and what is wrong with it.',
+        'Vis gjerne heile køyretøyet og det som er gale.',
+      ),
+    },
+    error: _(
+      'Vi klarte ikke å hente bildet. Vennligst prøv på nytt.',
+      'We could not load the image. Please try again.',
+      'Vi klarte ikkje å hente biletet. Ver vennleg og prøv på nytt.',
+    ),
+  },
   contactInfo: {
     header: _(
       'Din kontaktinfo (E-postadresse er obligatorisk)',
