@@ -1,7 +1,7 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod, PaymentSelection} from './types';
 import {humanizePaymentType, PaymentType} from '@atb/modules/ticketing';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {Platform, View} from 'react-native';
 import {NativeApplePayHandler} from '@atb/modules/native';
@@ -67,8 +67,6 @@ export const SinglePaymentMethod = ({
   }
 
   const paymentTexts = getPaymentTexts(paymentMethod);
-  const {theme} = useThemeContext();
-  const radioColor = theme.color.interactive[2].outline.background;
   const paymentSelection = getPaymentSelection(paymentMethod);
 
   if (
@@ -93,7 +91,7 @@ export const SinglePaymentMethod = ({
         <View style={styles.column}>
           <View style={styles.row}>
             <View style={styles.centerRow}>
-              <RadioIcon checked={selected} color={radioColor} />
+              <RadioIcon checked={selected} />
               <View style={styles.reccuringCard}>
                 <ThemeText>{paymentTexts.text}</ThemeText>
                 {paymentMethod.recurringPayment && (

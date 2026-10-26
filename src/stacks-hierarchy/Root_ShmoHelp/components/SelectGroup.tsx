@@ -92,9 +92,9 @@ const SelectItem = <T,>({
 }: ItemProps<T>) => {
   const itemStyles = useItemStyles();
   const {theme} = useThemeContext();
-  const background = theme.color.background.neutral[0].background;
-  const selectedBackground = theme.color.interactive[2].active.background;
-  const selectedBorder = theme.color.interactive[0].default.background;
+  const background = theme.color.surface.neutral.strong.background;
+  const selectedBackground = theme.color.surface.accent.subtle.background;
+  const selectedBorder = theme.color.surface.accent.strong.background;
 
   return (
     <View style={style ?? itemStyles.container}>
@@ -118,10 +118,7 @@ const SelectItem = <T,>({
           <Checkbox style={itemStyles.indicator} checked={selected} />
         ) : (
           <View style={itemStyles.indicator}>
-            <RadioIcon
-              checked={selected}
-              color={theme.color.interactive[0].default.background}
-            />
+            <RadioIcon checked={selected} />
           </View>
         )}
         {renderItem(item, selected)}
@@ -135,7 +132,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacing.medium,
   },
   item: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.regular,
     borderWidth: 2,
     paddingVertical: theme.spacing.medium,

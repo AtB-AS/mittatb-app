@@ -117,7 +117,6 @@ export const SelectTravelTokenScreenComponent = ({
                 setSelectedToken(travelCardToken);
               }}
               testID="selectTravelcard"
-              interactiveColor={theme.color.interactive[2]}
             />
           )}
           <RadioBox

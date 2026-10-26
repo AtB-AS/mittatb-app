@@ -1,7 +1,7 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod} from './types';
 import {useAuthContext} from '@atb/modules/auth';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType} from '@atb/modules/ticketing';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {View} from 'react-native';
@@ -30,8 +30,6 @@ export const MultiplePaymentMethodsRadioSection = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const {authenticationType} = useAuthContext();
-  const {theme} = useThemeContext();
-  const radioColor = theme.color.interactive[2].outline.background;
 
   function getPaymentTexts(method: PaymentMethod[]): {
     label: string;
@@ -80,7 +78,7 @@ export const MultiplePaymentMethodsRadioSection = ({
         <View style={styles.column}>
           <View style={styles.row}>
             <View style={styles.centerRow}>
-              <RadioIcon checked={selected} color={radioColor} />
+              <RadioIcon checked={selected} />
               <View style={styles.reccuringCard}>
                 <ThemeText>
                   {t(SelectPaymentMethodTexts.multiple_payment.title)}
