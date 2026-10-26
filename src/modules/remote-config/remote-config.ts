@@ -1,5 +1,5 @@
 import {getAll, getRemoteConfig} from '@react-native-firebase/remote-config';
-import {ENABLE_TICKETING, CUSTOMER_SERVICE_URL} from '@env';
+import {ENABLE_TICKETING} from '@env';
 import {
   MAPBOX_API_TOKEN,
   MAPBOX_NSR_SOURCE_LAYER_ID,
@@ -8,7 +8,6 @@ import {
 } from '@env';
 
 export type RemoteConfig = {
-  customer_service_url: string;
   default_map_filter: string;
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
@@ -90,7 +89,6 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  customer_service_url: CUSTOMER_SERVICE_URL,
   default_map_filter: JSON.stringify({
     mobility: {
       CAR: {showAll: true},
@@ -177,9 +175,6 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = getAll(getRemoteConfig());
 
-  const customer_service_url =
-    values['customer_service_url']?.asString() ??
-    defaultRemoteConfig.customer_service_url;
   const default_map_filter =
     values['default_map_filter']?.asString() ??
     defaultRemoteConfig.default_map_filter;
@@ -395,7 +390,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.use_trygg_overgang_qr_code;
 
   return {
-    customer_service_url,
     default_map_filter,
     disable_email_field_in_profile_page,
     disable_travelcard,
