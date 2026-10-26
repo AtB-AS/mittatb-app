@@ -111,6 +111,9 @@ export const FareContractView: React.FC<Props> = ({
 
   const accesses = getAccesses(fareContract);
 
+  const shouldShowShmoTripDetails =
+    hasShmoBookingId(fareContract) && validityStatus !== 'cancelled';
+
   return (
     <Section testID={testID}>
       {hasShmoBookingId(fareContract) ? (
@@ -129,13 +132,15 @@ export const FareContractView: React.FC<Props> = ({
       )}
 
       {hasShmoBookingId(fareContract) ? (
-        <ShmoTripDetailsSectionItem
-          startDateTime={fareContract.travelRights[0].startDateTime}
-          endDateTime={fareContract.travelRights[0].endDateTime}
-          totalAmount={fareContract.totalAmount}
-          currency="NOK" // not supported for fc yet
-          withHeader={true}
-        />
+        shouldShowShmoTripDetails && (
+          <ShmoTripDetailsSectionItem
+            startDateTime={fareContract.travelRights[0].startDateTime}
+            endDateTime={fareContract.travelRights[0].endDateTime}
+            totalAmount={fareContract.totalAmount}
+            currency="NOK" // not supported for fc yet
+            withHeader={true}
+          />
+        )
       ) : (
         <TravelInfoSectionItem
           fc={fareContract}

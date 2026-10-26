@@ -377,10 +377,20 @@ export function isNumberOfMinutesInThePast(
 export function formatToLongDateTime(
   isoDate: string | Date,
   language: Language,
+  fullMonthName?: boolean,
 ) {
   const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language, 'floor');
+  }
+  if (fullMonthName) {
+    return format(
+      parsed,
+      isSameYear(parsed, new Date())
+        ? 'dd. MMMM, HH:mm'
+        : 'dd. MMMM yyyy, HH:mm',
+      {locale: languageToLocale(language)},
+    );
   }
   if (isSameYear(parsed, new Date())) {
     return formatToShortDateTimeWithoutYear(parsed, language);
