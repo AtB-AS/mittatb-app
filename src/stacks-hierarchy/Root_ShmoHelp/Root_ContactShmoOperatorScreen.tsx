@@ -92,7 +92,7 @@ export const Root_ContactShmoOperatorScreen = ({
     showError,
     supportRequestStatus,
     isAddingImages,
-    hasPickerError,
+    hasImageError,
     images,
     pickFromLibrary,
     removeImage,
@@ -174,7 +174,7 @@ export const Root_ContactShmoOperatorScreen = ({
         <SupportImageSection
           images={images}
           isAddingImages={isAddingImages}
-          hasPickerError={hasPickerError}
+          hasImageError={hasImageError}
           onPickFromLibrary={pickFromLibrary}
           onRemoveImage={removeImage}
           onTakePhoto={() => navigation.navigate('Root_SupportPhotoScreen')}
@@ -333,7 +333,7 @@ const useShmoContactFormController = (
 
   const [showError, setShowError] = useState(false);
 
-  const {images, isAddingImages, hasPickerError, pickFromLibrary, removeImage} =
+  const {images, isAddingImages, hasImageError, pickFromLibrary, removeImage} =
     useSupportImages();
 
   const {
@@ -348,6 +348,7 @@ const useShmoContactFormController = (
     useSendSupportRequestMutation(operatorId, onSuccess);
 
   const onSubmit = () => {
+    if (isAddingImages) return;
     if (isAllInputValid && validatedRequestBody) {
       const currentUserCoordinates = getCurrentCoordinatesGlobal();
       const files = images.map((image, index) => ({
@@ -387,7 +388,7 @@ const useShmoContactFormController = (
     showError,
     supportRequestStatus,
     isAddingImages,
-    hasPickerError,
+    hasImageError,
     images,
     pickFromLibrary,
     removeImage,

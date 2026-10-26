@@ -104,11 +104,7 @@ export const ContactShmoOperatorTexts = {
       ),
     },
     camera: {
-      title: _(
-        'Ta bilde av feilen',
-        'Photograph the fault',
-        'Ta bilete av feilen',
-      ),
+      title: _('Ta bilde', 'Take photo', 'Ta bilete'),
       instruction: _(
         'Vis gjerne hele kjøretøyet og det som er galt.',
         'Try to show the whole vehicle and what is wrong with it.',

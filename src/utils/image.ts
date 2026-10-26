@@ -29,7 +29,7 @@ export const Base64ImageSchema = z
     {message: 'Invalid base64 payload'},
   );
 
-const EMPTY_IMAGE_BASE64 =
+export const EMPTY_IMAGE_BASE64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAABJRu5ErkJggg==';
 
 export async function compressImageToBase64(

@@ -4,7 +4,7 @@ import {
   MAX_UPLOAD_IMAGE_COUNT,
   SUPPORT_IMAGE_MAX_SIZE,
 } from '@atb/api/types/mobility';
-import {compressImageToBase64} from '@atb/utils/image';
+import {compressImageToBase64, EMPTY_IMAGE_BASE64} from '@atb/utils/image';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {errorToMetadata, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 import {create} from 'zustand';
@@ -34,7 +34,7 @@ export type SupportImage = {
 export const useSupportImages = () => {
   const [images, setImages] = useState<SupportImage[]>([]);
   const [isAddingImages, setIsAddingImages] = useState(false);
-  const [hasPickerError, setHasPickerError] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
   const pendingPhoto = usePendingSupportPhotoStore(
     (state) => state.pendingPhoto,
   );
@@ -44,27 +44,38 @@ export const useSupportImages = () => {
 
   const addImages = useCallback(async (paths: string[]) => {
     setIsAddingImages(true);
+    setHasImageError(false);
     try {
-      const added = await Promise.all(
-        paths.map(async (path) => {
-          const compressed = await compressImageToBase64(
+      const compressed = await Promise.all(
+        paths.map((path) =>
+          compressImageToBase64(
             path,
             SUPPORT_IMAGE_MAX_SIZE,
             SUPPORT_IMAGE_MAX_SIZE,
-          );
-          // compressImageToBase64 returns bare base64; the split only guards
-          // against it gaining a data URI prefix later.
-          return {id: uuid(), fileData: compressed.split(',').pop() ?? ''};
-        }),
+          ),
+        ),
       );
-      setImages((prev) => [...prev, ...added].slice(0, MAX_UPLOAD_IMAGE_COUNT));
+
+      const added = compressed
+        .filter((fileData) => fileData !== EMPTY_IMAGE_BASE64)
+        .map((fileData) => ({
+          id: uuid(),
+          fileData: fileData.split(',').pop() ?? '',
+        }));
+
+      if (added.length < paths.length) setHasImageError(true);
+      if (added.length) {
+        setImages((prev) =>
+          [...prev, ...added].slice(0, MAX_UPLOAD_IMAGE_COUNT),
+        );
+      }
     } finally {
       setIsAddingImages(false);
     }
   }, []);
 
   const pickFromLibrary = useCallback(async () => {
-    setHasPickerError(false);
+    setHasImageError(false);
     try {
       const result = await launchImageLibrary({
         mediaType: 'photo',
@@ -85,7 +96,7 @@ export const useSupportImages = () => {
       notifyBugsnag('Support image library picker failed', {
         metadata: errorToMetadata(e),
       });
-      setHasPickerError(true);
+      setHasImageError(true);
     }
   }, [images.length, addImages]);
 
@@ -102,7 +113,7 @@ export const useSupportImages = () => {
   return {
     images,
     isAddingImages,
-    hasPickerError,
+    hasImageError,
     addImages,
     pickFromLibrary,
     removeImage,

@@ -15,7 +15,7 @@ import {SUPPORT_IMAGE_FILE_TYPE, SupportImage} from '../use-support-images';
 type Props = {
   images: SupportImage[];
   isAddingImages: boolean;
-  hasPickerError: boolean;
+  hasImageError: boolean;
   onPickFromLibrary: () => void;
   onRemoveImage: (id: string) => void;
   onTakePhoto: () => void;
@@ -24,7 +24,7 @@ type Props = {
 export const SupportImageSection = ({
   images,
   isAddingImages,
-  hasPickerError,
+  hasImageError,
   onPickFromLibrary,
   onRemoveImage,
   onTakePhoto,
@@ -84,7 +84,7 @@ export const SupportImageSection = ({
           text={t(ContactShmoOperatorTexts.image.addButton)}
         />
       )}
-      {hasPickerError && (
+      {hasImageError && (
         <MessageInfoBox
           type="error"
           message={t(ContactShmoOperatorTexts.image.error)}
