@@ -14,7 +14,7 @@ import {ONE_HOUR_MS} from '@atb/utils/durations';
 
 type Props = {
   reservations: Reservation[];
-  preReservations?: PreReservation[];
+  preReservation?: PreReservation;
   fareContracts: FareContractType[];
   now: number;
   onPressFareContract: (orderId: string) => void;
@@ -29,7 +29,7 @@ type Props = {
 export const FareContractAndReservationsList: React.FC<Props> = ({
   fareContracts,
   reservations,
-  preReservations,
+  preReservation,
   now,
   onPressFareContract,
   onNavigateToBonusScreen,
@@ -45,24 +45,19 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
     now,
   );
 
-  // Hide pre-reservations that never got a reservation or fare contract, e.g.
+  // Hide pre-reservation that never got a reservation or fare contract, e.g.
   // if the Firestore listener failed.
-  const recentPreReservations = preReservations?.filter(
-    (r) => now - r.created.getTime() < ONE_HOUR_MS,
-  );
+  const showPreReservation =
+    !!preReservation && now - preReservation.created.getTime() < ONE_HOUR_MS;
 
   return (
     <View style={styles.container}>
-      {!fcAndReservations.length && !recentPreReservations?.length && (
+      {!fcAndReservations.length && !showPreReservation && (
         <EmptyState {...emptyStateConfig} testID="fareContracts" />
       )}
-      {recentPreReservations?.map((preReservation) => (
-        <PreReservationCard
-          key={preReservation.orderId}
-          preReservation={preReservation}
-          now={now}
-        />
-      ))}
+      {showPreReservation && (
+        <PreReservationCard preReservation={preReservation} now={now} />
+      )}
       {fcAndReservations?.map((fcOrReservation, index) => (
         <FareContractOrReservation
           now={now}
