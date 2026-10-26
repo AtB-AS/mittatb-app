@@ -357,7 +357,7 @@ export const DepartureDetailsScreenComponent = ({
                 {shouldShowMapButton && (
                   <View style={{flex: 1}}>
                     <Button
-                      surfaceColor="neutral"
+                      surfaceColor="accent"
                       mode="secondary"
                       type="small"
                       expanded={true}

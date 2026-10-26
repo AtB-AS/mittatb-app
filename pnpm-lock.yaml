@@ -127,10 +127,10 @@ importers:
         version: 18.20.0
       '@atb-as/mapbox-shared':
         specifier: ^1.0.4
-        version: 1.0.4(@atb-as/theme@16.3.0)
+        version: 1.0.4(@atb-as/theme@16.4.0)
       '@atb-as/theme':
-        specifier: ^16.3.0
-        version: 16.3.0
+        specifier: ^16.4.0
+        version: 16.4.0
       '@atb-as/utils':
         specifier: ^8.0.1
         version: 8.0.1(zod@4.1.11)
@@ -619,8 +619,8 @@ packages:
   '@atb-as/theme@14.0.1':
     resolution: {integrity: sha512-NYL92rDfXfkc4OAOWZNdhMvlCrqe6RExPbLGICkXHhpFQgEK77pzJNFO85Rj43+DRYeu32nGOBtEjJsIe1rINA==}
 
-  '@atb-as/theme@16.3.0':
-    resolution: {integrity: sha512-DJoSsBGZVp3LiKyQclV6X69qFmt43igcjJd1PChgvNt/c9/C84hKgjAR8Zl+6MXsjF+NaEXBw/BkdiYmR+IW1g==}
+  '@atb-as/theme@16.4.0':
+    resolution: {integrity: sha512-O/istl76B/Q7cVTy3kBwjlpTWZJo1j/rUVLU0/+MeyKNyCcGrsp5m7nuVkGdgkAq2h8FIZOw2cUpPWxdSwdEcg==}
 
   '@atb-as/utils@8.0.1':
     resolution: {integrity: sha512-3SsBVVpwSOHFFfFGMC7a2ufWzGd8IDx+Uz2SnPoKHr1FGncwGU/ul2P32V37/31pdqQWa33AAP7IIHApqYt/yg==}
@@ -7800,9 +7800,9 @@ snapshots:
       normalize-path: 3.0.0
       stream-editor: 1.11.0
 
-  '@atb-as/mapbox-shared@1.0.4(@atb-as/theme@16.3.0)':
+  '@atb-as/mapbox-shared@1.0.4(@atb-as/theme@16.4.0)':
     dependencies:
-      '@atb-as/theme': 16.3.0
+      '@atb-as/theme': 16.4.0
 
   '@atb-as/theme@14.0.1':
     dependencies:
@@ -7810,7 +7810,7 @@ snapshots:
       hex-to-rgba: 2.0.1
       ts-deepmerge: 4.0.0
 
-  '@atb-as/theme@16.3.0':
+  '@atb-as/theme@16.4.0':
     dependencies:
       '@tfk-samf/figma-to-dtcg': 0.4.4
       hex-to-rgba: 2.0.1
