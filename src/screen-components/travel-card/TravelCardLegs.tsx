@@ -175,7 +175,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   walkContainer: {
-    backgroundColor: theme.color.surface.neutral.subtle.background,
+    backgroundColor: theme.color.transport.walk.background,
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',
@@ -183,7 +183,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
   },
   walkDuration: {
-    color: theme.color.foreground.dynamic.primary,
+    color: theme.color.transport.walk.foreground.primary,
   },
   row: {
     flex: 1,

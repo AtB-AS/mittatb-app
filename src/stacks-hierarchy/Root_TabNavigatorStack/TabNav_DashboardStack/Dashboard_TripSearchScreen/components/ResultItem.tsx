@@ -357,7 +357,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   walkContainer: {
-    backgroundColor: theme.color.surface.neutral.subtle.background,
+    backgroundColor: theme.color.transport.walk.background,
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',
@@ -367,7 +367,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   walkDuration: {
     fontSize: 10,
     marginLeft: -2,
-    color: theme.color.foreground.dynamic.primary,
+    color: theme.color.transport.walk.foreground.primary,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -433,6 +433,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const styles = useThemeStyles();
+  const {theme} = useThemeContext();
   const showWaitTime = Boolean(nextLeg);
   const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
@@ -458,7 +459,11 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.walkContainer} testID="footLeg">
-      <ThemeIcon accessibilityLabel={a11yText} svg={WalkFill} />
+      <ThemeIcon
+        accessibilityLabel={a11yText}
+        svg={WalkFill}
+        color={theme.color.transport.walk.foreground.primary}
+      />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );
