@@ -116,7 +116,6 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
-  const backgroundColor = theme.color.background.neutral[1];
   const themeColor = theme.color.background.neutral[1];
 
   const analytics = useAnalyticsContext();
@@ -483,7 +482,6 @@ export const DepartureDetailsScreenComponent = ({
               publicCode: publicCode ?? null,
             }}
             style={styles.messageBox}
-            textColor={backgroundColor}
           />
 
           <EstimatedCallRows

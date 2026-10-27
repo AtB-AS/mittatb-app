@@ -190,7 +190,7 @@ export const PreassignedFareContractSummary = ({
               globalMessageContext={
                 GlobalMessageContextEnum.appPurchaseConfirmation
               }
-              textColor="secondary"
+              textType="secondary"
               ruleVariables={{
                 preassignedFareProductType: preassignedFareProduct.type,
               }}
@@ -200,7 +200,7 @@ export const PreassignedFareContractSummary = ({
                 style={styles.smallTopMargin}
                 type="info"
                 message={travelDateText}
-                textColor="secondary"
+                textType="secondary"
               />
             )}
           </View>

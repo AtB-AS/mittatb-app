@@ -8,8 +8,7 @@ import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables, GlobalMessageType} from '@atb-as/utils';
-import {ContrastColor} from '@atb/theme/colors';
-import {ColorValue} from 'react-native';
+import {ForegroundType} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useAuthContext} from '@atb/modules/auth';
 import type {MarginStyle} from '@atb/theme';
@@ -19,7 +18,7 @@ type Props = {
   style?: StyleProp<MarginStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;
-  textColor?: ContrastColor | ColorValue;
+  textType?: ForegroundType;
 };
 
 const GlobalMessage = ({
@@ -27,7 +26,7 @@ const GlobalMessage = ({
   style,
   includeDismissed,
   ruleVariables,
-  textColor,
+  textType,
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
@@ -75,7 +74,7 @@ const GlobalMessage = ({
               key={globalMessage.id}
               type={globalMessage.type}
               message={message}
-              textColor={textColor}
+              textType={textType}
               isMarkdown={true}
               style={style}
               testID="globalMessage"

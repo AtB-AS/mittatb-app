@@ -1,5 +1,5 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   formatToVerboseFullDate,
   isWithinSameDate,
@@ -72,7 +72,6 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const {isScreenReaderEnabled} = useAccessibilityContext();
   const {enable_ticketing} = useRemoteConfigContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
@@ -186,7 +185,6 @@ export const Trip: React.FC<TripProps> = ({
       )}
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
-        textColor={theme.color.background.neutral[1]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,

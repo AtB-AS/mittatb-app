@@ -55,7 +55,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const focusRef = useFocusOnLoad(navigation);
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const {theme, themeName} = useThemeContext();
+  const {themeName} = useThemeContext();
 
   const builder = usePurchaseSelectionBuilder();
   const [selection, setSelection] = useParamAsState(params.selection);
@@ -371,7 +371,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   globalMessageContext={
                     GlobalMessageContextEnum.appPurchaseOverview
                   }
-                  textColor={theme.color.background.neutral[1]}
                   ruleVariables={{
                     preassignedFareProductType: preassignedFareProduct.type,
                     fromFareZone: selection.zones?.from.id || 'none',
