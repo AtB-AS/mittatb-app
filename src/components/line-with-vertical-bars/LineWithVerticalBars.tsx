@@ -28,7 +28,7 @@ export const LineWithVerticalBars = ({
   const {theme} = useThemeContext();
   const animatedVerticalLineOffset = useAnimatedVerticalLineOffset(animate);
   const numberOfVerticalLines = getNumberOfVerticalLines();
-  const lineColor = theme.color.background.neutral[0].background;
+  const lineColor = theme.color.surface.neutral.strong.background;
   return (
     <View style={styles.container}>
       <View
