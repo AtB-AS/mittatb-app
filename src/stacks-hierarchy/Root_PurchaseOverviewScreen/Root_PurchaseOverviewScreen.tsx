@@ -371,7 +371,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   globalMessageContext={
                     GlobalMessageContextEnum.appPurchaseOverview
                   }
-                  textColor={theme.color.background.neutral[0]}
+                  textColor={theme.color.background.neutral[1]}
                   ruleVariables={{
                     preassignedFareProductType: preassignedFareProduct.type,
                     fromFareZone: selection.zones?.from.id || 'none',

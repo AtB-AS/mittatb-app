@@ -95,7 +95,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
       <View style={styles.container}>
         <GlobalMessage
           globalMessageContext={GlobalMessageContextEnum.appPointsScreen}
-          textColor={theme.color.background.neutral[0]}
+          textColor={theme.color.background.neutral[1]}
         />
         {!isEnrolled && (
           <>

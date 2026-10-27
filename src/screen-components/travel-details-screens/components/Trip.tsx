@@ -186,7 +186,7 @@ export const Trip: React.FC<TripProps> = ({
       )}
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
-        textColor={theme.color.background.neutral[0]}
+        textColor={theme.color.background.neutral[1]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,

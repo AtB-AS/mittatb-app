@@ -381,7 +381,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </ThemeText>
           )}
           <GlobalMessage
-            textColor={theme.color.background.neutral[0]}
+            textColor={theme.color.background.neutral[1]}
             style={styles.globalMessage}
             globalMessageContext={GlobalMessageContextEnum.appTripResults}
             ruleVariables={{
