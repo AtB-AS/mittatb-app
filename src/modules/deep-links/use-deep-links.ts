@@ -1,4 +1,4 @@
-import {APP_SCHEME} from '@env';
+import {APP_SCHEME, UNIVERSAL_LINK_HOST} from '@env';
 import {useCallback, useRef} from 'react';
 import {Linking} from 'react-native';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
@@ -84,7 +84,10 @@ export function useDeepLinks() {
   );
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
-    prefixes: [`${APP_SCHEME}://`],
+    prefixes: [
+      `${APP_SCHEME}://`,
+      ...(UNIVERSAL_LINK_HOST ? [`https://${UNIVERSAL_LINK_HOST}`] : []),
+    ],
     getInitialURL: async () => {
       const url = await initialUrl;
       if (url) await prepare(url);
@@ -111,6 +114,10 @@ export function useDeepLinks() {
     },
     getStateFromPath(pathAndQuery, config) {
       const {path, params} = parseDeepLink(pathAndQuery);
+
+      // Planner web stop place, e.g. `/departures/NSR:StopPlace:41613`
+      const stopId = path.match(/^departures\/([^/]+)$/)?.[1];
+      if (stopId) return routeForDepartures('departures', {...params, stopId});
 
       switch (path) {
         case 'map':
@@ -351,6 +358,7 @@ function routeForTripSearch(
 
 /**
  * `atb://departures?stopId=...&quayId=...`
+ * `https://<planner web>/departures/<stopId>`
  * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
  */
