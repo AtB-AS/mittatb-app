@@ -717,17 +717,17 @@ export const ShmoWarnings = {
     'This vehicle is not available right now',
     'Dette køyretøyet er ikkje tilgjengeleg akkurat no',
   ),
-  vehicleClosed: (start: string | undefined, end: string | undefined) =>
-    start && end
+  operatorClosed: (operatorName: string, openingTime: string | undefined) =>
+    openingTime
       ? _(
-          `Kjøretøyet er kun tilgjengelig mellom ${start} og ${end}`,
-          `The vehicle is only available between ${start} and ${end}`,
-          `Køyretøyet er berre tilgjengeleg mellom ${start} og ${end}`,
+          `${operatorName} er stengt frem til ${openingTime}`,
+          `${operatorName} is closed until ${openingTime}`,
+          `${operatorName} er stengt fram til ${openingTime}`,
         )
       : _(
-          'Kjøretøyet er utenfor åpningstiden',
-          'The vehicle is outside opening hours',
-          'Køyretøyet er utanfor opningstida',
+          `${operatorName} er ikke tilgjengelig. Det er utenfor åpningstiden.`,
+          `${operatorName} is not available. It's outside opening hours.`,
+          `${operatorName} er ikkje tilgjengeleg. Det er utanfor opningstida.`,
         ),
   vehicleNotNear: _(
     'Du må være i nærheten av kjøretøyet for å starte en tur',

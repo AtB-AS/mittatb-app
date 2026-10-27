@@ -11,7 +11,9 @@ import {
 import {
   BicycleTexts,
   MobilityTexts,
+  ShmoWarnings,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
+import {formatReopensAt} from '../utils';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {
   FormFactor,
@@ -33,6 +35,7 @@ import {
 
 type Props = {
   station: Station;
+  operatorName: string;
   navigateSupportCallback: (params: ShmoHelpParams) => void;
   onPressVehicleType: (
     isStationBasedBooking: boolean,
@@ -44,10 +47,11 @@ type Props = {
 
 export const BikeStationIntegrationView = ({
   station,
+  operatorName,
   navigateSupportCallback,
   onPressVehicleType,
 }: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const queryClient = useQueryClient();
   const styles = useStyles();
   const vehicleTypeIds = (station?.vehicleTypesAvailable ?? []).map(
@@ -62,6 +66,10 @@ export const BikeStationIntegrationView = ({
 
   const isLoading = vehicleQueries.some((q) => q.isLoading);
   const isError = vehicleQueries.some((q) => q.isError);
+
+  const openingTime = station.openingHoursStatus?.openingTime
+    ? formatReopensAt(station.openingHoursStatus.openingTime, language, t)
+    : undefined;
 
   if (isLoading) {
     return (
@@ -83,6 +91,12 @@ export const BikeStationIntegrationView = ({
       )}
 
       <View style={styles.container}>
+        {station.openingHoursStatus?.isClosed && (
+          <MessageInfoBox
+            type="info"
+            message={t(ShmoWarnings.operatorClosed(operatorName, openingTime))}
+          />
+        )}
         <View style={styles.illustration}>
           <ThemedCityBikeStation />
         </View>

@@ -46,6 +46,12 @@ export const useShmoRequirements = (
   const requirements: ShmoRequirementType[] = useMemo(() => {
     return (preReqs ?? []).map((preReq): ShmoRequirementType => {
       switch (preReq.type) {
+        case PreReqType.OPENING_HOURS:
+          return {
+            requirementCode: PreReqType.OPENING_HOURS,
+            isLoading: false,
+            isBlocking: true,
+          };
         case PreReqType.IS_LOGGED_IN:
           return {
             requirementCode: PreReqType.IS_LOGGED_IN,

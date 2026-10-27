@@ -100,6 +100,7 @@ export const BikeStationBottomSheet = ({
         isShmoDeepIntegrationCitybikeEnabled ? (
           <BikeStationIntegrationView
             station={station}
+            operatorName={operatorName}
             navigateSupportCallback={navigateSupportCallback}
             onPressVehicleType={onVehicleTypeSelected}
           />

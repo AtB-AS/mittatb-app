@@ -1,6 +1,9 @@
 import {useAuthContext} from '@atb/modules/auth';
 import {ForceUpdateTexts, useTranslation} from '@atb/translations';
-import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  MobilityTexts,
+  ShmoWarnings,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import React, {useCallback} from 'react';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useShmoRequirements} from '../use-shmo-requirements.tsx';
@@ -18,8 +21,7 @@ import {StyleSheet} from '@atb/theme';
 import {formatFriendlyShmoErrorMessage} from '../utils.ts';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {PaymentMethod, savePreviousPayment} from '@atb/modules/payment';
-import {useMapContext, useShmoWarnings} from '@atb/modules/map';
-import {MessageInfoText} from '@atb/components/message-info-text';
+import {useMapContext} from '@atb/modules/map';
 import {AgeVerificationEnum} from '../queries/use-get-age-verification-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useMapVehicle} from '../use-map-vehicle.tsx';
@@ -65,16 +67,16 @@ export const ShmoActionButton = ({
   const appUpdateRequired = requirements.some(
     (req) => req.requirementCode === PreReqType.UNSUPPORTED,
   );
+  const openingHoursBlocking = requirements.find(
+    (req) => req.requirementCode === PreReqType.OPENING_HOURS,
+  )?.isBlocking;
+
   const {openStoreListing, isError: openStoreListingError} =
     useOpenStoreListing();
   const {t} = useTranslation();
   const styles = useStyles();
   const coordinates = getCurrentCoordinatesGlobal();
   const {logEvent} = useAnalyticsContext();
-  const {warningMessage} = useShmoWarnings(
-    // Shmo warnings not yet supported for station based vehicles.
-    mapState.isStationBasedBooking ? undefined : vehicleId,
-  );
   const isLoggedInBlocking = requirements.find(
     (req) => req.requirementCode === PreReqType.IS_LOGGED_IN,
   )?.isBlocking;
@@ -157,6 +159,12 @@ export const ShmoActionButton = ({
     );
   }
 
+  if (openingHoursBlocking) {
+    // Not resolvable by user action, and shown higher up in VehicleSheet (above the
+    // range/price info) instead -- so hide the button entirely
+    return null;
+  }
+
   if (isLoggedInBlocking) {
     return (
       <ButtonInfoTextCombo
@@ -183,8 +191,11 @@ export const ShmoActionButton = ({
 
   return (
     <View style={styles.startTripWrapper}>
-      {warningMessage && (
-        <MessageInfoText type="warning" message={warningMessage} />
+      {vehicle?.isDisabled && (
+        <MessageInfoBox
+          type="warning"
+          message={t(ShmoWarnings.vehicleDisabled)}
+        />
       )}
       {initShmoOneStopBookingIsError && (
         <MessageInfoBox

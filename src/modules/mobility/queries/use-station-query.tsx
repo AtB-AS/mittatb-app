@@ -9,5 +9,6 @@ export const useStationQuery = (id: string) =>
     staleTime: ONE_MINUTE_MS,
     gcTime: ONE_MINUTE_MS,
     refetchOnMount: 'always',
+    refetchInterval: ONE_MINUTE_MS,
     retry: 5,
   });
