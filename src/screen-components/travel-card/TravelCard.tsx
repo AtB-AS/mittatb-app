@@ -129,7 +129,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
   },
   containerDisabled: {
-    backgroundColor: theme.color.background.neutral[2].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
   },
   legsContainer: {
     gap: theme.spacing.medium,

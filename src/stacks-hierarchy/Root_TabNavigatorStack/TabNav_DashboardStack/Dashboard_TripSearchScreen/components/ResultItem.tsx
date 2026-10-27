@@ -350,14 +350,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderTopRightRadius: theme.border.radius.regular,
   },
   iconContainer: {
-    backgroundColor: theme.color.background.neutral[2].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.small,
     borderRadius: theme.border.radius.regular,
     alignItems: 'center',
   },
   walkContainer: {
-    backgroundColor: theme.color.background.neutral[2].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     paddingVertical: theme.spacing.small,
     paddingHorizontal: theme.spacing.small,
     flexDirection: 'row',

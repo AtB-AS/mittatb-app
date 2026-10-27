@@ -33,7 +33,7 @@ export const TicketingTile = ({
   const {theme} = useThemeContext();
 
   const themeColor = accented
-    ? theme.color.background.accent[3]
+    ? theme.color.surface.accent.strong
     : theme.color.background.neutral[0];
 
   return (

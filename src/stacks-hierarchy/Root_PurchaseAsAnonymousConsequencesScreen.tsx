@@ -29,7 +29,7 @@ import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
-const getAccentColor = (theme: Theme) => theme.color.background.accent[1];
+const getAccentColor = (theme: Theme) => theme.color.surface.accent.subtle;
 
 export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   navigation,
