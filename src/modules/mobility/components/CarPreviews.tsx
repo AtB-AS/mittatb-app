@@ -64,7 +64,7 @@ const MoreCarsIndicator = ({count}: MoreCarsProps) => {
   const {theme} = useThemeContext();
   return (
     <View style={style.moreCarsContainer}>
-      <ThemeText color={theme.color.transport.other}>+{count}</ThemeText>
+      <ThemeText color={theme.color.surface.neutral.subtle}>+{count}</ThemeText>
     </View>
   );
 };
@@ -91,7 +91,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       height: 40,
       width: 40,
       borderRadius: 8,
-      backgroundColor: theme.color.transport.other.background,
+      backgroundColor: theme.color.surface.neutral.subtle.background,
       justifyContent: 'center',
       alignItems: 'center',
     },
