@@ -78,7 +78,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   loading: {
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.circle,
-    backgroundColor: theme.color.interactive[2].default.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   right: {
     right: theme.spacing.medium,
