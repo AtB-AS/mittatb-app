@@ -338,13 +338,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacing.large,
   },
   destinationLine_grow: {
-    backgroundColor: theme.color.background.neutral[3].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     marginLeft: theme.spacing.xSmall,
     borderBottomLeftRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
   },
   destinationLine: {
-    backgroundColor: theme.color.background.neutral[3].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     marginRight: theme.spacing.xSmall,
     borderBottomRightRadius: theme.border.radius.regular,
     borderTopRightRadius: theme.border.radius.regular,
