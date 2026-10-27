@@ -69,7 +69,7 @@ function FavoriteItemContent({favorite, icon, testID, ...props}: BaseProps) {
       {icon ?? (
         <ThemeIcon
           svg={Edit}
-          color={theme.color.interactive[0].default.background}
+          color={theme.color.surface.accent.strong.background}
         />
       )}
     </View>

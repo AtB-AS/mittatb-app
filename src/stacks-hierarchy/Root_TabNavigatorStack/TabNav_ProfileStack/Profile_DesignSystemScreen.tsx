@@ -1021,11 +1021,6 @@ export const Profile_DesignSystemScreen = ({
           <GenericSectionItem active transparent>
             <ThemeText>Active transparent generic section item</ThemeText>
           </GenericSectionItem>
-          <GenericSectionItem interactiveColor={theme.color.interactive[0]}>
-            <ThemeText color={theme.color.foreground.light.primary}>
-              Generic section item with interactiveColor
-            </ThemeText>
-          </GenericSectionItem>
         </Section>
 
         <Section style={styles.section}>
@@ -1117,15 +1112,6 @@ export const Profile_DesignSystemScreen = ({
             disabled={true}
             onPress={() => {}}
             rightIcon={{svg: Delete, color: 'error'}}
-          />
-          <LinkSectionItem
-            text="Link with interactiveColor"
-            interactiveColor={theme.color.interactive[0]}
-          />
-          <LinkSectionItem
-            text="Active link with interactveColor"
-            interactiveColor={theme.color.interactive[0]}
-            active
           />
           <LinkSectionItem text="Link with label" label="new" />
           <LinkSectionItem active text="Active link" />
