@@ -32,7 +32,7 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'approved':
       return (
         <LineWithVerticalBars
-          backgroundColor={theme.color.interactive[0].default.background}
+          backgroundColor={theme.color.surface.accent.strong.background}
         />
       );
     case 'valid':

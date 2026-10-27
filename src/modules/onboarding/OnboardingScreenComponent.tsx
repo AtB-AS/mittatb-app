@@ -33,7 +33,6 @@ type OnboardingScreenComponentParams = {
 };
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
-const getInteractiveColor = (theme: Theme) => theme.color.interactive[0];
 
 export const OnboardingScreenComponent = ({
   illustration,
@@ -52,7 +51,7 @@ export const OnboardingScreenComponent = ({
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const descriptionLinkColor = getInteractiveColor(theme).default.background;
+  const descriptionLinkColor = theme.color.surface.accent.strong.background;
 
   return (
     <OnboardingFullScreenView
