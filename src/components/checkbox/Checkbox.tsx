@@ -12,7 +12,7 @@ type CheckedProps = {
 };
 
 const getDefaultColor = (theme: Theme) => theme.color.surface.neutral.strong;
-const getCheckedColor = (theme: Theme) => theme.color.background.accent[3];
+const getCheckedColor = (theme: Theme) => theme.color.surface.accent.strong;
 
 export const Checkbox: React.FC<CheckedProps> = ({
   checked,

@@ -355,7 +355,7 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
       backgroundColor: theme.color.surface.neutral.strong.background,
     },
     containerDisabled: {
-      backgroundColor: theme.color.background.neutral[2].background,
+      backgroundColor: theme.color.surface.neutral.subtle.background,
     },
     mainContent: {
       padding: theme.spacing.medium,
@@ -372,7 +372,7 @@ const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
       backgroundColor: theme.color.surface.neutral.strong.background,
     },
     footerDisabled: {
-      backgroundColor: theme.color.background.neutral[2].background,
+      backgroundColor: theme.color.surface.neutral.subtle.background,
     },
   };
 });
