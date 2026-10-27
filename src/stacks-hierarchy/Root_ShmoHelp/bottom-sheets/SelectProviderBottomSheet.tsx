@@ -69,7 +69,7 @@ export const SelectProviderBottomSheet = ({
                     styles.providerLogo,
                     {
                       borderColor: isSeleted
-                        ? theme.color.interactive[0].default.background
+                        ? theme.color.surface.accent.strong.background
                         : theme.color.background.neutral[0].background,
                     },
                   ]}

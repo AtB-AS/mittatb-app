@@ -6,6 +6,6 @@ import {useThemeContext} from '@atb/theme';
 export const BonusStarFill = (props: SvgProps) => {
   const {theme} = useThemeContext();
   return (
-    <StarFill {...props} fill={theme.color.interactive[0].default.background} />
+    <StarFill {...props} fill={theme.color.surface.accent.strong.background} />
   );
 };

@@ -115,7 +115,7 @@ const ContactInfoContent = () => {
           >
             <ThemeText
               typography="body__m__underline"
-              color={theme.color.interactive[0].default.background}
+              color={theme.color.surface.accent.strong.background}
             >
               {t(dictionary.telephone(telephoneNumbers['parking']))}
             </ThemeText>
@@ -149,7 +149,7 @@ const ContactInfoContent = () => {
           >
             <ThemeText
               typography="body__m__underline"
-              color={theme.color.interactive[0].default.background}
+              color={theme.color.surface.accent.strong.background}
             >
               {t(dictionary.telephone(telephoneNumbers['project']))}
             </ThemeText>
@@ -176,14 +176,14 @@ const ContactInfoContent = () => {
           >
             <ThemeText
               typography="body__m__underline"
-              color={theme.color.interactive[0].default.background}
+              color={theme.color.surface.accent.strong.background}
             >
               {t(SmartParkAndRideTexts.onboarding.contactInfo.about.link)}
             </ThemeText>
             <ThemeIcon
               svg={ExternalLink}
               size="normal"
-              color={theme.color.interactive[0].default.background}
+              color={theme.color.surface.accent.strong.background}
             />
           </NativeTouchable>
         </GenericSectionItem>
