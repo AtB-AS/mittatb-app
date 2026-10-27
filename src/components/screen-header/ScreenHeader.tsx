@@ -124,7 +124,6 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         <GlobalMessage
           globalMessageContext={globalMessageContext}
           style={styles.globalMessageBox}
-          textColor={themeColor}
         />
       )}
     </View>

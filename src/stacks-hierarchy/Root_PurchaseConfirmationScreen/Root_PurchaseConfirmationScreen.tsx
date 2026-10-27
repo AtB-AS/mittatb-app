@@ -531,7 +531,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           globalMessageContext={
             GlobalMessageContextEnum.appPurchaseConfirmationBottom
           }
-          textColor="primary"
           ruleVariables={{
             preassignedFareProductType: selection.preassignedFareProduct.type,
           }}

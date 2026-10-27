@@ -30,7 +30,7 @@ import {
 } from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {View} from 'react-native';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   findReferenceDataById,
   useFirestoreConfigurationContext,
@@ -100,7 +100,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {abtCustomerId: currentUserId} = useAuthContext();
 
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const styles = useStyles();
   const {findGlobalMessages} = useGlobalMessagesContext();
   const {isActivateTicketNowEnabled} = useFeatureTogglesContext();
@@ -238,7 +237,6 @@ export const DetailsContent: React.FC<Props> = ({
               globalMessageContext={
                 GlobalMessageContextEnum.appFareContractDetails
               }
-              textColor={theme.color.surface.neutral.strong}
               ruleVariables={globalMessageRuleVariables}
             />
           </View>

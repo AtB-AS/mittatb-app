@@ -95,7 +95,6 @@ export function TravelTokenBox({
       ) : (
         <MessageInfoText
           type="error"
-          textColor={surfaceColor}
           message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
           testID="noInspectableToken"
         />

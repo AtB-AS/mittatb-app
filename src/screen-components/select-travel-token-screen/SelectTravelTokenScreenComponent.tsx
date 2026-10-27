@@ -6,7 +6,7 @@ import {
   useMobileTokenContext,
   useToggleTokenMutation,
 } from '@atb/modules/mobile-token';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -31,7 +31,6 @@ export const SelectTravelTokenScreenComponent = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
 
   const {disable_travelcard} = useRemoteConfigContext();
   const {completeOnboardingSection} = useOnboardingContext();
@@ -178,11 +177,7 @@ export const SelectTravelTokenScreenComponent = ({
           />
         )}
         {data?.toggleLimit !== undefined && (
-          <TokenToggleInfo
-            textColor={theme.color.background.neutral[1]}
-            toggleLimit={toggleLimit}
-            isLoading={isLoading}
-          />
+          <TokenToggleInfo toggleLimit={toggleLimit} isLoading={isLoading} />
         )}
         {toggleMutation.isPending ? (
           <Loading size="large" />

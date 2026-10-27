@@ -502,7 +502,6 @@ export const Profile_DesignSystemScreen = ({
               type="info"
               isMarkdown={true}
               message="This is a message text"
-              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -510,7 +509,6 @@ export const Profile_DesignSystemScreen = ({
               type="warning"
               isMarkdown={true}
               message="This is a warning text"
-              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -518,7 +516,6 @@ export const Profile_DesignSystemScreen = ({
               type="error"
               isMarkdown={true}
               message="This is an error text"
-              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -526,7 +523,6 @@ export const Profile_DesignSystemScreen = ({
               type="valid"
               isMarkdown={true}
               message="This is a valid text"
-              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -535,7 +531,6 @@ export const Profile_DesignSystemScreen = ({
               isMarkdown={true}
               iconPosition="right"
               message="This is a text with right sided icon"
-              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -543,7 +538,6 @@ export const Profile_DesignSystemScreen = ({
               type="valid"
               isMarkdown={true}
               message="This is a valid **markdown** message"
-              textColor={theme.color.background.neutral[0]}
             />
           </GenericSectionItem>
         </Section>
