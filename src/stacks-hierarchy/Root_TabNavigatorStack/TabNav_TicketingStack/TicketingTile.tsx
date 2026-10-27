@@ -34,7 +34,7 @@ export const TicketingTile = ({
 
   const themeColor = accented
     ? theme.color.background.accent[3]
-    : theme.color.background.neutral[0];
+    : theme.color.surface.neutral.strong;
 
   return (
     <NativeTouchable

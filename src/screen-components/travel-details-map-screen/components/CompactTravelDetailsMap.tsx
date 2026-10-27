@@ -120,7 +120,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     gap: theme.spacing.medium,
     padding: theme.spacing.medium,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.circle,
     ...shadows,
   },

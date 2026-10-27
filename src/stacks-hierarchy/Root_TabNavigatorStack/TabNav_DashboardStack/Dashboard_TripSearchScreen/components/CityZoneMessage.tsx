@@ -86,7 +86,7 @@ const CityZoneBox = ({message, actionButtons, onDismiss}: CityZoneBoxProps) => {
   const {theme} = useThemeContext();
   const styles = useStyle();
   const {t} = useTranslation();
-  const generalColor = theme.color.background.neutral[0];
+  const generalColor = theme.color.surface.neutral.strong;
   const {
     background: backgroundColor,
     foreground: {primary: textColor},

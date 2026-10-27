@@ -31,7 +31,7 @@ type SelectableFavouriteDepartureData = {
   testID?: string;
 };
 
-const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
+const getThemeColor = (theme: Theme) => theme.color.surface.neutral.strong;
 
 const SelectableFavouriteDeparture = ({
   handleSwitchFlip,
