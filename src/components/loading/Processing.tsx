@@ -4,7 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {Loading} from './Loading';
 
-const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
+const getThemeColor = (theme: Theme) => theme.color.surface.neutral.strong;
 
 export const Processing: React.FC<{message: string}> = ({message}) => {
   const styles = useStyles();
