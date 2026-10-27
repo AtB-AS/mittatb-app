@@ -43,7 +43,7 @@ export type SnackbarProps = {
   onHideSnackbar?: () => void;
 };
 
-const getThemeColor = (theme: Theme) => theme.color.background.neutral[0];
+const getThemeColor = (theme: Theme) => theme.color.surface.neutral.strong;
 
 // if position is ever toggled, it starts using two SnackbarInstances, one for top and one for bottom
 // one of them is always disabled

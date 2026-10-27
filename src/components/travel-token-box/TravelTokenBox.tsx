@@ -13,8 +13,6 @@ import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {Loading} from '@atb/components/loading';
 
-const getInteractiveColor = (th: Theme) => th.color.interactive[2];
-
 export function TravelTokenBox({
   showIfThisDevice,
   alwaysShowErrors,
@@ -25,7 +23,7 @@ export function TravelTokenBox({
   onPressChangeButton: () => void;
 }) {
   const {theme} = useThemeContext();
-  const interactiveColor = getInteractiveColor(theme);
+  const surfaceColor = theme.color.surface.neutral.strong;
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -77,10 +75,7 @@ export function TravelTokenBox({
             />
           )}
           <View style={styles.activeTravelTokenInfo}>
-            <ThemeText
-              typography="body__m__strong"
-              color={interactiveColor.default}
-            >
+            <ThemeText typography="body__m__strong" color={surfaceColor}>
               {t(TravelTokenBoxTexts.title) +
                 t(
                   isTravelCard
@@ -93,14 +88,14 @@ export function TravelTokenBox({
 
             <TravelTokenDeviceTitle
               inspectableToken={inspectableToken}
-              themeTextColor={interactiveColor.default}
+              themeTextColor={surfaceColor}
             />
           </View>
         </View>
       ) : (
         <MessageInfoText
           type="error"
-          textColor={interactiveColor.default}
+          textColor={surfaceColor}
           message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
           testID="noInspectableToken"
         />
@@ -123,7 +118,7 @@ export function TravelTokenBox({
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: getInteractiveColor(theme).default.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     padding: theme.spacing.xLarge,
     rowGap: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,

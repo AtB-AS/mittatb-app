@@ -124,7 +124,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     gap: theme.spacing.medium,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.regular,
   },

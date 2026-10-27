@@ -50,7 +50,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacing.small,
     padding: theme.spacing.large,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     ...shadows,
   },
   destination: {

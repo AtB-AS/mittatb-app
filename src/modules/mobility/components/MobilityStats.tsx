@@ -23,7 +23,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
   },
   vehicleStat: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.regular,
   },
   vehicleStat__first: {

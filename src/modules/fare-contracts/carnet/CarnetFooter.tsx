@@ -185,6 +185,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: '100%',
     width: '200%',
     alignSelf: 'flex-end',
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
 }));

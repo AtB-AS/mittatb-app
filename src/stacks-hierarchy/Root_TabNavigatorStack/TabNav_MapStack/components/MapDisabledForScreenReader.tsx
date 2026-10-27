@@ -38,7 +38,7 @@ export const MapDisabledForScreenReader = ({focusRef}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     alignItems: 'center',
     justifyContent: 'center',
   },

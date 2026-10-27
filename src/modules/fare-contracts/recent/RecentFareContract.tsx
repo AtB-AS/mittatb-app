@@ -55,7 +55,6 @@ export const RecentFareContract = ({
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {width} = Dimensions.get('window');
-  const interactiveColor = theme.color.interactive[2];
 
   const {fareProductTypeConfigs} = useFirestoreConfigurationContext();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -97,7 +96,6 @@ export const RecentFareContract = ({
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       accessibilityLabel={accessibilityLabel}
       buttonText={t(RecentFareContractsTexts.repeatPurchase.label)}
-      interactiveColor={interactiveColor}
       mode="spacious"
       onPress={() =>
         onSelect(recentFareContract, fareProductTypeConfig, harborsQuery.data)
@@ -107,7 +105,7 @@ export const RecentFareContract = ({
       <View style={styles.productName} testID={testID + 'Title'}>
         <ThemeText
           typography="body__m__strong"
-          color={interactiveColor.default}
+          color={theme.color.surface.neutral.strong}
         >
           {productName}
         </ThemeText>
@@ -116,7 +114,7 @@ export const RecentFareContract = ({
       <View style={styles.recentFareContractDetailItems}>
         <FareContractFromTo
           rfc={recentFareContract}
-          backgroundColor={theme.color.background.neutral[0]}
+          backgroundColor={theme.color.surface.neutral.strong}
           size="small"
         />
 

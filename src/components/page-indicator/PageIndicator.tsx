@@ -33,9 +33,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium / 2,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   activeDot: {
-    backgroundColor: theme.color.interactive[0].default.background,
+    backgroundColor: theme.color.surface.accent.strong.background,
   },
 }));

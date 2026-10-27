@@ -38,7 +38,7 @@ export const Loading: React.FC<LoadingProps> = ({
   const donutColor =
     props.donutColor ?? theme.color.background.neutral[3].background;
   const arcColor =
-    props.arcColor ?? theme.color.interactive[0].default.background;
+    props.arcColor ?? theme.color.surface.accent.strong.background;
 
   const path = useMemo(() => {
     const p = Skia.Path.Make();

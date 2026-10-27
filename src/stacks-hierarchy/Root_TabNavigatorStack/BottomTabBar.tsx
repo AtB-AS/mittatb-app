@@ -38,8 +38,8 @@ export const BottomTabBar = ({
 
         const focused = state.index === index;
         const color = focused
-          ? theme.color.interactive[2].outline.background
-          : theme.color.foreground.dynamic.secondary;
+          ? theme.color.surface.accent.strong.background
+          : theme.color.surface.neutral.strong.foreground.secondary;
 
         const onPress = () => {
           const event = navigation.emit({
@@ -89,7 +89,7 @@ const useTabBarStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     borderTopWidth: theme.border.width.slim,
     borderTopColor: theme.color.border.primary.background,
-    backgroundColor: theme.color.interactive[2].default.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   tab: {
     flex: 1,

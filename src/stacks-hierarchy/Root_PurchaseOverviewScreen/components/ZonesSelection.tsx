@@ -107,7 +107,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
           <ThemeIcon
             svg={Edit}
             size="normal"
-            color={theme.color.interactive[0].default.background}
+            color={theme.color.surface.accent.strong.background}
           />
         )}
       </View>
