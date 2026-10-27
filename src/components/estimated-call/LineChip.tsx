@@ -44,13 +44,8 @@ export function LineChip({serviceJourney, messageType}: LineChipProps) {
       />
       {publicCode && (
         <ThemeText
-          style={[
-            styles.lineChipText,
-            {
-              color: transportColor.foreground.primary,
-              minWidth: fontScale * 20,
-            },
-          ]}
+          style={[styles.lineChipText, {minWidth: fontScale * 20}]}
+          color={transportColor}
           typography="body__m__strong"
           testID="publicCode"
         >
@@ -75,7 +70,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     left: -theme.spacing.small,
   },
   lineChipText: {
-    color: theme.color.background.accent[3].foreground.primary,
     textAlign: 'center',
   },
 }));
