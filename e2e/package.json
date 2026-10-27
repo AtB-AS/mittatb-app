@@ -28,7 +28,7 @@
     "@wdio/mocha-framework": "9.27.0",
     "@wdio/spec-reporter": "9.27.0",
     "@wdio/visual-service": "9.2.2",
-    "appium": "3.3.0",
+    "appium": "3.8.0",
     "appium-inspector-plugin": "2026.2.1",
     "appium-interceptor": "1.0.3",
     "appium-uiautomator2-driver": "7.1.2",
