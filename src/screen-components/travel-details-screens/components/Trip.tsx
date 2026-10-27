@@ -278,7 +278,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacing.medium,
     paddingBottom: theme.spacing.large,
     rowGap: theme.spacing.large,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.regular,
   },
 }));

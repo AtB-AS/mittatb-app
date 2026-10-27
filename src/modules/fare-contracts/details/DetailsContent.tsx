@@ -238,7 +238,7 @@ export const DetailsContent: React.FC<Props> = ({
               globalMessageContext={
                 GlobalMessageContextEnum.appFareContractDetails
               }
-              textColor={theme.color.background.neutral[0]}
+              textColor={theme.color.surface.neutral.strong}
               ruleVariables={globalMessageRuleVariables}
             />
           </View>
