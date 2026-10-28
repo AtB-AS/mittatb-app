@@ -324,7 +324,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   departure: {
     padding: theme.spacing.small,
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
     justifyContent: 'center',

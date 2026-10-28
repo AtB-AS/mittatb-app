@@ -150,7 +150,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: theme.color.background.neutral[1].background,
+    borderBottomColor: theme.color.surface.neutral.subtle.background,
   },
   box: {
     alignItems: 'center',
@@ -161,7 +161,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingVertical: theme.spacing.xSmall,
     borderRadius: 3,
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
   },
   dot: {
     backgroundColor: theme.color.foreground.dynamic.secondary,
