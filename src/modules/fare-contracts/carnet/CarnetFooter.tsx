@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetDisplayData} from './calculate-carnet-display-data';
 import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
@@ -111,6 +111,7 @@ export const CarnetFooter: React.FC<Props> = ({
 
 function MultiCarnet({count}: {count: number}) {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   return (
     <View>
       <View style={[styles.dot, {marginRight: 8}]} />
@@ -121,7 +122,12 @@ function MultiCarnet({count}: {count: number}) {
         <View style={styles.triangle} />
       </View>
       <View style={styles.count}>
-        <ThemeText typography="body__xs">{count}</ThemeText>
+        <ThemeText
+          typography="body__xs"
+          color={theme.color.surface.neutral.subtle}
+        >
+          {count}
+        </ThemeText>
       </View>
     </View>
   );
@@ -150,7 +156,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: theme.color.background.neutral[1].background,
+    borderBottomColor: theme.color.surface.neutral.subtle.background,
   },
   box: {
     alignItems: 'center',
@@ -161,7 +167,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingVertical: theme.spacing.xSmall,
     borderRadius: 3,
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
   },
   dot: {
     backgroundColor: theme.color.foreground.dynamic.secondary,
