@@ -106,6 +106,8 @@ if (appScheme == null) {
     throw new GradleException("APP_SCHEME not found. Define APP_SCHEME with current org identifier in the .env file.")
 }
 
+def appLinkHost = System.getProperty('APP_LINK_HOST')
+
 def appVersionCode = '1'
 
 android {
@@ -202,6 +204,16 @@ android {
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
     }
+}
+
+androidComponents {
+    onVariants(selector().all(), { variant ->
+        // Include the app link manifest only if APP_LINK_HOST is set
+        if (appLinkHost) {
+            variant.sources.manifests.addStaticManifestFile("src/appLink/AndroidManifest.xml")
+            variant.manifestPlaceholders.put("appLinkHost", appLinkHost)
+        }
+    })
 }
 
 configurations.all {

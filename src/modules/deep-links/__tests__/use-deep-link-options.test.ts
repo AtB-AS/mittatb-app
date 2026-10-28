@@ -1,4 +1,4 @@
-import {APP_SCHEME, UNIVERSAL_LINK_HOST} from '@env';
+import {APP_SCHEME, APP_LINK_HOST} from '@env';
 import {renderHook} from '@testing-library/react-native';
 import {Linking} from 'react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
@@ -109,7 +109,7 @@ describe('prefixes', () => {
     const {result} = renderHook(() => useDeepLinks());
     expect(result.current.prefixes![0]).toMatch(/^[a-z-]+:\/\/$/);
     expect(result.current.prefixes!.slice(1)).toEqual(
-      UNIVERSAL_LINK_HOST ? [`https://${UNIVERSAL_LINK_HOST}`] : [],
+      APP_LINK_HOST ? [`https://${APP_LINK_HOST}`] : [],
     );
   });
 });
