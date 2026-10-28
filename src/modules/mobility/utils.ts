@@ -17,7 +17,9 @@ import {
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language, TranslateFunction} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {ShmoHelpTexts} from '@atb/translations/screens/ShmoHelp';
 import {enumFromString} from '@atb/utils/enum-from-string';
+import {capitalizeFirstLetter} from '@atb/utils/text';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
 import {TransportModeType} from '@atb-as/config-specs/lib/common';
@@ -30,6 +32,7 @@ import {
   BatteryMedium,
 } from '@atb/assets/svg/mono-icons/miscellaneous';
 import {
+  OpeningHoursDayRange,
   RentalUris,
   ShmoBooking,
   ShmoBookingState,
@@ -48,12 +51,15 @@ import {
   VirtualStationAreaFeatureSchema,
   VirtualStationFeature,
   VirtualStationFeatureSchema,
+  Weekday,
 } from '@atb/api/types/mobility';
 import {TFunc} from '@leile/lobo-t';
 import {ErrorResponse, formatNumberToString} from '@atb-as/utils';
 import {
+  Day,
   formatLocaleTime,
   formatToWeekday,
+  getWeekdayName,
   isWithin24Hours,
 } from '@atb/utils/date';
 import {FormattedRatePerUnit} from './types';
@@ -462,6 +468,43 @@ export const formatReopensAt = (
   const weekday = formatToWeekday(openingTime, language, 'EEEE');
   return `${weekday} ${t(dictionary.date.atTime)} ${time}`;
 };
+
+// date-fns' Day convention: 0 = Sunday, ..., 6 = Saturday.
+const WEEKDAY_TO_DAY: Record<Weekday, Day> = {
+  [Weekday.SUNDAY]: 0,
+  [Weekday.MONDAY]: 1,
+  [Weekday.TUESDAY]: 2,
+  [Weekday.WEDNESDAY]: 3,
+  [Weekday.THURSDAY]: 4,
+  [Weekday.FRIDAY]: 5,
+  [Weekday.SATURDAY]: 6,
+};
+
+/**
+ * Formats a weekly opening-hours schedule into one display line per day-range group, e.g.
+ * "Mandag - torsdag 00:00-23:59", or "Søndag Stengt" for a day-range with no open intervals.
+ */
+export const formatOpeningHoursSchedule = (
+  schedule: OpeningHoursDayRange[],
+  language: Language,
+  t: TFunc<typeof Language>,
+): string[] =>
+  schedule.map((dayRange) => {
+    const fromName = getWeekdayName(
+      WEEKDAY_TO_DAY[dayRange.fromWeekday],
+      language,
+    );
+    const label =
+      dayRange.fromWeekday === dayRange.toWeekday
+        ? fromName
+        : `${fromName} - ${getWeekdayName(WEEKDAY_TO_DAY[dayRange.toWeekday], language)}`;
+    const hours = dayRange.intervals.length
+      ? dayRange.intervals
+          .map(({opens, closes}) => `${opens}-${closes}`)
+          .join(', ')
+      : t(ShmoHelpTexts.closed);
+    return `${capitalizeFirstLetter(label)} ${hours}`;
+  });
 
 /**
  * Finds brand image URL for an operator from the mobility operators data

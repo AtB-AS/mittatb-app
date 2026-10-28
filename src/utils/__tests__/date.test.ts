@@ -11,6 +11,7 @@ import {
   formatToLongDateTime,
   formatToShortDateWithFullYear,
   getTimeBetweenFormatted,
+  getWeekdayName,
   isAfter,
   isBefore,
   isBetween,
@@ -645,5 +646,17 @@ describe('formatToShortDateWithFullYear', () => {
     expect(
       formatToShortDateWithFullYear('2026-09-01T22:30:00Z', Language.Norwegian),
     ).toBe('02.09.2026');
+  });
+});
+
+describe('getWeekdayName', () => {
+  it('resolves day indices to localized names without needing a concrete date', () => {
+    expect(getWeekdayName(0, Language.Norwegian)).toBe('søndag');
+    expect(getWeekdayName(1, Language.Norwegian)).toBe('mandag');
+    expect(getWeekdayName(6, Language.Norwegian)).toBe('lørdag');
+  });
+
+  it('formats in English', () => {
+    expect(getWeekdayName(1, Language.English)).toBe('Monday');
   });
 });

@@ -80,6 +80,7 @@ export const CityBikeStartTripOverlay = ({
               bookingId: activeBooking.bookingId,
               operatorId: activeBooking.asset.operator.id,
               formFactor: FormFactor.Bicycle,
+              systemId: activeBooking.asset.systemId ?? undefined,
             });
           }}
           radius="top-bottom"

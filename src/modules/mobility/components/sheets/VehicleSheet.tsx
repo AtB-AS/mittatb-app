@@ -343,6 +343,7 @@ export const VehicleSheet = ({
                     navigateToSupport({
                       operatorId,
                       formFactor,
+                      systemId: vehicle.system.id,
                       /* A station based booking has no real vehicle: its id is
                          synthesised from the station and vehicle type, which is what
                          the support screens resolve it by. */

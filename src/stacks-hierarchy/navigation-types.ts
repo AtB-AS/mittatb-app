@@ -93,7 +93,10 @@ type ShmoOperatorParams = {operatorId: string} & (
   | {bookingId: string | undefined}
   | {stationId: string | undefined; vehicleTypeId?: string}
 );
-export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
+export type ShmoHelpParams = ShmoOperatorParams & {
+  formFactor?: FormFactor;
+  systemId?: string;
+};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
 type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
 

@@ -29,6 +29,7 @@ type Props = {
     operatorId: string,
     bookingId: string,
     formFactor?: FormFactor,
+    systemId?: string,
   ) => void;
   navigateToScanQrCode: () => void;
   bookingId: string;
@@ -131,6 +132,7 @@ export const FinishedShmoSheet = ({
                 shmoBooking.asset.operator.id,
                 shmoBooking.bookingId,
                 shmoBooking.asset.formFactor ?? undefined,
+                shmoBooking.asset.systemId ?? undefined,
               );
             }}
           />

@@ -20,9 +20,10 @@ export const useShmoBookingQuery = (
   const bookingIdString = bookingId || '';
   const isValidBookingId = !!bookingId && bookingIdString.trim() !== '';
 
-  const effectiveRefetchInterval = isEventStreamEnabled
-    ? ONE_SECOND_MS * 90
-    : refetchInterval;
+  const effectiveRefetchInterval =
+    refetchInterval === undefined && isEventStreamEnabled
+      ? ONE_SECOND_MS * 90
+      : refetchInterval;
 
   return useQuery({
     queryKey: getShmoBookingQueryKey(bookingIdString, acceptLanguage),
