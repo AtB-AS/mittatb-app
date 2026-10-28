@@ -31,7 +31,7 @@ What the script does depends on the branch you are on:
 If the release was created as a draft, review the changelog and publish it as described in [Release in GitHub](#release-in-github).
 
 > [!WARNING]
-> **Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version for all variants (dev, staging, store, etc.).**
+> **Check the app version in the `.env` files and make sure they are the correct version for the release. If not, bump the version with `./scripts/update-app-version.sh`.**
 
 ### Manual release
 
