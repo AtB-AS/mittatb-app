@@ -117,7 +117,11 @@ export function useDeepLinks() {
 
       // Planner web stop place, e.g. `/departures/NSR:StopPlace:41613`
       const stopId = path.match(/^departures\/([^/]+)$/)?.[1];
-      if (stopId) return routeForDepartures('departures', {...params, stopId});
+      if (stopId)
+        return routeForDepartures('departures', {
+          ...params,
+          stopId: decodeURIComponent(stopId),
+        });
 
       switch (path) {
         case 'map':

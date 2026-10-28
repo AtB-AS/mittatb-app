@@ -414,6 +414,13 @@ describe('planner web', () => {
     });
   });
 
+  it('decodes the stop place id', () => {
+    const state = getStateFrom('/departures/NSR%3AStopPlace%3A41613');
+    expect(findRoute(state, 'Departures_PlaceScreen')?.params).toMatchObject({
+      place: {id: 'NSR:StopPlace:41613'},
+    });
+  });
+
   it('does not handle departure details', () => {
     expect(
       getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
