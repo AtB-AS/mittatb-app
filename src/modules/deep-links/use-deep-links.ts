@@ -1,4 +1,4 @@
-import {APP_SCHEME, UNIVERSAL_LINK_HOST} from '@env';
+import {APP_SCHEME, APP_LINK_HOST} from '@env';
 import {useCallback, useRef} from 'react';
 import {Linking} from 'react-native';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
@@ -86,7 +86,7 @@ export function useDeepLinks() {
   const linkingOptions: LinkingOptions<RootStackParamList> = {
     prefixes: [
       `${APP_SCHEME}://`,
-      ...(UNIVERSAL_LINK_HOST ? [`https://${UNIVERSAL_LINK_HOST}`] : []),
+      ...(APP_LINK_HOST ? [`https://${APP_LINK_HOST}`] : []),
     ],
     getInitialURL: async () => {
       const url = await initialUrl;
