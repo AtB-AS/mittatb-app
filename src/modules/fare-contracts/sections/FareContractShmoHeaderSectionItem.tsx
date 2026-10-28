@@ -37,7 +37,7 @@ export const FareContractShmoHeaderSectionItem = ({
   const dateTime = formatToLongDateTime(toDate(validTo), language, true);
   const label = t(
     isCancelled
-      ? FareContractTexts.shmoDetails.tripAborted(dateTime)
+      ? FareContractTexts.shmoDetails.tripCancelled(dateTime)
       : FareContractTexts.shmoDetails.tripEnded(dateTime),
   );
   const {data: operatorsData} = useGetOperatorsQuery();

@@ -100,7 +100,7 @@ export const FinishedShmoSheet = ({
                 <ThemeText typography="heading__m">
                   {t(
                     shmoBooking.state === ShmoBookingState.CANCELLED
-                      ? FareContractTexts.shmoDetails.tripAborted()
+                      ? FareContractTexts.shmoDetails.tripCancelled()
                       : FareContractTexts.shmoDetails.tripEnded(),
                   )}
                 </ThemeText>

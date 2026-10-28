@@ -111,8 +111,7 @@ export const FareContractView: React.FC<Props> = ({
 
   const accesses = getAccesses(fareContract);
 
-  const shouldShowShmoTripDetails =
-    hasShmoBookingId(fareContract) && validityStatus !== 'cancelled';
+  const isCancelled = validityStatus === 'cancelled';
 
   return (
     <Section testID={testID}>
@@ -132,7 +131,7 @@ export const FareContractView: React.FC<Props> = ({
       )}
 
       {hasShmoBookingId(fareContract) ? (
-        shouldShowShmoTripDetails && (
+        !isCancelled && (
           <ShmoTripDetailsSectionItem
             startDateTime={fareContract.travelRights[0].startDateTime}
             endDateTime={fareContract.travelRights[0].endDateTime}
