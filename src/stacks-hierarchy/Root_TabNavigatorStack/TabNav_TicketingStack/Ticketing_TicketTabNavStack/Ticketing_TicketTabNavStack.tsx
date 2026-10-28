@@ -75,7 +75,7 @@ export const Ticketing_TicketTabNavStack = () => {
   const activeTab = useSharedValue(
     initialRoute === 'TicketTabNav_AvailableFareContractsTabScreen' ? 1 : 0,
   );
-  const color = theme.color.background.neutral[3].background;
+  const color = theme.color.surface.neutral.subtle.background;
 
   // Instead of tracking scrollY value to determine border,
   // only trigger the change when needed (scroll Y value 0 vs not 0)

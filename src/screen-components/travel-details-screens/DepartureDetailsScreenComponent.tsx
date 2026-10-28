@@ -997,7 +997,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   headerSubSection: {
     marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.color.background.neutral[3].background,
+    borderTopColor: theme.color.surface.neutral.subtle.background,
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
