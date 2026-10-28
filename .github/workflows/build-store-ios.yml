@@ -64,6 +64,11 @@ jobs:
           bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
+      - name: Register app version
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: sh ./scripts/ios/register-app-version.sh
+        env:
+          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}
       - name: Setup Bugsnag CLI
         if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: ./.github/actions/setup-bugsnag-cli
@@ -72,8 +77,3 @@ jobs:
         uses: ./.github/actions/ios-upload-bugsnag
         with:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Register app version
-        if: ${{ github.event_name != 'workflow_dispatch' }}
-        run: sh ./scripts/ios/register-app-version.sh
-        env:
-          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}
