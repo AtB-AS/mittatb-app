@@ -36,7 +36,7 @@ export const Loading: React.FC<LoadingProps> = ({
   const donutRadius = donutInner + donutWidth / 2;
 
   const donutColor =
-    props.donutColor ?? theme.color.background.neutral[3].background;
+    props.donutColor ?? theme.color.surface.accent.subtle.background;
   const arcColor =
     props.arcColor ?? theme.color.surface.accent.strong.background;
 
