@@ -237,6 +237,12 @@ function usePurchaseSelectionFromTrip(
     return;
   }
 
+  if (nonFreeLegs.length > 1) {
+    // Boat trips with transfers are not supported yet, as only one offer per
+    // traveller is returned from the offer search.
+    return;
+  }
+
   const ticketInfoForExpressBoatBookingTrip =
     getTicketInfoForExpressBoatBookingTrip(
       nonFreeLegs,
