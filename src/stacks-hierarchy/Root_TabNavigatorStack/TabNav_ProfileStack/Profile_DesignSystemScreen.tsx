@@ -340,61 +340,69 @@ export const Profile_DesignSystemScreen = ({
         </Section>
 
         <Section style={styles.section}>
-          <HeaderSectionItem text="Loading" />
-
-          <GenericSectionItem>
-            <ThemeText>Default</ThemeText>
-            <View style={styles.contentContainer}>
-              <Loading size="large" />
-              <Loading size="small" />
-            </View>
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <ThemeText>Custom color</ThemeText>
-            <View style={styles.contentContainer}>
-              {surfaceColorKeys.map((key) => (
-                <React.Fragment key={key}>
-                  <Loading
-                    size="large"
-                    donutColor={
-                      theme.color.surface[key].strong.foreground.primary
-                    }
-                    arcColor={theme.color.surface[key].strong.background}
-                  />
-                  <Loading
-                    size="small"
-                    donutColor={
-                      theme.color.surface[key].strong.foreground.primary
-                    }
-                    arcColor={theme.color.surface[key].strong.background}
-                  />
-                </React.Fragment>
-              ))}
-            </View>
-          </GenericSectionItem>
+          <ExpandableSectionItem
+            text="Loading"
+            showIconText={false}
+            textType="heading__m"
+            expandContent={
+              <>
+                <ThemeText>Default</ThemeText>
+                <View style={styles.contentContainer}>
+                  <Loading size="large" />
+                  <Loading size="small" />
+                </View>
+                <ThemeText>Custom color</ThemeText>
+                <View style={styles.contentContainer}>
+                  {surfaceColorKeys.map((key) => (
+                    <React.Fragment key={key}>
+                      <Loading
+                        size="large"
+                        donutColor={
+                          theme.color.surface[key].strong.foreground.primary
+                        }
+                        arcColor={theme.color.surface[key].strong.background}
+                      />
+                      <Loading
+                        size="small"
+                        donutColor={
+                          theme.color.surface[key].strong.foreground.primary
+                        }
+                        arcColor={theme.color.surface[key].strong.background}
+                      />
+                    </React.Fragment>
+                  ))}
+                </View>
+              </>
+            }
+          />
         </Section>
 
         <Section style={styles.section}>
-          <HeaderSectionItem text="Skeleton" />
-
-          <GenericSectionItem>
-            <ThemeText>Standalone block</ThemeText>
-            <View style={styles.contentContainer}>
-              <Skeleton style={styles.skeletonLine} />
-            </View>
-            <ThemeText>Composed skeleton</ThemeText>
-            <Skeleton style={styles.skeletonCard}>
-              <View style={styles.skeletonCardHeader}>
-                <SkeletonBlock style={styles.skeletonTitle} />
-                <SkeletonBlock style={styles.skeletonBadge} />
-              </View>
-              <View style={styles.skeletonRow}>
-                <SkeletonBlock style={styles.skeletonPill} />
-                <SkeletonBlock style={styles.skeletonPill} />
-                <SkeletonBlock style={styles.skeletonPill} />
-              </View>
-            </Skeleton>
-          </GenericSectionItem>
+          <ExpandableSectionItem
+            text="Skeleton"
+            showIconText={false}
+            textType="heading__m"
+            expandContent={
+              <>
+                <ThemeText>Standalone block</ThemeText>
+                <View style={styles.contentContainer}>
+                  <Skeleton style={styles.skeletonLine} />
+                </View>
+                <ThemeText>Composed skeleton</ThemeText>
+                <Skeleton style={styles.skeletonCard}>
+                  <View style={styles.skeletonCardHeader}>
+                    <SkeletonBlock style={styles.skeletonTitle} />
+                    <SkeletonBlock style={styles.skeletonBadge} />
+                  </View>
+                  <View style={styles.skeletonRow}>
+                    <SkeletonBlock style={styles.skeletonPill} />
+                    <SkeletonBlock style={styles.skeletonPill} />
+                    <SkeletonBlock style={styles.skeletonPill} />
+                  </View>
+                </Skeleton>
+              </>
+            }
+          />
         </Section>
 
         <Section style={styles.section}>
