@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {calculateCarnetDisplayData} from './calculate-carnet-display-data';
 import {useSchoolCarnetInfoQuery} from '@atb/modules/ticketing';
@@ -111,6 +111,7 @@ export const CarnetFooter: React.FC<Props> = ({
 
 function MultiCarnet({count}: {count: number}) {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   return (
     <View>
       <View style={[styles.dot, {marginRight: 8}]} />
@@ -121,7 +122,12 @@ function MultiCarnet({count}: {count: number}) {
         <View style={styles.triangle} />
       </View>
       <View style={styles.count}>
-        <ThemeText typography="body__xs">{count}</ThemeText>
+        <ThemeText
+          typography="body__xs"
+          color={theme.color.surface.neutral.subtle}
+        >
+          {count}
+        </ThemeText>
       </View>
     </View>
   );
