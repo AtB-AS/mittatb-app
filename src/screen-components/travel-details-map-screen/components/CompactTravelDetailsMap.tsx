@@ -102,7 +102,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 100,
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.color.background.neutral[2].background,
+    borderColor: theme.color.surface.neutral.subtle.background,
     overflow: 'hidden',
   },
   pillOverlay: {
