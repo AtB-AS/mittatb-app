@@ -52,6 +52,12 @@ jobs:
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
+      - name: Register app version
+        if: github.event_name != 'workflow_dispatch'
+        run: bash ./scripts/android/register-app-version.sh
+        env:
+          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION }}
+          DISABLE_LISTED_ON_PLAY_STORE: false
       - name: Setup Bugsnag CLI
         uses: ./.github/actions/setup-bugsnag-cli
       - name: Upload Bugsnag symbols
@@ -59,9 +65,3 @@ jobs:
         uses: ./.github/actions/android-upload-bugsnag
         with:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Register app version
-        if: github.event_name != 'workflow_dispatch'
-        run: bash ./scripts/android/register-app-version.sh
-        env:
-          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION }}
-          DISABLE_LISTED_ON_PLAY_STORE: false

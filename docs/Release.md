@@ -4,15 +4,48 @@
 
 These are the steps for releasing a new major version to TestFlight / Play Store Alpha. This may be done as soon as the old version is deployed to production.
 
-If you want to release only for a given organization, the release tag must include the orgId specifier for the organization. The uploading jobs for other organizations will then exit and fail. An example tag for an NFK-only release is the tag `v1.20-rc3-nfk`. Please note that the releases after an org specific release may miss some information from the auto generated changelogs that may have to be manually added.
+### Prerequisites
+
+- Authenticated with the GitHub CLI (`gh auth status`).
+- Authenticated with `gcloud` with access to the relevant staging Google Cloud project for the organization, which holds the Entur client credentials (only needed when starting a new release cycle, for registering the app version at Entur). Optional but highly recommended, see [Bump version number](#on-master-bump-version-number).
+
+### Using the release script (recommended)
+
+Run from the project root:
+
+```bash
+pnpm release --preview   # Show what will happen, without making any changes
+pnpm release             # Create the release as a draft on GitHub
+pnpm release --publish   # Create and publish the release, which triggers the store build
+```
+
+What the script does depends on the branch you are on:
+
+- **On `master`**: starts a new release cycle.
+  1. Creates and pushes the next release branch, e.g. `release/1.30` if the latest is `release/1.29`.
+  2. Creates the release `v1.30-rc1` with changelog on GitHub (draft unless `--publish`).
+  3. Creates a draft PR to `master` bumping the version to `1.31`, and registers the bumped version at Entur (see [Bump version number](#on-master-bump-version-number)).
+- **On `release/x.xx`**: creates the next release candidate, e.g. `v1.30-rc3` if `v1.30-rc2` is the latest tag (org-specific tags are included when finding the latest). Warns if the version in `package.json` doesn't match the release branch.
+- **On any other branch**: runs as if on `master`, in preview mode only.
+
+If the release was created as a draft, review the changelog and publish it as described in [Release in GitHub](#release-in-github).
+
+> [!WARNING]
+> **Check the app version in the `.env` files and make sure they are the correct version for the release. If not, bump the version with `./scripts/update-app-version.sh`.**
+
+### Manual release
+
+Use the manual steps below if the script doesn't fit, for example for org-specific releases.
+
+If you want to release only for a given organization, the release tag must include the orgId specifier for the organization. The uploading jobs for other organizations will then exit and fail. An example tag for an NFK-only release is the tag `v1.20-rc3-nfk`. Since the release script doesn't create org-specific tags, create these with `pnpm release-draft` as described below. Please note that the releases after an org specific release may miss some information from the auto generated changelogs that may have to be manually added.
 
 Skip the first two steps of creating release-branch and bumping version number on master if the release is a new release candidate on an existing major version.
 
-### Create release branch
+#### Create release branch
 
 Branch out from master to a new branch with prefix `release/`, like `release/1.30`, and push it to GitHub.
 
-### On master: Bump version number
+#### On master: Bump version number
 
 Now that a release branch is created, the version-number on master should be increased. So if `release/1.30` is created, then master should be incremented to `1.31` as version number.
 
@@ -22,13 +55,23 @@ Version number can be updated by running the following command:
 ./scripts/update-app-version.sh x.xx
 ```
 
+After the version has been bumped, register the new version at Entur:
+
+```bash
+./scripts/register-local-app-version.sh
+```
+
+> [!NOTE]
+> Registering at Entur is optional, but highly recommended. This only registers the version in Entur's staging environment, for local and staging builds of the AtB app. If it is skipped, the only thing that breaks is Mobile Token in those builds for that specific version. Store builds are registered in production by the store build workflows on GitHub Actions.
+
 Then push your changes with commit message "chore: Bump to version x.xx" on a new branch and merge it to master.
 
-### On release branch: Create release candidate with the command line
+#### On release branch: Create release candidate with the command line
 
 This will create a draft release in GitHub.
 
-> [!WARNING] > **Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version for all variants (dev, staging, store, etc.).**
+> [!WARNING]
+> **Check the app version in the `.env` files, make sure they are the correct version for the release, if not, bump the version for all variants (dev, staging, store, etc.).**
 
 - `git fetch` to locally pull all existing tags
 - Make sure you've checked out the release branch from which you want to make the release.
