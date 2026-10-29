@@ -8,23 +8,22 @@ permissions:
   contents: read
 
 jobs:
+  orgs:
+    uses: ./.github/workflows/select-orgs.yml
+
   build-ios:
     name: Build iOS
+    needs: orgs
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram, troms]
+        org: ${{ fromJSON(needs.orgs.outputs.orgs) }} # see select-orgs.yml
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-26
     env:
       KEYCHAIN_NAME: "CI"
     steps:
-      - name: Check if release tag is org specific and exit for other orgs
-        if: ${{ (contains(github.ref, 'atb') || contains(github.ref, 'nfk') ||
-          contains(github.ref, 'fram') || contains(github.ref, 'troms')) &&
-          !contains(github.ref, matrix.org) }}
-        run: exit 1
       - name: Checkout project
         uses: actions/checkout@v4
       - name: Setup build dependencies, environment and assets
