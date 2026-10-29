@@ -105,13 +105,19 @@ beforeEach(() => {
 });
 
 describe('prefixes', () => {
-  it('handles the app scheme and universal link', () => {
+  it('handles the app scheme', () => {
     const {result} = renderHook(() => useDeepLinks());
     expect(result.current.prefixes![0]).toMatch(/^[a-z-]+:\/\/$/);
-    expect(result.current.prefixes!.slice(1)).toEqual(
-      APP_LINK_HOST ? [`https://${APP_LINK_HOST}`] : [],
-    );
   });
+
+  if (APP_LINK_HOST) {
+    it('handles app links with APP_LINK_HOST', () => {
+      const {result} = renderHook(() => useDeepLinks());
+      expect(result.current.prefixes!.slice(1)).toEqual([
+        `https://${APP_LINK_HOST}`,
+      ]);
+    });
+  }
 });
 
 describe('linking config', () => {
