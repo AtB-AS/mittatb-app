@@ -167,12 +167,18 @@ export const MapBottomSheets = ({
       <FinishedShmoSheet
         bookingId={mapState.bookingId}
         onClose={handleCloseSheet}
-        navigateSupportCallback={(operatorId, bookingId, formFactor) => {
+        navigateSupportCallback={(
+          operatorId,
+          bookingId,
+          formFactor,
+          systemId,
+        ) => {
           handleCloseSheet();
           navigateToShmoSupport({
             operatorId,
             bookingId,
             formFactor,
+            systemId,
           });
         }}
         locationArrowOnPress={locationArrowOnPress}
@@ -241,6 +247,7 @@ export const MapBottomSheets = ({
               operatorId: activeBooking.asset.operator.id,
               bookingId: activeBooking.bookingId,
               formFactor: activeBooking.asset.formFactor ?? undefined,
+              systemId: activeBooking.asset.systemId ?? undefined,
             });
           }}
           photoNavigation={() => {

@@ -373,6 +373,39 @@ export const StationSchema = z.object({
 
 export type Station = z.infer<typeof StationSchema>;
 
+export enum Weekday {
+  MONDAY = 'MONDAY',
+  TUESDAY = 'TUESDAY',
+  WEDNESDAY = 'WEDNESDAY',
+  THURSDAY = 'THURSDAY',
+  FRIDAY = 'FRIDAY',
+  SATURDAY = 'SATURDAY',
+  SUNDAY = 'SUNDAY',
+}
+
+const WeekdaySchema = z.enum(Object.values(Weekday) as [Weekday, ...Weekday[]]);
+
+const OpeningHoursIntervalSchema = z.object({
+  opens: z.string(),
+  closes: z.string(),
+});
+
+export type OpeningHoursInterval = z.infer<typeof OpeningHoursIntervalSchema>;
+
+const OpeningHoursDayRangeSchema = z.object({
+  fromWeekday: WeekdaySchema,
+  toWeekday: WeekdaySchema,
+  intervals: z.array(OpeningHoursIntervalSchema),
+});
+
+export type OpeningHoursDayRange = z.infer<typeof OpeningHoursDayRangeSchema>;
+
+export const SystemOpeningHoursSchema = z.object({
+  schedule: z.array(OpeningHoursDayRangeSchema).optional(),
+});
+
+export type SystemOpeningHours = z.infer<typeof SystemOpeningHoursSchema>;
+
 export const AssetSchema = z.object({
   id: z.string().nullish(),
   operator: ShmoOperatorSchema,

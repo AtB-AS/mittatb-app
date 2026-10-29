@@ -32,6 +32,7 @@ export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
 export {useInitAgeVerificationMutation} from './queries/use-init-age-verification-mutation';
 export {useGetOperatorsQuery} from './queries/use-get-operators-query';
 export {useVehicleQuery} from './queries/use-vehicle-query';
+export {useSystemOpeningHoursQuery} from './queries/use-system-opening-hours-query';
 export type {NavigateToPricingDetails} from './types';
 export {useOperatorBenefitsForFareProduct} from './use-operator-benefits-for-fare-product';
 export {useOperators} from './use-operators';
@@ -45,6 +46,7 @@ export {
   formatFriendlyShmoErrorMessage,
   formatMinuteBoundaryWithUnit,
   formatMinuteRange,
+  formatOpeningHoursSchedule,
   getAvailableVehicles,
   getFormFactorsFromTransportMode,
   getFreeMinutes,

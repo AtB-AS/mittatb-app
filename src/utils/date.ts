@@ -1,5 +1,6 @@
 import {Language, TranslateFunction, dictionary} from '@atb/translations';
 import {
+  Day,
   FormatOptions,
   Locale,
   RoundingMethod,
@@ -40,6 +41,7 @@ import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
 
 export {daysInWeek} from 'date-fns/constants';
+export type {Day} from 'date-fns';
 
 import {
   parse as parseIso8601Duration,
@@ -571,6 +573,13 @@ export function formatToWeekday(
   return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
   });
+}
+
+/**
+ * Localized full weekday name for a numbered day-of-week (0 = Sunday, ..., 6 = Saturday, per date-fns' `Day` convention)
+ */
+export function getWeekdayName(day: Day, language: Language) {
+  return languageToLocale(language).localize.day(day, {width: 'wide'});
 }
 
 export function daysBetween(base: string | Date, target: string | Date) {
