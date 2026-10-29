@@ -25,6 +25,7 @@ import {
   computeFreeMinuteCount,
   formatMinuteBoundaryWithUnit,
   formatMinuteRange,
+  formatRange,
   formatRatePerUnit,
   hasMultiplePricingPlans,
 } from '../utils';
@@ -309,5 +310,20 @@ describe('computeFreeMinuteCount', () => {
         45,
       );
     });
+  });
+});
+
+describe('formatRange', () => {
+  it('formats a range in meters as whole km above 5000m', () => {
+    expect(formatRange(12000, Language.Norwegian)).toBe('12 km');
+  });
+
+  it('formats a range in meters with one decimal below 5000m', () => {
+    expect(formatRange(2500, Language.Norwegian)).toBe('2,5 km');
+  });
+
+  it('shows "- -" when the range is unknown rather than claiming 0 km', () => {
+    expect(formatRange(null, Language.Norwegian)).toBe('- -');
+    expect(formatRange(undefined, Language.Norwegian)).toBe('- -');
   });
 });

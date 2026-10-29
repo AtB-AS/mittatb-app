@@ -269,11 +269,7 @@ export const ActiveShmoSheet = ({
                 PropulsionType.Electric) && (
               <VehicleCard
                 currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
-                currentRangeMeters={
-                  activeBooking.asset?.currentRangeKm
-                    ? activeBooking.asset.currentRangeKm * 1000
-                    : 0
-                }
+                currentRangeMeters={activeBooking.asset?.currentRangeMeters}
                 formFactor={activeBooking.asset.formFactor ?? undefined}
               />
             )}
