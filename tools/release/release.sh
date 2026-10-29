@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script automates the release process based on the current branch.
 #
-# Usage: ./release.sh [--preview|--publish]
+# Usage: ./release.sh [--preview|--publish] [--orgs <org,...>]
 #
 # - On 'master' branch: Starts a new release cycle (e.g., v1.80-rc1).
 # - On 'release/x.xx' branch: Creates the next release candidate (e.g., v1.80-rc2).
@@ -10,6 +10,8 @@
 # Options:
 #   --preview   Preview the release details without making changes
 #   --publish   Create and publish the release immediately (draft=false)
+#   --orgs      Only build these orgs, e.g. --orgs troms,fram,nfk (e.g., v1.80-rc2-troms-fram-nfk).
+#               Only on 'release/x.xx' branches. Valid orgs are read from .github/workflows/select-orgs.yml
 #   (none)      Create the release as a draft (draft=true)
 
 set -e
@@ -17,21 +19,33 @@ set -e
 # --- Parse arguments ---
 DRY_RUN=false
 DRAFT=true
+ORGS_ARG=""
+HAS_ORGS_ARG=false
 
-for arg in "$@"; do
-  case "$arg" in
+while [ $# -gt 0 ]; do
+  case "$1" in
     --preview)
       DRY_RUN=true
       ;;
     --publish)
       DRAFT=false
       ;;
+    --orgs)
+      HAS_ORGS_ARG=true
+      ORGS_ARG="${2:-}"
+      if [ $# -gt 1 ]; then shift; fi
+      ;;
+    --orgs=*)
+      HAS_ORGS_ARG=true
+      ORGS_ARG="${1#--orgs=}"
+      ;;
     *)
-      echo "Unknown argument: $arg"
-      echo "Usage: ./release.sh [--preview] [--publish]"
+      echo "Unknown argument: $1"
+      echo "Usage: ./release.sh [--preview] [--publish] [--orgs <org,...>]"
       exit 1
       ;;
   esac
+  shift
 done
 
 # Prevent conflicting arguments
@@ -39,6 +53,31 @@ if [ "$DRY_RUN" = true ] && [ "$DRAFT" = false ]; then
   echo "Error: Cannot use '--preview' and '--publish' together."
   echo "Usage: ./release.sh [--preview|--publish]"
   exit 1
+fi
+
+# --- Validate orgs against the store workflows ---
+ORGS_SUFFIX=""
+if [ "$HAS_ORGS_ARG" = true ]; then
+  KNOWN_ORGS=$(sed -nE 's/^[[:space:]]*ORGS:[[:space:]]*(.*)$/\1/p' .github/workflows/select-orgs.yml)
+  if [ -z "$KNOWN_ORGS" ]; then
+    echo "Error: Could not read ORGS from .github/workflows/select-orgs.yml"
+    exit 1
+  fi
+  if [ -z "$ORGS_ARG" ]; then
+    echo "Error: '--orgs' needs a comma-separated list of orgs (known: $KNOWN_ORGS)"
+    exit 1
+  fi
+  for org in $(echo "$ORGS_ARG" | tr ',' ' '); do
+    if [[ " $KNOWN_ORGS " != *" $org "* ]]; then
+      echo "Error: Unknown org '$org' (known: $KNOWN_ORGS)"
+      exit 1
+    fi
+    if [[ "$ORGS_SUFFIX-" == *"-$org-"* ]]; then
+      echo "Error: Org '$org' is listed more than once"
+      exit 1
+    fi
+    ORGS_SUFFIX="$ORGS_SUFFIX-$org"
+  done
 fi
 
 # --- Determine current branch ---
@@ -93,7 +132,12 @@ if [[ "$CURRENT_BRANCH" == "master" ]]; then
   # Get NEXT_MASTER_VERSION from package.json
   PKG_NEXT_MINOR=$((PKG_MINOR + 1))
   NEXT_MASTER_VERSION="$PKG_MAJOR.$PKG_NEXT_MINOR"
-  
+
+  if [ -n "$ORGS_SUFFIX" ]; then
+    echo "Error: '--orgs' can only be used on a 'release/x.xx' branch, not when starting a new release cycle."
+    exit 1
+  fi
+
 # --- Logic for 'release' branch ---
 elif [[ "$CURRENT_BRANCH" == "release/"* ]]; then
   MAJOR_MINOR=$(echo "$CURRENT_BRANCH" | sed 's/release\///')
@@ -117,6 +161,7 @@ elif [[ "$CURRENT_BRANCH" == "release/"* ]]; then
     NEXT_RC=$((LATEST_RC + 1))
     VERSION="$MAJOR_MINOR-rc$NEXT_RC"
   fi
+  VERSION="$VERSION$ORGS_SUFFIX"
 fi
 
 # --- Dry run output ---
@@ -131,6 +176,11 @@ if [ "$DRY_RUN" = true ]; then
   fi
   echo "🌿 Target release branch:  $RELEASE_BRANCH"
   echo "🏷️  Release version:        v$VERSION"
+  if [ -n "$ORGS_SUFFIX" ]; then
+    echo "🏢 Orgs:                   $(echo "${ORGS_SUFFIX#-}" | tr '-' ' ')"
+  else
+    echo "🏢 Orgs:                   all"
+  fi
   if [ "$IS_NEW_RELEASE_CYCLE" = true ]; then
     echo "⬆️  Next master version:    $NEXT_MASTER_VERSION"
   fi
