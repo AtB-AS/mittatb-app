@@ -7,8 +7,9 @@ on:
         value: ${{ jobs.select.outputs.orgs }}
 
 env:
-  # All orgs the store workflows can build. A release tag naming one or more orgs
-  # (e.g. v1.91-rc3-troms-fram-nfk) builds only those; a tag naming none builds all.
+  # All orgs the store workflows can build. A release tag must be vX.YY[.Z]-rcN, optionally
+  # followed by -<org> suffixes (e.g. v1.91-rc3-troms-fram-nfk) to build only those orgs;
+  # a tag without suffixes builds all. Any other tag fails, so a typo can't build all orgs.
   ORGS: atb nfk fram troms
 
 jobs:
@@ -22,11 +23,27 @@ jobs:
         id: orgs
         env:
           REF: ${{ github.ref_name }}
+          EVENT: ${{ github.event_name }}
         run: |
           selected=()
-          for org in $ORGS; do
-            [[ "$REF" == *"$org"* ]] && selected+=("$org")
-          done
+          if [[ "$EVENT" == "release" ]]; then
+            if [[ ! "$REF" =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?-rc[0-9]+((-[a-z]+)*)$ ]]; then
+              echo "::error::Release tag '$REF' must match vX.YY[.Z]-rcN[-<org>...]"
+              exit 1
+            fi
+            for org in $(tr '-' ' ' <<< "${BASH_REMATCH[2]}"); do
+              if [[ " $ORGS " != *" $org "* ]]; then
+                echo "::error::Unknown org '$org' in release tag '$REF' (known: $ORGS)"
+                exit 1
+              fi
+              selected+=("$org")
+            done
+          else
+            # Debug builds (workflow_dispatch) don't upload; match org names in the branch name
+            for org in $ORGS; do
+              [[ "$REF" == *"$org"* ]] && selected+=("$org")
+            done
+          fi
           [ ${#selected[@]} -eq 0 ] && selected=($ORGS)
           echo "Building: ${selected[*]}"
           echo "orgs=$(printf '%s\n' "${selected[@]}" | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
