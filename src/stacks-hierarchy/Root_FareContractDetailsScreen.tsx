@@ -3,7 +3,7 @@ import {
   DetailsContent,
   useAnnounceNewValidFareContract,
 } from '@atb/modules/fare-contracts';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   FareContractTexts,
   TicketingTexts,
@@ -36,7 +36,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const isFocused = useIsFocusedAndActive();
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const {enable_ticket_information} = useRemoteConfigContext();
   const {serverNow} = useTimeContext(
     isFocused ? ONE_SECOND_MS * 5 : ONE_MINUTE_MS,
@@ -126,7 +125,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             ? {
                 type: 'custom',
                 onPress: navigateToTicketInfoScreen,
-                color: theme.color.background.accent[0],
                 text: t(FareContractTexts.details.header.ticketInformation),
                 svg: SvgInfo,
                 accessibilityHint: t(

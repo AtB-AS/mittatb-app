@@ -501,16 +501,10 @@ export const DepartureDetailsScreenComponent = ({
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
-  const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
 
   return (
     <View style={styles.passedSection}>
-      <ThemeText
-        typography="body__s"
-        color={themeColor}
-        style={styles.passedText}
-      >
+      <ThemeText typography="body__s" style={styles.passedText}>
         {realtimeText}
       </ThemeText>
     </View>
