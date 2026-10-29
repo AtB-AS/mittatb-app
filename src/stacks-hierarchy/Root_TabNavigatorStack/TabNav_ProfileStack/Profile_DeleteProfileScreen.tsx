@@ -88,7 +88,6 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
   };
 
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
 
   const focusRef = useFocusOnLoad(navigation);
 
@@ -105,11 +104,7 @@ export const Profile_DeleteProfileScreen = ({navigation}: Props) => {
           accessible={true}
           ref={focusRef}
         >
-          <ThemeText
-            typography="heading__l"
-            color={themeColor}
-            style={{flexShrink: 1}}
-          >
+          <ThemeText typography="heading__l" style={{flexShrink: 1}}>
             {t(DeleteProfileTexts.header.title)}
           </ThemeText>
         </View>
