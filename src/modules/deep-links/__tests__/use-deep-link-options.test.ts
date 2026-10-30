@@ -437,6 +437,39 @@ describe('planner web', () => {
     });
   });
 
+  describe('search time', () => {
+    const now = new Date('2026-10-30T12:00:00Z');
+    const getSearchTime = (query: string) => {
+      jest.useFakeTimers().setSystemTime(now);
+      const state = getStateFrom(`/departures/NSR:StopPlace:41613?${query}`);
+      jest.useRealTimers();
+      return findRoute(state, 'Departures_PlaceScreen')?.params.searchTime;
+    };
+
+    it('opens with a future search time', () => {
+      const searchTime = new Date('2026-10-30T14:00:00Z');
+      expect(
+        getSearchTime(`searchMode=departBy&searchTime=${searchTime.getTime()}`),
+      ).toEqual({option: 'departure', date: '2026-10-30T14:00:00.000Z'});
+    });
+
+    it('falls back to now when the search time is in the past', () => {
+      const searchTime = new Date('2026-10-30T10:00:00Z');
+      expect(
+        getSearchTime(`searchMode=departBy&searchTime=${searchTime.getTime()}`),
+      ).toBeUndefined();
+    });
+
+    it.each(['', 'abc', '1793401200000abc', 'NaN', 'Infinity'])(
+      'falls back to now with an invalid search time %p',
+      (searchTime) => {
+        expect(
+          getSearchTime(`searchMode=departBy&searchTime=${searchTime}`),
+        ).toBeUndefined();
+      },
+    );
+  });
+
   it('does not handle departure details', () => {
     expect(
       getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),

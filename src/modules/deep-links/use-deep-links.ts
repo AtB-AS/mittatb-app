@@ -25,6 +25,7 @@ import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
 import {parseParamAsFormFactors, parseParamAsInt} from './utils';
 import {initialUrl} from './initial-url';
+import type {DepartureSearchTime} from '@atb/components/date-selection';
 import {
   resolveTripSearchLocations,
   TripSearchLocations,
@@ -117,11 +118,11 @@ export function useDeepLinks() {
 
       const stopId = path.match(/^departures\/([^/]+)$/)?.[1];
       if (stopId)
-        return routeForDepartures('departures', {
-          ...params,
-          stopId,
-          quayId: params.quay,
-        });
+        return routeForDepartures(
+          'departures',
+          {...params, stopId, quayId: params.quay},
+          parseSearchTime(params.searchTime),
+        );
 
       switch (path) {
         case 'map':
@@ -361,7 +362,21 @@ function routeForTripSearch(
 }
 
 /**
- * `https://{APP_LINK_HOST}/departures/{stopId}?quay=...`
+ * Parses a planner web `searchTime` param (epoch milliseconds) as a departure
+ * search time, or falls back to undefined (now) if missing, invalid or in the
+ * past.
+ */
+function parseSearchTime(
+  searchTime: string | undefined,
+): DepartureSearchTime | undefined {
+  if (!searchTime?.trim()) return undefined;
+  const date = new Date(Number(searchTime));
+  if (isNaN(date.getTime()) || date.getTime() <= Date.now()) return undefined;
+  return {option: 'departure', date: date.toISOString()};
+}
+
+/**
+ * `https://{APP_LINK_HOST}/departures/{stopId}?quay=...&searchTime=...`
  * `atb://departures?stopId=...&quayId=...`
  * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
@@ -369,6 +384,7 @@ function routeForTripSearch(
 function routeForDepartures(
   path: string,
   params: DeepLink['params'],
+  searchTime?: DepartureSearchTime,
 ): ResultState | undefined {
   const destination: PartialRoute<any>[] = [
     {
@@ -380,6 +396,7 @@ function routeForDepartures(
         place: {id: params.stopId},
         selectedQuayId: params.quayId,
         showOnlyFavoritesByDefault: path !== 'departures',
+        initialSearchTime: searchTime,
         mode: 'Departure',
       },
     },
