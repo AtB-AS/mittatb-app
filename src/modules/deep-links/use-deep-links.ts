@@ -115,12 +115,12 @@ export function useDeepLinks() {
     getStateFromPath(pathAndQuery, config) {
       const {path, params} = parseDeepLink(pathAndQuery);
 
-      // Planner web stop place, e.g. `/departures/NSR:StopPlace:41613`
       const stopId = path.match(/^departures\/([^/]+)$/)?.[1];
       if (stopId)
         return routeForDepartures('departures', {
           ...params,
-          stopId: decodeURIComponent(stopId),
+          stopId,
+          quayId: params.quay,
         });
 
       switch (path) {
@@ -361,8 +361,8 @@ function routeForTripSearch(
 }
 
 /**
+ * `https://APP_LINK_HOST/departures/<stopId>?quay=...`
  * `atb://departures?stopId=...&quayId=...`
- * `https://<planner web>/departures/<stopId>`
  * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
  */

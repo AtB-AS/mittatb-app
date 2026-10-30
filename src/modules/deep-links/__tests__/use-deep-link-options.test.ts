@@ -427,6 +427,16 @@ describe('planner web', () => {
     });
   });
 
+  it('opens the quay', () => {
+    const state = getStateFrom(
+      '/departures/NSR:StopPlace:41613?quay=NSR%3AQuay%3A71184',
+    );
+    expect(findRoute(state, 'Departures_PlaceScreen')?.params).toMatchObject({
+      place: {id: 'NSR:StopPlace:41613'},
+      selectedQuayId: 'NSR:Quay:71184',
+    });
+  });
+
   it('does not handle departure details', () => {
     expect(
       getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
