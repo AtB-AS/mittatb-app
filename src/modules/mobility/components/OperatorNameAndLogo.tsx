@@ -1,8 +1,8 @@
 import React from 'react';
-import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {SvgCssUri} from 'react-native-svg/css';
 import {StyleSheet} from '@atb/theme';
+import {BrandingImage} from './BrandingImage';
 
 const LOGO_SIZE = 20;
 
@@ -27,28 +27,16 @@ export const OperatorNameAndLogo = ({
   logoUrl,
   style,
 }: OperatorNameAndLogoProps) => {
-  const isSvg = (url: string) => url.endsWith('.svg');
   const styles = useSheetStyle();
 
   return (
     <View style={style}>
       {logoUrl ? (
-        isSvg(logoUrl) ? (
-          <SvgCssUri
-            style={styles.logo}
-            height={LOGO_SIZE}
-            width={LOGO_SIZE}
-            uri={logoUrl}
-          />
-        ) : (
-          <Image
-            source={{uri: logoUrl}}
-            width={LOGO_SIZE}
-            height={LOGO_SIZE}
-            style={styles.logo as ImageStyle}
-            resizeMode="contain"
-          />
-        )
+        <BrandingImage
+          logoUrl={logoUrl}
+          logoSize={LOGO_SIZE}
+          style={styles.logo}
+        />
       ) : null}
       <ThemeText typography="body__m__strong">{operatorName}</ThemeText>
     </View>
