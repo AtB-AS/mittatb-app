@@ -13,11 +13,13 @@ import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 import {shadows} from '@atb/modules/map';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {Skeleton} from '@atb/components/skeleton';
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
   buttonText: string;
   isLive?: boolean;
+  isLoading?: boolean;
   onExpand?(): void;
 };
 
@@ -25,6 +27,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   serviceJourneyPolylines,
   buttonText,
   isLive = false,
+  isLoading = false,
   onExpand,
 }) => {
   const {themeName} = useThemeContext();
@@ -55,6 +58,10 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   }, [bounds]);
 
   const styles = useStyles();
+
+  if (isLoading) {
+    return <Skeleton style={styles.mapSkeleton} />;
+  }
 
   return (
     <View>
@@ -104,6 +111,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderWidth: theme.border.width.slim,
     borderColor: theme.color.surface.neutral.subtle.background,
     overflow: 'hidden',
+  },
+  mapSkeleton: {
+    height: 100,
+    borderRadius: theme.border.radius.regular,
   },
   pillOverlay: {
     position: 'absolute',

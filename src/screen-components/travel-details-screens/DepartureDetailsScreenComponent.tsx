@@ -48,7 +48,7 @@ import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
-import {useServiceJourneyPolylineQuery} from './use-service-journey-polyline-query';
+import {useServiceJourneysPolylinesQuery} from './use-service-journeys-polylines-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {GlobalMessage} from '@atb/modules/global-messages';
@@ -166,10 +166,19 @@ export const DepartureDetailsScreenComponent = ({
     (c) => c.stopPositionInPattern === activeItem.toStopPosition,
   );
 
-  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
-    activeItem.serviceJourneyId,
-    fromCall?.quay.id,
-    toCall?.quay.id,
+  const {data: serviceJourneysPolylines} = useServiceJourneysPolylinesQuery(
+    fromCall
+      ? [
+          {
+            serviceJourneyId: activeItem.serviceJourneyId,
+            fromQuayId: fromCall.quay.id,
+            toQuayId: toCall?.quay.id,
+          },
+        ]
+      : [],
+  );
+  const serviceJourneyPolyline = serviceJourneysPolylines.find(
+    (p) => p.serviceJourneyId === activeItem.serviceJourneyId,
   );
 
   const {isTravelAidEnabled} = useFeatureTogglesContext();

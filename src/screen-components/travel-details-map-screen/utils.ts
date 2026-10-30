@@ -6,7 +6,11 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
+import {
+  ServiceJourneyPolyline,
+  ServiceJourneyPolylinesWithId,
+} from '@atb/api/types/serviceJourney';
+import {Leg} from '@atb/api/types/trips';
 import {Coordinates} from '@atb/utils/coordinates';
 import {CameraBounds} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
@@ -19,12 +23,19 @@ export interface MapLine extends Feature<LineString> {
   faded?: boolean;
 }
 
+/**
+ * Gets the camera bounds for the map lines, focusing on the non-faded lines.
+ * Faded lines show the parts of a service journey before boarding or after
+ * alighting.
+ */
 export function getMapBounds(
   features: MapLine[],
   extraPoints: Position[] = [],
 ): CameraBounds {
+  const nonFadedFeatures = features.filter((f) => !f.faded);
+  const boundsFeatures = nonFadedFeatures.length ? nonFadedFeatures : features;
   const positions = [
-    ...flatMap(features, (f) => f.geometry.coordinates),
+    ...flatMap(boundsFeatures, (f) => f.geometry.coordinates),
     ...extraPoints,
   ];
 
@@ -69,6 +80,30 @@ export function createMapLines(
         isFlexible: isLineFlexibleTransport(leg.line),
       };
     });
+}
+
+/**
+ * Combines the trip legs with the faded part of each service journey before
+ * the boarding stop. The faded lines come first so they are drawn below the
+ * trip legs.
+ *
+ * Relies on the BFF returning the map legs of a service journey in the order
+ * before, main, after.
+ */
+export function createTripMapLegs(
+  legs: Leg[],
+  serviceJourneysPolylines: ServiceJourneyPolylinesWithId[],
+): ServiceJourneyPolyline[] {
+  const beforeBoardingMapLegs = legs.flatMap((leg) => {
+    const mapLegs = serviceJourneysPolylines.find(
+      (p) => p.serviceJourneyId === leg.serviceJourney?.id,
+    )?.mapLegs;
+    if (!mapLegs) return [];
+    const mainMapLegIndex = mapLegs.findIndex((mapLeg) => !mapLeg.faded);
+    const hasBeforeBoardingMapLegs = mainMapLegIndex > 0;
+    return hasBeforeBoardingMapLegs ? mapLegs.slice(0, mainMapLegIndex) : [];
+  });
+  return [...beforeBoardingMapLegs, ...legs];
 }
 
 export function pointOf(coords: Coordinates): Point;
