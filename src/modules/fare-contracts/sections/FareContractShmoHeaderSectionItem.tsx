@@ -2,7 +2,7 @@ import React from 'react';
 import {FareContractType} from '@atb-as/utils';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
@@ -29,11 +29,17 @@ export const FareContractShmoHeaderSectionItem = ({
   const styles = useStyles();
 
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
   const {abtCustomerId: currentUserId} = useAuthContext();
   const {isInspectable} = useMobileTokenContext();
-  const {validTo} = getFareContractInfo(now, fc, currentUserId);
-  const dateTime = formatToLongDateTime(toDate(validTo), language);
-  const label = t(FareContractTexts.shmoDetails.tripEnded(dateTime));
+  const {validTo, validityStatus} = getFareContractInfo(now, fc, currentUserId);
+  const isCancelled = validityStatus === 'cancelled';
+  const dateTime = formatToLongDateTime(toDate(validTo), language, true);
+  const label = t(
+    isCancelled
+      ? FareContractTexts.shmoDetails.tripCancelled(dateTime)
+      : FareContractTexts.shmoDetails.tripEnded(dateTime),
+  );
   const {data: operatorsData} = useGetOperatorsQuery();
   const operatorName = getOperatorNameById(
     operatorsData,
@@ -63,6 +69,7 @@ export const FareContractShmoHeaderSectionItem = ({
       <ThemeText
         style={styles.validityText}
         typography="heading__l"
+        color={isCancelled ? theme.color.foreground.emphasis.error : undefined}
         accessibilityLabel={
           !isInspectable
             ? label +
@@ -83,6 +90,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: theme.spacing.small,
+    paddingVertical: theme.spacing.large,
   },
   validityText: {
     textAlign: 'left',
