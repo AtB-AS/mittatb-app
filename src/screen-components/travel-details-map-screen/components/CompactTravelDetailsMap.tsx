@@ -48,6 +48,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
    * https://github.com/rnmapbox/maps/issues/2705
    */
   useEffect(() => {
+    if (isLoading) return;
     if (Platform.OS === 'ios') {
       setTimeout(
         () =>
@@ -55,7 +56,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         100,
       );
     }
-  }, [bounds]);
+  }, [bounds, isLoading]);
 
   const styles = useStyles();
 
