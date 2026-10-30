@@ -12,6 +12,16 @@ export type ServiceJourneyPolylines = {
   stop?: Scalars['Coordinates']['output'];
 };
 
+export type ServiceJourneyPolylinesQuery = {
+  serviceJourneyId: string;
+  fromQuayId: string;
+  toQuayId?: string;
+};
+
+export type ServiceJourneyPolylinesWithId = ServiceJourneyPolylines & {
+  serviceJourneyId: string;
+};
+
 export type ServiceJourneyPolyline = {
   mode?: AnyMode;
   faded?: boolean;
