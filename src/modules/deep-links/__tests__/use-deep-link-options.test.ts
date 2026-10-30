@@ -1,4 +1,4 @@
-import {APP_SCHEME} from '@env';
+import {APP_SCHEME, APP_LINK_HOST} from '@env';
 import {renderHook} from '@testing-library/react-native';
 import {Linking} from 'react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
@@ -105,11 +105,19 @@ beforeEach(() => {
 });
 
 describe('prefixes', () => {
-  it('only handles the app scheme', () => {
+  it('handles the app scheme', () => {
     const {result} = renderHook(() => useDeepLinks());
-    expect(result.current.prefixes).toHaveLength(1);
     expect(result.current.prefixes![0]).toMatch(/^[a-z-]+:\/\/$/);
   });
+
+  if (APP_LINK_HOST) {
+    it('handles app links with APP_LINK_HOST', () => {
+      const {result} = renderHook(() => useDeepLinks());
+      expect(result.current.prefixes!.slice(1)).toEqual([
+        `https://${APP_LINK_HOST}`,
+      ]);
+    });
+  }
 });
 
 describe('linking config', () => {
@@ -394,6 +402,44 @@ describe('trip search', () => {
         'trip-search?fromId=NSR:StopPlace:337',
         result.current.config,
       ),
+    ).toBeUndefined();
+  });
+});
+
+describe('planner web', () => {
+  it('opens the stop place', () => {
+    const state = getStateFrom('/departures/NSR:StopPlace:41613');
+    expect(findRoute(state, 'Departures_PlaceScreen')).toEqual({
+      name: 'Departures_PlaceScreen',
+      params: {
+        place: {id: 'NSR:StopPlace:41613'},
+        selectedQuayId: undefined,
+        showOnlyFavoritesByDefault: false,
+        mode: 'Departure',
+      },
+    });
+  });
+
+  it('decodes the stop place id', () => {
+    const state = getStateFrom('/departures/NSR%3AStopPlace%3A41613');
+    expect(findRoute(state, 'Departures_PlaceScreen')?.params).toMatchObject({
+      place: {id: 'NSR:StopPlace:41613'},
+    });
+  });
+
+  it('opens the quay', () => {
+    const state = getStateFrom(
+      '/departures/NSR:StopPlace:41613?quay=NSR%3AQuay%3A71184',
+    );
+    expect(findRoute(state, 'Departures_PlaceScreen')?.params).toMatchObject({
+      place: {id: 'NSR:StopPlace:41613'},
+      selectedQuayId: 'NSR:Quay:71184',
+    });
+  });
+
+  it('does not handle departure details', () => {
+    expect(
+      getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
     ).toBeUndefined();
   });
 });

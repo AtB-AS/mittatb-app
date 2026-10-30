@@ -24,9 +24,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window = window
     appDelegate.window = window
 
-    // Pass a URL the app was cold-started with on to Linking.getInitialURL()
+    // Pass a URL or universal link the app was cold-started with on to
+    // Linking.getInitialURL()
     var launchOptions = appDelegate.launchOptions ?? [:]
-    if let url = connectionOptions.urlContexts.first?.url {
+    let universalLink = connectionOptions.userActivities.first {
+      $0.activityType == NSUserActivityTypeBrowsingWeb
+    }?.webpageURL
+    if let url = connectionOptions.urlContexts.first?.url ?? universalLink {
       launchOptions[.url] = url
     }
 
@@ -42,5 +46,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       return
     }
     RCTLinkingManager.application(UIApplication.shared, open: url, options: [:])
+  }
+
+  func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    RCTLinkingManager.application(
+      UIApplication.shared,
+      continue: userActivity,
+      restorationHandler: { _ in }
+    )
   }
 }

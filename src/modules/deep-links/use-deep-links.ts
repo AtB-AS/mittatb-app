@@ -1,4 +1,4 @@
-import {APP_SCHEME} from '@env';
+import {APP_SCHEME, APP_LINK_HOST} from '@env';
 import {useCallback, useRef} from 'react';
 import {Linking} from 'react-native';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
@@ -84,7 +84,10 @@ export function useDeepLinks() {
   );
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
-    prefixes: [`${APP_SCHEME}://`],
+    prefixes: [
+      `${APP_SCHEME}://`,
+      ...(APP_LINK_HOST ? [`https://${APP_LINK_HOST}`] : []),
+    ],
     getInitialURL: async () => {
       const url = await initialUrl;
       if (url) await prepare(url);
@@ -111,6 +114,14 @@ export function useDeepLinks() {
     },
     getStateFromPath(pathAndQuery, config) {
       const {path, params} = parseDeepLink(pathAndQuery);
+
+      const stopId = path.match(/^departures\/([^/]+)$/)?.[1];
+      if (stopId)
+        return routeForDepartures('departures', {
+          ...params,
+          stopId,
+          quayId: params.quay,
+        });
 
       switch (path) {
         case 'map':
@@ -350,6 +361,7 @@ function routeForTripSearch(
 }
 
 /**
+ * `https://APP_LINK_HOST/departures/<stopId>?quay=...`
  * `atb://departures?stopId=...&quayId=...`
  * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
