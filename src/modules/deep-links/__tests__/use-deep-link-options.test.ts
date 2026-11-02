@@ -1,8 +1,8 @@
-import {APP_SCHEME, APP_LINK_HOST} from '@env';
 import {renderHook} from '@testing-library/react-native';
 import {Linking} from 'react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useDeepLinks} from '../use-deep-links';
+import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from '../prefixes';
 
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
@@ -46,6 +46,10 @@ jest.mock('@atb/modules/map', () => ({
 }));
 // Unused by the hook, but imported by ./utils, and pulls in native modules
 jest.mock('@atb/modules/fare-zones-selector', () => ({}));
+jest.mock('../prefixes', () => ({
+  APP_SCHEME_PREFIX: 'atb://',
+  APP_LINK_PREFIX: 'https://app.example',
+}));
 
 const TEST_PRODUCT = {
   id: 'P1',
@@ -80,7 +84,7 @@ const getStateAfterLookupFrom = async (url: string) => {
   const {result} = renderHook(() => useDeepLinks());
   const {subscribe, getStateFromPath, config} = result.current;
   const handled = new Promise<void>((resolve) => subscribe!(() => resolve()));
-  onUrl({url: `${APP_SCHEME}://${url}`});
+  onUrl({url: APP_SCHEME_PREFIX + url});
   await handled;
   return getStateFromPath!(url, config);
 };
@@ -110,14 +114,10 @@ describe('prefixes', () => {
     expect(result.current.prefixes![0]).toMatch(/^[a-z-]+:\/\/$/);
   });
 
-  if (APP_LINK_HOST) {
-    it('handles app links with APP_LINK_HOST', () => {
-      const {result} = renderHook(() => useDeepLinks());
-      expect(result.current.prefixes!.slice(1)).toEqual([
-        `https://${APP_LINK_HOST}`,
-      ]);
-    });
-  }
+  it('handles app links', () => {
+    const {result} = renderHook(() => useDeepLinks());
+    expect(result.current.prefixes!.slice(1)).toEqual([APP_LINK_PREFIX]);
+  });
 });
 
 describe('linking config', () => {
@@ -443,7 +443,8 @@ describe('planner web', () => {
       jest.useFakeTimers().setSystemTime(now);
       const state = getStateFrom(`/departures/NSR:StopPlace:41613?${query}`);
       jest.useRealTimers();
-      return findRoute(state, 'Departures_PlaceScreen')?.params.searchTime;
+      return findRoute(state, 'Departures_PlaceScreen')?.params
+        .initialSearchTime;
     };
 
     it('opens with a future search time', () => {
@@ -474,6 +475,10 @@ describe('planner web', () => {
     expect(
       getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
     ).toBeUndefined();
+  });
+
+  it('does not handle ids other than NSR ids', () => {
+    expect(getStateFrom('/departures/foo')).toBeUndefined();
   });
 });
 

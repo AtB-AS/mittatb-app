@@ -1,4 +1,3 @@
-import {APP_SCHEME, APP_LINK_HOST} from '@env';
 import {useCallback, useRef} from 'react';
 import {Linking} from 'react-native';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
@@ -23,8 +22,13 @@ import {
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
-import {parseParamAsFormFactors, parseParamAsInt} from './utils';
+import {
+  parseParamAsFormFactors,
+  parseParamAsInt,
+  parseParamAsSearchTime,
+} from './utils';
 import {initialUrl} from './initial-url';
+import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from './prefixes';
 import type {DepartureSearchTime} from '@atb/components/date-selection';
 import {
   resolveTripSearchLocations,
@@ -55,7 +59,7 @@ export function useDeepLinks() {
    */
   const prepare = useCallback(
     async (url: string) => {
-      const {path, params} = parseDeepLink(url.replace(`${APP_SCHEME}://`, ''));
+      const {path, params} = parseDeepLink(url.replace(APP_SCHEME_PREFIX, ''));
       if (path === 'trip-search') {
         tripSearchLocationsRef.current =
           await resolveTripSearchLocations(params);
@@ -86,8 +90,8 @@ export function useDeepLinks() {
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
     prefixes: [
-      `${APP_SCHEME}://`,
-      ...(APP_LINK_HOST ? [`https://${APP_LINK_HOST}`] : []),
+      APP_SCHEME_PREFIX,
+      ...(APP_LINK_PREFIX ? [APP_LINK_PREFIX] : []),
     ],
     getInitialURL: async () => {
       const url = await initialUrl;
@@ -116,12 +120,12 @@ export function useDeepLinks() {
     getStateFromPath(pathAndQuery, config) {
       const {path, params} = parseDeepLink(pathAndQuery);
 
-      const stopId = path.match(/^departures\/([^/]+)$/)?.[1];
+      const stopId = path.match(/^departures\/(NSR:[^/]+)$/)?.[1];
       if (stopId)
         return routeForDepartures(
           'departures',
           {...params, stopId, quayId: params.quay},
-          parseSearchTime(params.searchTime),
+          parseParamAsSearchTime(params.searchTime),
         );
 
       switch (path) {
@@ -359,20 +363,6 @@ function routeForTripSearch(
       },
     ],
   } as ResultState;
-}
-
-/**
- * Parses a planner web `searchTime` param (epoch milliseconds) as a departure
- * search time, or falls back to undefined (now) if missing, invalid or in the
- * past.
- */
-function parseSearchTime(
-  searchTime: string | undefined,
-): DepartureSearchTime | undefined {
-  if (!searchTime?.trim()) return undefined;
-  const date = new Date(Number(searchTime));
-  if (isNaN(date.getTime()) || date.getTime() <= Date.now()) return undefined;
-  return {option: 'departure', date: date.toISOString()};
 }
 
 /**
