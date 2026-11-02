@@ -34,4 +34,24 @@ describe('getMapBounds', () => {
   it('is unaffected by extra points inside the lines', () => {
     expect(getMapBounds([line], [[11, 64]])).toEqual(getMapBounds([line]));
   });
+
+  it('ignores faded lines when there are non-faded lines', () => {
+    const fadedLine: MapLine = {
+      ...line,
+      faded: true,
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [0, 50],
+          [10, 63],
+        ],
+      },
+    };
+    expect(getMapBounds([fadedLine, line])).toEqual(getMapBounds([line]));
+  });
+
+  it('uses faded lines when all lines are faded', () => {
+    const fadedLine: MapLine = {...line, faded: true};
+    expect(getMapBounds([fadedLine])).toEqual(getMapBounds([line]));
+  });
 });
