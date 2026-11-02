@@ -77,18 +77,20 @@ export const FinishedShmoSheet = ({
       }
       subText={shmoBooking?.asset.operator.name}
       logoIcon={
-        <BrandingImage
-          logoUrl={operatorLogoUrl}
-          logoSize={28}
-          rounded={true}
-          fallback={
-            <TransportationIconBox
-              mode={mode}
-              subMode={subMode}
-              rounded={true}
-            />
-          }
-        />
+        isLoading ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            rounded={true}
+            fallback={
+              <TransportationIconBox
+                mode={mode}
+                subMode={subMode}
+                rounded={true}
+              />
+            }
+          />
+        )
       }
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       locationArrowOnPress={locationArrowOnPress}

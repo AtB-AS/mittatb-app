@@ -236,18 +236,20 @@ export const ActiveShmoSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       logoIcon={
-        <BrandingImage
-          logoUrl={operatorLogoUrl}
-          logoSize={28}
-          rounded={true}
-          fallback={
-            <TransportationIconBox
-              mode={mode}
-              subMode={subMode}
-              rounded={true}
-            />
-          }
-        />
+        isLoading ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            rounded={true}
+            fallback={
+              <TransportationIconBox
+                mode={mode}
+                subMode={subMode}
+                rounded={true}
+              />
+            }
+          />
+        )
       }
       headerNode={
         activeBooking ? (
