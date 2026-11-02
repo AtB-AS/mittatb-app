@@ -6,7 +6,7 @@ import {ShimmerBand} from './ShimmerBand';
 type Props = PropsWithChildren<
   ViewProps & {
     style?: StyleProp<ViewStyle>;
-    /** Highlight color swept across the content. Defaults to white. */
+    /** Highlight color swept across the content. Defaults to surface neutral strong. */
     highlightColor?: string;
   }
 >;
@@ -47,6 +47,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   // Applied only when the Skeleton is a standalone block (no children).
   block: {
-    backgroundColor: theme.color.background.neutral[3].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
   },
 }));

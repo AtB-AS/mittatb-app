@@ -42,7 +42,6 @@ const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
 export const Root_TabNavigatorStack = () => {
   const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
   const {t} = useTranslation();
   const {startScreen} = usePreferencesContext().preferences;
 
@@ -96,7 +95,7 @@ export const Root_TabNavigatorStack = () => {
     ) {
       return {
         color: theme.color.status.error.primary,
-        backgroundColor: interactiveColor.default,
+        backgroundColor: theme.color.surface.neutral.strong,
       };
     }
   };

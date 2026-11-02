@@ -1,7 +1,6 @@
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {TileWithButton} from '@atb/components/tile';
-import {StyleSheet} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View, ViewStyle} from 'react-native';
 import {BenefitImageAsset} from './BenefitImage';
 import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
@@ -12,7 +11,6 @@ import {MapFilterType, useEnableFormFactorsInMapFilter} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type BenefitCardProps = {
-  interactiveColor: InteractiveColor;
   style?: ViewStyle;
   benefit: FareProductBenefitType;
   onNavigateToMap: (initialFilters: MapFilterType) => void;
@@ -21,10 +19,10 @@ type BenefitCardProps = {
 export const BenefitTile = ({
   style,
   benefit,
-  interactiveColor,
   onNavigateToMap,
 }: BenefitCardProps): React.JSX.Element => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
   const {t, language} = useTranslation();
   const title = t(
     MobilityTexts.vehicleName(benefit.formFactors[0] as FormFactor),
@@ -47,7 +45,6 @@ export const BenefitTile = ({
         accessibilityLabel={title + screenReaderPause + description}
         mode="compact"
         buttonText={t(MobilityTexts.showInMap)}
-        interactiveColor={interactiveColor}
         style={styles.contentContainer}
         onPress={onPress}
         accessibilityHint={t(MobilityTexts.showInMapA11yLabel)}
@@ -60,7 +57,10 @@ export const BenefitTile = ({
             style: styles.image,
           }}
         />
-        <ThemeText typography="heading__xs" color={interactiveColor.default}>
+        <ThemeText
+          typography="heading__xs"
+          color={theme.color.surface.neutral.strong}
+        >
           {title}
         </ThemeText>
         <ThemeText

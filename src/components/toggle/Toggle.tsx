@@ -16,7 +16,7 @@ type Props = Pick<
 export function Toggle({value, onValueChange, ...props}: Props) {
   const [checked, setChecked] = useState(value);
   const {theme} = useThemeContext();
-  const backgroundColor = theme.color.background.neutral[3].background;
+  const backgroundColor = theme.color.surface.neutral.subtle.background;
   const fontScale = useFontScale();
   const scale = Math.min(1.5, Math.max(fontScale, 1));
   const transform = Platform.select({

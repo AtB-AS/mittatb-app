@@ -1,15 +1,13 @@
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
 export type TileWithButtonProps = {
   mode: 'compact' | 'spacious';
-  interactiveColor: InteractiveColor;
   onPress: () => void;
   accessibilityLabel: string;
   accessibilityHint?: string;
@@ -22,7 +20,6 @@ export type TileWithButtonProps = {
 
 export function TileWithButton({
   mode,
-  interactiveColor,
   onPress,
   accessibilityLabel,
   accessibilityHint,
@@ -32,7 +29,8 @@ export function TileWithButton({
   buttonSvg,
   children,
 }: TileWithButtonProps): React.JSX.Element {
-  const styles = useStyles(interactiveColor);
+  const styles = useStyles();
+  const {theme} = useThemeContext();
 
   return (
     <NativeTouchable
@@ -71,46 +69,45 @@ export function TileWithButton({
         <ThemeIcon
           size={mode === 'spacious' ? 'normal' : 'xSmall'}
           svg={buttonSvg}
-          color={interactiveColor.default.foreground.primary}
+          color={theme.color.surface.neutral.strong.foreground.primary}
         />
       </View>
     </NativeTouchable>
   );
 }
 
-const useStyles = (interactiveColor: InteractiveColor) =>
-  StyleSheet.createThemeHook((theme) => ({
-    container: {
-      backgroundColor: interactiveColor.default.background,
-      borderRadius: theme.border.radius.regular,
-      overflow: 'hidden',
-      borderWidth: theme.border.width.slim,
-      borderColor: theme.color.background.neutral[2].background,
-    },
-    spaciousContentContainer: {
-      padding: theme.spacing.medium,
-      flexGrow: 1,
-    },
-    compactContentContainer: {
-      padding: theme.spacing.medium,
-      flexGrow: 1,
-    },
-    button: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      borderTopWidth: theme.border.width.slim,
-      borderColor: theme.color.background.neutral[2].background,
-    },
-    spaciousButton: {
-      paddingHorizontal: theme.spacing.medium,
-      paddingVertical: theme.spacing.medium,
-    },
-    compactButton: {
-      paddingHorizontal: theme.spacing.medium,
-      paddingVertical: theme.spacing.small,
-    },
-    buttonText: {
-      color: interactiveColor.default.foreground.primary,
-    },
-  }))();
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    backgroundColor: theme.color.surface.neutral.strong.background,
+    borderRadius: theme.border.radius.regular,
+    overflow: 'hidden',
+    borderWidth: theme.border.width.slim,
+    borderColor: theme.color.surface.neutral.subtle.background,
+  },
+  spaciousContentContainer: {
+    padding: theme.spacing.medium,
+    flexGrow: 1,
+  },
+  compactContentContainer: {
+    padding: theme.spacing.medium,
+    flexGrow: 1,
+  },
+  button: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: theme.border.width.slim,
+    borderColor: theme.color.surface.neutral.subtle.background,
+  },
+  spaciousButton: {
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.medium,
+  },
+  compactButton: {
+    paddingHorizontal: theme.spacing.medium,
+    paddingVertical: theme.spacing.small,
+  },
+  buttonText: {
+    color: theme.color.surface.neutral.strong.foreground.primary,
+  },
+}));

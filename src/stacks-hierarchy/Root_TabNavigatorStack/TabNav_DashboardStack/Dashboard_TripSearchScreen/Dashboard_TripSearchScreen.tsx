@@ -15,7 +15,7 @@ import {
 import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
 
 import {TripsProps, useTrips} from './use-trips';
-import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
 import {
@@ -79,7 +79,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 }) => {
   const {callerRoute} = route.params;
   const styles = useStyles();
-  const {theme} = useThemeContext();
   const [searchTime, setSearchTime] = useState<TripSearchTime>({
     option: 'now',
     date: new Date().toISOString(),
@@ -381,7 +380,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </ThemeText>
           )}
           <GlobalMessage
-            textColor={theme.color.background.neutral[0]}
             style={styles.globalMessage}
             globalMessageContext={GlobalMessageContextEnum.appTripResults}
             ruleVariables={{

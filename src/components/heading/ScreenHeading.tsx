@@ -12,7 +12,6 @@ type ScreenHeadingProps = {
 export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
   ({text, accessibilityLabel, isLarge}: ScreenHeadingProps, ref) => {
     const {theme} = useThemeContext();
-    const color = theme.color.background.accent[0];
 
     return (
       <View
@@ -29,7 +28,6 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
       >
         <ThemeText
           typography={isLarge ? 'heading__2xl' : 'heading__l'}
-          color={color}
           accessibilityLabel={accessibilityLabel}
         >
           {text}

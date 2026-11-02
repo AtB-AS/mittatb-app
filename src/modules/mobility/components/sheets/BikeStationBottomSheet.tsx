@@ -18,6 +18,7 @@ import {BikeStationNotIntegratedView} from '../BicycleSheetNotIntegratedView';
 import {useOperators} from '../../use-operators';
 import {Loading} from '@atb/components/loading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {BrandingImage} from '../BrandingImage';
 
 type Props = {
   stationId: string;
@@ -59,6 +60,7 @@ export const BikeStationBottomSheet = ({
     availableBikes,
   } = useBikeStation(stationId);
   const operator = useOperators().byId(operatorId);
+  const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
   const operatorIsIntegrationEnabled = operator?.isDeepIntegrationEnabled;
   const {isShmoDeepIntegrationCitybikeEnabled} = useFeatureTogglesContext();
 
@@ -75,7 +77,15 @@ export const BikeStationBottomSheet = ({
       heading={stationName}
       subText={operatorName}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoIcon={<TransportationIconBox mode="bicycle" />}
+      logoIcon={
+        isLoading ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            fallback={<TransportationIconBox mode="bicycle" />}
+          />
+        )
+      }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >

@@ -1,11 +1,11 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   formatToVerboseFullDate,
   isWithinSameDate,
   secondsBetween,
 } from '@atb/utils/date';
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {TripSection} from './TripSection';
 import {WaitDetails} from './WaitSection';
@@ -25,9 +25,11 @@ import {
 import {isTransferInto} from '@atb/modules/trip-patterns';
 import {
   CompactTravelDetailsMap,
+  createTripMapLegs,
   TravelDetailsMapScreenParams,
 } from '@atb/screen-components/travel-details-map-screen';
 import {useGetServiceJourneyVehiclesQuery} from '../use-get-service-journey-vehicles';
+import {useServiceJourneysPolylinesQuery} from '../use-service-journeys-polylines-query';
 import {MapFilterType} from '@atb/modules/map';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
@@ -72,7 +74,6 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
-  const {theme} = useThemeContext();
   const {isScreenReaderEnabled} = useAccessibilityContext();
   const {enable_ticketing} = useRemoteConfigContext();
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
@@ -93,6 +94,11 @@ export const Trip: React.FC<TripProps> = ({
   const hasLiveVehicle = (vehiclePositions?.length ?? 0) > 0;
 
   const tripPatternLegs = tripPattern?.legs;
+
+  const {mapLegs, isLoading: isMapLoading} = useTripMapLegs(
+    tripPatternLegs,
+    !isScreenReaderEnabled,
+  );
 
   const mapFilter: MapFilterType = {
     mobility: {
@@ -133,8 +139,9 @@ export const Trip: React.FC<TripProps> = ({
     <View style={styles.container}>
       {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
-          serviceJourneyPolylines={tripPatternLegs}
+          serviceJourneyPolylines={mapLegs}
           isLive={hasLiveVehicle}
+          isLoading={isMapLoading}
           buttonText={t(
             hasLiveVehicle
               ? TripDetailsTexts.trip.summary.followTripInMap.label
@@ -143,7 +150,7 @@ export const Trip: React.FC<TripProps> = ({
           onExpand={() => {
             shouldShowRequestReview.current = true;
             onPressDetailsMap({
-              serviceJourneyPolylines: tripPatternLegs,
+              serviceJourneyPolylines: mapLegs,
               fromPlace: tripPatternLegs[0]?.fromPlace,
               toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
               vehicles: vehiclePositions?.map((vehicleWithPosition) => {
@@ -186,7 +193,6 @@ export const Trip: React.FC<TripProps> = ({
       )}
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
-        textColor={theme.color.background.neutral[0]}
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,
@@ -278,11 +284,36 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingRight: theme.spacing.medium,
     paddingBottom: theme.spacing.large,
     rowGap: theme.spacing.large,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.regular,
   },
 }));
 
 function isNetworkError(error: ErrorResponse): boolean {
   return error.kind === 'AXIOS_NETWORK_ERROR' || error.kind === 'AXIOS_TIMEOUT';
+}
+
+/**
+ * Gets the map legs for the trip, including the faded part of each service
+ * journey before the boarding stop.
+ */
+function useTripMapLegs(legs: Leg[], enabled: boolean) {
+  const serviceJourneysPolylinesQuery = legs
+    .map((leg) =>
+      leg.serviceJourney?.id && leg.fromPlace.quay?.id
+        ? {
+            serviceJourneyId: leg.serviceJourney.id,
+            fromQuayId: leg.fromPlace.quay.id,
+            toQuayId: leg.toPlace.quay?.id,
+          }
+        : undefined,
+    )
+    .filter(isDefined);
+  const {data: serviceJourneysPolylines, isLoading} =
+    useServiceJourneysPolylinesQuery(serviceJourneysPolylinesQuery, enabled);
+  const mapLegs = useMemo(
+    () => createTripMapLegs(legs, serviceJourneysPolylines),
+    [legs, serviceJourneysPolylines],
+  );
+  return {mapLegs, isLoading};
 }

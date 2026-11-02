@@ -242,7 +242,7 @@ function DepartureTimeItem({
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
-  const {themeName} = useThemeContext();
+  const {theme, themeName} = useThemeContext();
 
   const rightIcon = getSvgForDeparture(departure, themeName);
   const leftIcon =
@@ -270,6 +270,7 @@ function DepartureTimeItem({
           departure.cancellation ? 'body__m__strike' : 'body__m__strong'
         }
         style={styles.departureText}
+        color={theme.color.surface.neutral.subtle}
       >
         {formatTimeText(departure, searchDate, language, t)}
       </ThemeText>
@@ -324,7 +325,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   departure: {
     padding: theme.spacing.small,
-    backgroundColor: theme.color.background.neutral[1].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     borderRadius: theme.border.radius.regular,
     flexDirection: 'row',
     justifyContent: 'center',

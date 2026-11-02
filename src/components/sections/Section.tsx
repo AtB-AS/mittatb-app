@@ -63,7 +63,7 @@ function toRadius(index: number, lastIndex: number, firstIndex: number) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   separator: {
     flexGrow: 0,
-    backgroundColor: theme.color.background.neutral[2].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
     height: 1,
   },
 }));

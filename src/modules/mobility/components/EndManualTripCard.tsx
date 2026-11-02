@@ -29,7 +29,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacing.medium,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.regular,
   },
   imageContainer: {

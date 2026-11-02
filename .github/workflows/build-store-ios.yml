@@ -21,10 +21,9 @@ jobs:
       KEYCHAIN_NAME: "CI"
     steps:
       - name: Check if release tag is org specific and exit for other orgs
-        if: ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') ||
-          (contains(github.ref, 'nfk') && matrix.org != 'nfk') ||
-          (contains(github.ref, 'fram') && matrix.org != 'fram') ||
-          (contains(github.ref, 'troms') && matrix.org != 'troms') }}
+        if: ${{ (contains(github.ref, 'atb') || contains(github.ref, 'nfk') ||
+          contains(github.ref, 'fram') || contains(github.ref, 'troms')) &&
+          !contains(github.ref, matrix.org) }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v4
@@ -64,6 +63,11 @@ jobs:
           bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
+      - name: Register app version
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        run: sh ./scripts/ios/register-app-version.sh
+        env:
+          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}
       - name: Setup Bugsnag CLI
         if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: ./.github/actions/setup-bugsnag-cli
@@ -72,8 +76,3 @@ jobs:
         uses: ./.github/actions/ios-upload-bugsnag
         with:
           bugsnag-api-key: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Register app version
-        if: ${{ github.event_name != 'workflow_dispatch' }}
-        run: sh ./scripts/ios/register-app-version.sh
-        env:
-          ENTUR_PUBLISH_CLIENT: ${{ secrets.ABT_ENTUR_PUBLISH_CLIENT_PRODUCTION}}

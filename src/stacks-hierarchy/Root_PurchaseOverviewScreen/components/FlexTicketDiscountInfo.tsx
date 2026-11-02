@@ -111,7 +111,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                       <BorderedInfoBox
                         style={styles.discountInfo}
                         type="small"
-                        backgroundColor={theme.color.background.neutral[0]}
+                        backgroundColor={theme.color.surface.neutral.strong}
                         text={discountText}
                       />
                     )}

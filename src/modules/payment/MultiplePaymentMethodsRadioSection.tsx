@@ -141,7 +141,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   card: {
     marginVertical: theme.spacing.xSmall,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   saveMethodSection: {
     paddingHorizontal: theme.spacing.medium,

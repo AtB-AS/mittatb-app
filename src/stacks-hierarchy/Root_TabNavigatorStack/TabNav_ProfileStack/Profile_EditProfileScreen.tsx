@@ -62,7 +62,6 @@ export const Profile_EditProfileScreen = ({
 
   const {disable_email_field_in_profile_page} = useRemoteConfigContext();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
 
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -131,7 +130,6 @@ export const Profile_EditProfileScreen = ({
         <View style={styles.headerContent} ref={focusRef} accessible={true}>
           <ThemeText
             typography="heading__l"
-            color={themeColor}
             style={{flexShrink: 1, marginLeft: theme.spacing.medium}}
           >
             {t(EditProfileTexts.header.title)}

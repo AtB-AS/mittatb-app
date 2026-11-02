@@ -83,11 +83,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
           {favorite.quayPublicCode ?? ''}
         </ThemeText>
       </View>
-      {icon ?? (
-        <SvgDelete
-          fill={theme.color.interactive.destructive.default.background}
-        />
-      )}
+      {icon ?? <SvgDelete fill={theme.color.surface.error.strong.background} />}
     </View>
   );
 }

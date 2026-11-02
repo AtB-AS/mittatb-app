@@ -102,7 +102,7 @@ export async function listPaymentAgreements(
 
   const response = await client.get<unknown>(url, {
     authWithIdToken: true,
-    params: {status: statuses?.join(',')},
+    params: {statuses: statuses?.join(',')},
   });
 
   return parsePaymentAgreements(response.data);

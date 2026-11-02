@@ -31,6 +31,9 @@ import {
   MapBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {Loading} from '@atb/components/loading';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {BrandingImage} from './BrandingImage';
+import {useOperators} from '../use-operators';
 
 type Props = {
   stationId: string;
@@ -58,12 +61,13 @@ export const CarSharingStationBottomSheet = ({
     isError,
     operatorId,
     operatorName,
-    brandLogoUrl,
     appStoreUri,
     rentalAppUri,
     stationName,
   } = useCarSharingStation(stationId);
   const {operatorBenefit} = useOperatorBenefit(operatorId);
+  const operator = useOperators().byId(operatorId);
+  const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const bonusProduct = useRelevantVoucherBonusProduct(operatorId);
@@ -82,7 +86,15 @@ export const CarSharingStationBottomSheet = ({
       heading={operatorName}
       subText={t(MobilityTexts.vehicleName(FormFactor.Car))}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
-      logoUrl={brandLogoUrl ?? ''}
+      logoIcon={
+        isLoading ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            fallback={<TransportationIconBox mode="car" />}
+          />
+        )
+      }
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
@@ -106,7 +118,7 @@ export const CarSharingStationBottomSheet = ({
                 <GenericSectionItem>
                   <OperatorNameAndLogo
                     operatorName={operatorName}
-                    logoUrl={brandLogoUrl}
+                    logoUrl={operatorLogoUrl}
                     style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>

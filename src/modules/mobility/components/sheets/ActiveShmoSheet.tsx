@@ -80,7 +80,7 @@ export const ActiveShmoSheet = ({
   );
 
   const operator = useOperators().byId(activeBooking?.asset.operator.id);
-  const operatorLogo = operator?.brandAssets?.brandImageUrl;
+  const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
 
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -236,10 +236,19 @@ export const ActiveShmoSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
       logoIcon={
-        operatorLogo ? (
-          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
-        ) : (
-          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        isLoading ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            rounded={true}
+            fallback={
+              <TransportationIconBox
+                mode={mode}
+                subMode={subMode}
+                rounded={true}
+              />
+            }
+          />
         )
       }
       headerNode={
@@ -269,11 +278,7 @@ export const ActiveShmoSheet = ({
                 PropulsionType.Electric) && (
               <VehicleCard
                 currentFuelPercent={activeBooking.asset.stateOfCharge ?? 0}
-                currentRangeMeters={
-                  activeBooking.asset?.currentRangeKm
-                    ? activeBooking.asset.currentRangeKm * 1000
-                    : 0
-                }
+                currentRangeMeters={activeBooking.asset?.currentRangeMeters}
                 formFactor={activeBooking.asset.formFactor ?? undefined}
               />
             )}

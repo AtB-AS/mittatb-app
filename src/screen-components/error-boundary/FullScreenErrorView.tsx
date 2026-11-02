@@ -65,7 +65,7 @@ const getContactButtonText = (url: string) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
     flex: 1,
-    backgroundColor: theme.color.background.neutral[2].background,
+    backgroundColor: theme.color.background.neutral[1].background,
   },
   svg: {
     margin: theme.spacing.xLarge,

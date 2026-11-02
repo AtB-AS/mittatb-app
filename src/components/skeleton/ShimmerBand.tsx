@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Animated, Easing, useWindowDimensions, View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 
 const SWEEP_DURATION = 1600;
 const BAND_WIDTH = 140;
@@ -45,7 +45,7 @@ const releaseShimmer = () => {
 };
 
 type Props = {
-  /** Highlight color swept across the content. Defaults to white. */
+  /** Highlight color swept across the content. Defaults to surface neutral strong. */
   highlightColor?: string;
 };
 
@@ -54,8 +54,11 @@ type Props = {
  * absolutely-positioned overlay clipped by the enclosing Skeleton, so every
  * band on screen shares a single native-driven sweep.
  */
-export const ShimmerBand = ({highlightColor = 'white'}: Props) => {
+export const ShimmerBand = ({highlightColor}: Props) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
+  const bandColor =
+    highlightColor ?? theme.color.surface.neutral.strong.background;
   const {width} = useWindowDimensions();
 
   useEffect(() => {
@@ -77,7 +80,7 @@ export const ShimmerBand = ({highlightColor = 'white'}: Props) => {
       {STRIPE_OPACITIES.map((opacity, i) => (
         <View
           key={i}
-          style={[styles.stripe, {opacity, backgroundColor: highlightColor}]}
+          style={[styles.stripe, {opacity, backgroundColor: bandColor}]}
         />
       ))}
     </Animated.View>

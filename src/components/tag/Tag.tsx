@@ -155,7 +155,7 @@ const SecondaryTag: React.FC<
 
 const useSecondaryTagStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderWidth: theme.border.width.slim,
     borderColor: theme.color.foreground.inverse.disabled,
   },

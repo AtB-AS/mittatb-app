@@ -53,9 +53,7 @@ export const ShmoContactSection = ({
               {!!operatorName && (
                 <View style={style.operatorHeader}>
                   {!!operatorLogoUrl && (
-                    <View style={style.operatorLogo}>
-                      <BrandingImage logoUrl={operatorLogoUrl} logoSize={28} />
-                    </View>
+                    <BrandingImage logoUrl={operatorLogoUrl} logoSize={28} />
                   )}
                   <ThemeText typography="heading__xl">{operatorName}</ThemeText>
                 </View>
@@ -118,9 +116,5 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.medium,
-  },
-  operatorLogo: {
-    borderRadius: theme.border.radius.regular,
-    overflow: 'hidden',
   },
 }));

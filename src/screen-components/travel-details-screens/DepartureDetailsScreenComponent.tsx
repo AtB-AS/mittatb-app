@@ -48,7 +48,7 @@ import {useAccessibilityContext} from '@atb/modules/accessibility';
 import {PaginatedDetailsHeader} from './components/PaginatedDetailsHeader';
 import {useRealtimeText} from './use-realtime-text';
 import {Divider} from '@atb/components/divider';
-import {useServiceJourneyPolylineQuery} from './use-service-journey-polyline-query';
+import {useServiceJourneysPolylinesQuery} from './use-service-journeys-polylines-query';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 import {GlobalMessage} from '@atb/modules/global-messages';
@@ -116,7 +116,6 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useThemeContext();
-  const backgroundColor = theme.color.background.neutral[1];
   const themeColor = theme.color.background.neutral[1];
 
   const analytics = useAnalyticsContext();
@@ -167,10 +166,19 @@ export const DepartureDetailsScreenComponent = ({
     (c) => c.stopPositionInPattern === activeItem.toStopPosition,
   );
 
-  const {data: serviceJourneyPolyline} = useServiceJourneyPolylineQuery(
-    activeItem.serviceJourneyId,
-    fromCall?.quay.id,
-    toCall?.quay.id,
+  const {data: serviceJourneysPolylines} = useServiceJourneysPolylinesQuery(
+    fromCall
+      ? [
+          {
+            serviceJourneyId: activeItem.serviceJourneyId,
+            fromQuayId: fromCall.quay.id,
+            toQuayId: toCall?.quay.id,
+          },
+        ]
+      : [],
+  );
+  const serviceJourneyPolyline = serviceJourneysPolylines.find(
+    (p) => p.serviceJourneyId === activeItem.serviceJourneyId,
   );
 
   const {isTravelAidEnabled} = useFeatureTogglesContext();
@@ -483,7 +491,6 @@ export const DepartureDetailsScreenComponent = ({
               publicCode: publicCode ?? null,
             }}
             style={styles.messageBox}
-            textColor={backgroundColor}
           />
 
           <EstimatedCallRows
@@ -503,16 +510,10 @@ export const DepartureDetailsScreenComponent = ({
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
-  const {theme} = useThemeContext();
-  const themeColor = theme.color.background.accent[0];
 
   return (
     <View style={styles.passedSection}>
-      <ThemeText
-        typography="body__s"
-        color={themeColor}
-        style={styles.passedText}
-      >
+      <ThemeText typography="body__s" style={styles.passedText}>
         {realtimeText}
       </ThemeText>
     </View>
@@ -999,7 +1000,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   headerSubSection: {
     marginTop: theme.spacing.medium,
     borderTopWidth: theme.border.width.slim,
-    borderTopColor: theme.color.background.neutral[3].background,
+    borderTopColor: theme.color.surface.neutral.subtle.background,
     paddingTop: theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
