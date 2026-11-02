@@ -142,7 +142,12 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       accessible
       accessibilityRole="button"
       accessibilityState={{disabled}}
-      style={[styleContainer, hasShadow ? shadows : undefined, style]}
+      style={[
+        styleContainer,
+        (disabled || loading) && styles.disabledButton,
+        hasShadow ? shadows : undefined,
+        style,
+      ]}
       onPress={disabled || loading ? undefined : onPress}
       disabled={disabled || loading}
       pressedColor={pressedColorValue}
@@ -276,6 +281,11 @@ const useButtonStyle = StyleSheet.createThemeHook(() => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  disabledButton: {
+    // Overrides the 0.2 opacity NativeTouchable uses for disabled touchables,
+    // since it gives too low contrast on the button text.
+    opacity: 0.3,
   },
 }));
 
