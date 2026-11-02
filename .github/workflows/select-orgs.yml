@@ -39,6 +39,10 @@ jobs:
                 echo "::error::Unknown org '$org' in release tag '$REF' (known: $ORGS)"
                 exit 1
               fi
+              if [[ " ${selected[*]} " == *" $org "* ]]; then
+                echo "::error::Org '$org' is listed more than once in release tag '$REF'"
+                exit 1
+              fi
               selected+=("$org")
             done
           else
