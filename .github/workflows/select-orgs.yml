@@ -6,6 +6,9 @@ on:
         description: 'JSON array of orgs to build, e.g. ["troms","fram","nfk"]'
         value: ${{ jobs.select.outputs.orgs }}
 
+# Only reads the tag name, so the job token needs no permissions
+permissions: {}
+
 env:
   # All orgs the store workflows can build. A release tag must be vX.YY[.Z]-rcN, optionally
   # followed by -<org> suffixes (e.g. v1.91-rc3-troms-fram-nfk) to build only those orgs;
