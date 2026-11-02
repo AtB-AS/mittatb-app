@@ -112,7 +112,7 @@ export const VehicleSheet = ({
   const isCar = formFactor === FormFactor.Car;
 
   const operator = useOperators().byId(operatorId);
-  const operatorLogo = operator?.brandAssets?.brandImageUrl;
+  const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
 
   const {mode, subMode} = getTransportModeAndSubMode(
     formFactor,
@@ -240,10 +240,19 @@ export const VehicleSheet = ({
       subText={vehicle ? operatorName : undefined}
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
       logoIcon={
-        !vehicle ? null : operatorLogo ? (
-          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
-        ) : (
-          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        !vehicle ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            rounded={true}
+            fallback={
+              <TransportationIconBox
+                mode={mode}
+                subMode={subMode}
+                rounded={true}
+              />
+            }
+          />
         )
       }
       locationArrowOnPress={locationArrowOnPress}
