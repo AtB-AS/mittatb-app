@@ -75,11 +75,12 @@ if [ "$HAS_ORGS_ARG" = true ]; then
     echo "Error: Could not read ORGS from .github/workflows/select-orgs.yml"
     exit 1
   fi
-  if [ -z "$ORGS_ARG" ]; then
-    echo "Error: '--orgs' needs a comma-separated list of orgs (known: $KNOWN_ORGS)"
+  # Strict format, so an empty or malformed list can't fall back to an all-org release
+  if [[ ! "$ORGS_ARG" =~ ^[a-z]+(,[a-z]+)*$ ]]; then
+    echo "Error: '--orgs' needs a comma-separated list of orgs, e.g. --orgs troms,nfk (known: $KNOWN_ORGS)"
     exit 1
   fi
-  for org in $(echo "$ORGS_ARG" | tr ',' ' '); do
+  for org in ${ORGS_ARG//,/ }; do
     if [[ " $KNOWN_ORGS " != *" $org "* ]]; then
       echo "Error: Unknown org '$org' (known: $KNOWN_ORGS)"
       exit 1
