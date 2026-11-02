@@ -151,6 +151,8 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       onPress={disabled || loading ? undefined : onPress}
       disabled={disabled || loading}
       pressedColor={pressedColorValue}
+      // To make disabled buttons look the same on Android as iOS
+      needsOffscreenAlphaCompositing={loading || disabled}
       ref={ref}
       {...otherProps}
     >
