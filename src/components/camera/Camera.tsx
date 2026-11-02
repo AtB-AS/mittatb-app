@@ -149,7 +149,7 @@ export const Camera = ({
     );
   } else {
     return (
-      <View style={styles.loadingIndicator}>
+      <View style={styles.permissionRequired}>
         <MessageInfoBox
           title={t(CameraTexts.permissionRequired.title)}
           message={t(CameraTexts.permissionRequired.message)}
@@ -173,6 +173,12 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}, {height}) => {
       flex: 1,
       justifyContent: 'center',
       padding: theme.spacing.medium,
+    },
+    permissionRequired: {
+      flex: 1,
+      justifyContent: 'flex-end',
+      padding: theme.spacing.medium,
+      paddingBottom: bottom + theme.spacing.medium,
     },
     qrFrame: {
       position: 'absolute',
