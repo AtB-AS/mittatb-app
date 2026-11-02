@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script automates the release process based on the current branch.
 #
-# Usage: ./release.sh [--preview|--publish] [--orgs <org,...>]
+# Usage: ./release.sh [--preview|--publish] [--orgs <org,...>] [--help]
 #
 # - On 'master' branch: Starts a new release cycle (e.g., v1.80-rc1).
 # - On 'release/x.xx' branch: Creates the next release candidate (e.g., v1.80-rc2).
@@ -12,9 +12,17 @@
 #   --publish   Create and publish the release immediately (draft=false)
 #   --orgs      Only build these orgs, e.g. --orgs troms,fram,nfk (e.g., v1.80-rc2-troms-fram-nfk).
 #               Only on 'release/x.xx' branches. Valid orgs are read from .github/workflows/select-orgs.yml
+#   --help      Show this help
 #   (none)      Create the release as a draft (draft=true)
+#
+# Options can be given in any order; the org list must directly follow --orgs (or use --orgs=troms,nfk).
 
 set -e
+
+print_help() {
+  # Prints the comment block at the top of this file
+  sed -n '2,/^[^#]/s/^# \{0,1\}//p' "$0"
+}
 
 # --- Parse arguments ---
 DRY_RUN=false
@@ -30,6 +38,10 @@ while [ $# -gt 0 ]; do
     --publish)
       DRAFT=false
       ;;
+    -h|--help)
+      print_help
+      exit 0
+      ;;
     --orgs)
       HAS_ORGS_ARG=true
       ORGS_ARG="${2:-}"
@@ -41,7 +53,7 @@ while [ $# -gt 0 ]; do
       ;;
     *)
       echo "Unknown argument: $1"
-      echo "Usage: ./release.sh [--preview] [--publish] [--orgs <org,...>]"
+      echo "Usage: ./release.sh [--preview] [--publish] [--orgs <org,...>] [--help]"
       exit 1
       ;;
   esac

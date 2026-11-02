@@ -25,7 +25,7 @@ Automates the release process based on the current branch:
 - On `release/x.xx`: creates the next release candidate (e.g. `v1.80-rc2`).
 - On other branches: previews as if on `master`.
 
-Options: `--preview` to only show what will happen, `--publish` to publish the release immediately instead of creating a draft, `--orgs troms,fram,nfk` to only build those orgs (appended to the tag, e.g. `v1.80-rc2-troms-fram-nfk`; only on `release/x.xx`, valid orgs are read from `.github/workflows/select-orgs.yml`).
+Options: `--preview` to only show what will happen, `--publish` to publish the release immediately instead of creating a draft, `--orgs troms,fram,nfk` to only build those orgs (appended to the tag, e.g. `v1.80-rc2-troms-fram-nfk`; only on `release/x.xx`, valid orgs are read from `.github/workflows/select-orgs.yml`). Run `pnpm release --help` to see all options.
 
 ### `release-draft.sh` (`pnpm release-draft`)
 
