@@ -120,6 +120,17 @@ export function humanizePaymentTypeString(paymentType: string) {
   }
 }
 
+/** Payment types that payment agreements can be created for */
+export const SUPPORTED_PAYMENT_AGREEMENT_TYPES = [PaymentType.Vipps];
+
+export function isPaymentAgreementSupported(
+  paymentType: PaymentType | undefined,
+): paymentType is PaymentType {
+  return (
+    !!paymentType && SUPPORTED_PAYMENT_AGREEMENT_TYPES.includes(paymentType)
+  );
+}
+
 export function getLatestPaymentAgreement(
   paymentAgreements: PaymentAgreement[] | undefined,
   paymentType: PaymentType,
