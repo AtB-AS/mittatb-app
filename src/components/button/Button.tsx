@@ -64,18 +64,19 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     getButtonColors(props, surfaceColor, theme);
 
   const spacing = theme.spacing.medium;
-  // Subtract the border width so the large button matches the design height,
+  // Subtract the border width so the button matches the design size,
   // where the border is drawn inside the button.
-  const largePadding = spacing - theme.border.width.slim;
+  const padding = spacing - theme.border.width.slim;
+  const smallVerticalPadding = theme.spacing.small - theme.border.width.slim;
 
   const styleContainer: ViewStyle[] = [
     styles.button,
     {
       backgroundColor: mainContrastColor.background,
       borderColor: borderColorValue,
-      paddingHorizontal: type === 'small' ? spacing : largePadding,
+      paddingHorizontal: padding,
       gap: type === 'small' ? theme.spacing.xSmall : undefined,
-      paddingVertical: type === 'small' ? theme.spacing.xSmall : largePadding,
+      paddingVertical: type === 'small' ? smallVerticalPadding : padding,
       borderRadius: theme.border.radius.circle,
       borderWidth: theme.border.width.slim,
       ...(expanded && type === 'small'
@@ -99,7 +100,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     if (expanded && text && type !== 'small') {
       return {
         position: 'absolute',
-        [iconSide]: largePadding,
+        [iconSide]: padding,
         [iconMargin]: text ? theme.spacing.xSmall : undefined,
       };
     }
