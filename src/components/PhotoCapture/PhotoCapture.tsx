@@ -10,7 +10,7 @@ type PhotoCaptureProps = {
   onConfirmImage: (file: PhotoFile) => void;
   onGoBack: () => void;
   title: string;
-  secondaryText: string;
+  secondaryText?: string;
   isLoading?: boolean;
   focusRef?: Ref<any>;
   isFocused: boolean;

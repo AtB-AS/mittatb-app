@@ -36,7 +36,6 @@ export const Root_SupportPhotoScreen = ({
       onConfirmImage={onConfirmImage}
       onGoBack={onGoBack}
       title={t(ContactShmoOperatorTexts.image.camera.title)}
-      secondaryText={t(ContactShmoOperatorTexts.image.camera.instruction)}
       isFocused={isFocused}
     />
   );
