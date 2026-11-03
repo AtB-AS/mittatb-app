@@ -182,67 +182,6 @@ const TripSearchTexts = {
           ),
       },
     },
-    resultItem: {
-      header: {
-        title: (mode: string, placeName: string) =>
-          _(
-            `${mode} fra ${placeName}`,
-            `${mode} from ${placeName}`,
-            `${mode} frå ${placeName}`,
-          ),
-        flexTransportTitle: (publicCode: string) =>
-          _(
-            `Henting med ${publicCode}`,
-            `Pickup with ${publicCode}`,
-            `Henting med ${publicCode}`,
-          ),
-        totalDuration: _('Reisetid', 'Trip duration', 'Reisetid'),
-        time: (startTime: string, endTime: string) =>
-          _(
-            `Fra klokken ${startTime}, til klokken ${endTime}`,
-            `From ${startTime}, to ${endTime}`,
-            `Frå klokka ${startTime}, til klokka ${endTime}`,
-          ),
-      },
-      hasSituationsTip: _(
-        'Denne reisen har driftsmeldinger. Se detaljer for mer info',
-        'There are service messages affecting your journey. See details for more info ',
-        'Denne reisa har driftsmeldingar. Sjå detaljar for meir informasjon.',
-      ),
-      footLeg: {
-        walkAndWaitLabel: (walkTime: string, waitTime: string) =>
-          _(
-            `Gå ${walkTime}. Vent ${waitTime}`,
-            `Walk ${walkTime}. Wait ${waitTime}`,
-            `Gå ${walkTime}. Vent ${waitTime}`,
-          ),
-        walkLabel: (time: string) =>
-          _(`Gå ${time}`, `Walk ${time}`, `Gå ${time}`),
-        waitLabel: (time: string) =>
-          _(`Vent ${time}`, `Wait ${time}`, `Vent ${time}`),
-      },
-      destination: {
-        a11yLabel: _('Destinasjon', 'Destination', 'Destinasjon'),
-      },
-      waitRow: {
-        label: _('Vent', 'Wait', 'Vent'),
-      },
-      footer: {
-        fromPlace: (place: string) =>
-          _(`Fra ${place}`, `From ${place}`, `Frå ${place}`),
-        fromPlaceWithTime: (place: string, time: string) =>
-          _(
-            `Fra ${place} ${time}`,
-            `From ${place} ${time}`,
-            `Frå ${place} ${time}`,
-          ),
-        requiresBooking: _(
-          `Krever reservasjon`,
-          `Requires booking`,
-          `Krev reservasjon`,
-        ),
-      },
-    },
     dayHeader: {
       today: () => _('I dag', 'Today', 'I dag'),
       tomorrow: (date: string) =>

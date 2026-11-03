@@ -373,7 +373,6 @@ const TicketingTexts = {
       'Choose another day or adjust time',
       'Velg ein annan dag eller juster tidspunkt',
     ),
-    select: _('Velg', 'Select', 'Velg'),
     beforeStartOfFareContract: _(
       'Billett ikke aktiv',
       'Ticket not active',

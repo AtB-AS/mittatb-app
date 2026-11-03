@@ -1,42 +1,27 @@
 import {type PurchaseSelectionType} from '@atb/modules/purchase-selection';
 import {View} from 'react-native';
 import React from 'react';
-import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {
   type BookingDisabledReason,
   useBookingTrips,
 } from '@atb/modules/booking';
 import type {TripPatternLegs} from '../types';
-import {Button} from '@atb/components/button';
 import {StyleSheet, Statuses} from '@atb/theme';
-import {SectionSeparator} from '@atb/components/sections';
 import {TripPatternWithBooking} from '@atb/api/types/trips';
-import {Tag} from '@atb/components/tag';
 import {ThemeText} from '@atb/components/text';
-import {NativeTouchable} from '@atb/components/native-touchable';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {
-  getTextForLanguage,
   TicketingTexts,
   TravelCardTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
-import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {
-  getMessageTypeForSituation,
-  getSituationOrNoticeA11yLabel,
-} from '@atb/modules/situations';
-import {MessageInfoText} from '@atb/components/message-info-text';
-import {findAllNotices, findAllSituations} from '@atb/modules/situations';
-import {Loading} from '@atb/components/loading';
 import {BookingValidityInfoBox} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/components/BookingValidityInfoBox';
 import {
   TravelCard,
   WithTravelCardSkeleton,
 } from '@atb/screen-components/travel-card';
-import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 
 const BOOKING_SKELETON_COUNT = 3;
 const SEAT_TAG_LIMIT = 15;
@@ -52,9 +37,6 @@ export function BookingTripSelection({
 }: BookingTripSelectionProps) {
   const styles = useBookingTripSelectionStyles();
   const {t} = useTranslation();
-  const isNewTravelCardBooking = useIsExperimentalEnabled(
-    'isNewTravelCardBookingEnabled',
-  );
   const {
     tripPatterns,
     isEmpty,
@@ -66,37 +48,6 @@ export function BookingTripSelection({
 
   // Refetch in case the availability has changed
   useDoOnceWhen(reload, true, true);
-
-  if (!isNewTravelCardBooking) {
-    if (isLoading) {
-      return (
-        <View style={styles.container}>
-          <Loading size="large" />
-        </View>
-      );
-    }
-    return (
-      <View style={styles.container}>
-        <BookingValidityInfoBox
-          tripPatterns={tripPatterns}
-          originFareContract={selection.originFareContract}
-        />
-        {!isEmpty ? (
-          <View style={styles.travelCardsList}>
-            {tripPatterns.map((tp, i) => (
-              <BookingTrip
-                key={`booking-trip-${i}`}
-                onSelect={onSelect}
-                tripPattern={tp}
-              />
-            ))}
-          </View>
-        ) : (
-          <EmptyState />
-        )}
-      </View>
-    );
-  }
 
   // Index-keyed so the slot (and its skeleton) persists from loading through
   // measure, keeping the shimmer continuous.
@@ -163,101 +114,6 @@ export function BookingTripSelection({
   );
 }
 
-type BookingTripProps = {
-  tripPattern: TripPatternWithBooking;
-  onSelect: (legs: TripPatternLegs) => void;
-};
-
-function BookingTrip({tripPattern, onSelect}: BookingTripProps) {
-  const styles = useBookingTripStyles();
-  const {t, language} = useTranslation();
-
-  const onPress = () => {
-    if (isAvailable && !tripPattern.booking.disabledReason) {
-      onSelect(tripPattern.legs);
-    }
-  };
-
-  const isAvailable =
-    tripPattern.booking.availability === 'available' &&
-    !tripPattern.booking.disabledReason;
-
-  const notices = findAllNotices(tripPattern);
-  const situations = findAllSituations(tripPattern);
-
-  return (
-    <NativeTouchable
-      variant="block"
-      onPress={onPress}
-      style={[
-        styles.container,
-        isAvailable ? styles.containerAvailable : styles.containerDisabled,
-      ]}
-    >
-      <View style={styles.mainContent}>
-        <TripSelectionTag
-          bookingInfo={tripPattern.booking}
-          disabledReason={tripPattern.booking.disabledReason}
-        />
-        <MemoizedResultItem
-          tripPattern={tripPattern}
-          key={tripPattern.compressedQuery}
-          state={isAvailable ? 'enabled' : 'disabled'}
-        />
-        <View
-          accessibilityLabel={getSituationOrNoticeA11yLabel(
-            situations,
-            notices,
-            false,
-            t,
-          )}
-        >
-          {situations.map((situation) => (
-            <MessageInfoText
-              key={situation.id}
-              type={getMessageTypeForSituation(situation)}
-              message={
-                getTextForLanguage(situation.description, language) ?? ''
-              }
-            />
-          ))}
-          {notices.map((notice) => (
-            <MessageInfoText
-              type="info"
-              message={notice.text ?? ''}
-              key={notice.id}
-            />
-          ))}
-        </View>
-      </View>
-      {isAvailable && (
-        <>
-          <SectionSeparator />
-          <View
-            style={[
-              styles.footer,
-              isAvailable ? styles.footerAvailable : styles.footerDisabled,
-            ]}
-          >
-            <Button
-              surfaceColor="accent"
-              text={t(TicketingTexts.booking.select)}
-              expanded={false}
-              type="small"
-              mode="tertiary"
-              onPress={onPress}
-              style={{
-                marginLeft: 'auto',
-              }}
-              rightIcon={{svg: ChevronRight}}
-            />
-          </View>
-        </>
-      )}
-    </NativeTouchable>
-  );
-}
-
 function EmptyState() {
   const {t} = useTranslation();
   return (
@@ -299,83 +155,6 @@ function getBookingTagInfo(
   }
   return undefined;
 }
-
-/**
- * We only want to show one tag at a time
- */
-function TripSelectionTag({
-  bookingInfo,
-  disabledReason,
-}: {
-  bookingInfo: TripPatternWithBooking['booking'];
-  disabledReason?: BookingDisabledReason;
-}) {
-  const {t} = useTranslation();
-  const availableSeats = bookingInfo?.offer?.available ?? 0;
-  if (disabledReason === 'expired_fare_contract')
-    return (
-      <Tag
-        labels={[t(TicketingTexts.booking.expiredFareContract)]}
-        tagType="info"
-      />
-    );
-  if (disabledReason === 'inactive_fare_contract')
-    return (
-      <Tag
-        labels={[t(TicketingTexts.booking.beforeStartOfFareContract)]}
-        tagType="info"
-      />
-    );
-  if (bookingInfo.availability === 'closed')
-    return (
-      <Tag labels={[t(TicketingTexts.booking.closed)]} tagType="warning" />
-    );
-  if (bookingInfo.availability === 'sold_out')
-    return (
-      <Tag labels={[t(TicketingTexts.booking.soldOut)]} tagType="warning" />
-    );
-  if (!!availableSeats && availableSeats <= SEAT_TAG_LIMIT)
-    return (
-      <Tag
-        labels={[t(TicketingTexts.booking.numAvailableTickets(availableSeats))]}
-        tagType="info"
-      />
-    );
-}
-
-const useBookingTripStyles = StyleSheet.createThemeHook((theme) => {
-  return {
-    container: {
-      marginHorizontal: theme.spacing.medium,
-      marginVertical: theme.spacing.small,
-      borderRadius: theme.border.radius.regular,
-      overflow: 'hidden',
-    },
-    containerAvailable: {
-      backgroundColor: theme.color.surface.neutral.strong.background,
-    },
-    containerDisabled: {
-      backgroundColor: theme.color.surface.neutral.subtle.background,
-    },
-    mainContent: {
-      padding: theme.spacing.medium,
-      rowGap: theme.spacing.medium,
-    },
-    footer: {
-      flexDirection: 'row',
-      paddingVertical: theme.spacing.small,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      borderRadius: theme.border.radius.regular,
-    },
-    footerAvailable: {
-      backgroundColor: theme.color.surface.neutral.strong.background,
-    },
-    footerDisabled: {
-      backgroundColor: theme.color.surface.neutral.subtle.background,
-    },
-  };
-});
 
 const useBookingTripSelectionStyles = StyleSheet.createThemeHook((theme) => {
   return {

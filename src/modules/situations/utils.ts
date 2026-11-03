@@ -2,8 +2,8 @@ import {
   getTextForLanguage,
   Language,
   SituationsTexts,
+  TravelCardTexts,
   TripDetailsTexts,
-  TripSearchTexts,
   TranslateFunction,
 } from '@atb/translations';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
@@ -331,7 +331,7 @@ export const getLegNotificationsA11yLabel = (
     }
 
     if (hasBooking) {
-      texts.push(t(TripSearchTexts.results.resultItem.footer.requiresBooking));
+      texts.push(t(TravelCardTexts.header.requiresBooking));
     }
 
     if (texts.length > 0) {

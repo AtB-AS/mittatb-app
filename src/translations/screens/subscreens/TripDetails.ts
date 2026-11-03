@@ -271,11 +271,6 @@ const TripDetailsTexts = {
       'We could not update your trip plan. Perhaps your trip has changed or timed out?',
       'Vi kunne ikkje oppdatere reiseforslaget ditt. Det kan hende reisa har endra seg eller er utdatert.',
     ),
-    tripIncludesRailReplacementBus: _(
-      'Reisen inkluderer buss for tog.',
-      'This trip includes rail replacement bus.',
-      'Reisa inkluderer buss for tog.',
-    ),
     departureIsRailReplacementBus: _(
       'Buss for tog',
       'Rail replacement bus',
