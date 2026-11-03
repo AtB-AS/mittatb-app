@@ -3,14 +3,13 @@ import {
   getLatestPaymentAgreement,
   PaymentAgreement,
   PaymentType,
+  SUPPORTED_PAYMENT_AGREEMENT_TYPES,
 } from '@atb/modules/ticketing';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {View} from 'react-native';
 import {PaymentAgreementBox} from './PaymentAgreementBox';
-
-const SUPPORTED_PAYMENT_TYPES = [PaymentType.Vipps];
 
 type Props = {
   /**
@@ -35,7 +34,7 @@ export const PaymentAgreementsSection = ({
   return (
     <View style={styles.container}>
       <ContentHeading text={t(PaymentMethodsTexts.agreements.heading)} />
-      {SUPPORTED_PAYMENT_TYPES.map((paymentType) => (
+      {SUPPORTED_PAYMENT_AGREEMENT_TYPES.map((paymentType) => (
         <PaymentAgreementBox
           key={paymentType}
           paymentType={paymentType}

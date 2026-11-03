@@ -102,6 +102,14 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_parking_violations_reporting',
   },
   {
+    name: 'isPaymentAgreementOnboardingCheckboxEnabled',
+    remoteConfigKey: 'enable_payment_agreement_onboarding_checkbox',
+  },
+  {
+    name: 'isPaymentAgreementOnboardingDotsEnabled',
+    remoteConfigKey: 'enable_payment_agreement_onboarding_dots',
+  },
+  {
     name: 'isPosthogEnabled',
     remoteConfigKey: 'enable_posthog',
   },
@@ -171,7 +179,7 @@ export const toggleSpecifications = [
   },
   {
     name: 'isVippsPaymentAgreementEnabled',
-    remoteConfigKey: 'enable_vipps_payment_agreement',
+    remoteConfigKey: 'enable_vipps_payment_agreements',
   },
   {
     name: 'isVirtualStationsEnabled',
