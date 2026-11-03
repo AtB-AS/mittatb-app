@@ -10,8 +10,10 @@ import {
   ActionButtonType,
   BonusOfferSchema,
   MAX_UPLOAD_IMAGE_COUNT,
+  SendDamageReportBodySchema,
   SendSupportRequestBodySchema,
   SupportType,
+  VehicleComponent,
   VehicleSchema,
 } from '../mobility';
 
@@ -270,6 +272,111 @@ describe('SendSupportRequestBodySchema files', () => {
     const result = SendSupportRequestBodySchema.safeParse({
       ...baseSupportRequest,
       files: new Array(MAX_UPLOAD_IMAGE_COUNT + 1).fill(image),
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe('SendSupportRequestBodySchema damage', () => {
+  const baseSupportRequest = {
+    assetId: 'asset-1',
+    supportType: SupportType.ACCIDENT_OR_BROKEN,
+    contactInformationEndUser: {email: 'someone@example.com'},
+  };
+
+  it('parses a request without damage (backward compatible)', () => {
+    const result = SendSupportRequestBodySchema.safeParse(baseSupportRequest);
+    expect(result.success).toBe(true);
+    expect(result.data?.damage).toBeUndefined();
+  });
+
+  it('parses damage with only the fields the endpoint requires', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseSupportRequest,
+      damage: {
+        vehicleComponent: VehicleComponent.TIRE,
+        description: 'Punctured rear tire',
+      },
+    });
+    expect(result.success).toBe(true);
+    expect(result.data?.damage).toEqual({
+      vehicleComponent: 'TIRE',
+      description: 'Punctured rear tire',
+    });
+  });
+
+  it('parses damage with the optional component name', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseSupportRequest,
+      damage: {
+        vehicleComponent: VehicleComponent.ANCILLARY,
+        description: 'Missing helmet',
+        vehicleComponentName: 'Helmet box',
+      },
+    });
+    expect(result.success).toBe(true);
+    expect(result.data?.damage?.vehicleComponentName).toBe('Helmet box');
+  });
+
+  it('rejects damage missing the required description', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseSupportRequest,
+      damage: {vehicleComponent: VehicleComponent.FRONT},
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects a vehicle component the endpoint does not define', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseSupportRequest,
+      damage: {vehicleComponent: 'HANDLEBAR', description: 'Bent'},
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe('SendDamageReportBodySchema contact information', () => {
+  const baseDamageReport = {
+    assetId: 'asset-1',
+    supportType: SupportType.ACCIDENT_OR_BROKEN,
+  };
+
+  const parseWith = (contactInformationEndUser: object) =>
+    SendDamageReportBodySchema.safeParse({
+      ...baseDamageReport,
+      contactInformationEndUser,
+    });
+
+  it('accepts an e-mail on its own', () => {
+    expect(parseWith({email: 'someone@example.com'}).success).toBe(true);
+  });
+
+  /* The difference from the support form, which requires an e-mail outright. */
+  it('accepts a phone number on its own', () => {
+    expect(
+      parseWith({phonePrefix: '47', phoneNumber: '91234567'}).success,
+    ).toBe(true);
+  });
+
+  it('rejects an empty contact form, since the operator could not reply', () => {
+    expect(parseWith({}).success).toBe(false);
+  });
+
+  it('still rejects an e-mail that is not well formed', () => {
+    expect(parseWith({email: 'not-an-email'}).success).toBe(false);
+  });
+
+  it('still rejects a phone number that is not well formed', () => {
+    expect(parseWith({phonePrefix: '47', phoneNumber: '1'}).success).toBe(
+      false,
+    );
+  });
+
+  /* The support form keeps its own rule. */
+  it('is stricter on the support form, where an e-mail is mandatory', () => {
+    const result = SendSupportRequestBodySchema.safeParse({
+      ...baseDamageReport,
+      contactInformationEndUser: {phonePrefix: '47', phoneNumber: '91234567'},
     });
     expect(result.success).toBe(false);
   });

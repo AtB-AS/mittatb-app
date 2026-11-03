@@ -78,6 +78,49 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  reportDamage: {
+    title: _('Meld skade', 'Report damage', 'Meld skade'),
+
+    damages: {
+      header: _(
+        'Hva er feil? (obligatorisk)',
+        'What is wrong? (required)',
+        'Kva er feil? (obligatorisk)',
+      ),
+      errorMessage: _(
+        'Vennligst velg minst én ting som er feil.',
+        'Please select at least one thing that is wrong.',
+        'Ver vennleg og vel minst éin ting som er feil.',
+      ),
+      emptyList: (operatorName: string) =>
+        _(
+          `${operatorName} har ingen skader du kan melde fra om her. Bruk "Trenger du hjelp?" i stedet.`,
+          `${operatorName} has no damages you can report here. Use "Need help?" instead.`,
+          `${operatorName} har ingen skadar du kan melda frå om her. Bruk "Treng du hjelp?" i staden.`,
+        ),
+    },
+    comment: {
+      placeholder: _(
+        'Skriv litt om problemet...',
+        'Write a little about the problem...',
+        'Skriv litt om problemet...',
+      ),
+      missingMessage: _(
+        'Vennligst beskriv hva som er feil.',
+        'Please describe what is wrong.',
+        'Ver vennleg og skildra kva som er feil.',
+      ),
+    },
+
+    submitError: (remainingDamages: string[]) => {
+      const remaining = remainingDamages.join(', ');
+      return _(
+        `Noe gikk galt. Disse er ikke sendt: ${remaining}. Trykk «Neste» for å sende dem som gjenstår.`,
+        `Something went wrong. These were not sent: ${remaining}. Press "Next" to send the ones remaining.`,
+        `Noko gjekk gale. Desse er ikkje sende: ${remaining}. Trykk «Neste» for å senda dei som står att.`,
+      );
+    },
+  },
   pricingDetails: {
     priceInfo: _('Prisinformasjon', 'Price information', 'Prisinformasjon'),
     unlock: _('Opplåsing', 'Unlock', 'Opplåsing'),

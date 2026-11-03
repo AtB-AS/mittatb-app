@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {ShmoBookingState} from '@atb/api/types/mobility';
+import {ShmoBookingState, ShmoDamage} from '@atb/api/types/mobility';
 import {ShmoTripDetailsSectionItem} from '../ShmoTripDetailsSectionItem';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -30,6 +30,11 @@ type Props = {
     bookingId: string,
     formFactor?: FormFactor,
   ) => void;
+  navigateReportDamageCallback: (
+    operatorId: string,
+    bookingId: string,
+    supportedDamages?: ShmoDamage[] | null,
+  ) => void;
   navigateToScanQrCode: () => void;
   bookingId: string;
   locationArrowOnPress: () => void;
@@ -38,6 +43,7 @@ type Props = {
 export const FinishedShmoSheet = ({
   onClose,
   navigateSupportCallback,
+  navigateReportDamageCallback,
   navigateToScanQrCode,
   bookingId,
   locationArrowOnPress,
@@ -54,6 +60,8 @@ export const FinishedShmoSheet = ({
     shmoBooking?.asset?.formFactor,
     shmoBooking?.asset?.propulsionType,
   );
+
+  console.log(shmoBooking?.asset);
 
   const operator = useOperators().byId(shmoBooking?.asset.operator.id);
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
@@ -115,15 +123,22 @@ export const FinishedShmoSheet = ({
               />
             </Section>
           </View>
-          <Button
-            surfaceColor="accent"
-            mode="primary"
-            expanded={true}
-            type="large"
-            accessibilityRole="button"
-            onPress={onClose}
-            text={t(MobilityTexts.trip.button.finishTrip)}
-          />
+          {!!shmoBooking.asset?.supportedDamages?.length && (
+            <Button
+              surfaceColor="accent"
+              accessibilityRole="button"
+              onPress={() =>
+                navigateReportDamageCallback(
+                  shmoBooking.asset.operator.id,
+                  shmoBooking.bookingId,
+                  shmoBooking.asset.supportedDamages,
+                )
+              }
+              mode="secondary"
+              expanded={true}
+              text={t(MobilityTexts.reportDamage.title)}
+            />
+          )}
 
           <SupportButton
             navigateToSupport={() => {

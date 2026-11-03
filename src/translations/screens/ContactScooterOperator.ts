@@ -66,7 +66,14 @@ export const ContactShmoOperatorTexts = {
     },
   },
   comment: {
-    header: _('Vennligst utdyp', 'Please elaborate', 'Ver vennleg og utdjup'),
+    header: (isRequired: boolean) =>
+      isRequired
+        ? _(
+            'Vennligst utdyp (obligatorisk)',
+            'Please elaborate (required)',
+            'Ver vennleg og utdjup (obligatorisk)',
+          )
+        : _('Vennligst utdyp', 'Please elaborate', 'Ver vennleg og utdjup'),
     label: _('Kommentar', 'Comment', 'Kommentar'),
     placeholder: _('Legg til kommentar', 'Add a comment', 'Legg til kommentar'),
     errorMessage: (maxCommentLength: number) =>
@@ -119,6 +126,11 @@ export const ContactShmoOperatorTexts = {
   },
   contactInfo: {
     header: _(
+      'Din kontaktinfo (fyll inn minst én)',
+      'Your contact info (fill in at least one)',
+      'Kontaktinfoen din (fyll inn minst éin)',
+    ),
+    headerEmailRequired: _(
       'Din kontaktinfo (E-postadresse er obligatorisk)',
       'Your contact info (Email address is required)',
       'Kontaktinfoen din (E-postadressa er obligatorisk)',

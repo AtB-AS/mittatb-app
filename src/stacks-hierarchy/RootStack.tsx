@@ -61,6 +61,7 @@ import {compareVersion} from '@atb/utils/compare-version';
 import {Root_ShmoOnboardingScreen} from './Root_ShmoOnboardingScreen';
 import {Root_ContactShmoOperatorScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorScreen';
 import {Root_ContactShmoOperatorConfirmationScreen} from './Root_ShmoHelp/Root_ContactShmoOperatorConfirmationScreen';
+import {Root_ReportShmoDamageScreen} from './Root_ShmoHelp/Root_ReportShmoDamageScreen';
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
@@ -285,6 +286,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ContactShmoOperatorConfirmationScreen"
                 component={Root_ContactShmoOperatorConfirmationScreen}
+              />
+              <Stack.Screen
+                name="Root_ReportShmoDamageScreen"
+                component={Root_ReportShmoDamageScreen}
               />
               <Stack.Screen
                 name="Root_ParkingViolationsSelectScreen"

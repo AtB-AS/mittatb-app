@@ -3,3 +3,4 @@ export {Root_ParkingViolationsPhotoScreen} from './Root_ParkingViolationsPhotoSc
 export {Root_ParkingViolationsQrScreen} from './Root_ParkingViolationsQrScreen';
 export {Root_ParkingViolationsConfirmationScreen} from './Root_ParkingViolationsConfirmationScreen';
 export {Root_SupportPhotoScreen} from './Root_SupportPhotoScreen';
+export {Root_ReportShmoDamageScreen} from './Root_ReportShmoDamageScreen';

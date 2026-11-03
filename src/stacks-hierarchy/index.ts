@@ -8,5 +8,6 @@ export type {
   NextScreenParams,
   StackParams,
   ShmoHelpParams,
+  ReportShmoDamageParams,
 } from './navigation-types';
 export {isValidKey} from './utils';
