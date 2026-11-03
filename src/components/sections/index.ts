@@ -10,6 +10,7 @@ export {EditActionSectionItem} from './items/EditActionSectionItem';
 export {LinkSectionItem} from './items/LinkSectionItem';
 export {HeaderSectionItem} from './items/HeaderSectionItem';
 export {RadioSectionItem} from './items/RadioSectionItem.tsx';
+export {CheckboxSectionItem} from './items/CheckboxSectionItem';
 export {GenericSectionItem} from './items/GenericSectionItem';
 export {GenericClickableSectionItem} from './items/GenericClickableSectionItem';
 export {FavoriteSectionItem} from './items/FavoriteSectionItem';
