@@ -20,6 +20,8 @@ type Props = {
   onActivate: (paymentType: PaymentType) => void;
   onStop: (agreement: PaymentAgreement) => void;
   isLoading: boolean;
+  /** Highlights the section to help the user discover payment agreements */
+  showNotification?: boolean;
 };
 
 export const PaymentAgreementsSection = ({
@@ -27,13 +29,17 @@ export const PaymentAgreementsSection = ({
   onActivate,
   onStop,
   isLoading,
+  showNotification,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
   return (
     <View style={styles.container}>
-      <ContentHeading text={t(PaymentMethodsTexts.agreements.heading)} />
+      <ContentHeading
+        text={t(PaymentMethodsTexts.agreements.heading)}
+        notificationCount={showNotification ? 1 : undefined}
+      />
       {SUPPORTED_PAYMENT_AGREEMENT_TYPES.map((paymentType) => (
         <PaymentAgreementBox
           key={paymentType}

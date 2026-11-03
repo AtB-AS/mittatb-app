@@ -37,6 +37,7 @@ import {useAuthContext} from '@atb/modules/auth';
 import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
+import {usePaymentAgreementDiscovery} from '@atb/modules/payment';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -70,6 +71,7 @@ export const Root_TabNavigatorStack = () => {
   const {customerNumber} = useAuthContext();
   const unreadCount = useChatUnreadCount();
   const serverOverrides = useDebugServerOverrides();
+  const {shouldShowPaymentAgreementDiscovery} = usePaymentAgreementDiscovery();
 
   useEffect(() => {
     if (
@@ -91,7 +93,8 @@ export const Root_TabNavigatorStack = () => {
     if (
       customerNumber === undefined ||
       unreadCount ||
-      serverOverrides.length > 0
+      serverOverrides.length > 0 ||
+      shouldShowPaymentAgreementDiscovery
     ) {
       return {
         color: theme.color.status.error.primary,

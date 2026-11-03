@@ -17,3 +17,4 @@ export {SinglePaymentMethod} from './SinglePaymentMethod';
 export {MultiplePaymentMethodsRadioSection} from './MultiplePaymentMethodsRadioSection';
 export {isCardPaymentMethod, isNonRecurringPaymentType} from './utils';
 export {useSelectedShmoPaymentMethod} from './hooks/use-selected-shmo-payment-method';
+export {usePaymentAgreementDiscovery} from './hooks/use-payment-agreement-discovery';
