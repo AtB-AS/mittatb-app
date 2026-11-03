@@ -76,7 +76,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       backgroundColor: mainContrastColor.background,
       borderColor: borderColorValue,
       paddingHorizontal: buttonPadding,
-      gap: type === 'small' ? theme.spacing.xSmall : undefined,
+      gap: type === 'small' ? theme.spacing.xSmall : spacing,
       paddingVertical: buttonPadding,
       borderRadius: theme.border.radius.circle,
       borderWidth: theme.border.width.slim,
@@ -92,25 +92,17 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
 
   const textMarginHorizontal = useTextMarginHorizontal(
     expanded,
+    type,
     leftIcon,
     rightIcon,
   );
 
-  const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
-    const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
-    if (expanded && text && type !== 'small') {
-      return {
-        position: 'absolute',
-        [iconSide]: largePadding,
-        [iconMargin]: text ? theme.spacing.xSmall : undefined,
-      };
-    }
-
-    // Small buttons use the container gap for spacing between icon and text
-    return {
-      [iconMargin]: text && type !== 'small' ? spacing : undefined,
-    };
-  };
+  // Spacing between icon and text is handled by the container gap, except for
+  // expanded large buttons where the icons are absolutely positioned.
+  const iconStyle = (iconSide: 'left' | 'right'): ViewStyle =>
+    expanded && text && type !== 'small'
+      ? {position: 'absolute', [iconSide]: largePadding}
+      : {};
 
   const styleText: TextStyle = {
     // Add 1% width to the text to avoid layout issues on Android with small font sizes
@@ -124,7 +116,6 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     ...(expanded &&
       type === 'small' && {
         flex: undefined,
-        marginHorizontal: 0,
       }),
   };
 
@@ -275,11 +266,12 @@ const getButtonColors = (
  */
 const useTextMarginHorizontal = (
   expand: boolean,
+  type: ButtonType,
   leftIcon?: ButtonIconProps,
   rightIcon?: ButtonIconProps,
 ) => {
   const {theme} = useThemeContext();
-  if (!expand) return 0;
+  if (!expand || type === 'small') return 0;
   if (!leftIcon && !rightIcon) return 0;
   return theme.icon.size['normal'] + theme.spacing.xSmall;
 };
