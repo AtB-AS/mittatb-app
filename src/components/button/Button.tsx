@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {
   NativeTouchable,
   NativeTouchableProps,
@@ -106,12 +106,9 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       };
     }
 
+    // Small buttons use the container gap for spacing between icon and text
     return {
-      [iconMargin]: text
-        ? type === 'small'
-          ? theme.spacing.xSmall
-          : spacing
-        : undefined,
+      [iconMargin]: text && type !== 'small' ? spacing : undefined,
     };
   };
 
@@ -127,10 +124,11 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     ...(expanded &&
       type === 'small' && {
         flex: undefined,
-        marginHorizontal: theme.spacing.xSmall,
+        marginHorizontal: 0,
       }),
   };
 
+  const iconSize = type === 'small' ? 'small' : 'normal';
   const leftStyling: ViewStyle = iconStyle('left');
   const rightStyling: ViewStyle = iconStyle('right');
 
@@ -158,7 +156,11 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     >
       {leftIcon && (
         <View style={leftStyling}>
-          <ButtonIcon {...leftIcon} mainContrastColor={mainContrastColor} />
+          <ButtonIcon
+            {...leftIcon}
+            mainContrastColor={mainContrastColor}
+            size={iconSize}
+          />
         </View>
       )}
       {text && (
@@ -186,6 +188,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
               <ButtonIcon
                 {...rightIcon}
                 mainContrastColor={mainContrastColor}
+                size={iconSize}
               />
             )
           )}
@@ -199,13 +202,15 @@ const ButtonIcon = ({
   svg,
   notificationColor,
   mainContrastColor,
+  size,
 }: ButtonIconProps & {
   mainContrastColor: ContrastColor;
+  size: ThemeIconProps['size'];
 }) => (
   <ThemeIcon
     svg={svg}
     color={mainContrastColor}
-    size="normal"
+    size={size}
     notification={
       notificationColor && {
         color: notificationColor,
