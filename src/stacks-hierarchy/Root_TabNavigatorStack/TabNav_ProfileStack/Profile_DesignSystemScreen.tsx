@@ -662,7 +662,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Primary - block - surface/accent
+                  Primary - large - surface/accent
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -686,7 +686,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Primary - block - surface/neutral
+                  Primary - large - surface/neutral
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -710,7 +710,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Primary - block - surface/error
+                  Primary - large - surface/error
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -734,7 +734,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Secondary - block
+                  Secondary - large
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -758,7 +758,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  tertiary - block
+                  Tertiary - large
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -782,7 +782,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Medium button examples (surface/accent)
+                  Large, not expanded, button examples (surface/accent)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
@@ -833,7 +833,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Pill button examples (surface/accent)
+                  Small button examples (surface/accent)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
