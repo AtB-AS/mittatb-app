@@ -17,6 +17,7 @@ import {
   Section,
   SectionProps,
   TextInputSectionItem,
+  CheckboxSectionItem,
   ToggleSectionItem,
   InternalLabeledSectionItem,
   RadioGroupSection,
@@ -172,6 +173,23 @@ export const AllSectionItemsList: Meta<SectionMetaProps> = {
                   text="ToggleSectionItem"
                   subtext="Subtext"
                   onValueChange={() => {}}
+                />
+                <CheckboxSectionItem
+                  title="CheckboxSectionItem"
+                  isChecked={false}
+                  onPress={() => {}}
+                />
+                <CheckboxSectionItem
+                  title="CheckboxSectionItem checked"
+                  isChecked={true}
+                  onPress={() => {}}
+                />
+                <CheckboxSectionItem
+                  title="CheckboxSectionItem"
+                  description="Description"
+                  label="new"
+                  isChecked={false}
+                  onPress={() => {}}
                 />
                 <SelectionInlineSectionItem
                   label="SelectionInlineSectionItem"
