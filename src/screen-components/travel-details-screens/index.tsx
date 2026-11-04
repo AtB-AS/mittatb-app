@@ -10,13 +10,11 @@ export {
   getIsTooLateToBookFlexLine,
   getLineA11yLabel,
   getNoticesForEstimatedCall,
-  getNoticesForLeg,
   getNoticesForServiceJourney,
   getTripPatternAnalytics,
   getTripPatternBookingStatus,
   isFreeLeg,
   isLineFlexibleTransport,
-  significantWalkTime,
 } from './utils';
 
 export type {DepartureDetailsScreenParams} from './DepartureDetailsScreenComponent';

@@ -50,7 +50,7 @@ export function SelectionInlineSectionItem({
       <ThemeIcon
         svg={onPressIcon}
         size={onPressIconSize}
-        color={theme.color.interactive[0].default.background}
+        color={theme.color.surface.accent.strong.background}
       />
     ));
 

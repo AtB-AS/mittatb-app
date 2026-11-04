@@ -124,7 +124,7 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',
@@ -141,7 +141,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
     minWidth: 60 - theme.spacing.medium,
   },
   faded: {
-    color: theme.color.foreground.dynamic.secondary,
+    color: theme.color.surface.neutral.strong.foreground.secondary,
   },
   highlighted: {
     borderWidth: theme.border.width.slim,

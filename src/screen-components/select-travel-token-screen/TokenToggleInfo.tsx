@@ -4,18 +4,16 @@ import {
   formatToVerboseFullDate,
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
-import {ContrastColor, Statuses} from '@atb/theme/colors';
+import {Statuses} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {Loading} from '@atb/components/loading';
 
 type TokenToggleInfoProps = {
-  textColor?: ContrastColor;
   toggleLimit: number;
   isLoading: boolean;
 };
 
 export const TokenToggleInfo = ({
-  textColor,
   toggleLimit,
   isLoading,
 }: TokenToggleInfoProps) => {
@@ -24,19 +22,15 @@ export const TokenToggleInfo = ({
   return isLoading ? (
     <Loading style={styles.loader} />
   ) : (
-    <TokenToggleContent toggleLimit={toggleLimit} textColor={textColor} />
+    <TokenToggleContent toggleLimit={toggleLimit} />
   );
 };
 
 type TokenToggleContentProps = {
   toggleLimit: number;
-  textColor?: ContrastColor;
 };
 
-const TokenToggleContent = ({
-  toggleLimit,
-  textColor,
-}: TokenToggleContentProps) => {
+const TokenToggleContent = ({toggleLimit}: TokenToggleContentProps) => {
   const {t, language} = useTranslation();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -78,7 +72,6 @@ const TokenToggleContent = ({
       message={getToggleInfo(toggleLimit, countRenewalDate)}
       type={getToggleInfoIcon(toggleLimit)}
       a11yLabel={getToggleInfo(toggleLimit, countRenewalDateA11yLabel)}
-      textColor={textColor}
       testID="tokenToggleInfo"
     />
   );

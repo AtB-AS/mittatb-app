@@ -5,8 +5,8 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {StyleSheet} from '@atb/theme';
-import {ContrastColor, InteractiveColor, TextNames} from '@atb/theme/colors';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {ContrastColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/modules/configuration';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {useTranslation} from '@atb/translations';
@@ -55,8 +55,8 @@ export const LinkSectionItem = forwardRef<any, Props>(
     forwardedRef,
   ) => {
     const {t} = useTranslation();
-    const {contentContainer, topContainer, interactiveColor} =
-      useSectionItem(props);
+    const {theme} = useThemeContext();
+    const {contentContainer, topContainer} = useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
     const accessibilityWithOverrides = disabled
@@ -67,10 +67,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
 
     const leftAccessory =
-      leftElement ??
-      (leftIcon ? (
-        <Icon icon={leftIcon} interactiveColor={interactiveColor} />
-      ) : null);
+      leftElement ?? (leftIcon ? <Icon icon={leftIcon} /> : null);
 
     return (
       <NativeTouchable
@@ -94,7 +91,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
           {leftAccessory}
           <View style={[linkSectionItemStyle.textContainer, contentContainer]}>
             <ThemeText
-              style={{color: interactiveColor.default.foreground.primary}}
+              color={theme.color.surface.neutral.strong}
               typography={textType}
               isMarkdown={props.isMarkdown}
             >
@@ -115,22 +112,15 @@ export const LinkSectionItem = forwardRef<any, Props>(
               customStyle={linkSectionItemStyle.tag}
             />
           )}
-          {rightIcon && (
-            <Icon icon={rightIcon} interactiveColor={interactiveColor} />
-          )}
+          {rightIcon && <Icon icon={rightIcon} />}
         </View>
       </NativeTouchable>
     );
   },
 );
 
-const Icon = ({
-  icon,
-  interactiveColor,
-}: {
-  icon: IconProps;
-  interactiveColor: InteractiveColor;
-}) => {
+const Icon = ({icon}: {icon: IconProps}) => {
+  const {theme} = useThemeContext();
   return (
     <ThemeIcon
       svg={icon.svg}
@@ -139,7 +129,7 @@ const Icon = ({
         icon.notificationColor
           ? {
               color: icon.notificationColor,
-              backgroundColor: interactiveColor.default,
+              backgroundColor: theme.color.surface.neutral.strong,
             }
           : undefined
       }

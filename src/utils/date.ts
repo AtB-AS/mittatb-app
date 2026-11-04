@@ -1,5 +1,6 @@
 import {Language, TranslateFunction, dictionary} from '@atb/translations';
 import {
+  Day,
   FormatOptions,
   Locale,
   RoundingMethod,
@@ -40,6 +41,7 @@ import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
 
 export {daysInWeek} from 'date-fns/constants';
+export type {Day} from 'date-fns';
 
 import {
   parse as parseIso8601Duration,
@@ -377,10 +379,20 @@ export function isNumberOfMinutesInThePast(
 export function formatToLongDateTime(
   isoDate: string | Date,
   language: Language,
+  fullMonthName?: boolean,
 ) {
   const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language, 'floor');
+  }
+  if (fullMonthName) {
+    return format(
+      parsed,
+      isSameYear(parsed, new Date())
+        ? 'dd. MMMM, HH:mm'
+        : 'dd. MMMM yyyy, HH:mm',
+      {locale: languageToLocale(language)},
+    );
   }
   if (isSameYear(parsed, new Date())) {
     return formatToShortDateTimeWithoutYear(parsed, language);
@@ -571,6 +583,13 @@ export function formatToWeekday(
   return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
   });
+}
+
+/**
+ * Localized full weekday name for a numbered day-of-week (0 = Sunday, ..., 6 = Saturday, per date-fns' `Day` convention)
+ */
+export function getWeekdayName(day: Day, language: Language) {
+  return languageToLocale(language).localize.day(day, {width: 'wide'});
 }
 
 export function daysBetween(base: string | Date, target: string | Date) {

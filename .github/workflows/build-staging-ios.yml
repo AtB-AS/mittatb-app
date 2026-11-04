@@ -165,6 +165,9 @@ jobs:
       - name: Enable Apple Pay entitlement
         if: ${{ env.APPLE_PAY_MERCHANT_ID != '' && steps.ipa-cache.outputs.cache-hit != 'true' }}
         run: bundle exec fastlane ios enable_apple_pay_entitlement
+      - name: Enable associated domains entitlement
+        if: ${{ env.APP_LINK_HOST != '' && steps.ipa-cache.outputs.cache-hit != 'true' }}
+        run: bundle exec fastlane ios enable_associated_domains_entitlement
       - name: Run fastlane cert match
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs

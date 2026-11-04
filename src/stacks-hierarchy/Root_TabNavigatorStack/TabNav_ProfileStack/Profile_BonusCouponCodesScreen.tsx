@@ -307,7 +307,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   copyButton: {
     borderRadius: theme.border.radius.circle,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.color.background.neutral[2].foreground.primary,
+    borderColor: theme.color.surface.neutral.strong.foreground.primary,
     paddingHorizontal: theme.spacing.medium,
     paddingVertical: theme.spacing.xSmall,
   },

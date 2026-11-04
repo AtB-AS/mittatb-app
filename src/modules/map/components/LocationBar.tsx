@@ -33,7 +33,7 @@ type Props = {
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
-const getBackgroundColor = (theme: Theme) => theme.color.background.neutral[0];
+const getBackgroundColor = (theme: Theme) => theme.color.surface.neutral.strong;
 
 export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();

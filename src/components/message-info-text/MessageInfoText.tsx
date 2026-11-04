@@ -1,5 +1,5 @@
 import React from 'react';
-import {ColorValue, StyleProp, View} from 'react-native';
+import {StyleProp, View} from 'react-native';
 import {
   type MarginStyle,
   Statuses,
@@ -9,7 +9,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
-import {ContrastColor} from '@atb/theme/colors';
+import {ForegroundType} from '@atb/theme/colors';
 
 export type MessageInfoTextProps = {
   type: Statuses;
@@ -18,7 +18,7 @@ export type MessageInfoTextProps = {
   style?: StyleProp<MarginStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
-  textColor?: ContrastColor | ColorValue;
+  textType?: ForegroundType;
   isMarkdown?: boolean;
 };
 
@@ -29,13 +29,13 @@ export const MessageInfoText = ({
   a11yLabel,
   iconPosition = 'left',
   testID,
-  textColor,
+  textType,
   isMarkdown = false,
 }: MessageInfoTextProps) => {
   const styles = useStyles();
   const {themeName} = useThemeContext();
 
-  const iconColorProps = {color: textColor};
+  const iconColorProps = {color: textType};
 
   return (
     <View
@@ -53,7 +53,7 @@ export const MessageInfoText = ({
 
       <View style={styles.text}>
         <ThemeText
-          color={textColor}
+          type={textType}
           isMarkdown={isMarkdown}
           typography="body__s"
           testID={`${testID}Text`}

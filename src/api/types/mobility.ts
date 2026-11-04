@@ -394,6 +394,39 @@ export const ShmoDamageSchema = z.object({
 
 export type ShmoDamage = z.infer<typeof ShmoDamageSchema>;
 
+export enum Weekday {
+  MONDAY = 'MONDAY',
+  TUESDAY = 'TUESDAY',
+  WEDNESDAY = 'WEDNESDAY',
+  THURSDAY = 'THURSDAY',
+  FRIDAY = 'FRIDAY',
+  SATURDAY = 'SATURDAY',
+  SUNDAY = 'SUNDAY',
+}
+
+const WeekdaySchema = z.enum(Weekday);
+
+const OpeningHoursIntervalSchema = z.object({
+  opens: z.string(),
+  closes: z.string(),
+});
+
+export type OpeningHoursInterval = z.infer<typeof OpeningHoursIntervalSchema>;
+
+const OpeningHoursDayRangeSchema = z.object({
+  fromWeekday: WeekdaySchema,
+  toWeekday: WeekdaySchema,
+  intervals: z.array(OpeningHoursIntervalSchema),
+});
+
+export type OpeningHoursDayRange = z.infer<typeof OpeningHoursDayRangeSchema>;
+
+export const SystemOpeningHoursSchema = z.object({
+  schedule: z.array(OpeningHoursDayRangeSchema).optional(),
+});
+
+export type SystemOpeningHours = z.infer<typeof SystemOpeningHoursSchema>;
+
 export const AssetSchema = z.object({
   id: z.string().nullish(),
   operator: ShmoOperatorSchema,
@@ -403,7 +436,7 @@ export const AssetSchema = z.object({
   stationId: z.string().nullish(),
   licensePlate: z.string().nullish(),
   stateOfCharge: z.number().int().nullish(),
-  currentRangeKm: z.number().int().nullish(),
+  currentRangeMeters: z.number().int().nullish(),
   formFactor: FormFactorSchema.nullish(),
   propulsionType: PropulsionTypeSchema.nullish(),
   stationSlotName: z.string().nullish(),

@@ -130,7 +130,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {top: safeAreaTop}) => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       rowGap: theme.spacing.small,
@@ -154,11 +154,6 @@ const useStyles = StyleSheet.createThemeHook((theme, {top: safeAreaTop}) => {
       gap: theme.spacing.medium,
       padding: theme.spacing.large,
       paddingTop: theme.spacing.medium,
-    },
-    hideHeaderContainer: {
-      paddingTop: safeAreaTop,
-      flex: 1,
-      backgroundColor: theme.color.background.accent[0].background,
     },
     flex: {
       flex: 1,

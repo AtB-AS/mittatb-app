@@ -356,9 +356,9 @@ const TicketingTexts = {
   },
   booking: {
     closed: _(
-      'Billettkjøp stengt i app',
-      'Ticket purchase closed in app',
-      'Billettkjøp stengt i app',
+      'Billettsalg for denne reisen har ikke åpnet enda',
+      'Ticket sales for this trip have not opened yet',
+      'Billettsal for denne reisa har ikkje opna enno',
     ),
     soldOut: _('Fullbooket', 'Fully booked', 'Fullteikna'),
     numAvailableTickets: (num: number) =>
@@ -373,7 +373,6 @@ const TicketingTexts = {
       'Choose another day or adjust time',
       'Velg ein annan dag eller juster tidspunkt',
     ),
-    select: _('Velg', 'Select', 'Velg'),
     beforeStartOfFareContract: _(
       'Billett ikke aktiv',
       'Ticket not active',

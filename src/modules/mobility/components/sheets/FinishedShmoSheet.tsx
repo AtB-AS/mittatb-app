@@ -29,6 +29,7 @@ type Props = {
     operatorId: string,
     bookingId: string,
     formFactor?: FormFactor,
+    systemId?: string,
   ) => void;
   navigateReportDamageCallback: (
     operatorId: string,
@@ -66,7 +67,7 @@ export const FinishedShmoSheet = ({
   const supportedDamages = shmoBooking?.asset?.supportedDamages;
 
   const operator = useOperators().byId(shmoBooking?.asset.operator.id);
-  const operatorLogo = operator?.brandAssets?.brandImageUrl;
+  const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
 
   return (
     <MapBottomSheet
@@ -87,10 +88,19 @@ export const FinishedShmoSheet = ({
       }
       subText={shmoBooking?.asset.operator.name}
       logoIcon={
-        operatorLogo ? (
-          <BrandingImage logoUrl={operatorLogo} logoSize={28} rounded={true} />
-        ) : (
-          <TransportationIconBox mode={mode} subMode={subMode} rounded={true} />
+        isLoading ? null : (
+          <BrandingImage
+            logoUrl={operatorLogoUrl}
+            logoSize={28}
+            rounded={true}
+            fallback={
+              <TransportationIconBox
+                mode={mode}
+                subMode={subMode}
+                rounded={true}
+              />
+            }
+          />
         )
       }
       bottomSheetHeaderType={BottomSheetHeaderType.Close}
@@ -110,7 +120,7 @@ export const FinishedShmoSheet = ({
                 <ThemeText typography="heading__m">
                   {t(
                     shmoBooking.state === ShmoBookingState.CANCELLED
-                      ? FareContractTexts.shmoDetails.tripCancelled
+                      ? FareContractTexts.shmoDetails.tripCancelled()
                       : FareContractTexts.shmoDetails.tripEnded(),
                   )}
                 </ThemeText>
@@ -148,6 +158,7 @@ export const FinishedShmoSheet = ({
                 shmoBooking.asset.operator.id,
                 shmoBooking.bookingId,
                 shmoBooking.asset.formFactor ?? undefined,
+                shmoBooking.asset.systemId ?? undefined,
               );
             }}
           />

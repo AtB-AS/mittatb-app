@@ -16,7 +16,7 @@ import {useThemeContext} from '@atb/theme';
 export function useScrollBorder() {
   const {theme} = useThemeContext();
   const [isScrolled, setIsScrolled] = useState(false);
-  const color = theme.color.background.neutral[3].background;
+  const color = theme.color.surface.neutral.subtle.background;
 
   const onScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {

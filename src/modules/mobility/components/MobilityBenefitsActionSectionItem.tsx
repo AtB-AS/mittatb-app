@@ -1,7 +1,7 @@
 import {MapFilterType} from '@atb/modules/map';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -21,19 +21,13 @@ export const MobilityBenefitsActionSectionItem = ({
   const styles = useStyles();
   const {topContainer} = useSectionItem(props);
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
-  const interactiveColor = theme.color.interactive[2];
 
   return (
     <View style={[topContainer, styles.benefitSection]}>
       <ThemeText typography="body__s" type="secondary">
         {t(FareContractTexts.label.includedBenefits)}
       </ThemeText>
-      <BenefitTiles
-        benefits={benefits}
-        onNavigateToMap={onNavigateToMap}
-        interactiveColor={interactiveColor}
-      />
+      <BenefitTiles benefits={benefits} onNavigateToMap={onNavigateToMap} />
     </View>
   );
 };

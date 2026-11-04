@@ -114,7 +114,7 @@ export const RootStack = () => {
     return null;
   }
 
-  const statusBarColor = theme.color.background.accent[0].background;
+  const statusBarColor = theme.color.background.neutral[1].background;
 
   const ReactNavigationTheme = {
     ...DefaultTheme,

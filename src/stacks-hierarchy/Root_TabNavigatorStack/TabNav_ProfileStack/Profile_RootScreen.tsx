@@ -201,7 +201,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <GlobalMessage
               style={style.globalMessage}
               globalMessageContext={GlobalMessageContextEnum.appProfile}
-              textColor={neutralContrastColor}
             />
             <UserInfo
               navigateToEditProfileScreen={() =>

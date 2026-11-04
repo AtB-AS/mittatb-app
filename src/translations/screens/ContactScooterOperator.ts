@@ -105,11 +105,6 @@ export const ContactShmoOperatorTexts = {
     },
     camera: {
       title: _('Ta bilde', 'Take photo', 'Ta bilete'),
-      instruction: _(
-        'Vis gjerne hele kjøretøyet og det som er galt.',
-        'Try to show the whole vehicle and what is wrong with it.',
-        'Vis gjerne heile køyretøyet og det som er gale.',
-      ),
     },
     error: _(
       'Vi klarte ikke å hente bildet. Vennligst prøv på nytt.',

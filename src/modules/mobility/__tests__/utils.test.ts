@@ -17,14 +17,18 @@ jest.mock('@atb/theme/ThemedAssets', () => ({
 
 import {Language, TranslateFunction} from '@atb/translations';
 import type {PriceAdjustmentType} from '@atb/api/types/benefit';
-import type {
-  ShmoPricingPlan,
-  ShmoPricingSegment,
+import {
+  type OpeningHoursDayRange,
+  type ShmoPricingPlan,
+  type ShmoPricingSegment,
+  Weekday,
 } from '@atb/api/types/mobility';
 import {
   computeFreeMinuteCount,
   formatMinuteBoundaryWithUnit,
   formatMinuteRange,
+  formatOpeningHoursSchedule,
+  formatRange,
   formatRatePerUnit,
   hasMultiplePricingPlans,
 } from '../utils';
@@ -309,5 +313,134 @@ describe('computeFreeMinuteCount', () => {
         45,
       );
     });
+  });
+});
+
+describe('formatOpeningHoursSchedule', () => {
+  const dayRange = (
+    overrides: Partial<OpeningHoursDayRange>,
+  ): OpeningHoursDayRange => ({
+    fromWeekday: Weekday.MONDAY,
+    toWeekday: Weekday.MONDAY,
+    intervals: [{opens: '00:00', closes: '23:59'}],
+    ...overrides,
+  });
+
+  it('formats a single day range', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [
+          dayRange({
+            fromWeekday: Weekday.FRIDAY,
+            toWeekday: Weekday.FRIDAY,
+            intervals: [{opens: '00:00', closes: '22:00'}],
+          }),
+        ],
+        Language.Norwegian,
+        t,
+      ),
+    ).toEqual(['Fredag 00:00-22:00']);
+  });
+
+  it('formats a multi-day range with " - "', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [
+          dayRange({
+            fromWeekday: Weekday.MONDAY,
+            toWeekday: Weekday.THURSDAY,
+            intervals: [{opens: '00:00', closes: '23:59'}],
+          }),
+        ],
+        Language.Norwegian,
+        t,
+      ),
+    ).toEqual(['Mandag - torsdag 00:00-23:59']);
+  });
+
+  it('shows a midnight closing time as 24:00, unaltered', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [dayRange({intervals: [{opens: '06:00', closes: '24:00'}]})],
+        Language.Norwegian,
+        t,
+      ),
+    ).toEqual(['Mandag 06:00-24:00']);
+  });
+
+  it('joins multiple intervals in the same day with a comma', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [
+          dayRange({
+            intervals: [
+              {opens: '06:00', closes: '10:00'},
+              {opens: '14:00', closes: '22:00'},
+            ],
+          }),
+        ],
+        Language.Norwegian,
+        t,
+      ),
+    ).toEqual(['Mandag 06:00-10:00, 14:00-22:00']);
+  });
+
+  it('shows a closed label for a day-range with no open intervals', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [
+          dayRange({
+            fromWeekday: Weekday.SUNDAY,
+            toWeekday: Weekday.SUNDAY,
+            intervals: [],
+          }),
+        ],
+        Language.Norwegian,
+        t,
+      ),
+    ).toEqual(['Søndag Stengt']);
+  });
+
+  it('formats weekday names per language', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [dayRange({fromWeekday: Weekday.SUNDAY, toWeekday: Weekday.SUNDAY})],
+        Language.English,
+        t,
+      ),
+    ).toEqual(['Sunday 00:00-23:59']);
+  });
+
+  it('formats one line per day-range group, in order', () => {
+    expect(
+      formatOpeningHoursSchedule(
+        [
+          dayRange({fromWeekday: Weekday.MONDAY, toWeekday: Weekday.THURSDAY}),
+          dayRange({fromWeekday: Weekday.FRIDAY, toWeekday: Weekday.FRIDAY}),
+          dayRange({fromWeekday: Weekday.SATURDAY, toWeekday: Weekday.SUNDAY}),
+        ],
+        Language.Norwegian,
+        t,
+      ),
+    ).toEqual([
+      'Mandag - torsdag 00:00-23:59',
+      'Fredag 00:00-23:59',
+      'Lørdag - søndag 00:00-23:59',
+    ]);
+  });
+});
+
+describe('formatRange', () => {
+  it('formats a range in meters as whole km above 5000m', () => {
+    expect(formatRange(12000, Language.Norwegian)).toBe('12 km');
+  });
+
+  it('formats a range in meters with one decimal below 5000m', () => {
+    expect(formatRange(2500, Language.Norwegian)).toBe('2,5 km');
+  });
+
+  it('shows "- -" when the range is unknown rather than claiming 0 km', () => {
+    expect(formatRange(null, Language.Norwegian)).toBe('- -');
+    expect(formatRange(undefined, Language.Norwegian)).toBe('- -');
   });
 });

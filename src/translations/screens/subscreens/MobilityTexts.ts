@@ -384,7 +384,7 @@ export const MobilityTexts = {
       ),
     },
   },
-  helpText: _('Trenger du hjelp?', 'Need help?', 'Treng du hjelp?'),
+  helpText: _('Info og hjelp', 'Info and help', 'Info og hjelp'),
   unknownOperator: _('Ukjent operatør', 'Unknown operator', 'Ukjent operatør'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`, `Åpne ${operator}`),

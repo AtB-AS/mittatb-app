@@ -72,13 +72,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     zIndex: 2,
   },
   border: {
-    borderColor: theme.color.background.neutral[3].background,
+    borderColor: theme.color.surface.neutral.subtle.background,
     borderWidth: theme.border.width.slim,
   },
   loading: {
     padding: theme.spacing.medium,
     borderRadius: theme.border.radius.circle,
-    backgroundColor: theme.color.interactive[2].default.background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
   },
   right: {
     right: theme.spacing.medium,

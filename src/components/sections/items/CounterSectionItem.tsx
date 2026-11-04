@@ -9,7 +9,6 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
-import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {BicycleFill} from '@atb/assets/svg/mono-icons/transportation';
@@ -18,7 +17,6 @@ import {BaggageType} from '@atb/modules/configuration';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  color?: InteractiveColor;
   count: number;
   addCount: () => void;
   removeCount: () => void;
@@ -29,7 +27,6 @@ type Props = SectionItemProps<{
 export function CounterSectionItem({
   text,
   subtext,
-  color,
   count,
   addCount,
   removeCount,
@@ -44,7 +41,7 @@ export function CounterSectionItem({
   const {t} = useTranslation();
   const {theme} = useThemeContext();
   const removeButtonDisabled = count === 0;
-  const activeColor = count > 0 && color ? color.active : undefined;
+  const activeColor = count > 0 ? theme.color.surface.accent.subtle : undefined;
   const illustration = mapBaggageTypeToSvg(baggageType);
 
   return (
@@ -100,8 +97,8 @@ export function CounterSectionItem({
             svg={Subtract}
             color={
               removeButtonDisabled
-                ? theme.color.foreground.dynamic.disabled
-                : theme.color.foreground.dynamic.primary
+                ? theme.color.surface.neutral.strong.foreground.disabled
+                : theme.color.surface.neutral.strong.foreground.primary
             }
           />
         </NativeTouchable>

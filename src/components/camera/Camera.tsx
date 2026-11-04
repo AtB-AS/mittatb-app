@@ -1,11 +1,8 @@
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {RefObject, useRef, useState} from 'react';
-import {Linking, Platform, View} from 'react-native';
-import {Processing} from '../loading';
-import {MessageInfoBox} from '../message-info-box';
+import {Platform, View} from 'react-native';
 import {CaptureButton} from './CaptureButton';
 import {PhotoFile} from './types';
-import {usePermissions} from './use-permissions';
 import CameraTexts from '@atb/translations/components/Camera';
 import {useTranslation} from '@atb/translations';
 import {FilterChip} from '../filter-chip';
@@ -43,7 +40,6 @@ export const Camera = ({
 }: Props) => {
   const camera = useRef<CameraApi>(null);
   const styles = useStyles();
-  const {isAuthorized} = usePermissions();
   const {t} = useTranslation();
   const [torch, setTorch] = useState<'on' | 'off'>('off');
   const {theme} = useThemeContext();
@@ -86,93 +82,64 @@ export const Camera = ({
     },
   });
 
-  if (isAuthorized === undefined) {
-    return (
-      <View style={styles.loadingIndicator}>
-        <Processing message={t(CameraTexts.loading)} />
-      </View>
-    );
-  }
+  return (
+    <>
+      {device && (
+        <View style={styles.container}>
+          <VisionCamera
+            ref={camera}
+            style={StyleSheet.absoluteFill}
+            enableZoomGesture={true}
+            device={device}
+            isActive={isFocused}
+            resizeMode="cover"
+            video={false}
+            audio={false}
+            photo={mode === 'photo'}
+            torch={device?.hasTorch ? torch : undefined}
+            codeScanner={mode === 'qr' ? codeScanner : undefined}
+          />
 
-  if (isAuthorized) {
-    return (
-      <>
-        {device && (
-          <View style={styles.container}>
-            <VisionCamera
-              ref={camera}
-              style={StyleSheet.absoluteFill}
-              enableZoomGesture={true}
-              device={device}
-              isActive={isFocused}
-              resizeMode="cover"
-              video={false}
-              audio={false}
-              photo={mode === 'photo'}
-              torch={device?.hasTorch ? torch : undefined}
-              codeScanner={mode === 'qr' ? codeScanner : undefined}
+          {mode === 'qr' && (
+            <View pointerEvents="none" style={styles.qrFrame} />
+          )}
+          <FilterChip
+            onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}
+            style={[
+              styles.flashlightButton,
+              footerHeight > 0
+                ? {marginBottom: theme.spacing.medium + footerHeight}
+                : {marginBottom: safeBottomInset + theme.spacing.medium},
+            ]}
+            text={t(CameraTexts.flashlight.default)}
+            selected={torch === 'on'}
+            rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
+          />
+        </View>
+      )}
+      {mode !== 'qr' || bottomButtonNode ? (
+        <View
+          style={styles.footerWrapper}
+          onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
+        >
+          {mode !== 'qr' && (
+            <CaptureButton
+              style={styles.captureButton}
+              onCapture={handleCapture}
+              focusRef={focusRef}
             />
-
-            {mode === 'qr' && (
-              <View pointerEvents="none" style={styles.qrFrame} />
-            )}
-            <FilterChip
-              onPress={() => setTorch(torch === 'on' ? 'off' : 'on')}
-              style={[
-                styles.flashlightButton,
-                footerHeight > 0
-                  ? {marginBottom: theme.spacing.medium + footerHeight}
-                  : {marginBottom: safeBottomInset + theme.spacing.medium},
-              ]}
-              text={t(CameraTexts.flashlight.default)}
-              selected={torch === 'on'}
-              rightIcon={torch === 'on' ? {svg: Flash} : {svg: NoFlash}}
-            />
-          </View>
-        )}
-        {mode !== 'qr' || bottomButtonNode ? (
-          <View
-            style={styles.footerWrapper}
-            onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}
-          >
-            {mode !== 'qr' && (
-              <CaptureButton
-                style={styles.captureButton}
-                onCapture={handleCapture}
-                focusRef={focusRef}
-              />
-            )}
-            {bottomButtonNode}
-          </View>
-        ) : null}
-      </>
-    );
-  } else {
-    return (
-      <View style={styles.loadingIndicator}>
-        <MessageInfoBox
-          title={t(CameraTexts.permissionRequired.title)}
-          message={t(CameraTexts.permissionRequired.message)}
-          type="warning"
-          onPressConfig={{
-            action: () => Linking.openSettings(),
-            text: t(CameraTexts.permissionRequired.action),
-          }}
-        />
-      </View>
-    );
-  }
+          )}
+          {bottomButtonNode}
+        </View>
+      ) : null}
+    </>
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme, {bottom}, {height}) => {
   return {
     container: {
       flex: 1,
-    },
-    loadingIndicator: {
-      flex: 1,
-      justifyContent: 'center',
-      padding: theme.spacing.medium,
     },
     qrFrame: {
       position: 'absolute',

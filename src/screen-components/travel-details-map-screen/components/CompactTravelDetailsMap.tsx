@@ -13,11 +13,13 @@ import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
 import {shadows} from '@atb/modules/map';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {Skeleton} from '@atb/components/skeleton';
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
   buttonText: string;
   isLive?: boolean;
+  isLoading?: boolean;
   onExpand?(): void;
 };
 
@@ -25,6 +27,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   serviceJourneyPolylines,
   buttonText,
   isLive = false,
+  isLoading = false,
   onExpand,
 }) => {
   const {themeName} = useThemeContext();
@@ -45,6 +48,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
    * https://github.com/rnmapbox/maps/issues/2705
    */
   useEffect(() => {
+    if (isLoading) return;
     if (Platform.OS === 'ios') {
       setTimeout(
         () =>
@@ -52,9 +56,13 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         100,
       );
     }
-  }, [bounds]);
+  }, [bounds, isLoading]);
 
   const styles = useStyles();
+
+  if (isLoading) {
+    return <Skeleton style={styles.mapSkeleton} />;
+  }
 
   return (
     <View>
@@ -102,8 +110,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 100,
     borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.color.background.neutral[2].background,
+    borderColor: theme.color.surface.neutral.subtle.background,
     overflow: 'hidden',
+  },
+  mapSkeleton: {
+    height: 100,
+    borderRadius: theme.border.radius.regular,
   },
   pillOverlay: {
     position: 'absolute',
@@ -120,7 +132,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     gap: theme.spacing.medium,
     padding: theme.spacing.medium,
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.border.radius.circle,
     ...shadows,
   },

@@ -65,7 +65,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   const backgroundColor = themeColor.background;
   const borderBottomColor =
     showBorder && !!textOpacity
-      ? theme.color.background.neutral[2].background
+      ? theme.color.surface.neutral.subtle.background
       : 'transparent';
 
   const leftIcon = leftButton ? (
@@ -124,7 +124,6 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         <GlobalMessage
           globalMessageContext={globalMessageContext}
           style={styles.globalMessageBox}
-          textColor={themeColor}
         />
       )}
     </View>

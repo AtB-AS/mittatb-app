@@ -16,4 +16,6 @@ export const ShmoHelpTexts = {
     'Rapporter feilparkering',
   ),
   faq: _('Vanlige spørsmål', 'Frequently asked questions', 'Vanlege spørsmål'),
+  openingHours: _('Åpningstider', 'Opening hours', 'Opningstider'),
+  closed: _('Stengt', 'Closed', 'Stengt'),
 };

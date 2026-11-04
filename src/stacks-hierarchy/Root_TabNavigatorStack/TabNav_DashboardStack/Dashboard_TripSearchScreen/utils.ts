@@ -16,7 +16,6 @@ import {
 import {formatToLongDateTime} from '@atb/utils/date';
 import type {DateOptionAndValue} from '@atb/components/date-selection';
 import type {Leg} from '@atb/api/types/trips';
-import {getRealtimeState} from '@atb/utils/realtime';
 import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {isDefined} from '@atb/utils/presence';
@@ -119,16 +118,6 @@ export function getSearchTimeLabel(
     case 'departure':
       return t(TripSearchTexts.dateInput.departure(time));
   }
-}
-
-export function isSignificantDifference(leg: Leg) {
-  return (
-    getRealtimeState({
-      isRealtime: leg.realtime,
-      aimedTime: leg.aimedStartTime,
-      expectedTime: leg.expectedStartTime,
-    }) === 'significant-difference'
-  );
 }
 
 /**

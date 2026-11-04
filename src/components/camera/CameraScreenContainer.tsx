@@ -1,5 +1,5 @@
 import {PropsWithChildren, Ref} from 'react';
-import {StatusBar, View} from 'react-native';
+import {Linking, ScrollView, StatusBar, View} from 'react-native';
 import {LoadingBody} from '../PhotoCapture/ScreenContainer';
 import {ThemeText} from '../text';
 import {StyleSheet} from '@atb/theme';
@@ -8,6 +8,9 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '../theme-icon';
 import SvgChevronLeft from '@atb/assets/svg/mono-icons/navigation/ChevronLeft';
 import {MessageInfoBox} from '@atb/components/message-info-box';
+import {Processing} from '@atb/components/loading';
+import CameraTexts from '@atb/translations/components/Camera';
+import {usePermissions} from './use-permissions';
 
 type CameraScreenContainerProps = PropsWithChildren<{
   title: string;
@@ -29,6 +32,7 @@ export const CameraScreenContainer = ({
 }: CameraScreenContainerProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {isAuthorized} = usePermissions();
 
   if (isLoading) {
     return <LoadingBody />;
@@ -37,7 +41,7 @@ export const CameraScreenContainer = ({
   return (
     <View style={styles.root}>
       <View style={StyleSheet.absoluteFill} pointerEvents="auto">
-        {children}
+        {isAuthorized && children}
       </View>
 
       <View style={styles.overlay} pointerEvents="box-none">
@@ -77,12 +81,33 @@ export const CameraScreenContainer = ({
             )}
           </View>
         </View>
+        {isAuthorized === undefined && (
+          <View style={[styles.cameraFallback, styles.cameraFallbackContent]}>
+            <Processing message={t(CameraTexts.loading)} />
+          </View>
+        )}
+        {isAuthorized === false && (
+          <ScrollView
+            style={styles.cameraFallback}
+            contentContainerStyle={styles.cameraFallbackContent}
+          >
+            <MessageInfoBox
+              title={t(CameraTexts.permissionRequired.title)}
+              message={t(CameraTexts.permissionRequired.message)}
+              type="warning"
+              onPressConfig={{
+                action: () => Linking.openSettings(),
+                text: t(CameraTexts.permissionRequired.action),
+              }}
+            />
+          </ScrollView>
+        )}
       </View>
     </View>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => {
+const useStyles = StyleSheet.createThemeHook((theme, {top, bottom}) => {
   return {
     root: {
       flex: 1,
@@ -94,7 +119,7 @@ const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => {
     container: {
       gap: theme.spacing.medium,
       backgroundColor: 'black',
-      paddingTop: safeTopInset + theme.spacing.medium,
+      paddingTop: top + theme.spacing.medium,
       paddingBottom: theme.spacing.medium,
     },
     header: {
@@ -110,6 +135,15 @@ const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => {
       flexDirection: 'row',
       alignItems: 'center',
       gap: theme.spacing.small,
+    },
+    cameraFallback: {
+      flex: 1,
+    },
+    cameraFallbackContent: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      padding: theme.spacing.medium,
+      paddingBottom: bottom + theme.spacing.medium,
     },
   };
 });

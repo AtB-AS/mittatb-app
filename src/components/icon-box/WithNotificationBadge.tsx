@@ -75,7 +75,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginRight: -notificationBorderWidth,
     },
     badgeBackground: {
-      backgroundColor: theme.color.background.neutral[0].background,
+      backgroundColor: theme.color.surface.neutral.strong.background,
       borderRadius: notificationTotalSize / 2,
       padding: notificationBorderWidth,
     },

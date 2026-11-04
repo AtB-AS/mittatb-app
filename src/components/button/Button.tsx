@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {
   NativeTouchable,
   NativeTouchableProps,
@@ -64,18 +64,20 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     getButtonColors(props, surfaceColor, theme);
 
   const spacing = theme.spacing.medium;
-  // Subtract the border width so the large button matches the design height,
+  // Subtract the border width so the button matches the design size,
   // where the border is drawn inside the button.
   const largePadding = spacing - theme.border.width.slim;
+  const smallPadding = theme.spacing.small - theme.border.width.slim;
+  const buttonPadding = type === 'small' ? smallPadding : largePadding;
 
   const styleContainer: ViewStyle[] = [
     styles.button,
     {
       backgroundColor: mainContrastColor.background,
       borderColor: borderColorValue,
-      paddingHorizontal: type === 'small' ? spacing : largePadding,
-      gap: type === 'small' ? theme.spacing.xSmall : undefined,
-      paddingVertical: type === 'small' ? theme.spacing.xSmall : largePadding,
+      paddingHorizontal: buttonPadding,
+      gap: type === 'small' ? theme.spacing.xSmall : spacing,
+      paddingVertical: buttonPadding,
       borderRadius: theme.border.radius.circle,
       borderWidth: theme.border.width.slim,
       ...(expanded && type === 'small'
@@ -90,28 +92,17 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
 
   const textMarginHorizontal = useTextMarginHorizontal(
     expanded,
+    type,
     leftIcon,
     rightIcon,
   );
 
-  const iconStyle = (iconSide: 'left' | 'right'): ViewStyle => {
-    const iconMargin = iconSide === 'left' ? 'marginRight' : 'marginLeft';
-    if (expanded && text && type !== 'small') {
-      return {
-        position: 'absolute',
-        [iconSide]: largePadding,
-        [iconMargin]: text ? theme.spacing.xSmall : undefined,
-      };
-    }
-
-    return {
-      [iconMargin]: text
-        ? type === 'small'
-          ? theme.spacing.xSmall
-          : spacing
-        : undefined,
-    };
-  };
+  // Spacing between icon and text is handled by the container gap, except for
+  // expanded large buttons where the icons are absolutely positioned.
+  const iconStyle = (iconSide: 'left' | 'right'): ViewStyle =>
+    expanded && text && type !== 'small'
+      ? {position: 'absolute', [iconSide]: largePadding}
+      : {};
 
   const styleText: TextStyle = {
     // Add 1% width to the text to avoid layout issues on Android with small font sizes
@@ -125,10 +116,10 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
     ...(expanded &&
       type === 'small' && {
         flex: undefined,
-        marginHorizontal: theme.spacing.xSmall,
       }),
   };
 
+  const iconSize = type === 'small' ? 'small' : 'normal';
   const leftStyling: ViewStyle = iconStyle('left');
   const rightStyling: ViewStyle = iconStyle('right');
 
@@ -142,16 +133,27 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
       accessible
       accessibilityRole="button"
       accessibilityState={{disabled}}
-      style={[styleContainer, hasShadow ? shadows : undefined, style]}
+      style={[
+        styleContainer,
+        (disabled || loading) && styles.disabledButton,
+        hasShadow ? shadows : undefined,
+        style,
+      ]}
       onPress={disabled || loading ? undefined : onPress}
       disabled={disabled || loading}
       pressedColor={pressedColorValue}
+      // To make disabled buttons look the same on Android as iOS
+      needsOffscreenAlphaCompositing={loading || disabled}
       ref={ref}
       {...otherProps}
     >
       {leftIcon && (
         <View style={leftStyling}>
-          <ButtonIcon {...leftIcon} mainContrastColor={mainContrastColor} />
+          <ButtonIcon
+            {...leftIcon}
+            mainContrastColor={mainContrastColor}
+            size={iconSize}
+          />
         </View>
       )}
       {text && (
@@ -179,6 +181,7 @@ export const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
               <ButtonIcon
                 {...rightIcon}
                 mainContrastColor={mainContrastColor}
+                size={iconSize}
               />
             )
           )}
@@ -192,13 +195,15 @@ const ButtonIcon = ({
   svg,
   notificationColor,
   mainContrastColor,
+  size,
 }: ButtonIconProps & {
   mainContrastColor: ContrastColor;
+  size: ThemeIconProps['size'];
 }) => (
   <ThemeIcon
     svg={svg}
     color={mainContrastColor}
-    size="normal"
+    size={size}
     notification={
       notificationColor && {
         color: notificationColor,
@@ -263,11 +268,12 @@ const getButtonColors = (
  */
 const useTextMarginHorizontal = (
   expand: boolean,
+  type: ButtonType,
   leftIcon?: ButtonIconProps,
   rightIcon?: ButtonIconProps,
 ) => {
   const {theme} = useThemeContext();
-  if (!expand) return 0;
+  if (!expand || type === 'small') return 0;
   if (!leftIcon && !rightIcon) return 0;
   return theme.icon.size['normal'] + theme.spacing.xSmall;
 };
@@ -276,6 +282,11 @@ const useButtonStyle = StyleSheet.createThemeHook(() => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  disabledButton: {
+    // Overrides the 0.2 opacity NativeTouchable uses for disabled touchables,
+    // since it gives too low contrast on the button text.
+    opacity: 0.3,
   },
 }));
 

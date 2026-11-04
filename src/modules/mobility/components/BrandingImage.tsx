@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import React from 'react';
 import {Image, StyleProp, View, ViewStyle} from 'react-native';
 import {SvgCssUri} from 'react-native-svg/css';
@@ -22,12 +22,14 @@ export const BrandingImage = ({
   rounded = false,
 }: BrandingImageProps) => {
   const styles = useSheetStyle();
+  const {theme} = useThemeContext();
+  const borderRadius = rounded ? logoSize / 2 : theme.border.radius.small;
   return (
     <View style={style}>
       {logoUrl ? (
         isSvgUrl(logoUrl) ? (
           <SvgCssUri
-            style={{...styles.logo, borderRadius: rounded ? logoSize / 2 : 0}}
+            style={{...styles.logo, borderRadius}}
             height={logoSize}
             width={logoSize}
             uri={logoUrl}
@@ -37,7 +39,7 @@ export const BrandingImage = ({
             source={{uri: logoUrl}}
             height={logoSize}
             width={logoSize}
-            borderRadius={rounded ? logoSize / 2 : 0}
+            borderRadius={borderRadius}
             resizeMode="contain"
           />
         )

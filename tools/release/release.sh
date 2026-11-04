@@ -54,6 +54,11 @@ if [[ "$CURRENT_BRANCH" != "master" && "$CURRENT_BRANCH" != "release/"* ]]; then
   DRY_RUN=true
 fi
 
+# --- Read current version from package.json ---
+CURRENT_PACKAGE_VERSION=$(node -p "require('./package.json').version")
+PKG_MAJOR=$(echo "$CURRENT_PACKAGE_VERSION" | cut -d. -f1)
+PKG_MINOR=$(echo "$CURRENT_PACKAGE_VERSION" | cut -d. -f2)
+
 VERSION=""
 IS_NEW_RELEASE_CYCLE=false
 RELEASE_BRANCH=""
@@ -86,9 +91,6 @@ if [[ "$CURRENT_BRANCH" == "master" ]]; then
   RELEASE_BRANCH="release/$MAJOR_MINOR"
 
   # Get NEXT_MASTER_VERSION from package.json
-  CURRENT_PACKAGE_VERSION=$(node -p "require('./package.json').version")
-  PKG_MAJOR=$(echo "$CURRENT_PACKAGE_VERSION" | cut -d. -f1)
-  PKG_MINOR=$(echo "$CURRENT_PACKAGE_VERSION" | cut -d. -f2)
   PKG_NEXT_MINOR=$((PKG_MINOR + 1))
   NEXT_MASTER_VERSION="$PKG_MAJOR.$PKG_NEXT_MINOR"
   
@@ -97,14 +99,21 @@ elif [[ "$CURRENT_BRANCH" == "release/"* ]]; then
   MAJOR_MINOR=$(echo "$CURRENT_BRANCH" | sed 's/release\///')
   RELEASE_BRANCH="$CURRENT_BRANCH"
 
+  if [[ "$PKG_MAJOR.$PKG_MINOR" != "$MAJOR_MINOR" ]]; then
+    echo "⚠️  package.json version ($CURRENT_PACKAGE_VERSION) does not match release branch '$CURRENT_BRANCH'."
+    echo ""
+  fi
+
   # Fetch tags to get the latest RC version
   git fetch --tags --prune-tags --quiet 
-  LATEST_TAG=$(git tag --sort=-v:refname | grep "^v$MAJOR_MINOR-rc" | head -n1)
+  # Includes org-specific tags (e.g. v1.80-rc3-nfk), so the next RC number is never reused
+  LATEST_TAG=$(git tag --sort=-v:refname | grep -E "^v${MAJOR_MINOR//./\\.}-rc[0-9]+(-|$)" | head -n1)
 
   if [ -z "$LATEST_TAG" ]; then
     VERSION="$MAJOR_MINOR-rc1"
   else
-    LATEST_RC=$(echo "$LATEST_TAG" | sed -E "s/v$MAJOR_MINOR-rc//")
+    # Extract only the RC number, ignoring any org suffix
+    LATEST_RC=$(echo "$LATEST_TAG" | sed -E 's/.*-rc0*([0-9]+).*/\1/')
     NEXT_RC=$((LATEST_RC + 1))
     VERSION="$MAJOR_MINOR-rc$NEXT_RC"
   fi
@@ -112,7 +121,11 @@ fi
 
 # --- Dry run output ---
 if [ "$DRY_RUN" = true ]; then
-  echo "📍 Current branch:         $CURRENT_BRANCH (version $PKG_MAJOR.$PKG_MINOR)"
+  if [ "$IS_NEW_RELEASE_CYCLE" = true ]; then
+    echo "📍 Current branch:         $CURRENT_BRANCH (version $PKG_MAJOR.$PKG_MINOR)"
+  else
+    echo "📍 Current branch:         $CURRENT_BRANCH"
+  fi
   if [ -n "$LATEST_RELEASE_BRANCH" ]; then
     echo "📦 Latest release branch:  release/$LATEST_RELEASE_BRANCH"
   fi

@@ -103,7 +103,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         return {borderColor: theme.color.border.focus.background};
       } else if (errorText) {
         return {
-          borderColor: theme.color.interactive.destructive.default.background,
+          borderColor: theme.color.surface.error.strong.background,
         };
       } else {
         return undefined;
@@ -155,7 +155,9 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
                 textAlignVertical: 'top',
               },
             ]}
-            placeholderTextColor={theme.color.foreground.dynamic.secondary}
+            placeholderTextColor={
+              theme.color.surface.neutral.strong.foreground.secondary
+            }
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
             maxFontSizeMultiplier={MAX_FONT_SCALE}
@@ -198,15 +200,15 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
 
 const useInputStyle = StyleSheet.createThemeHook((theme) => ({
   input: {
-    color: theme.color.foreground.dynamic.primary,
+    color: theme.color.surface.neutral.strong.foreground.primary,
     paddingRight: 40,
     paddingVertical: 0,
     fontSize: theme.typography.body__m.fontSize,
   },
   container: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.color.background.neutral[0].background,
+    borderColor: theme.color.surface.neutral.strong.background,
   },
   containerInline: {
     alignItems: 'center',

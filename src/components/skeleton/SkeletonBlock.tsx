@@ -13,6 +13,6 @@ export const SkeletonBlock = ({style}: {style?: StyleProp<ViewStyle>}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   base: {
-    backgroundColor: theme.color.background.neutral[3].background,
+    backgroundColor: theme.color.surface.neutral.subtle.background,
   },
 }));

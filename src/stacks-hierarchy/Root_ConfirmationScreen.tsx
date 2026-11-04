@@ -12,7 +12,7 @@ type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
 const CIRCLE_SIZE = 80;
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
-const getCircleColor = (theme: Theme) => theme.color.interactive[2];
+const getCircleColor = (theme: Theme) => theme.color.surface.accent.strong;
 
 export const Root_ConfirmationScreen = ({
   navigation,
@@ -43,7 +43,7 @@ export const Root_ConfirmationScreen = ({
         {message}
       </ThemeText>
       <View style={styles.circle}>
-        <ThemeIcon size="large" svg={ConfirmSvg} color={circleColor.outline} />
+        <ThemeIcon size="large" svg={ConfirmSvg} color={circleColor} />
       </View>
     </View>
   );
@@ -63,7 +63,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     marginTop: theme.spacing.xLarge,
     borderRadius: CIRCLE_SIZE / 2,
-    backgroundColor: getCircleColor(theme).outline.background,
+    backgroundColor: getCircleColor(theme).background,
   },
   message: {
     textAlign: 'center',

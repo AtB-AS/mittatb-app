@@ -148,7 +148,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacing.small,
   },
   container: {
-    backgroundColor: theme.color.background.neutral[0].background,
+    backgroundColor: theme.color.surface.neutral.strong.background,
     borderRadius: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium,
     flex: 1,

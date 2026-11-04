@@ -11,7 +11,6 @@ import {
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 import {Meta} from '@storybook/react';
-import {getColorByOption} from '../utils';
 
 type MessageInfoTextMetaProps = ThemedStoryProps<MessageInfoTextProps>;
 
@@ -19,31 +18,27 @@ const MessageInfoTextMeta: Meta<MessageInfoTextMetaProps> = {
   title: 'MessageInfoText',
   component: MessageInfoText,
   argTypes: {
+    textType: {
+      options: ['primary', 'secondary'],
+      control: {type: 'radio'},
+    },
     ...themedStoryControls,
   },
   args: {
     message: 'The message body.',
     iconPosition: 'left',
     isMarkdown: false,
+    textType: 'primary',
     ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => {
-      const storyContrastColor = getColorByOption(args.theme, args.storyColor);
       return (
         <View style={{alignItems: 'center'}}>
-          <Story
-            args={{...args, type: 'info', textColor: storyContrastColor}}
-          />
-          <Story
-            args={{...args, type: 'valid', textColor: storyContrastColor}}
-          />
-          <Story
-            args={{...args, type: 'warning', textColor: storyContrastColor}}
-          />
-          <Story
-            args={{...args, type: 'error', textColor: storyContrastColor}}
-          />
+          <Story args={{...args, type: 'info'}} />
+          <Story args={{...args, type: 'valid'}} />
+          <Story args={{...args, type: 'warning'}} />
+          <Story args={{...args, type: 'error'}} />
         </View>
       );
     },

@@ -151,7 +151,7 @@ export const TravelInfoSectionItem = ({
         >
           <FareContractFromTo
             fc={fc}
-            backgroundColor={theme.color.background.neutral[0]}
+            backgroundColor={theme.color.surface.neutral.strong}
             size="normal"
           />
           {!!fareProductTypeConfig?.transportModes && (

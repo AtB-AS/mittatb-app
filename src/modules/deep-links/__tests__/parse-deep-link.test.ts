@@ -43,6 +43,16 @@ describe('parseDeepLink', () => {
     });
   });
 
+  it('decodes the path', () => {
+    expect(parseDeepLink('departures/NSR%3AStopPlace%3A1').path).toBe(
+      'departures/NSR:StopPlace:1',
+    );
+  });
+
+  it('keeps malformed path encoding as is', () => {
+    expect(parseDeepLink('departures/100%').path).toBe('departures/100%');
+  });
+
   it('parses a param without a value as an empty string', () => {
     expect(parseDeepLink('widget?stopId').params).toEqual({stopId: ''});
   });
