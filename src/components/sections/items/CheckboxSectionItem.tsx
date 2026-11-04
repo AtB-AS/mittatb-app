@@ -1,11 +1,11 @@
 import React from 'react';
-import {View} from 'react-native';
+import {AccessibilityInfo, Platform, View} from 'react-native';
 import {Checkbox} from '@atb/components/checkbox';
 import {Tag} from '@atb/components/tag';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {LabelType} from '@atb/modules/configuration';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
 import {SectionItemProps} from '../types';
 import {GenericClickableSectionItem} from './GenericClickableSectionItem';
@@ -48,7 +48,16 @@ export const CheckboxSectionItem = ({
     <GenericClickableSectionItem
       {...props}
       active={isChecked}
-      onPress={onPress}
+      onPress={() => {
+        // Talkback doesn't read out the updated state automatically, so we
+        // trigger it manually instead.
+        if (Platform.OS === 'android') {
+          AccessibilityInfo.announceForAccessibility(
+            t(isChecked ? dictionary.unchecked : dictionary.checked),
+          );
+        }
+        onPress();
+      }}
       disabled={disabled}
       accessibilityRole="checkbox"
       accessibilityState={{checked: isChecked, disabled}}
