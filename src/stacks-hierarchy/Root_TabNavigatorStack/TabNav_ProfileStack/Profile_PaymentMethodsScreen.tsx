@@ -11,7 +11,6 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   humanizePaymentType,
-  isPaymentAgreementSupported,
   PaymentAgreement,
   PaymentType,
   RecurringPayment,
@@ -22,7 +21,7 @@ import {
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -30,7 +29,7 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {
   ExpiryMessage,
   PaymentBrand,
-  usePaymentAgreementDiscovery,
+  usePaymentAgreementsNotification,
 } from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -92,27 +91,8 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
-  const {
-    shouldShowPaymentAgreementDiscovery,
-    completePaymentAgreementDiscovery,
-  } = usePaymentAgreementDiscovery();
-  // The agreements are discovered once shown, but keep the notification for
-  // the rest of the visit so the user sees what it pointed to.
-  const [showAgreementsNotification, setShowAgreementsNotification] =
-    useState(false);
-  useEffect(() => {
-    if (!shouldShowPaymentAgreementDiscovery) return;
-    setShowAgreementsNotification(true);
-    completePaymentAgreementDiscovery();
-  }, [shouldShowPaymentAgreementDiscovery, completePaymentAgreementDiscovery]);
-  // Hide it again once the user has created a payment agreement
-  const hasSupportedPaymentAgreement = paymentAgreements?.some(
-    (paymentAgreement) =>
-      isPaymentAgreementSupported(paymentAgreement.paymentType),
-  );
-  useEffect(() => {
-    if (hasSupportedPaymentAgreement) setShowAgreementsNotification(false);
-  }, [hasSupportedPaymentAgreement]);
+  const showAgreementsNotification =
+    usePaymentAgreementsNotification(paymentAgreements);
   const hasPaymentAgreementsError =
     isPaymentAgreementsError ||
     addPaymentAgreement.isError ||
