@@ -383,7 +383,7 @@ export enum Weekday {
   SUNDAY = 'SUNDAY',
 }
 
-const WeekdaySchema = z.enum(Object.values(Weekday) as [Weekday, ...Weekday[]]);
+const WeekdaySchema = z.enum(Weekday);
 
 const OpeningHoursIntervalSchema = z.object({
   opens: z.string(),
