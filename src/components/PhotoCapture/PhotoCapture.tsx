@@ -43,23 +43,23 @@ export const PhotoCapture = ({
   }, [file]);
 
   return (
-    <CameraScreenContainer
-      title={title}
-      secondaryText={secondaryText}
-      isLoading={isLoading}
-      onGoBack={onGoBack}
-      focusRef={focusRef}
-      errorMessage={errorMessage}
-    >
-      {isFocused && (
-        <>
+    <>
+      <CameraScreenContainer
+        title={title}
+        secondaryText={secondaryText}
+        isLoading={isLoading}
+        onGoBack={onGoBack}
+        focusRef={focusRef}
+        errorMessage={errorMessage}
+      >
+        {isFocused && (
           <Camera
             mode="photo"
             onCapture={handlePhotoCapture}
             focusRef={onCloseFocusRef}
           />
-        </>
-      )}
+        )}
+      </CameraScreenContainer>
       {file && (
         <ImageConfirmationBottomSheet
           onConfirm={() => {
@@ -74,6 +74,6 @@ export const PhotoCapture = ({
           dismissText={t(MobilityTexts.imageConfirmation.retryButton)}
         />
       )}
-    </CameraScreenContainer>
+    </>
   );
 };
