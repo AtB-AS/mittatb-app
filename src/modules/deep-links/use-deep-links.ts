@@ -1,4 +1,3 @@
-import {APP_SCHEME} from '@env';
 import {useCallback, useRef} from 'react';
 import {Linking} from 'react-native';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
@@ -23,8 +22,14 @@ import {
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
-import {parseParamAsFormFactors, parseParamAsInt} from './utils';
+import {
+  parseParamAsFormFactors,
+  parseParamAsInt,
+  parseParamAsSearchTime,
+} from './utils';
 import {initialUrl} from './initial-url';
+import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from './prefixes';
+import type {DepartureSearchTime} from '@atb/components/date-selection';
 import {
   resolveTripSearchLocations,
   TripSearchLocations,
@@ -54,7 +59,11 @@ export function useDeepLinks() {
    */
   const prepare = useCallback(
     async (url: string) => {
-      const {path, params} = parseDeepLink(url.replace(`${APP_SCHEME}://`, ''));
+      let pathAndQuery = url.replace(APP_SCHEME_PREFIX, '');
+      if (APP_LINK_PREFIX)
+        pathAndQuery = pathAndQuery.replace(APP_LINK_PREFIX, '');
+      const {path, params} = parseDeepLink(pathAndQuery);
+
       if (path === 'trip-search') {
         tripSearchLocationsRef.current =
           await resolveTripSearchLocations(params);
@@ -84,7 +93,10 @@ export function useDeepLinks() {
   );
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
-    prefixes: [`${APP_SCHEME}://`],
+    prefixes: [
+      APP_SCHEME_PREFIX,
+      ...(APP_LINK_PREFIX ? [APP_LINK_PREFIX] : []),
+    ],
     getInitialURL: async () => {
       const url = await initialUrl;
       if (url) await prepare(url);
@@ -111,6 +123,14 @@ export function useDeepLinks() {
     },
     getStateFromPath(pathAndQuery, config) {
       const {path, params} = parseDeepLink(pathAndQuery);
+
+      const stopId = path.match(/^departures\/(NSR:[^/]+)$/)?.[1];
+      if (stopId)
+        return routeForDepartures(
+          'departures',
+          {...params, stopId, quayId: params.quay},
+          parseParamAsSearchTime(params.searchTime),
+        );
 
       switch (path) {
         case 'map':
@@ -350,6 +370,7 @@ function routeForTripSearch(
 }
 
 /**
+ * `https://{APP_LINK_HOST}/departures/{stopId}?quay=...&searchTime=...`
  * `atb://departures?stopId=...&quayId=...`
  * `atb://widget?stopId=...&quayId=...`
  * `atb://widgetdetails?...&serviceJourneyId=...&serviceDate=...`
@@ -357,6 +378,7 @@ function routeForTripSearch(
 function routeForDepartures(
   path: string,
   params: DeepLink['params'],
+  searchTime?: DepartureSearchTime,
 ): ResultState | undefined {
   const destination: PartialRoute<any>[] = [
     {
@@ -368,6 +390,7 @@ function routeForDepartures(
         place: {id: params.stopId},
         selectedQuayId: params.quayId,
         showOnlyFavoritesByDefault: path !== 'departures',
+        initialSearchTime: searchTime,
         mode: 'Departure',
       },
     },

@@ -22,6 +22,7 @@ export type PlaceScreenParams = {
   place: StopPlace | {id: string};
   selectedQuayId?: string;
   showOnlyFavoritesByDefault?: boolean;
+  initialSearchTime?: DepartureSearchTime;
 };
 
 const hasLoadedQuays = (
@@ -42,6 +43,7 @@ export const PlaceScreenComponent = ({
   place: placeParam,
   selectedQuayId,
   showOnlyFavoritesByDefault,
+  initialSearchTime,
   onPressQuay,
   onPressDeparture,
 }: Props) => {
@@ -49,10 +51,13 @@ export const PlaceScreenComponent = ({
   const {t} = useTranslation();
   const {onScroll, borderStyle} = useScrollBorder();
 
-  const [searchTime, setSearchTime] = useState<DepartureSearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
+  const [searchTime, setSearchTime] = useState<DepartureSearchTime>(
+    () =>
+      initialSearchTime ?? {
+        option: 'now',
+        date: new Date().toISOString(),
+      },
+  );
   const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(
     showOnlyFavoritesByDefault || false,
   );
