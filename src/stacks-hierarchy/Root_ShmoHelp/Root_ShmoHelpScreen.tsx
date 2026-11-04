@@ -9,12 +9,22 @@ import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
-import {useOperators} from '@atb/modules/mobility';
+import {
+  formatOpeningHoursSchedule,
+  useOperators,
+  useShmoBookingQuery,
+  useSystemOpeningHoursQuery,
+} from '@atb/modules/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ShmoContactSection} from './components/ShmoContactSection';
 
 export type ShmoHelpScreenProps = RootStackScreenProps<'Root_ShmoHelpScreen'>;
+
+// Firestore FAQ ids are free-form content-editor strings, not guaranteed distinct from a fixed
+// sentinel -- tagging the opening-hours entry with its own variant (rather than comparing it
+// against FAQ ids as plain strings) rules out a collision expanding both at once.
+type OpenAccordionItem = {type: 'opening-hours'} | {type: 'faq'; id: string};
 
 export const Root_ShmoHelpScreen = ({
   navigation,
@@ -23,7 +33,7 @@ export const Root_ShmoHelpScreen = ({
   /* vehicleId is only for support request body in Root_ContactShmoOperatorScreen,
      it can be null when there is an active booking.
      The support api accepts either vehicleId(as assetId), bookingId, or stationId */
-  const {operatorId, formFactor} = route.params;
+  const {operatorId, formFactor, systemId} = route.params;
   const vehicleId =
     'vehicleId' in route.params ? route.params?.vehicleId : undefined;
   const bookingId =
@@ -45,7 +55,17 @@ export const Root_ShmoHelpScreen = ({
   const contactInfo = operator?.support;
 
   const faqs = isBicycle ? bicycleFaqs : scooterFaqs;
-  const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
+  // Fare-contract details only has a bookingId, no systemId -- fall back to the booking for it.
+  const {data: fallbackBooking} = useShmoBookingQuery(
+    !systemId && !!bookingId,
+    bookingId,
+    false,
+  );
+  const resolvedSystemId =
+    systemId ?? fallbackBooking?.asset.systemId ?? undefined;
+  const {data: openingHours} = useSystemOpeningHoursQuery(resolvedSystemId);
+  const [openAccordionItem, setOpenAccordionItem] =
+    useState<OpenAccordionItem>();
   const focusRef = useFocusOnLoad(navigation);
 
   const contactParams = {
@@ -96,15 +116,38 @@ export const Root_ShmoHelpScreen = ({
 
         <ContentHeading text={t(ShmoHelpTexts.faq)} />
         <Section>
-          {faqs?.map((item, index) => (
+          {!!openingHours?.schedule?.length && (
+            <ExpandableSectionItem
+              text={t(ShmoHelpTexts.openingHours)}
+              textType="body__m"
+              showIconText={false}
+              expanded={openAccordionItem?.type === 'opening-hours'}
+              onPress={() => {
+                setOpenAccordionItem({type: 'opening-hours'});
+              }}
+              expandContent={
+                <ThemeText type="secondary">
+                  {formatOpeningHoursSchedule(
+                    openingHours.schedule,
+                    language,
+                    t,
+                  ).join('\n')}
+                </ThemeText>
+              }
+            />
+          )}
+          {faqs?.map((item) => (
             <ExpandableSectionItem
               key={item.id}
               text={getTextForLanguage(item.title, language) ?? ''}
               textType="body__m"
               showIconText={false}
-              expanded={currentlyOpenFaqIndex === index}
+              expanded={
+                openAccordionItem?.type === 'faq' &&
+                openAccordionItem.id === item.id
+              }
               onPress={() => {
-                setCurrentlyOpenFaqIndex(index);
+                setOpenAccordionItem({type: 'faq', id: item.id});
               }}
               expandContent={
                 <ThemeText isMarkdown={true} type="secondary">

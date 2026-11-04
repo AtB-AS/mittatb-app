@@ -1,3 +1,4 @@
+import {Info} from '@atb/assets/svg/mono-icons/status';
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
@@ -17,6 +18,7 @@ export const SupportButton = ({navigateToSupport}: Props) => {
     <View style={styles.supportButton}>
       <LinkSectionItem
         text={t(MobilityTexts.helpText)}
+        leftIcon={{svg: Info}}
         onPress={navigateToSupport}
         radius="top-bottom"
       />

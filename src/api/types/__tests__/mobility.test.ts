@@ -12,6 +12,7 @@ import {
   MAX_UPLOAD_IMAGE_COUNT,
   SendSupportRequestBodySchema,
   SupportType,
+  SystemOpeningHoursSchema,
   VehicleSchema,
 } from '../mobility';
 
@@ -236,6 +237,44 @@ describe('BonusOfferSchema', () => {
       priceAdjustments: [],
     });
     expect(result.success).toBe(true);
+  });
+});
+
+describe('SystemOpeningHoursSchema', () => {
+  it('parses a response with no schedule (unresolvable opening hours)', () => {
+    const result = SystemOpeningHoursSchema.safeParse({});
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.schedule).toBeUndefined();
+    }
+  });
+
+  it('parses a day-range schedule', () => {
+    const result = SystemOpeningHoursSchema.safeParse({
+      schedule: [
+        {
+          fromWeekday: 'MONDAY',
+          toWeekday: 'THURSDAY',
+          intervals: [{opens: '00:00', closes: '23:59'}],
+        },
+        {
+          fromWeekday: 'FRIDAY',
+          toWeekday: 'FRIDAY',
+          intervals: [{opens: '00:00', closes: '22:59'}],
+        },
+      ],
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.schedule).toHaveLength(2);
+    }
+  });
+
+  it('rejects an unrecognized weekday', () => {
+    const result = SystemOpeningHoursSchema.safeParse({
+      schedule: [{fromWeekday: 'FUNDAY', toWeekday: 'FUNDAY', intervals: []}],
+    });
+    expect(result.success).toBe(false);
   });
 });
 
