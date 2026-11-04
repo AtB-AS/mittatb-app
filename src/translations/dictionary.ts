@@ -194,7 +194,6 @@ const dictionary = {
     error: _('Feil', 'Error', `Feil`),
   },
   confirm: _('Bekreft', 'Confirm', `Bekreft`),
-  next: _('Neste', 'Next', 'Neste'),
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   edit: _('Endre', 'Edit', 'Endre'),
   cancel: _('Avbryt', 'Cancel', `Avbryt`),

@@ -101,7 +101,7 @@ type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
 export type ReportShmoDamageParams = {
   operatorId: string;
   bookingId: string;
-  supportedDamages?: ShmoDamage[] | null;
+  supportedDamages: ShmoDamage[];
 };
 type Root_ReportShmoDamageScreenParams = ReportShmoDamageParams;
 

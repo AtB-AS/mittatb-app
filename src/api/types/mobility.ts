@@ -553,19 +553,6 @@ export const SendSupportRequestBodySchema =
 export const SendDamageReportBodySchema =
   sendSupportRequestBodySchema('emailOrPhone');
 
-/**
- * What the backend reports back from a support request.
- *
- * `unsentDamages` only carries anything when a multi-damage report stopped part
- * way through: a sent case cannot be taken back, so the remainder is named
- * rather than failing the whole request.
- */
-export const SupportResponseSchema = z.object({
-  unsentDamages: z.array(ShmoDamageSchema).nullish(),
-});
-
-export type SupportResponse = z.infer<typeof SupportResponseSchema>;
-
 export type SendSupportRequestBodyInput = z.input<
   typeof SendSupportRequestBodySchema
 >;

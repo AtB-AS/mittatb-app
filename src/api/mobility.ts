@@ -8,8 +8,6 @@ import {
   AssetFromQrCodeResponse,
   InitShmoOneStopBookingRequestBody,
   SendSupportRequestBody,
-  SupportResponse,
-  SupportResponseSchema,
   ShmoBooking,
   ShmoBookingEvent,
   ShmoBookingSchema,
@@ -112,16 +110,14 @@ export const sendSupportRequest = (
   reqBody: SendSupportRequestBody,
   acceptLanguage: string,
   operatorId: string,
-): Promise<SupportResponse> =>
-  client
-    .post<SupportResponse>('/mobility/v1/support', reqBody, {
-      authWithIdToken: true,
-      headers: {
-        'Accept-Language': acceptLanguage,
-        'Operator-Id': operatorId,
-      },
-    })
-    .then((response) => SupportResponseSchema.parse(response.data ?? {}));
+) =>
+  client.post('/mobility/v1/support', reqBody, {
+    authWithIdToken: true,
+    headers: {
+      'Accept-Language': acceptLanguage,
+      'Operator-Id': operatorId,
+    },
+  });
 
 export const getOperators = (
   opts?: AxiosRequestConfig,

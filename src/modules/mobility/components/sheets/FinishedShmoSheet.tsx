@@ -33,7 +33,7 @@ type Props = {
   navigateReportDamageCallback: (
     operatorId: string,
     bookingId: string,
-    supportedDamages?: ShmoDamage[] | null,
+    supportedDamages: ShmoDamage[],
   ) => void;
   navigateToScanQrCode: () => void;
   bookingId: string;
@@ -61,7 +61,9 @@ export const FinishedShmoSheet = ({
     shmoBooking?.asset?.propulsionType,
   );
 
-  console.log(shmoBooking?.asset);
+  /* Held as a const so the length check below narrows it for the callback --
+     TypeScript drops the narrowing of a property chain inside a closure. */
+  const supportedDamages = shmoBooking?.asset?.supportedDamages;
 
   const operator = useOperators().byId(shmoBooking?.asset.operator.id);
   const operatorLogo = operator?.brandAssets?.brandImageUrl;
@@ -123,7 +125,7 @@ export const FinishedShmoSheet = ({
               />
             </Section>
           </View>
-          {!!shmoBooking.asset?.supportedDamages?.length && (
+          {!!supportedDamages?.length && (
             <Button
               surfaceColor="accent"
               accessibilityRole="button"
@@ -131,7 +133,7 @@ export const FinishedShmoSheet = ({
                 navigateReportDamageCallback(
                   shmoBooking.asset.operator.id,
                   shmoBooking.bookingId,
-                  shmoBooking.asset.supportedDamages,
+                  supportedDamages,
                 )
               }
               mode="secondary"

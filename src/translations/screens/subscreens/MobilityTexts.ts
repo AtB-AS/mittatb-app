@@ -106,15 +106,6 @@ export const MobilityTexts = {
         'Skriv litt om problemet...',
       ),
     },
-
-    submitError: (remainingDamages: string[]) => {
-      const remaining = remainingDamages.join(', ');
-      return _(
-        `Noe gikk galt. Disse er ikke sendt: ${remaining}. Trykk «Neste» for å sende dem som gjenstår.`,
-        `Something went wrong. These were not sent: ${remaining}. Press "Next" to send the ones remaining.`,
-        `Noko gjekk gale. Desse er ikkje sende: ${remaining}. Trykk «Neste» for å senda dei som står att.`,
-      );
-    },
   },
   pricingDetails: {
     priceInfo: _('Prisinformasjon', 'Price information', 'Prisinformasjon'),

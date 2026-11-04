@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {
   CheckboxSectionItem,
@@ -43,7 +43,7 @@ export const Root_ReportShmoDamageScreen = ({
   /* Handed over by whoever opened the screen -- the operator's own damages ride
      along on the asset, so the caller already has them. An operator that
      publishes none leaves the user the empty state below. */
-  const supportedDamages = route.params?.supportedDamages ?? [];
+  const supportedDamages = route.params.supportedDamages;
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -59,7 +59,6 @@ export const Root_ReportShmoDamageScreen = ({
     isPhoneNumberValid,
     isEmailValid,
     isDamageSelectionValid,
-    unsentDamages,
     onSubmit,
     showError,
     supportRequestStatus,
@@ -207,13 +206,9 @@ export const Root_ReportShmoDamageScreen = ({
             {t(ContactShmoOperatorTexts.location.description(operatorName))}
           </ThemeText>
         </View>
-        {!!unsentDamages?.length && showError && (
+        {supportRequestStatus === 'error' && showError && (
           <MessageInfoBox
-            message={t(
-              MobilityTexts.reportDamage.submitError(
-                unsentDamages.map((damage) => damage.description),
-              ),
-            )}
+            message={t(ContactShmoOperatorTexts.submitError(operatorName))}
             type="error"
           />
         )}
@@ -223,7 +218,7 @@ export const Root_ReportShmoDamageScreen = ({
           disabled={selectedDamages.length === 0}
           expanded={true}
           mode="primary"
-          text={t(dictionary.next)}
+          text={t(ContactShmoOperatorTexts.submitButton)}
           onPress={onSubmit}
         />
       </View>
@@ -245,7 +240,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 const useReportDamageController = (
   operatorId: string,
   bookingId: string,
-  onAllSent: () => void,
+  onSent: () => void,
 ) => {
   const {
     requestBody,
@@ -268,14 +263,9 @@ const useReportDamageController = (
 
   /* A damage report is an ordinary support request that happens to carry
      several damages. The backend turns each into its own case, since Entur
-     takes one damage per case, and answers with the ones it never got to. */
-  const {
-    mutate: sendSupportRequest,
-    status: supportRequestStatus,
-    data: response,
-  } = useSendSupportRequestMutation(operatorId, (sentResponse) => {
-    if (!sentResponse.unsentDamages?.length) onAllSent();
-  });
+     takes one damage per case. */
+  const {mutate: sendSupportRequest, status: supportRequestStatus} =
+    useSendSupportRequestMutation(operatorId, onSent);
 
   const toggleDamage = (damage: ShmoDamage) =>
     setSelectedDamages((prev) =>
@@ -299,7 +289,6 @@ const useReportDamageController = (
   return {
     selectedDamages,
     toggleDamage,
-    unsentDamages: response?.unsentDamages,
     requestBody,
     setRequestBody,
     isCommentValid,
