@@ -81,13 +81,6 @@ export const CameraScreenContainer = ({
             )}
           </View>
         </View>
-
-        {/*
-          With no camera to show, these take the space the preview would have
-          filled. They are siblings of the header rather than children of it,
-          so flex hands them exactly what is left over and nothing has to know
-          how tall the header grew.
-        */}
         {isAuthorized === undefined && (
           <View style={[styles.cameraFallback, styles.cameraFallbackContent]}>
             <Processing message={t(CameraTexts.loading)} />
