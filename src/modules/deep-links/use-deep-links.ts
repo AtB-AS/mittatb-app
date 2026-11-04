@@ -59,7 +59,11 @@ export function useDeepLinks() {
    */
   const prepare = useCallback(
     async (url: string) => {
-      const {path, params} = parseDeepLink(url.replace(APP_SCHEME_PREFIX, ''));
+      let pathAndQuery = url.replace(APP_SCHEME_PREFIX, '');
+      if (APP_LINK_PREFIX)
+        pathAndQuery = pathAndQuery.replace(APP_LINK_PREFIX, '');
+      const {path, params} = parseDeepLink(pathAndQuery);
+
       if (path === 'trip-search') {
         tripSearchLocationsRef.current =
           await resolveTripSearchLocations(params);
