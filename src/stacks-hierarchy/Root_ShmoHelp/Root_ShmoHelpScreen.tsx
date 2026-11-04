@@ -7,11 +7,13 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ShmoHelpTexts} from '@atb/translations/screens/ShmoHelp';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
-import {useOperators} from '@atb/modules/mobility';
+import {
+  useOperators,
+  useShmoBookingQuery,
+  useShmoFaqsQuery,
+} from '@atb/modules/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ShmoContactSection} from './components/ShmoContactSection';
 
 export type ShmoHelpScreenProps = RootStackScreenProps<'Root_ShmoHelpScreen'>;
@@ -33,18 +35,27 @@ export const Root_ShmoHelpScreen = ({
   const vehicleTypeId =
     'vehicleTypeId' in route.params ? route.params?.vehicleTypeId : undefined;
 
-  const isBicycle = formFactor === FormFactor.Bicycle;
-
   const operators = useOperators();
   const operator = operators.byId(operatorId);
   const operatorName = operator?.name;
 
   const style = useStyles();
   const {t, language} = useTranslation();
-  const {scooterFaqs, bicycleFaqs} = useFirestoreConfigurationContext();
   const contactInfo = operator?.support;
 
-  const faqs = isBicycle ? bicycleFaqs : scooterFaqs;
+  /* FAQs can differ per vehicle type. When opened for a booking, the vehicle
+     type is only known from the booking itself. */
+  const isBookingNeededForFaqs = !vehicleTypeId && !!bookingId;
+  const {data: booking, isLoading: isBookingLoading} = useShmoBookingQuery(
+    isBookingNeededForFaqs,
+    bookingId,
+  );
+  const {data: faqsResponse} = useShmoFaqsQuery(
+    !isBookingNeededForFaqs || !isBookingLoading,
+    operatorId,
+    vehicleTypeId ?? booking?.asset.vehicleTypeId ?? undefined,
+  );
+  const faqs = faqsResponse?.faqs ?? [];
   const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
   const focusRef = useFocusOnLoad(navigation);
 
@@ -94,26 +105,35 @@ export const Root_ShmoHelpScreen = ({
           }
         />
 
-        <ContentHeading text={t(ShmoHelpTexts.faq)} />
-        <Section>
-          {faqs?.map((item, index) => (
-            <ExpandableSectionItem
-              key={item.id}
-              text={getTextForLanguage(item.title, language) ?? ''}
-              textType="body__m"
-              showIconText={false}
-              expanded={currentlyOpenFaqIndex === index}
-              onPress={() => {
-                setCurrentlyOpenFaqIndex(index);
-              }}
-              expandContent={
-                <ThemeText isMarkdown={true} type="secondary">
-                  {getTextForLanguage(item.description, language)}
-                </ThemeText>
-              }
-            />
-          ))}
-        </Section>
+        {faqs.length > 0 && (
+          <>
+            <ContentHeading text={t(ShmoHelpTexts.faq)} />
+            <Section>
+              {faqs.map((item, index) => (
+                <ExpandableSectionItem
+                  key={item.id}
+                  text={
+                    getTextForLanguage(item.title.translation, language) ?? ''
+                  }
+                  textType="body__m"
+                  showIconText={false}
+                  expanded={currentlyOpenFaqIndex === index}
+                  onPress={() => {
+                    setCurrentlyOpenFaqIndex(index);
+                  }}
+                  expandContent={
+                    <ThemeText isMarkdown={true} type="secondary">
+                      {getTextForLanguage(
+                        item.description.translation,
+                        language,
+                      )}
+                    </ThemeText>
+                  }
+                />
+              ))}
+            </Section>
+          </>
+        )}
       </View>
     </FullScreenView>
   );

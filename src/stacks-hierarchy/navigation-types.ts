@@ -89,7 +89,7 @@ type Root_ParkingPhotoScreenParams = {
 };
 
 type ShmoOperatorParams = {operatorId: string} & (
-  | {vehicleId: string | undefined}
+  | {vehicleId: string | undefined; vehicleTypeId?: string}
   | {bookingId: string | undefined}
   | {stationId: string | undefined; vehicleTypeId?: string}
 );

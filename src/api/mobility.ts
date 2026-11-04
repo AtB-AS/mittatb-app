@@ -13,6 +13,8 @@ import {
   ShmoBookingSchema,
   OperatorsResponse,
   OperatorsResponseSchema,
+  ShmoFaqsResponse,
+  ShmoFaqsResponseSchema,
   VehiclesRequestBody,
   VehicleSchema,
   Vehicle,
@@ -127,6 +129,20 @@ export const getOperators = (
       ...opts,
     })
     .then((response) => OperatorsResponseSchema.parse(response.data));
+
+export const getShmoFaqs = (
+  operatorId: string,
+  vehicleTypeId?: string,
+  opts?: AxiosRequestConfig,
+): Promise<ShmoFaqsResponse> => {
+  const url = `/mobility/v1/operators/${encodeURIComponent(operatorId)}/faqs`;
+  const query = qs.stringify({vehicleTypeId});
+  return client
+    .get<ShmoFaqsResponse>(stringifyUrl(url, query), {
+      ...opts,
+    })
+    .then((response) => ShmoFaqsResponseSchema.parse(response.data));
+};
 
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 

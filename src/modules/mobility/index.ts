@@ -29,6 +29,7 @@ export {
 export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-event-mutation';
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';
 export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
+export {useShmoFaqsQuery} from './queries/use-shmo-faqs-query';
 export {useInitAgeVerificationMutation} from './queries/use-init-age-verification-mutation';
 export {useGetOperatorsQuery} from './queries/use-get-operators-query';
 export {useVehicleQuery} from './queries/use-vehicle-query';
