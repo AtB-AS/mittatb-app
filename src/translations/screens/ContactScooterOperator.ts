@@ -66,14 +66,7 @@ export const ContactShmoOperatorTexts = {
     },
   },
   comment: {
-    header: (isRequired: boolean) =>
-      isRequired
-        ? _(
-            'Vennligst utdyp (obligatorisk)',
-            'Please elaborate (required)',
-            'Ver vennleg og utdjup (obligatorisk)',
-          )
-        : _('Vennligst utdyp', 'Please elaborate', 'Ver vennleg og utdjup'),
+    header: _('Vennligst utdyp', 'Please elaborate', 'Ver vennleg og utdjup'),
     label: _('Kommentar', 'Comment', 'Kommentar'),
     placeholder: _('Legg til kommentar', 'Add a comment', 'Legg til kommentar'),
     errorMessage: (maxCommentLength: number) =>

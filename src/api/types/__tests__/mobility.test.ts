@@ -277,51 +277,56 @@ describe('SendSupportRequestBodySchema files', () => {
   });
 });
 
-describe('SendSupportRequestBodySchema damage', () => {
+describe('SendSupportRequestBodySchema damages', () => {
   const baseSupportRequest = {
     assetId: 'asset-1',
     supportType: SupportType.ACCIDENT_OR_BROKEN,
     contactInformationEndUser: {email: 'someone@example.com'},
   };
 
-  it('parses a request without damage (backward compatible)', () => {
+  /* The regular support form sends no damages at all. */
+  it('parses a request without damages', () => {
     const result = SendSupportRequestBodySchema.safeParse(baseSupportRequest);
     expect(result.success).toBe(true);
-    expect(result.data?.damage).toBeUndefined();
+    expect(result.data?.damages).toBeUndefined();
   });
 
-  it('parses damage with only the fields the endpoint requires', () => {
+  it('parses damages with only the fields the endpoint requires', () => {
     const result = SendSupportRequestBodySchema.safeParse({
       ...baseSupportRequest,
-      damage: {
-        vehicleComponent: VehicleComponent.TIRE,
-        description: 'Punctured rear tire',
-      },
+      damages: [
+        {
+          vehicleComponent: VehicleComponent.TIRE,
+          description: 'Punctured rear tire',
+        },
+      ],
     });
     expect(result.success).toBe(true);
-    expect(result.data?.damage).toEqual({
-      vehicleComponent: 'TIRE',
-      description: 'Punctured rear tire',
-    });
+    expect(result.data?.damages).toEqual([
+      {vehicleComponent: 'TIRE', description: 'Punctured rear tire'},
+    ]);
   });
 
-  it('parses damage with the optional component name', () => {
+  it('parses several damages, keeping the optional component name', () => {
     const result = SendSupportRequestBodySchema.safeParse({
       ...baseSupportRequest,
-      damage: {
-        vehicleComponent: VehicleComponent.ANCILLARY,
-        description: 'Missing helmet',
-        vehicleComponentName: 'Helmet box',
-      },
+      damages: [
+        {vehicleComponent: VehicleComponent.OTHER, description: 'Lys'},
+        {
+          vehicleComponent: VehicleComponent.ANCILLARY,
+          description: 'Missing helmet',
+          vehicleComponentName: 'helmet-box',
+        },
+      ],
     });
     expect(result.success).toBe(true);
-    expect(result.data?.damage?.vehicleComponentName).toBe('Helmet box');
+    expect(result.data?.damages?.[1].vehicleComponentName).toBe('helmet-box');
   });
 
-  it('rejects damage missing the required description', () => {
+  it('rejects a damage missing the required description', () => {
     const result = SendSupportRequestBodySchema.safeParse({
       ...baseSupportRequest,
-      damage: {vehicleComponent: VehicleComponent.FRONT},
+      damages: [{vehicleComponent: VehicleComponent.FRONT}],
     });
     expect(result.success).toBe(false);
   });
@@ -329,7 +334,7 @@ describe('SendSupportRequestBodySchema damage', () => {
   it('rejects a vehicle component the endpoint does not define', () => {
     const result = SendSupportRequestBodySchema.safeParse({
       ...baseSupportRequest,
-      damage: {vehicleComponent: 'HANDLEBAR', description: 'Bent'},
+      damages: [{vehicleComponent: 'HANDLEBAR', description: 'Bent'}],
     });
     expect(result.success).toBe(false);
   });

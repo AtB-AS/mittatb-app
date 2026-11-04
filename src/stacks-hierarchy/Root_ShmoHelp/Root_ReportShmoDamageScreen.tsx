@@ -22,16 +22,15 @@ import {
 } from '@atb/api/types/mobility';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useSendDamageReportMutation, useOperators} from '@atb/modules/mobility';
+import {
+  useSendSupportRequestMutation,
+  useOperators,
+} from '@atb/modules/mobility';
 import {FullScreenView} from '@atb/components/screen-view';
 import {
   getCurrentPlace,
   useSupportContactForm,
 } from './use-support-contact-form';
-
-// Used to display the free text input
-const isOtherDamage = (damage: ShmoDamage) =>
-  damage.vehicleComponentName === 'other';
 
 export type Root_ReportShmoDamageScreenProps =
   RootStackScreenProps<'Root_ReportShmoDamageScreen'>;
@@ -56,13 +55,11 @@ export const Root_ReportShmoDamageScreen = ({
     toggleDamage,
     requestBody,
     setRequestBody,
-    isCommentMissing,
-    isCommentTooLong,
+    isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
     isDamageSelectionValid,
-    isCommentRequired,
-    unsentReports,
+    unsentDamages,
     onSubmit,
     showError,
     supportRequestStatus,
@@ -112,39 +109,31 @@ export const Root_ReportShmoDamageScreen = ({
           />
         )}
 
-        {isCommentRequired && (
-          <>
-            <ContentHeading
-              text={t(ContactShmoOperatorTexts.comment.header(true))}
-            />
-            <Section>
-              <TextInputSectionItem
-                value={requestBody.comment ?? ''}
-                onChangeText={(comment) =>
-                  setRequestBody((prev) => ({...prev, comment}))
-                }
-                label={t(ContactShmoOperatorTexts.comment.label)}
-                placeholder={t(MobilityTexts.reportDamage.comment.placeholder)}
-                inlineLabel={false}
-                multiline={true}
-                maxLength={MAX_SUPPORT_COMMENT_LENGTH}
-                scrollEnabled={false}
-                autoCapitalize="sentences"
-                errorText={
-                  showError && isCommentMissing
-                    ? t(MobilityTexts.reportDamage.comment.missingMessage)
-                    : showError && isCommentTooLong
-                      ? t(
-                          ContactShmoOperatorTexts.comment.errorMessage(
-                            MAX_SUPPORT_COMMENT_LENGTH,
-                          ),
-                        )
-                      : undefined
-                }
-              />
-            </Section>
-          </>
-        )}
+        <ContentHeading text={t(ContactShmoOperatorTexts.comment.header)} />
+        <Section>
+          <TextInputSectionItem
+            value={requestBody.comment ?? ''}
+            onChangeText={(comment) =>
+              setRequestBody((prev) => ({...prev, comment}))
+            }
+            label={t(ContactShmoOperatorTexts.comment.label)}
+            placeholder={t(MobilityTexts.reportDamage.comment.placeholder)}
+            inlineLabel={false}
+            multiline={true}
+            maxLength={MAX_SUPPORT_COMMENT_LENGTH}
+            scrollEnabled={false}
+            autoCapitalize="sentences"
+            errorText={
+              !isCommentValid && showError
+                ? t(
+                    ContactShmoOperatorTexts.comment.errorMessage(
+                      MAX_SUPPORT_COMMENT_LENGTH,
+                    ),
+                  )
+                : undefined
+            }
+          />
+        </Section>
 
         <ContentHeading text={t(ContactShmoOperatorTexts.contactInfo.header)} />
         <Section>
@@ -218,11 +207,11 @@ export const Root_ReportShmoDamageScreen = ({
             {t(ContactShmoOperatorTexts.location.description(operatorName))}
           </ThemeText>
         </View>
-        {!!unsentReports?.length && showError && (
+        {!!unsentDamages?.length && showError && (
           <MessageInfoBox
             message={t(
               MobilityTexts.reportDamage.submitError(
-                unsentReports.map((report) => report.damage?.description ?? ''),
+                unsentDamages.map((damage) => damage.description),
               ),
             )}
             type="error"
@@ -256,7 +245,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 const useReportDamageController = (
   operatorId: string,
   bookingId: string,
-  onSuccess: () => void,
+  onAllSent: () => void,
 ) => {
   const {
     requestBody,
@@ -268,9 +257,6 @@ const useReportDamageController = (
     isEmailValid,
     isAllInputValid,
     validatedRequestBody,
-    /* A damage report only needs some way to reach the reporter, so a phone
-       number alone is enough -- unlike the support form, which insists on an
-       e-mail. */
   } = useSupportContactForm(
     SupportType.ACCIDENT_OR_BROKEN,
     SendDamageReportBodySchema,
@@ -278,54 +264,34 @@ const useReportDamageController = (
 
   const [selectedDamages, setSelectedDamages] = useState<ShmoDamage[]>([]);
 
-  const isCommentRequired = selectedDamages.some(isOtherDamage);
-  const hasComment = !!requestBody.comment?.trim();
-
   const isDamageSelectionValid = selectedDamages.length > 0;
 
-  /* The send resolves with the cases it never got to, so a partial failure is
-     ordinary data rather than an error: `unsentReports` is what is still
-     missing, and empty once everything is through. */
+  /* A damage report is an ordinary support request that happens to carry
+     several damages. The backend turns each into its own case, since Entur
+     takes one damage per case, and answers with the ones it never got to. */
   const {
-    mutate: sendDamageReports,
+    mutate: sendSupportRequest,
     status: supportRequestStatus,
-    data: unsentReports,
-    reset: clearUnsentReports,
-  } = useSendDamageReportMutation(operatorId, onSuccess);
+    data: response,
+  } = useSendSupportRequestMutation(operatorId, (sentResponse) => {
+    if (!sentResponse.unsentDamages?.length) onAllSent();
+  });
 
-  const toggleDamage = (damage: ShmoDamage) => {
+  const toggleDamage = (damage: ShmoDamage) =>
     setSelectedDamages((prev) =>
       prev.includes(damage)
         ? prev.filter((selected) => selected !== damage)
         : [...prev, damage],
     );
-    // Changing the selection invalidates what was left over from a failed send.
-    clearUnsentReports();
-  };
 
   const onSubmit = () => {
-    const isValid =
-      isAllInputValid &&
-      isDamageSelectionValid &&
-      (!isCommentRequired || hasComment);
-
-    if (isValid && validatedRequestBody) {
-      /* Each ticked damage becomes its own support case, carrying the damage
-         exactly as the operator published it. The comment belongs to the free
-         text choice, so it rides on that case alone. */
-      sendDamageReports(
-        unsentReports?.length
-          ? unsentReports
-          : selectedDamages.map((damage) => ({
-              ...validatedRequestBody,
-              bookingId,
-              ...getCurrentPlace(),
-              damage,
-              comment: isOtherDamage(damage)
-                ? requestBody.comment?.trim() || undefined
-                : undefined,
-            })),
-      );
+    if (isAllInputValid && isDamageSelectionValid && validatedRequestBody) {
+      sendSupportRequest({
+        ...validatedRequestBody,
+        bookingId,
+        ...getCurrentPlace(),
+        damages: selectedDamages,
+      });
     }
     setShowError(true);
   };
@@ -333,15 +299,13 @@ const useReportDamageController = (
   return {
     selectedDamages,
     toggleDamage,
-    unsentReports,
+    unsentDamages: response?.unsentDamages,
     requestBody,
     setRequestBody,
-    isCommentMissing: isCommentRequired && !hasComment,
-    isCommentTooLong: !isCommentValid,
+    isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
     isDamageSelectionValid,
-    isCommentRequired,
     onSubmit,
     showError,
     supportRequestStatus,

@@ -105,11 +105,6 @@ export const MobilityTexts = {
         'Write a little about the problem...',
         'Skriv litt om problemet...',
       ),
-      missingMessage: _(
-        'Vennligst beskriv hva som er feil.',
-        'Please describe what is wrong.',
-        'Ver vennleg og skildra kva som er feil.',
-      ),
     },
 
     submitError: (remainingDamages: string[]) => {

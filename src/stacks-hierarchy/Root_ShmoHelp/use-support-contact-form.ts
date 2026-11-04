@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {
   SendSupportRequestBodyInput,
   SendSupportRequestBodySchema,
@@ -48,16 +48,22 @@ export const useSupportContactForm = (
     },
   });
 
-  // The logged in profile's email saves the user typing it again.
-  useProfileQuery((data: CustomerProfile) =>
-    setRequestBody((prev) => ({
-      ...prev,
-      contactInformationEndUser: {
-        ...prev.contactInformationEndUser,
-        email: data?.email,
-      },
-    })),
+  /* The logged in profile's email saves the user typing it again. Memoized
+     because `useProfileQuery` has the callback in its effect dependencies, so a
+     fresh one each render would set state, re-render and never settle. */
+  const fillInProfileEmail = useCallback(
+    (data: CustomerProfile) =>
+      setRequestBody((prev) => ({
+        ...prev,
+        contactInformationEndUser: {
+          ...prev.contactInformationEndUser,
+          email: data?.email,
+        },
+      })),
+    [],
   );
+
+  useProfileQuery(fillInProfileEmail);
 
   const [showError, setShowError] = useState(false);
 

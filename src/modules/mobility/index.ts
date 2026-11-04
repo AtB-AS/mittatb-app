@@ -28,7 +28,6 @@ export {
 } from './queries/use-init-shmo-one-stop-booking-mutation';
 export {useSendShmoBookingEventMutation} from './queries/use-send-shmo-booking-event-mutation';
 export {useSendSupportRequestMutation} from './queries/use-send-support-request-mutation';
-export {useSendDamageReportMutation} from './queries/use-send-damage-report-mutation';
 export {useShmoBookingQuery} from './queries/use-shmo-booking-query';
 export {useInitAgeVerificationMutation} from './queries/use-init-age-verification-mutation';
 export {useGetOperatorsQuery} from './queries/use-get-operators-query';

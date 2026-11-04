@@ -143,9 +143,7 @@ export const Root_ContactShmoOperatorScreen = ({
               type="info"
             />
           )}
-        <ContentHeading
-          text={t(ContactShmoOperatorTexts.comment.header(false))}
-        />
+        <ContentHeading text={t(ContactShmoOperatorTexts.comment.header)} />
         <Section>
           <TextInputSectionItem
             value={requestBody.comment ?? ''}
