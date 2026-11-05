@@ -8,7 +8,7 @@ import {
 } from '@atb/modules/onboarding';
 import {
   isPaymentAgreementSupported,
-  useListPaymentAgreementsQuery,
+  usePaymentAgreementsQuery,
 } from '@atb/modules/ticketing';
 
 const ONBOARDING_SECTION_ID = 'paymentAgreementDiscovery';
@@ -41,9 +41,8 @@ export const usePaymentAgreementDiscovery = () => {
     authenticationType === 'phone' &&
     paymentTypes.some(isPaymentAgreementSupported);
 
-  const {data: paymentAgreements} = useListPaymentAgreementsQuery(
-    isEnabled && !hasSeen,
-  );
+  const paymentAgreements = usePaymentAgreementsQuery(isEnabled && !hasSeen)
+    .data?.active;
   const hasSupportedPaymentAgreement = paymentAgreements?.some(
     (paymentAgreement) =>
       isPaymentAgreementSupported(paymentAgreement.paymentType),

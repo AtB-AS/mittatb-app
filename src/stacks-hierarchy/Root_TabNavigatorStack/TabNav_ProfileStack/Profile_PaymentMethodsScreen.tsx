@@ -15,8 +15,7 @@ import {
   PaymentType,
   RecurringPayment,
   useAddPaymentAgreementMutation,
-  useListPaymentAgreementsQuery,
-  usePendingPaymentAgreementsQuery,
+  usePaymentAgreementsQuery,
   useStopPaymentAgreementMutation,
 } from '@atb/modules/ticketing';
 import {ProfileTexts, useTranslation} from '@atb/translations';
@@ -84,16 +83,16 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const showPaymentAgreements =
     isVippsPaymentAgreementEnabled && paymentTypes.includes(PaymentType.Vipps);
   const {
-    data: paymentAgreements,
+    data: paymentAgreementsData,
     isLoading: isLoadingPaymentAgreements,
     isFetching: isFetchingPaymentAgreements,
     isError: isPaymentAgreementsError,
     refetch: refetchPaymentAgreements,
-  } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
-  const {data: pendingPaymentAgreements} = usePendingPaymentAgreementsQuery(
-    isFocused && showPaymentAgreements,
-    {refetchWhilePending: true},
-  );
+  } = usePaymentAgreementsQuery(isFocused && showPaymentAgreements, {
+    refetchWhilePending: true,
+  });
+  const paymentAgreements = paymentAgreementsData?.active;
+  const pendingPaymentAgreements = paymentAgreementsData?.pending;
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
   const showAgreementsNotification =
