@@ -15,6 +15,7 @@ import {
   isPaymentAgreementSupported,
   useCancelPaymentMutation,
   useListPaymentAgreementsQuery,
+  usePendingPaymentAgreementsQuery,
   type PreReservation,
 } from '@atb/modules/ticketing';
 import {
@@ -190,13 +191,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const paymentAgreementId = agreementPaymentType
     ? getLatestPaymentAgreement(paymentAgreements, agreementPaymentType)?.id
     : undefined;
+  const {data: pendingPaymentAgreements} = usePendingPaymentAgreementsQuery(
+    shouldUsePaymentAgreement,
+  );
   // The agreements must be loaded, so the user isn't offered to create an
-  // agreement that already exists.
+  // agreement that already exists or is being created.
   const canCreatePaymentAgreement =
     isPaymentAgreementOnboardingCheckboxEnabled &&
     !!agreementPaymentType &&
     paymentAgreements !== undefined &&
-    !paymentAgreementId;
+    !paymentAgreementId &&
+    !pendingPaymentAgreements?.length;
   const [isCreatePaymentAgreementChecked, setIsCreatePaymentAgreementChecked] =
     useState(false);
 

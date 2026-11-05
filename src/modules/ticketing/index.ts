@@ -7,6 +7,7 @@ export {useFareContracts, useNeedsRefreshStore} from './use-fare-contracts';
 export {useListRecurringPaymentsQuery} from './use-list-recurring-payments-query';
 export {
   useListPaymentAgreementsQuery,
+  usePendingPaymentAgreementsQuery,
   getListPaymentAgreementsQueryKey,
   LIST_PAYMENT_AGREEMENTS_QUERY_KEY,
 } from './use-list-payment-agreements-query';

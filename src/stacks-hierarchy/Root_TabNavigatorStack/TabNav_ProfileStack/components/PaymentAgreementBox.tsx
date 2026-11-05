@@ -15,20 +15,25 @@ type Props = {
   paymentType: PaymentType;
   /** The latest active payment agreement of this payment type, if any */
   agreement: PaymentAgreement | undefined;
+  /** The latest payment agreement of this payment type being created, if any */
+  pendingAgreement: PaymentAgreement | undefined;
   onActivate: () => void;
   onStop: (agreement: PaymentAgreement) => void;
+  onCancel: (pendingAgreement: PaymentAgreement) => void;
   isLoading: boolean;
 };
 
 /**
- * Shows how to activate a payment agreement of the given payment type, or lets
- * the user stop the active one.
+ * Shows how to activate a payment agreement of the given payment type, lets
+ * the user cancel one being created, or stop the active one.
  */
 export const PaymentAgreementBox = ({
   paymentType,
   agreement,
+  pendingAgreement,
   onActivate,
   onStop,
+  onCancel,
   isLoading,
 }: Props) => {
   const styles = useStyles();
@@ -37,15 +42,21 @@ export const PaymentAgreementBox = ({
   // The texts are specific to Vipps
   if (paymentType !== PaymentType.Vipps) return null;
 
+  // An active agreement wins over a pending one
+  const isPending = !agreement && !!pendingAgreement;
   const title = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.title
-      : PaymentMethodsTexts.agreements.vipps.inactive.title,
+      : isPending
+        ? PaymentMethodsTexts.agreements.vipps.pending.title
+        : PaymentMethodsTexts.agreements.vipps.inactive.title,
   );
   const description = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.description
-      : PaymentMethodsTexts.agreements.vipps.inactive.description,
+      : isPending
+        ? PaymentMethodsTexts.agreements.vipps.pending.description
+        : PaymentMethodsTexts.agreements.vipps.inactive.description,
   );
 
   return (
@@ -90,6 +101,16 @@ export const PaymentAgreementBox = ({
             loading={isLoading}
             onPress={() => onStop(agreement)}
             testID="stopVippsAgreementButton"
+          />
+        ) : pendingAgreement ? (
+          <Button
+            surfaceColor="error"
+            expanded={true}
+            mode="secondary"
+            text={t(PaymentMethodsTexts.agreements.vipps.pending.cancelButton)}
+            loading={isLoading}
+            onPress={() => onCancel(pendingAgreement)}
+            testID="cancelVippsAgreementButton"
           />
         ) : (
           <Button
