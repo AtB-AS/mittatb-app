@@ -70,9 +70,6 @@ export const usePaymentAgreementsQuery = (
     // The agreements can change outside of the app, e.g. when activating one in
     // Vipps, so refetch when the app is opened again.
     refetchOnWindowFocus: true,
-    // Failing should not keep the payment button disabled; paying with Vipps
-    // without an agreement still works.
-    retry: false,
     enabled: enabled && isLoggedIn && !!abtCustomerId,
   });
 };
