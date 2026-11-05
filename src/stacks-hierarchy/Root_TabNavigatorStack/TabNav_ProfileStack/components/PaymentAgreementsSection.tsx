@@ -17,8 +17,11 @@ type Props = {
    * otherwise be offered to activate an agreement that already exists.
    */
   agreements: PaymentAgreement[];
+  /** The user's payment agreements that are still being created */
+  pendingAgreements: PaymentAgreement[] | undefined;
   onActivate: (paymentType: PaymentType) => void;
   onStop: (agreement: PaymentAgreement) => void;
+  onCancel: (pendingAgreement: PaymentAgreement) => void;
   isLoading: boolean;
   /** Highlights the section to help the user discover payment agreements */
   showNotification?: boolean;
@@ -26,8 +29,10 @@ type Props = {
 
 export const PaymentAgreementsSection = ({
   agreements,
+  pendingAgreements,
   onActivate,
   onStop,
+  onCancel,
   isLoading,
   showNotification,
 }: Props) => {
@@ -45,8 +50,13 @@ export const PaymentAgreementsSection = ({
           key={paymentType}
           paymentType={paymentType}
           agreement={getLatestPaymentAgreement(agreements, paymentType)}
+          pendingAgreement={getLatestPaymentAgreement(
+            pendingAgreements,
+            paymentType,
+          )}
           onActivate={() => onActivate(paymentType)}
           onStop={onStop}
+          onCancel={onCancel}
           isLoading={isLoading}
         />
       ))}
