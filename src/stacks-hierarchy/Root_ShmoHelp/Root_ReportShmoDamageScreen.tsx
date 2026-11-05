@@ -27,6 +27,7 @@ import {
   useOperators,
 } from '@atb/modules/mobility';
 import {FullScreenView} from '@atb/components/screen-view';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   getCurrentPlace,
   useSupportContactForm,
@@ -45,6 +46,7 @@ export const Root_ReportShmoDamageScreen = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
+  const focusRef = useFocusOnLoad(navigation);
   const operatorName = useOperators().byId(operatorId)?.name ?? '';
 
   const {
@@ -73,7 +75,7 @@ export const Root_ReportShmoDamageScreen = ({
         title: t(MobilityTexts.reportDamage.title),
       }}
       avoidKeyboard={true}
-      focusRef={undefined}
+      focusRef={focusRef}
     >
       <View style={styles.contentContainer}>
         <ContentHeading text={t(MobilityTexts.reportDamage.damages.header)} />
