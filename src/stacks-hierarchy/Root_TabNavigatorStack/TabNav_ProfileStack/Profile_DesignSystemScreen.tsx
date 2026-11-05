@@ -29,6 +29,7 @@ import {
   MessageSectionItem,
   Section,
   TextInputSectionItem,
+  CheckboxSectionItem,
   ToggleSectionItem,
   PhoneInputSectionItem,
   RadioGroupSection,
@@ -1035,6 +1036,18 @@ export const Profile_DesignSystemScreen = ({
             text="Toggle with label"
             onValueChange={() => {}}
             label="new"
+          />
+          <CheckboxSectionItem
+            title="Some short text"
+            isChecked={selected}
+            onPress={() => setSelected(!selected)}
+          />
+          <CheckboxSectionItem
+            title="Checkbox with label"
+            description="With a description"
+            label="new"
+            isChecked={selected}
+            onPress={() => setSelected(!selected)}
           />
           <RadioSectionItem
             text="Some short text and interactive color"

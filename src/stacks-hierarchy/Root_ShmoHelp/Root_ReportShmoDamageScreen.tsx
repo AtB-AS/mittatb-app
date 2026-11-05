@@ -94,8 +94,8 @@ export const Root_ReportShmoDamageScreen = ({
             {supportedDamages.map((damage) => (
               <CheckboxSectionItem
                 key={damage.vehicleComponentName ?? damage.description}
-                text={damage.description}
-                selected={selectedDamages.includes(damage)}
+                title={damage.description}
+                isChecked={selectedDamages.includes(damage)}
                 onPress={() => toggleDamage(damage)}
               />
             ))}
