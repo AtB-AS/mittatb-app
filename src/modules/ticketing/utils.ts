@@ -146,11 +146,6 @@ export function getLatestPaymentAgreement(
   );
 }
 
-const PENDING_PAYMENT_AGREEMENT_STATUSES = [
-  PaymentAgreementStatus.Created,
-  PaymentAgreementStatus.Pending,
-];
-
 /**
  * The supported payment agreements that are still being created, e.g. waiting
  * for the user to accept them in Vipps.
@@ -160,7 +155,7 @@ export function getPendingPaymentAgreements(
 ): PaymentAgreement[] {
   return (paymentAgreements ?? []).filter(
     (paymentAgreement) =>
-      PENDING_PAYMENT_AGREEMENT_STATUSES.includes(paymentAgreement.status) &&
+      paymentAgreement.status === PaymentAgreementStatus.Pending &&
       isPaymentAgreementSupported(paymentAgreement.paymentType),
   );
 }

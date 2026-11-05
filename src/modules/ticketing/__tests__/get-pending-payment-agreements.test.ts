@@ -16,22 +16,13 @@ describe('getPendingPaymentAgreements', () => {
     expect(getPendingPaymentAgreements(undefined)).toEqual([]);
   });
 
-  it('returns created and pending agreements', () => {
-    const created = paymentAgreement({
-      id: 1,
-      status: PaymentAgreementStatus.Created,
-    });
-    const pending = paymentAgreement({
-      id: 2,
-      status: PaymentAgreementStatus.Pending,
-    });
-    expect(getPendingPaymentAgreements([created, pending])).toEqual([
-      created,
-      pending,
-    ]);
+  it('returns pending agreements', () => {
+    const pending = paymentAgreement({status: PaymentAgreementStatus.Pending});
+    expect(getPendingPaymentAgreements([pending])).toEqual([pending]);
   });
 
   it.each([
+    PaymentAgreementStatus.Created,
     PaymentAgreementStatus.Active,
     PaymentAgreementStatus.Stopped,
     PaymentAgreementStatus.Expired,
