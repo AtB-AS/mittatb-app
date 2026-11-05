@@ -43,28 +43,28 @@ export const PaymentAgreementBox = ({
   const {t, language} = useTranslation();
 
   // An active agreement wins over a pending one
-  const hasPendingAgreement = !agreement && !!pendingAgreement;
+  const hasOnlyPendingAgreement = !agreement && !!pendingAgreement;
   // Agreements are often activated right after returning from Vipps, so only
   // show it as pending if it stays pending for a moment, to avoid a flicker.
   const hasBeenPendingForAMoment = useDelayGate(
     PENDING_PAYMENT_AGREEMENT_DELAY_MS,
-    hasPendingAgreement,
+    hasOnlyPendingAgreement,
   );
-  const isPending = hasPendingAgreement && hasBeenPendingForAMoment;
+  const showAsPending = hasOnlyPendingAgreement && hasBeenPendingForAMoment;
 
   // The texts are specific to Vipps
   if (paymentType !== PaymentType.Vipps) return null;
   const title = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.title
-      : isPending
+      : showAsPending
         ? PaymentMethodsTexts.agreements.vipps.pending.title
         : PaymentMethodsTexts.agreements.vipps.inactive.title,
   );
   const description = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.description
-      : isPending
+      : showAsPending
         ? PaymentMethodsTexts.agreements.vipps.pending.description
         : PaymentMethodsTexts.agreements.vipps.inactive.description,
   );
@@ -112,7 +112,7 @@ export const PaymentAgreementBox = ({
             onPress={() => onStop(agreement)}
             testID="stopVippsAgreementButton"
           />
-        ) : isPending && pendingAgreement ? (
+        ) : showAsPending && pendingAgreement ? (
           <Button
             surfaceColor="error"
             expanded={true}
