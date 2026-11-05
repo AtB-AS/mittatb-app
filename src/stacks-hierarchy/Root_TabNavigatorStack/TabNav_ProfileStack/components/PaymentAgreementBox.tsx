@@ -9,7 +9,10 @@ import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {formatToShortDateWithFullYear} from '@atb/utils/date';
+import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {View} from 'react-native';
+
+const PENDING_PAYMENT_AGREEMENT_DELAY_MS = 300;
 
 type Props = {
   paymentType: PaymentType;
@@ -39,11 +42,18 @@ export const PaymentAgreementBox = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
 
+  // An active agreement wins over a pending one
+  const hasPendingAgreement = !agreement && !!pendingAgreement;
+  // Agreements are often activated right after returning from Vipps, so only
+  // show it as pending if it stays pending for a moment, to avoid a flicker.
+  const hasBeenPendingForAMoment = useDelayGate(
+    PENDING_PAYMENT_AGREEMENT_DELAY_MS,
+    hasPendingAgreement,
+  );
+  const isPending = hasPendingAgreement && hasBeenPendingForAMoment;
+
   // The texts are specific to Vipps
   if (paymentType !== PaymentType.Vipps) return null;
-
-  // An active agreement wins over a pending one
-  const isPending = !agreement && !!pendingAgreement;
   const title = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.title
@@ -102,7 +112,7 @@ export const PaymentAgreementBox = ({
             onPress={() => onStop(agreement)}
             testID="stopVippsAgreementButton"
           />
-        ) : pendingAgreement ? (
+        ) : isPending && pendingAgreement ? (
           <Button
             surfaceColor="error"
             expanded={true}
