@@ -96,6 +96,7 @@ export const Map = (props: MapProps) => {
     isMapTabFocused,
     tabBarHeight,
     navigateToShmoSupport,
+    navigateToReportShmoDamage,
     navigateToShmoOnboarding,
     navigateToReportParkingViolation,
     navigateToParkingPhoto,
@@ -579,6 +580,7 @@ export const Map = (props: MapProps) => {
         mapProps={props}
         tabBarHeight={tabBarHeight}
         navigateToShmoSupport={navigateToShmoSupport}
+        navigateToReportShmoDamage={navigateToReportShmoDamage}
         navigateToShmoOnboarding={navigateToShmoOnboarding}
         navigateToReportParkingViolation={navigateToReportParkingViolation}
         navigateToParkingPhoto={navigateToParkingPhoto}

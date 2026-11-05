@@ -24,7 +24,7 @@ import {
 import {TranslatedString} from '@atb/translations';
 import {GeofencingZoneCode, GeofencingZoneStyle} from '@atb-as/theme';
 import {ContrastColor} from '@atb/theme/colors';
-import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {ReportShmoDamageParams, ShmoHelpParams} from '@atb/stacks-hierarchy';
 import type {NavigateToPricingDetails} from '@atb/modules/mobility';
 import type {PreReq} from '@atb/api/types/mobility';
 
@@ -73,6 +73,7 @@ export type MapProps = {
   navigateToDetails: NavigateToDetailsCallback;
   navigateToTripSearch: NavigateToTripSearchCallback;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
+  navigateToReportShmoDamage: (params: ReportShmoDamageParams) => void;
   navigateToShmoOnboarding: NavigateToShmoOnboardingCallback;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;

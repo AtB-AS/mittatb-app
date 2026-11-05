@@ -373,6 +373,27 @@ export const StationSchema = z.object({
 
 export type Station = z.infer<typeof StationSchema>;
 
+export enum VehicleComponent {
+  FRONT = 'FRONT',
+  REAR = 'REAR',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  TOP = 'TOP',
+  BOTTOM = 'BOTTOM',
+  INTERIOR = 'INTERIOR',
+  TIRE = 'TIRE',
+  ANCILLARY = 'ANCILLARY',
+  OTHER = 'OTHER',
+}
+
+export const ShmoDamageSchema = z.object({
+  vehicleComponent: z.enum(VehicleComponent),
+  description: z.string(),
+  vehicleComponentName: z.string().nullish(),
+});
+
+export type ShmoDamage = z.infer<typeof ShmoDamageSchema>;
+
 export enum Weekday {
   MONDAY = 'MONDAY',
   TUESDAY = 'TUESDAY',
@@ -420,6 +441,7 @@ export const AssetSchema = z.object({
   propulsionType: PropulsionTypeSchema.nullish(),
   stationSlotName: z.string().nullish(),
   maxRentalDuration: z.number().nullish(),
+  supportedDamages: z.array(ShmoDamageSchema).nullish(),
 });
 
 export const ShmoBookingSchema = z.object({
@@ -504,12 +526,10 @@ export const VehiclesRequestBodySchema = z.object({
 
 export type VehiclesRequestBody = z.infer<typeof VehiclesRequestBodySchema>;
 
-export const SendSupportRequestBodySchema = z.object({
-  bookingId: z.string().uuid().nullish(),
-  assetId: z.string().nullish(),
-  stationId: z.string().nullish(),
-  supportType: z.nativeEnum(SupportType),
-  contactInformationEndUser: z
+export type ContactInfoRequirement = 'email' | 'emailOrPhone';
+
+const contactInformationEndUserSchema = (requires: ContactInfoRequirement) =>
+  z
     .object({
       phonePrefix: z.string().nullish(),
       phoneNumber: z.string().nullish(),
@@ -524,30 +544,47 @@ export const SendSupportRequestBodySchema = z.object({
     }))
     .superRefine((data, ctx) => {
       const email = data.email || undefined;
+      const addIssue = (path: 'email' | 'phone') =>
+        ctx.addIssue({code: 'custom', path: [path]});
 
-      if (!email || !isValidEmail(email)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['email'],
-        });
+      if (requires === 'email' && (!email || !isValidEmail(email))) {
+        addIssue('email');
       }
 
-      if (data.phone && !isValidPhoneNumber(data.phone)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['phone'],
-        });
+      if (requires === 'emailOrPhone') {
+        if (!email && !data.phone) {
+          addIssue('email');
+          addIssue('phone');
+        }
+        if (email && !isValidEmail(email)) addIssue('email');
       }
-    }),
-  comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).nullish(),
-  place: z
-    .object({
-      coordinates: ShmoCoordinatesSchema,
-      name: z.string().nullish(),
-    })
-    .nullish(),
-  files: z.array(ShmoImageFileSchema).max(MAX_UPLOAD_IMAGE_COUNT).nullish(),
-});
+
+      if (data.phone && !isValidPhoneNumber(data.phone)) addIssue('phone');
+    });
+
+const sendSupportRequestBodySchema = (requires: ContactInfoRequirement) =>
+  z.object({
+    bookingId: z.string().uuid().nullish(),
+    assetId: z.string().nullish(),
+    stationId: z.string().nullish(),
+    supportType: z.nativeEnum(SupportType),
+    contactInformationEndUser: contactInformationEndUserSchema(requires),
+    comment: z.string().max(MAX_SUPPORT_COMMENT_LENGTH).nullish(),
+    place: z
+      .object({
+        coordinates: ShmoCoordinatesSchema,
+        name: z.string().nullish(),
+      })
+      .nullish(),
+    files: z.array(ShmoImageFileSchema).max(MAX_UPLOAD_IMAGE_COUNT).nullish(),
+    damages: z.array(ShmoDamageSchema).nullish(),
+  });
+
+export const SendSupportRequestBodySchema =
+  sendSupportRequestBodySchema('email');
+
+export const SendDamageReportBodySchema =
+  sendSupportRequestBodySchema('emailOrPhone');
 
 export type SendSupportRequestBodyInput = z.input<
   typeof SendSupportRequestBodySchema

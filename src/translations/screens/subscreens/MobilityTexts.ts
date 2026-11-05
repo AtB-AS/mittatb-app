@@ -78,6 +78,28 @@ export const MobilityTexts = {
         return _('Annet', 'Other', 'Anna');
     }
   },
+  reportDamage: {
+    title: _('Meld skade', 'Report damage', 'Meld skade'),
+
+    damages: {
+      header: _(
+        'Hva er feil? (obligatorisk)',
+        'What is wrong? (required)',
+        'Kva er feil? (obligatorisk)',
+      ),
+      errorMessage: _(
+        'Vennligst velg minst én ting som er feil.',
+        'Please select at least one thing that is wrong.',
+        'Ver vennleg og vel minst éin ting som er feil.',
+      ),
+      emptyList: (operatorName: string) =>
+        _(
+          `${operatorName} har ingen skader du kan melde fra om her. Bruk Kontaktskjema under "Info og hjelp" i stedet.`,
+          `${operatorName} has no damages you can report here. Use the Contact form under "Info and help" instead.`,
+          `${operatorName} har ingen skadar du kan melda frå om her. Bruk Kontaktskjema under "Info og hjelp" i staden.`,
+        ),
+    },
+  },
   pricingDetails: {
     priceInfo: _('Prisinformasjon', 'Price information', 'Prisinformasjon'),
     unlock: _('Opplåsing', 'Unlock', 'Opplåsing'),

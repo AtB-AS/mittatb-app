@@ -42,7 +42,7 @@ import {useBottomSheetContext} from '@atb/components/bottom-sheet';
 import {MapBottomSheetType, useMapContext} from './MapContext';
 import {useFinishedBookingDetection} from './hooks/use-finished-booking-detection';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {ReportShmoDamageParams, ShmoHelpParams} from '@atb/stacks-hierarchy';
 
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
@@ -51,6 +51,7 @@ type MapBottomSheetsProps = {
   locationArrowOnPress: () => void;
   tabBarHeight: number;
   navigateToShmoSupport: (params: ShmoHelpParams) => void;
+  navigateToReportShmoDamage: (params: ReportShmoDamageParams) => void;
   navigateToShmoOnboarding: NavigateToShmoOnboardingCallback;
   navigateToReportParkingViolation: () => void;
   navigateToParkingPhoto: (bookingId: string) => void;
@@ -67,6 +68,7 @@ export const MapBottomSheets = ({
   locationArrowOnPress,
   tabBarHeight,
   navigateToShmoSupport,
+  navigateToReportShmoDamage,
   navigateToShmoOnboarding,
   navigateToReportParkingViolation,
   navigateToParkingPhoto,
@@ -84,6 +86,7 @@ export const MapBottomSheets = ({
   } = useMapContext();
   const isFocusedAndActive = useIsFocusedAndActive();
   const {data: activeBooking} = useActiveShmoBookingQuery(isFocusedAndActive);
+
   const {bottomSheetMapRef} = useBottomSheetContext();
 
   useFinishedBookingDetection(isFocusedAndActive, dispatchMapState);
@@ -179,6 +182,18 @@ export const MapBottomSheets = ({
             bookingId,
             formFactor,
             systemId,
+          });
+        }}
+        navigateReportDamageCallback={(
+          operatorId,
+          bookingId,
+          supportedDamages,
+        ) => {
+          handleCloseSheet();
+          navigateToReportShmoDamage({
+            operatorId,
+            bookingId,
+            supportedDamages,
           });
         }}
         locationArrowOnPress={locationArrowOnPress}
