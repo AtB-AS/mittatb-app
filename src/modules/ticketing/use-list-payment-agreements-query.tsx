@@ -41,7 +41,6 @@ const usePaymentAgreementsQuery = <T,>(
     queryKey: getListPaymentAgreementsQueryKey(abtCustomerId, isLoggedIn),
     queryFn: () =>
       listPaymentAgreements([
-        PaymentAgreementStatus.Created,
         PaymentAgreementStatus.Pending,
         PaymentAgreementStatus.Active,
       ]),
