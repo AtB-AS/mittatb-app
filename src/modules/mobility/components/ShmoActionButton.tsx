@@ -202,7 +202,7 @@ export const ShmoActionButton = ({
           type="error"
           message={formatFriendlyShmoErrorMessage(
             initShmoOneStopBookingError,
-            t,
+            t(ShmoWarnings.startTripError),
           )}
         />
       )}

@@ -228,14 +228,14 @@ export const MobilityTexts = {
     },
   },
   loadingFailed: _(
-    'Vi fant ikke dette kjøretøyet',
-    "We couldn't find this vehicle",
-    'Vi fann ikkje dette køyretøyet',
+    'Klarte ikke å finne dette kjøretøyet.',
+    "Couldn't find this vehicle.",
+    'Klarte ikkje å finne dette køyretøyet.',
   ),
   loadingBookingFailed: _(
-    'Ops! Vi kunne ikke hente informasjon om turen',
-    "Ops! We couldn't fetch the trip information",
-    'Ops! Vi kunne ikkje hente informasjon om turen',
+    'Klarte ikke å hente informasjon om turen.',
+    "Couldn't load the trip information.",
+    'Klarte ikkje å hente informasjon om turen.',
   ),
   finishing: {
     button: _('Ta bilde', 'Take a photo', 'Ta eit bilde'),
@@ -349,6 +349,11 @@ export const MobilityTexts = {
         'Continue with Vipps',
         'Fortsett med Vipps',
       ),
+      error: _(
+        'Klarte ikke å bekrefte alderen din.',
+        "Couldn't verify your age.",
+        'Klarte ikkje å verifisere alderen din.',
+      ),
     },
     payment: {
       title: _(
@@ -403,9 +408,9 @@ export const MobilityTexts = {
   appStoreOpenError: {
     text: (appStore: string, operator: string) =>
       _(
-        `Vi fikk dessverre ikke til å åpne ${appStore} automatisk. Gå til ${appStore} og søk etter ${operator}-appen`,
-        `We could not open ${appStore}. Please go to ${appStore} and search for ${operator}`,
-        `Vi fikk dessverre ikkje opna ${appStore} automatisk. Gå til ${appStore} og søk etter ${operator}-appen`,
+        `Klarte ikke å åpne ${appStore} automatisk. Gå til ${appStore} og søk etter ${operator}-appen.`,
+        `Couldn't open ${appStore}. Please go to ${appStore} and search for ${operator}.`,
+        `Klarte ikkje å opna ${appStore} automatisk. Gå til ${appStore} og søk etter ${operator}-appen.`,
       ),
     button: _('OK', 'OK', 'OK'),
   },
@@ -563,16 +568,16 @@ export const BicycleTexts = {
     },
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
     loadingFailed: _(
-      'Vi fant ikke denne sykkelstasjonen',
-      "We couldn't find this bike station",
-      'Vi fann ikkje denne sykkelstasjonen',
+      'Klarte ikke å finne denne sykkelstasjonen.',
+      "Couldn't find this bike station.",
+      'Klarte ikkje å finne denne sykkelstasjonen.',
     ),
   },
   humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
   loadingFailed: _(
-    'Vi fant ikke denne sykkelen',
-    "We couldn't find this bike",
-    'Vi fann ikkje denne sykkelen',
+    'Klarte ikke å finne denne sykkelen.',
+    "Couldn't find this bike.",
+    'Klarte ikkje å finne denne sykkelen.',
   ),
   loadingFailedBicyclesStations: _(
     'Feil ved innlasting av sykler på denne stasjonen',
@@ -597,9 +602,9 @@ export const CarSharingTexts = {
     ),
   },
   loadingFailed: _(
-    'Vi fant ikke denne parkeringen',
-    "We couldn't find this car sharing station",
-    'Vi fann ikkje denne parkeringa',
+    'Klarte ikke å finne denne parkeringen.',
+    "Couldn't find this car sharing station.",
+    'Klarte ikkje å finne denne parkeringa.',
   ),
   propultionType: (type: PropulsionType) => {
     switch (type) {
@@ -729,6 +734,26 @@ export const GeofencingZoneExtraExplanations = {
 };
 
 export const ShmoWarnings = {
+  startTripError: _(
+    'Klarte ikke å starte turen.',
+    "Couldn't start the trip.",
+    'Klarte ikkje å starte turen.',
+  ),
+  endTripError: _(
+    'Klarte ikke å avslutte turen.',
+    "Couldn't end the trip.",
+    'Klarte ikkje å avslutte turen.',
+  ),
+  pauseTripError: _(
+    'Klarte ikke å pause turen.',
+    "Couldn't pause the trip.",
+    'Klarte ikkje å pause turen.',
+  ),
+  resumeTripError: _(
+    'Klarte ikke å fortsette turen.',
+    "Couldn't resume the trip.",
+    'Klarte ikkje å halde fram med turen.',
+  ),
   bookingPaused: _(
     'Det har oppstått en feil og turen er pauset i våre systemer. Trykk på knappen nedenfor for å fortsette turen.',
     'An error has occurred and the trip is paused in our systems. Press the button below to continue the trip.',

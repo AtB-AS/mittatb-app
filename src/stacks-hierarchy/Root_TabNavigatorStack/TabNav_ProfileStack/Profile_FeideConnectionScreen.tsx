@@ -6,11 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet, Theme} from '@atb/theme';
-import {
-  dictionary,
-  FeideConnectionTexts,
-  useTranslation,
-} from '@atb/translations';
+import {FeideConnectionTexts, useTranslation} from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {FEIDE_CALLBACK_URL} from '@atb/api/identity';
 import {closeInAppBrowseriOS} from '@atb/modules/in-app-browser';
@@ -117,11 +113,7 @@ export const Profile_FeideConnectionScreen = ({navigation}: Props) => {
           ) : (
             <MessageInfoBox
               type="error"
-              message={
-                connectError
-                  ? t(dictionary.genericErrorMsg)
-                  : t(FeideConnectionTexts.error)
-              }
+              message={t(FeideConnectionTexts.error)}
             />
           ))}
 

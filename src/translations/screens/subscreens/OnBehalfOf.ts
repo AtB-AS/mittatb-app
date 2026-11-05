@@ -43,10 +43,15 @@ const OnBehalfOfTexts = {
     ),
   },
   errors: {
+    lookup_failed: _(
+      'Klarte ikke å søke opp telefonnummeret. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      "Couldn't look up the phone number. Please try again or contact customer service for assistance.",
+      'Klarte ikkje å søke opp telefonnummeret. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    ),
     fetch_recipients_failed: _(
-      'Kunne ikke laste mottakere',
-      "Couldn't retrieve recipients",
-      'Kunne ikkje laste mottakarar',
+      'Klarte ikke å hente mottakere.',
+      "Couldn't load recipients.",
+      'Klarte ikkje å hente mottakarar.',
     ),
     no_recipient_selected: _(
       'Du må velge mottaker',
@@ -54,9 +59,9 @@ const OnBehalfOfTexts = {
       'Du må velje mottakar',
     ),
     delete_recipient_failed: _(
-      'Klarte ikke å slette mottaker',
-      "Weren't able to delete recipient",
-      'Klarte ikkje å slette mottakar',
+      'Klarte ikke å slette mottaker.',
+      "Couldn't delete recipient.",
+      'Klarte ikkje å slette mottakar.',
     ),
     missing_recipient_name: _(
       'Du må legge inn navn på mottaker',

@@ -17,9 +17,9 @@ const TravelTokenBoxTexts = {
       'Klarer ikkje hente informasjon om t:kort / mobil.',
     ),
     tokensNotLoaded: _(
-      'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
-      `Tickets must be used on either a t:card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
-      `Billettar må brukast på enten eit t:kort eller ein mobil, men akkurat no kan vi ikkje finne ut kvar billetten blir brukt. Sjekk at du har tilgang på nett der du er.`,
+      'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarte ikke appen å finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+      `Tickets must be used on either a t:card or phone, but right now the app couldn't find where the ticket is in use. Check that you have internet access.`,
+      `Billettar må brukast på enten eit t:kort eller ein mobil, men akkurat no klarte ikkje appen å finne ut kvar billetten blir brukt. Sjekk at du har tilgang på nett der du er.`,
     ),
     noInspectableToken: _(
       'Billetter må brukes på enten t:kort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
@@ -41,9 +41,9 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         'Klarer ikkje hente informasjon om reisekort / mobil.',
       ),
       tokensNotLoaded: _(
-        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
-        `Tickets must be used on either a travel card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
-        `Billettar må brukast på enten eit reisekort eller ein mobil, men akkurat no kan vi ikkje finne ut kvar billetten blir brukt. Sjekk at du har tilgang på nett der du er.`,
+        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarte ikke appen å finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        `Tickets must be used on either a travel card or phone, but right now the app couldn't find where the ticket is in use. Check that you have internet access.`,
+        `Billettar må brukast på enten eit reisekort eller ein mobil, men akkurat no klarte ikkje appen å finne ut kvar billetten blir brukt. Sjekk at du har tilgang på nett der du er.`,
       ),
       noInspectableToken: _(
         'Billetter må brukes på enten reisekort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
@@ -61,9 +61,9 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         'Klarer ikkje hente informasjon om reisekort / mobil.',
       ),
       tokensNotLoaded: _(
-        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
-        `Tickets must be used on either a travel card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
-        'Billettar må brukast på enten eit reisekort eller ein mobil, men nett no klarar vi ikkje finne ut kvar den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarte ikke appen å finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        `Tickets must be used on either a travel card or phone, but right now the app couldn't find where the ticket is in use. Check that you have internet access.`,
+        'Billettar må brukast på enten eit reisekort eller ein mobil, men nett no klarte ikkje appen å finne ut kvar den er i bruk. Sjekk at du har tilgang på nett der du er.',
       ),
       noInspectableToken: _(
         'Billetter må brukes på enten reisekort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',
@@ -81,9 +81,9 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         'Klarer ikkje hente informasjon om reisekort / mobil.',
       ),
       tokensNotLoaded: _(
-        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
-        `Tickets must be used on either a travel card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
-        'Billettar må brukast på enten eit reisekort eller ein mobil, men nett no klarar vi ikkje finne ut kvar den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarte ikke appen å finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        `Tickets must be used on either a travel card or phone, but right now the app couldn't find where the ticket is in use. Check that you have internet access.`,
+        'Billettar må brukast på enten eit reisekort eller ein mobil, men nett no klarte ikkje appen å finne ut kvar den er i bruk. Sjekk at du har tilgang på nett der du er.',
       ),
       noInspectableToken: _(
         'Billetter må brukes på enten reisekort eller mobil. Vennligst velg hvor du vil bruke dine billetter.',

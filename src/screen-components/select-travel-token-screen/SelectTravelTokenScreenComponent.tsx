@@ -8,7 +8,7 @@ import {
 } from '@atb/modules/mobile-token';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {dictionary, TravelTokenTexts, useTranslation} from '@atb/translations';
+import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import React, {Ref, useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
@@ -173,7 +173,7 @@ export const SelectTravelTokenScreenComponent = ({
         {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
-            message={t(dictionary.genericErrorMsg)}
+            message={t(TravelTokenTexts.toggleToken.toggleError)}
           />
         )}
         {data?.toggleLimit !== undefined && (

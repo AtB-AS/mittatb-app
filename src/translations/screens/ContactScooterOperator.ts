@@ -107,9 +107,9 @@ export const ContactShmoOperatorTexts = {
       title: _('Ta bilde', 'Take photo', 'Ta bilete'),
     },
     error: _(
-      'Vi klarte ikke å hente bildet. Vennligst prøv på nytt.',
-      'We could not load the image. Please try again.',
-      'Vi klarte ikkje å hente biletet. Ver vennleg og prøv på nytt.',
+      'Klarte ikke å hente bildet. Prøv igjen.',
+      "Couldn't load the image. Please try again.",
+      'Klarte ikkje å hente biletet. Prøv igjen.',
     ),
   },
   contactInfo: {
@@ -168,9 +168,9 @@ export const ContactShmoOperatorTexts = {
 
   submitError: (operatorName: string) => {
     return _(
-      `Noe gikk galt, vi klarte ikke å sende meldingen til ${operatorName}. Vennligst prøv på nytt.`,
-      `Something went wrong, we could not send the message to ${operatorName}. Please try again.`,
-      `Noko gjekk gale, vi klarte ikkje å sende meldinga til ${operatorName}. Vennligst prøv på nytt.`,
+      `Klarte ikke å sende meldingen til ${operatorName}. Prøv igjen.`,
+      `Couldn't send the message to ${operatorName}. Please try again.`,
+      `Klarte ikkje å sende meldinga til ${operatorName}. Prøv igjen.`,
     );
   },
   confirmation: {

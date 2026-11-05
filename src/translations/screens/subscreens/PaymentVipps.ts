@@ -19,14 +19,14 @@ const PaymentVippsTexts = {
   },
   errorMessages: {
     openVipps: _(
-      'Vi klarte ikke å åpne Vipps. Sjekk at du har installert Vipps-appen, og prøv igjen.',
-      'We couldn’t open Vipps. Check that you have installed the Vipps app, and try again.',
-      'Vi klarte ikkje å opne Vipps. Sjekk at du har installert Vipps-appen, og prøv igjen.',
+      'Klarte ikke å åpne Vipps. Sjekk at du har installert Vipps-appen, og prøv igjen.',
+      "Couldn't open Vipps. Check that you have installed the Vipps app, and try again.",
+      'Klarte ikkje å opne Vipps. Sjekk at du har installert Vipps-appen, og prøv igjen.',
     ),
     reserveOffer: _(
-      'Vi klarte ikke å reservere billett. Prøv igjen, eller kontakt kundeservice for hjelp.',
-      'We were unable to reserve a ticket. Please try again, or contact customer service for assistance.',
-      'Vi klarte ikkje å reservere billett. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Klarte ikke å reservere billett. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      "Couldn't reserve a ticket. Please try again, or contact customer service for assistance.",
+      'Klarte ikkje å reservere billett. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
   },
   stateMessages: {

@@ -98,9 +98,9 @@ const SmartParkAndRideTexts = {
     },
     button: _('Lagre', 'Save', 'Lagre'),
     error: _(
-      'Vi klarte ikke lagre endringer. Prøv igjen.',
-      'We could not save changes. Please try again.',
-      'Vi klarte ikkje lagre endringar. Prøv igjen.',
+      'Klarte ikke å lagre endringer. Prøv igjen.',
+      "Couldn't save changes. Please try again.",
+      'Klarte ikkje å lagre endringar. Prøv igjen.',
     ),
     delete: {
       button: _('Fjern kjøretøy', 'Remove vehicle', 'Fjern køyretøy'),
@@ -115,9 +115,9 @@ const SmartParkAndRideTexts = {
         confirm: _('Fjern', 'Remove', 'Fjern'),
       },
       error: _(
-        'Vi klarte ikke fjerne kjøretøyet. Prøv igjen.',
-        'We could not remove the vehicle. Please try again.',
-        'Vi klarte ikkje fjerne køyretøyet. Prøv igjen.',
+        'Klarte ikke å fjerne kjøretøyet. Prøv igjen.',
+        "Couldn't remove the vehicle. Please try again.",
+        'Klarte ikkje å fjerne køyretøyet. Prøv igjen.',
       ),
     },
   },
@@ -138,9 +138,9 @@ const SmartParkAndRideTexts = {
       'Du kan ikkje leggje til fleire køyretøy. Du kan leggje til maks to køyretøy.',
     ),
     unknown: _(
-      'Noe gikk galt. Prøv igjen.',
-      'Something went wrong. Please try again.',
-      'Noko gjekk gale. Prøv igjen.',
+      'Klarte ikke å lagre kjøretøyet. Prøv igjen.',
+      "Couldn't save the vehicle. Please try again.",
+      'Klarte ikkje å lagre køyretøyet. Prøv igjen.',
     ),
   },
   success: {

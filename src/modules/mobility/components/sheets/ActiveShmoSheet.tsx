@@ -1,5 +1,5 @@
 import React, {RefObject, useCallback, useEffect} from 'react';
-import {useTranslation} from '@atb/translations';
+import {TranslateFunction, useTranslation} from '@atb/translations';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   MobilityTexts,
@@ -105,6 +105,7 @@ export const ActiveShmoSheet = ({
     isPending: sendShmoBookingEventIsLoading,
     isError: sendShmoBookingEventIsError,
     error: sendShmoBookingEventError,
+    variables: sendShmoBookingEventVariables,
   } = useSendShmoBookingEventMutation();
 
   const startFinishingShmoBooking = useCallback(async () => {
@@ -304,7 +305,10 @@ export const ActiveShmoSheet = ({
                 type="error"
                 message={formatFriendlyShmoErrorMessage(
                   sendShmoBookingEventError,
-                  t,
+                  getBookingEventErrorFallback(
+                    t,
+                    sendShmoBookingEventVariables?.shmoBookingEvent.event,
+                  ),
                 )}
               />
             )}
@@ -365,6 +369,20 @@ export const ActiveShmoSheet = ({
       )}
     </MapBottomSheet>
   );
+};
+
+const getBookingEventErrorFallback = (
+  t: TranslateFunction,
+  event?: ShmoBookingEventType,
+) => {
+  switch (event) {
+    case ShmoBookingEventType.PAUSE:
+      return t(ShmoWarnings.pauseTripError);
+    case ShmoBookingEventType.RESUME:
+      return t(ShmoWarnings.resumeTripError);
+    default:
+      return t(ShmoWarnings.endTripError);
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
