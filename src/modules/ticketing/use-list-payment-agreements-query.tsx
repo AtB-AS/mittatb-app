@@ -83,10 +83,10 @@ export const usePendingPaymentAgreementsQuery = (
 ) =>
   usePaymentAgreementsQuery(enabled, {
     select: (paymentAgreements) =>
-      getPendingPaymentAgreements(paymentAgreements, Date.now()),
+      getPendingPaymentAgreements(paymentAgreements),
     refetchInterval: (paymentAgreements) =>
       refetchWhilePending &&
-      getPendingPaymentAgreements(paymentAgreements, Date.now()).length > 0
+      getPendingPaymentAgreements(paymentAgreements).length > 0
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
         : false,
   });

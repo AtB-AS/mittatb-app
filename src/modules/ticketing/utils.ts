@@ -10,7 +10,6 @@ import {
 import {FareContractType, TravelRightType, UsedAccessType} from '@atb-as/utils';
 import {getAvailabilityStatus} from '@atb-as/utils';
 import {parseDate} from '@atb/utils/date';
-import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
 export function isSentOrReceivedFareContract(fc: FareContractType) {
   return fc.customerAccountId !== fc.purchasedBy;
@@ -152,23 +151,16 @@ const PENDING_PAYMENT_AGREEMENT_STATUSES = [
   PaymentAgreementStatus.Pending,
 ];
 
-// Vipps expires pending agreements after 10 minutes, so don't show them as
-// pending for longer, even if they haven't been marked as expired yet.
-const PENDING_PAYMENT_AGREEMENT_MAX_AGE_MS = 10 * ONE_MINUTE_MS;
-
 /**
  * The supported payment agreements that are still being created, e.g. waiting
  * for the user to accept them in Vipps.
  */
 export function getPendingPaymentAgreements(
   paymentAgreements: PaymentAgreement[] | undefined,
-  now: number,
 ): PaymentAgreement[] {
   return (paymentAgreements ?? []).filter(
     (paymentAgreement) =>
       PENDING_PAYMENT_AGREEMENT_STATUSES.includes(paymentAgreement.status) &&
-      isPaymentAgreementSupported(paymentAgreement.paymentType) &&
-      now - parseDate(paymentAgreement.createdAt).getTime() <
-        PENDING_PAYMENT_AGREEMENT_MAX_AGE_MS,
+      isPaymentAgreementSupported(paymentAgreement.paymentType),
   );
 }
