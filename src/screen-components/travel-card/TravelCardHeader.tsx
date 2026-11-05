@@ -23,6 +23,7 @@ export const TravelCardHeader: React.FC<
     includeDayInfo?: boolean;
     includeFromToInfo?: boolean;
     isSaved?: boolean;
+    testID?: string;
   }
 > = ({
   tripPattern,
@@ -30,6 +31,7 @@ export const TravelCardHeader: React.FC<
   includeDayInfo = true,
   includeFromToInfo = true,
   isSaved = false,
+  testID,
   ...accessibilityProps
 }) => {
   const styles = useThemeStyles();
@@ -107,11 +109,16 @@ export const TravelCardHeader: React.FC<
           )}
           <ThemeText
             typography={size === 'large' ? 'heading__l' : 'body__m__strong'}
+            testID={testID && `${testID}Time`}
           >
             {`${expectedStartTimeLabel} - ${expectedEndTimeLabel}`}
           </ThemeText>
           {!areTimesEquivalentInMinutes && (
-            <ThemeText typography="body__s" type="secondary">
+            <ThemeText
+              typography="body__s"
+              type="secondary"
+              testID={testID && `${testID}AimedTime`}
+            >
               {t(TravelCardTexts.header.originalTime)} {aimedStartTimeLabel} -{' '}
               {aimedEndTimeLabel}
             </ThemeText>
