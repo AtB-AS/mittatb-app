@@ -16,6 +16,7 @@ export {FavoriteSectionItem} from './items/FavoriteSectionItem';
 export {FavoriteDepartureSectionItem} from './items/FavoriteDepartureSectionItem';
 export {ExpandableSectionItem} from './items/ExpandableSectionItem';
 export {ToggleSectionItem} from './items/ToggleSectionItem';
+export {CheckboxSectionItem} from './items/CheckboxSectionItem';
 export {SelectionInlineSectionItem} from './items/SelectionInlineSectionItem.tsx';
 
 // Inputs
