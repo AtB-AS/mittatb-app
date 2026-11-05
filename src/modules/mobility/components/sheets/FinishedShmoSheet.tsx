@@ -62,8 +62,6 @@ export const FinishedShmoSheet = ({
     shmoBooking?.asset?.propulsionType,
   );
 
-  /* Held as a const so the length check below narrows it for the callback --
-     TypeScript drops the narrowing of a property chain inside a closure. */
   const supportedDamages = shmoBooking?.asset?.supportedDamages;
 
   const operator = useOperators().byId(shmoBooking?.asset.operator.id);

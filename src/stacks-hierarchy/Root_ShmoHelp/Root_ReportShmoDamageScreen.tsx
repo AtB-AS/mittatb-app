@@ -40,9 +40,6 @@ export const Root_ReportShmoDamageScreen = ({
 }: Root_ReportShmoDamageScreenProps) => {
   const {operatorId, bookingId} = route.params;
 
-  /* Handed over by whoever opened the screen -- the operator's own damages ride
-     along on the asset, so the caller already has them. An operator that
-     publishes none leaves the user the empty state below. */
   const supportedDamages = route.params.supportedDamages;
 
   const styles = useStyles();
@@ -88,8 +85,6 @@ export const Root_ReportShmoDamageScreen = ({
             type="info"
           />
         ) : (
-          /* One section rather than one per damage, so the rows sit flush with
-             a divider between them instead of as separate cards. */
           <Section>
             {supportedDamages.map((damage) => (
               <CheckboxSectionItem
@@ -116,7 +111,7 @@ export const Root_ReportShmoDamageScreen = ({
               setRequestBody((prev) => ({...prev, comment}))
             }
             label={t(ContactShmoOperatorTexts.comment.label)}
-            placeholder={t(MobilityTexts.reportDamage.comment.placeholder)}
+            placeholder={t(ContactShmoOperatorTexts.comment.placeholder)}
             inlineLabel={false}
             multiline={true}
             maxLength={MAX_SUPPORT_COMMENT_LENGTH}

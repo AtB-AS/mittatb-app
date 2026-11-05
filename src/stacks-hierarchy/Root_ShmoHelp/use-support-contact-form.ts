@@ -10,8 +10,6 @@ import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {useProfileQuery} from '@atb/queries';
 import {CustomerProfile} from '@atb/api/types/profile';
 
-//Moved out from Root_ContactShmoOperatorScreen to be reused in damage and support forms
-
 export const validateSchema = (
   body: SendSupportRequestBodyInput,
   schema: typeof SendSupportRequestBodySchema = SendSupportRequestBodySchema,
@@ -29,7 +27,6 @@ export const validateSchema = (
   };
 };
 
-//Moved out from Root_ContactShmoOperatorScreen to be reused in damage and support forms
 export const useSupportContactForm = (
   supportType: SupportType,
   schema: typeof SendSupportRequestBodySchema = SendSupportRequestBodySchema,
@@ -48,9 +45,6 @@ export const useSupportContactForm = (
     },
   });
 
-  /* The logged in profile's email saves the user typing it again. Memoized
-     because `useProfileQuery` has the callback in its effect dependencies, so a
-     fresh one each render would set state, re-render and never settle. */
   const fillInProfileEmail = useCallback(
     (data: CustomerProfile) =>
       setRequestBody((prev) => ({

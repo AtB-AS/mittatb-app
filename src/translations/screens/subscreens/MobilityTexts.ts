@@ -94,17 +94,10 @@ export const MobilityTexts = {
       ),
       emptyList: (operatorName: string) =>
         _(
-          `${operatorName} har ingen skader du kan melde fra om her. Bruk "Trenger du hjelp?" i stedet.`,
-          `${operatorName} has no damages you can report here. Use "Need help?" instead.`,
-          `${operatorName} har ingen skadar du kan melda frå om her. Bruk "Treng du hjelp?" i staden.`,
+          `${operatorName} har ingen skader du kan melde fra om her. Bruk Kontaktskjema under "Info og hjelp" i stedet.`,
+          `${operatorName} has no damages you can report here. Use the Contact form under "Info and help" instead.`,
+          `${operatorName} har ingen skadar du kan melda frå om her. Bruk Kontaktskjema under "Info og hjelp" i staden.`,
         ),
-    },
-    comment: {
-      placeholder: _(
-        'Skriv litt om problemet...',
-        'Write a little about the problem...',
-        'Skriv litt om problemet...',
-      ),
     },
   },
   pricingDetails: {
