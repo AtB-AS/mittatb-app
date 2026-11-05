@@ -8,7 +8,7 @@ import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
 import {getPendingPaymentAgreements} from './utils';
 
-export const LIST_PAYMENT_AGREEMENTS_QUERY_KEY =
+const LIST_PAYMENT_AGREEMENTS_QUERY_KEY =
   'GET_LIST_PAYMENT_AGREEMENTS_QUERY_KEY';
 
 export const getListPaymentAgreementsQueryKey = (
