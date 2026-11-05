@@ -199,7 +199,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     !!agreementPaymentType &&
     paymentAgreements !== undefined &&
     !paymentAgreementId &&
-    !pendingPaymentAgreements?.length;
+    !getLatestPaymentAgreement(pendingPaymentAgreements, agreementPaymentType);
   const [isCreatePaymentAgreementChecked, setIsCreatePaymentAgreementChecked] =
     useState(false);
 
