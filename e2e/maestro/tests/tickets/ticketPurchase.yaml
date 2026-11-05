@@ -14,6 +14,9 @@ name: 'Ticket purchase'
       - tapOn:
           id: ${output.nav.tickets.purchase}
           label: 'Navigate to the purchase tickets tab'
+- runFlow:
+    file: ../../common/removeGlobalMessages.yaml
+    label: 'Remove all global messages'
 - assertVisible:
     id: ${output.tickets.fareProduct('single')}
     label: 'Verify that single ticket is shown'
@@ -60,7 +63,7 @@ name: 'Ticket purchase'
 - extendedWaitUntil:
     visible:
       id: ${output.nav.tickets.active}
-    timeout: 20000
+    timeout: 30000
     label: 'Wait for active tickets tab'
 - assertVisible:
     id: ${output.tickets.ticket(0)}

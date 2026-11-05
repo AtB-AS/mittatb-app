@@ -1,0 +1,113 @@
+appId: ${APP_ID}
+name: 'Filter travel search'
+---
+- evalScript: ${output.myFromPlace = 'Cecilienborg'}
+- evalScript: ${output.myToPlace = 'Melhus skysstasjon'}
+
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to Assistant tab'
+
+# Search
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: ${output.myFromPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search from'
+- runFlow:
+    file: ../../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'to'
+      SEARCH_TEXT: ${output.myToPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search to'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripSearch.result(0)}
+    timeout: 20000
+    label: 'Wait for trip results'
+
+# Initially both bus and rail are in the results
+# Note! Since the search always will have at least a bus, we'll only check on bus initially
+- assertVisible:
+    id: ${output.tripSearch.busLeg}
+    label: 'Verify bus in the results'
+
+# Filter out buses
+- scrollUntilVisible:
+    element:
+      id: ${output.tripSearch.filterButton}
+    direction: UP
+    timeout: 10000
+    label: 'Scroll to filter button'
+- tapOn:
+    id: ${output.tripSearch.filterButton}
+    label: 'Open filter'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripFilter.view}
+    timeout: 5000
+    label: 'Wait for filter'
+- tapOn:
+    id: ${output.tripFilter.toggle('bus')}
+    label: 'Toggle off bus'
+- tapOn:
+    id: ${output.global.closeBottomSheet}
+    label: 'Close filter'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripSearch.result(0)}
+    timeout: 20000
+    label: 'Wait for trip results'
+- assertNotVisible:
+    id: ${output.tripSearch.busLeg}
+    label: 'Verify bus NOT in the results'
+#- extendedWaitUntil:
+#    notVisible:
+#      id: ${output.tripSearch.busLeg}
+#    timeout: 10000
+#    label: 'Wait for results without bus'
+- assertVisible:
+    id: ${output.tripSearch.railLeg}
+    label: 'Verify rail is still in the results'
+
+# Remove the selected filters
+- scrollUntilVisible:
+    element:
+      id: ${output.tripSearch.filterButton}
+    direction: UP
+    timeout: 10000
+    label: 'Scroll to filter button'
+- tapOn:
+    id: ${output.tripSearch.filterButton}
+    label: 'Open filter'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripFilter.view}
+    timeout: 5000
+    label: 'Wait for filter'
+- tapOn:
+    id: ${output.tripFilter.toggle('allModes')}
+    label: 'Toggle all modes'
+- tapOn:
+    id: ${output.global.closeBottomSheet}
+    label: 'Close filter'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tripSearch.result(0)}
+    timeout: 20000
+    label: 'Wait for trip results'
+- assertVisible:
+    id: ${output.tripSearch.busLeg}
+    label: 'Verify bus in the results'
+#- extendedWaitUntil:
+#    visible:
+#      id: ${output.tripSearch.busLeg}
+#    timeout: 20000
+#    label: 'Wait for results with bus'
+
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to Assistant tab'

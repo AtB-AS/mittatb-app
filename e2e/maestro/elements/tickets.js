@@ -2,6 +2,15 @@ output.tickets = {
   fareProduct: fareProduct,
   toPayment: 'goToPaymentButton',
   offerPrice: 'offerTotalPriceText',
+  selectTraveller: 'selectTravellerButton',
+  selectedTravellers: 'selectedTravellers',
+  counter: counter,
+  selectZones: 'selectZonesButton',
+  selectedZone: 'selectedZone',
+  searchFrom: 'searchFromButton',
+  searchTo: 'searchToButton',
+  fareZone: fareZone,
+  saveZones: 'saveZonesButton',
   summary: {
     choosePayment: 'choosePaymentMethodButton',
     recurringPayment: recurringPayment,
@@ -21,6 +30,14 @@ output.ticket = {
 
 function fareProduct(type) {
   return type + 'FareProduct';
+}
+
+function counter(profile, action) {
+  return 'counterInput_' + profile + '_' + action;
+}
+
+function fareZone(name) {
+  return 'fareZone' + name + 'Button';
 }
 
 function recurringPayment(index) {

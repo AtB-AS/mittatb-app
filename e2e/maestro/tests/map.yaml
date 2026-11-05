@@ -17,13 +17,13 @@ name: 'Map'
     duration: 1000
 # This simulates "zoom in"
 - doubleTapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - tapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - doubleTapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - tapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - swipe:
     direction: UP
     duration: 1500
@@ -42,13 +42,13 @@ name: 'Map'
 - swipe:
     direction: RIGHT
 - doubleTapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - tapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - doubleTapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - tapOn:
-    point: "50%,50%"
+    point: '50%,50%'
 - swipe:
     direction: UP
     duration: 1000
