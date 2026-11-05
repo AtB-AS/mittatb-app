@@ -3,7 +3,6 @@ import {
   LastUsedAccessState,
   UsedAccessStatus,
   PaymentAgreement,
-  PaymentAgreementStatus,
   PaymentType,
   ConsumableSchoolCarnetResponse,
 } from './types';
@@ -143,19 +142,5 @@ export function getLatestPaymentAgreement(
     sortBy(agreementsOfType, (agreement) =>
       parseDate(agreement.updatedAt ?? agreement.createdAt).getTime(),
     ),
-  );
-}
-
-/**
- * The supported payment agreements that are still being created, e.g. waiting
- * for the user to accept them in Vipps.
- */
-export function getPendingPaymentAgreements(
-  paymentAgreements: PaymentAgreement[] | undefined,
-): PaymentAgreement[] {
-  return (paymentAgreements ?? []).filter(
-    (paymentAgreement) =>
-      paymentAgreement.status === PaymentAgreementStatus.Pending &&
-      isPaymentAgreementSupported(paymentAgreement.paymentType),
   );
 }

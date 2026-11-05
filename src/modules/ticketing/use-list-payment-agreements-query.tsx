@@ -6,7 +6,6 @@ import {
 } from '@atb/modules/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
-import {getPendingPaymentAgreements} from './utils';
 
 const LIST_PAYMENT_AGREEMENTS_QUERY_KEY =
   'GET_LIST_PAYMENT_AGREEMENTS_QUERY_KEY';
@@ -63,6 +62,14 @@ const selectActivePaymentAgreements = (paymentAgreements: PaymentAgreement[]) =>
       paymentAgreement.status === PaymentAgreementStatus.Active,
   );
 
+const selectPendingPaymentAgreements = (
+  paymentAgreements: PaymentAgreement[],
+) =>
+  paymentAgreements.filter(
+    (paymentAgreement) =>
+      paymentAgreement.status === PaymentAgreementStatus.Pending,
+  );
+
 /**
  * The user's active payment agreements. Like saved cards, payment agreements
  * require the user to be logged in, so there is no data until then.
@@ -81,11 +88,13 @@ export const usePendingPaymentAgreementsQuery = (
   {refetchWhilePending = false}: {refetchWhilePending?: boolean} = {},
 ) =>
   usePaymentAgreementsQuery(enabled, {
-    select: (paymentAgreements) =>
-      getPendingPaymentAgreements(paymentAgreements),
+    select: selectPendingPaymentAgreements,
     refetchInterval: (paymentAgreements) =>
       refetchWhilePending &&
-      getPendingPaymentAgreements(paymentAgreements).length > 0
+      paymentAgreements?.some(
+        (paymentAgreement) =>
+          paymentAgreement.status === PaymentAgreementStatus.Pending,
+      )
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
         : false,
   });
