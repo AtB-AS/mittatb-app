@@ -339,7 +339,7 @@ describe('formatOpeningHoursSchedule', () => {
         Language.Norwegian,
         t,
       ),
-    ).toEqual(['Fredag 00:00-22:00']);
+    ).toEqual(['Fredag: 00:00-22:00']);
   });
 
   it('formats a multi-day range with " - "', () => {
@@ -355,7 +355,7 @@ describe('formatOpeningHoursSchedule', () => {
         Language.Norwegian,
         t,
       ),
-    ).toEqual(['Mandag - torsdag 00:00-23:59']);
+    ).toEqual(['Mandag - torsdag: 00:00-23:59']);
   });
 
   it('shows a midnight closing time as 24:00, unaltered', () => {
@@ -365,7 +365,7 @@ describe('formatOpeningHoursSchedule', () => {
         Language.Norwegian,
         t,
       ),
-    ).toEqual(['Mandag 06:00-24:00']);
+    ).toEqual(['Mandag: 06:00-24:00']);
   });
 
   it('joins multiple intervals in the same day with a comma', () => {
@@ -382,7 +382,7 @@ describe('formatOpeningHoursSchedule', () => {
         Language.Norwegian,
         t,
       ),
-    ).toEqual(['Mandag 06:00-10:00, 14:00-22:00']);
+    ).toEqual(['Mandag: 06:00-10:00, 14:00-22:00']);
   });
 
   it('shows a closed label for a day-range with no open intervals', () => {
@@ -398,7 +398,7 @@ describe('formatOpeningHoursSchedule', () => {
         Language.Norwegian,
         t,
       ),
-    ).toEqual(['Søndag Stengt']);
+    ).toEqual(['Søndag: Stengt']);
   });
 
   it('formats weekday names per language', () => {
@@ -408,7 +408,7 @@ describe('formatOpeningHoursSchedule', () => {
         Language.English,
         t,
       ),
-    ).toEqual(['Sunday 00:00-23:59']);
+    ).toEqual(['Sunday: 00:00-23:59']);
   });
 
   it('formats one line per day-range group, in order', () => {
@@ -423,9 +423,9 @@ describe('formatOpeningHoursSchedule', () => {
         t,
       ),
     ).toEqual([
-      'Mandag - torsdag 00:00-23:59',
-      'Fredag 00:00-23:59',
-      'Lørdag - søndag 00:00-23:59',
+      'Mandag - torsdag: 00:00-23:59',
+      'Fredag: 00:00-23:59',
+      'Lørdag - søndag: 00:00-23:59',
     ]);
   });
 });
