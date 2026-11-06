@@ -32,9 +32,9 @@ const SelectFavouriteDeparturesText = {
   },
   noFavourites: {
     text: _(
-      'Vi fant ingen favorittavganger. For å legge til en favorittavgang kan du gå til Avganger-fanen, og klikke på stjernen ved en avgang.',
-      'We found no favourite departures. To add a favourite departure, you may open the Departures-view, and then press the star next to a departure.',
-      'Vi fann ingen favorittavgangar. For å legge til ein favorittavgang kan du gå til Avgangar-fana og trykke på stjerna ved ein avgang.',
+      'Fant ingen favorittavganger. For å legge til en favorittavgang kan du gå til Avganger-fanen, og klikke på stjernen ved en avgang.',
+      'No favourite departures found. To add a favourite departure, you may open the Departures-view, and then press the star next to a departure.',
+      'Fann ingen favorittavgangar. For å legge til ein favorittavgang kan du gå til Avgangar-fana og trykke på stjerna ved ein avgang.',
     ),
   },
   confirm_button: {

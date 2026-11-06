@@ -1,7 +1,7 @@
 import React, {Ref, useEffect, useState} from 'react';
 import {OnboardingScreenComponent} from '@atb/modules/onboarding';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {dictionary, LoginTexts, useTranslation} from '@atb/translations';
+import {LoginTexts, useTranslation} from '@atb/translations';
 import {ThemedBabyOnScooter} from '@atb/theme/ThemedAssets';
 import {Linking} from 'react-native';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
@@ -43,7 +43,7 @@ export const AgeVerificationScreenComponent = ({focusRef}: Props) => {
   }
 
   if (completeError || initError) {
-    errorMessage = t(dictionary.genericErrorMsg);
+    errorMessage = t(MobilityTexts.shmoRequirements.ageVerification.error);
   }
 
   useEffect(() => {

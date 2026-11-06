@@ -87,9 +87,9 @@ const MobileTokenOnboardingTexts = {
       'Ser ut som det kan ta litt tid...',
     ),
     description: _(
-      'Vi får ikke knyttet et t:kort eller en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nOm problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-      "We can't connect a t:card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact AtB service center.",
-      'Vi får ikkje kopla eit t:kort eller ein mobil til profilen din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nOm problemet held fram, kan du kontakte AtB kundesenter.',
+      'Klarte ikke å knytte et t:kort eller en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nOm problemet vedvarer kan du ta kontakt med AtB kundesenter.',
+      "Couldn't connect a t:card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact AtB service center.",
+      'Klarte ikkje å kopla eit t:kort eller ein mobil til profilen din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nOm problemet held fram, kan du kontakte AtB kundesenter.',
     ),
   },
   next: _('Neste', 'Next', 'Neste'),
@@ -130,9 +130,9 @@ const MobileTokenOnboardingTexts = {
     },
     error: {
       description: _(
-        'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med AtB kundesenter.',
-        "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact AtB service center.",
-        'Vi får ikkje knytt ein mobil til brukaren din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nTa kontakt med AtB kundesenter.',
+        'Klarte ikke å knytte en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med AtB kundesenter.',
+        "Couldn't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact AtB service center.",
+        'Klarte ikkje å knyte ein mobil til brukaren din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nTa kontakt med AtB kundesenter.',
       ),
     },
   },
@@ -185,9 +185,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     error: {
       description: _(
-        'Vi får ikke knyttet et reisekort eller en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Reis Nordland kundeservice om problemet vedvarer.',
-        "We can't connect a travel card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
-        'Vi får ikkje knytt eit reisekort eller ein mobil til profilen din. Sjekk om du har tilgang til internett. Hvis du ikkje er på nett, vil appen prøve på nytt når du blir kobla opp igjen.\n\nKontakt kundeservice hjå Reis Nordland dersom problemet held fram.',
+        'Klarte ikke å knytte et reisekort eller en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Reis Nordland kundeservice om problemet vedvarer.',
+        "Couldn't connect a travel card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
+        'Klarte ikkje å knyte eit reisekort eller ein mobil til profilen din. Sjekk om du har tilgang til internett. Viss du ikkje er på nett, vil appen prøve på nytt når du blir kobla opp igjen.\n\nKontakt kundeservice hjå Reis Nordland dersom problemet held fram.',
       ),
     },
     withoutTravelcard: {
@@ -214,9 +214,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       error: {
         description: _(
-          'Vi får ikke knyttet en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Reis Nordland kundeservice om problemet vedvarer.',
-          "We can't connect a phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
-          'Vi får ikkje knytt ein mobil til profilen din. Sjekk at du har tilgang til internett. Hvis du ikkje er på nett, vil appen prøve på nytt når du blir kobla opp igjen.\n\nKontakt Reis Nordland kundeservice om problemet held fram.',
+          'Klarte ikke å knytte en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Reis Nordland kundeservice om problemet vedvarer.',
+          "Couldn't connect a phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
+          'Klarte ikkje å knyte ein mobil til profilen din. Sjekk at du har tilgang til internett. Viss du ikkje er på nett, vil appen prøve på nytt når du blir kobla opp igjen.\n\nKontakt Reis Nordland kundeservice om problemet held fram.',
         ),
       },
     },
@@ -274,9 +274,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     error: {
       description: _(
-        'Vi får ikke knyttet et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
-        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
-        'Vi får ikkje knytt eit reisekort eller ein mobil til brukaren din. Sjekk at du har tilgang til nett.\n\nHvis du ikkje er på nett, vil appen prøve på nytt når du er kopla på igjen.\n\nTa kontakt med FRAM Kundesenter om problema vedvarar.',
+        'Klarte ikke å knytte et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+        "Couldn't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
+        'Klarte ikkje å knyte eit reisekort eller ein mobil til brukaren din. Sjekk at du har tilgang til nett.\n\nViss du ikkje er på nett, vil appen prøve på nytt når du er kopla på igjen.\n\nTa kontakt med FRAM Kundesenter om problema vedvarar.',
       ),
     },
     withoutTravelcard: {
@@ -303,9 +303,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       error: {
         description: _(
-          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
-          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
-          'Vi får ikkje knytt ein mobil til brukaren din. Sjekk at du har tilgang til nett.\n\nHvis du ikkje er på nett, vil appen prøve på nytt når du er kopla på igjen.\n\nTa kontakt med FRAM Kundesenter om problema vedvarar.',
+          'Klarte ikke å knytte en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+          "Couldn't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
+          'Klarte ikkje å knyte ein mobil til brukaren din. Sjekk at du har tilgang til nett.\n\nViss du ikkje er på nett, vil appen prøve på nytt når du er kopla på igjen.\n\nTa kontakt med FRAM Kundesenter om problema vedvarar.',
         ),
       },
     },
@@ -328,9 +328,9 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       error: {
         description: _(
-          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Svipper kundeservice.',
-          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Svipper customer service.",
-          'Vi får ikkje knytt ein mobil til brukaren din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nTa kontakt med Svipper kundeservice.',
+          'Klarte ikke å knytte en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Svipper kundeservice.',
+          "Couldn't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Svipper customer service.",
+          'Klarte ikkje å knyte ein mobil til brukaren din. Sjekk at du har tilgong til nett.\n\nOm du ikkje har nettilgang vil appen prøve på nytt når du er kobla til igjen.\n\nTa kontakt med Svipper kundeservice.',
         ),
       },
     },

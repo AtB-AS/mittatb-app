@@ -444,15 +444,13 @@ export const getNewFilterState = (
 
 export const formatFriendlyShmoErrorMessage = (
   errorResponse: ErrorResponse,
-  t: TFunc<typeof Language>,
+  fallbackMessage: string,
 ) => {
   const detailWithMessage = errorResponse.details?.find(
     (detail: any) => detail?.userFriendlyErrorMessage,
   ) as {userFriendlyErrorMessage?: string} | undefined;
 
-  return (
-    detailWithMessage?.userFriendlyErrorMessage ?? t(dictionary.genericErrorMsg)
-  );
+  return detailWithMessage?.userFriendlyErrorMessage ?? fallbackMessage;
 };
 
 /**

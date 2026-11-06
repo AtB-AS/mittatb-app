@@ -12,14 +12,14 @@ const MapTexts = {
       ),
     notFound: {
       title: _(
-        'Kunne ikke lese QR-kode',
-        "Couldn't read the QR code.",
-        'Kunne ikkje lese QR-kode.',
+        'Klarte ikke å lese QR-kode',
+        "Couldn't read the QR code",
+        'Klarte ikkje å lese QR-kode',
       ),
       description: _(
-        'Det kan hende at vi ikke kan vise dette innholdet i appen eller at lenken er ugyldig.',
-        'It could be that we are unable to show this content in the app or that the link is broken.',
-        'Det kan hende at vi ikkje kan vise dette innhaldet i appen eller at lenken er ugyldig.',
+        'Det kan hende at dette innholdet ikke kan vises i appen eller at lenken er ugyldig.',
+        'It could be that this content cannot be shown in the app or that the link is broken.',
+        'Det kan hende at dette innhaldet ikkje kan visast i appen eller at lenken er ugyldig.',
       ),
       ok: _('OK', 'OK', 'OK'),
     },

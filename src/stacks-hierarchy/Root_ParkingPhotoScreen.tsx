@@ -1,6 +1,9 @@
 import {useTranslation} from '@atb/translations';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  MobilityTexts,
+  ShmoWarnings,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ShmoBookingEvent, ShmoBookingEventType} from '@atb/api/types/mobility';
 import {
   formatFriendlyShmoErrorMessage,
@@ -125,7 +128,10 @@ export const Root_ParkingPhotoScreen = ({
       isFocused={isFocused}
       errorMessage={
         sendShmoBookingEventError
-          ? formatFriendlyShmoErrorMessage(sendShmoBookingEventError, t)
+          ? formatFriendlyShmoErrorMessage(
+              sendShmoBookingEventError,
+              t(ShmoWarnings.endTripError),
+            )
           : undefined
       }
     />

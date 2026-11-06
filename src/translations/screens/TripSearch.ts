@@ -19,9 +19,9 @@ const TripSearchTexts = {
       'Søkeresultat er lasta inn',
     ),
     searchEmptyResult: _(
-      'Fikk ingen søkeresultater',
-      'We could not find any search results',
-      'Ingen søkeresultat vart funne',
+      'Fikk ingen søkeresultater.',
+      'No search results found.',
+      'Ingen søkeresultat vart funne.',
     ),
     noResultReason: {
       IdenticalLocations: _(
@@ -143,14 +143,14 @@ const TripSearchTexts = {
     ),
     error: {
       network: _(
-        'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil',
-        `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
-        `Er du på nett? Vi klarar ikkje hente reiseforslag då tilkopling til internett manglar eller er ustabil`,
+        'Klarte ikke å hente reiseforslag. Nettforbindelsen din mangler eller er ustabil.',
+        `Couldn't complete the search. Your device seems to be offline or the connection is unstable.`,
+        `Klarte ikkje å hente reiseforslag. Tilkoplinga til internett manglar eller er ustabil.`,
       ),
       generic: _(
-        'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
-        'Something went wrong with the search. Please try again or contact customer service for assistance.',
-        'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'Klarte ikke å fullføre søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        "Couldn't complete the search. Please try again or contact customer service for assistance.",
+        'Klarte ikkje å fullføre søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
     },
 

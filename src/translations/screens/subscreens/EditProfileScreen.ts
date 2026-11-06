@@ -71,9 +71,9 @@ export const EditProfileTexts = {
       ),
     },
     error: _(
-      'Vi fikk ikke hentet profilinformasjonen din akkurat nå.',
-      'We were not able to retrieve your profile information.',
-      'Vi fekk ikkje henta profilinformasjonen din akkurat no.',
+      'Klarte ikke å hente profilinformasjonen din akkurat nå.',
+      "Couldn't load your profile information.",
+      'Klarte ikkje å henta profilinformasjonen din akkurat no.',
     ),
   },
   profileInfo: {
@@ -98,9 +98,9 @@ export const EditProfileTexts = {
   profileUpdate: {
     success: _('Profil oppdatert.', 'Profile updated.', 'Profil oppdatert.'),
     error: _(
-      'Vi fikk ikke til å oppdatere din profil. Vennligst prøv igjen.',
-      'We could not update you profile. Please try again.',
-      'Vi klarte ikkje å oppdatere profilen din. Ver venleg og prøv igjen.',
+      'Klarte ikke å oppdatere din profil. Prøv igjen.',
+      "Couldn't update your profile. Please try again.",
+      'Klarte ikkje å oppdatere profilen din. Prøv igjen.',
     ),
   },
 };

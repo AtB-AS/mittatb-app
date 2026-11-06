@@ -50,9 +50,9 @@ const FareZoneSearchTexts = {
   },
   messages: {
     networkError: _(
-      'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.',
-      'Hi, are you connected? We are unable to conduct a search, since your connection is missing or unstable',
-      'Hei, er du på nett? Vi klarar ikkje søke då du har manglande eller ustabil tilkoping til internett.',
+      'Klarte ikke å søke. Nettforbindelsen din mangler eller er ustabil.',
+      "Couldn't complete the search. Your connection is missing or unstable.",
+      'Klarte ikkje å søke. Du har manglande eller ustabil tilkopling til internett.',
     ),
     defaultError: _(
       'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',

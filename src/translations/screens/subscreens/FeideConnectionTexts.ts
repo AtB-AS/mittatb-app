@@ -37,9 +37,9 @@ const FeideConnectionTexts = {
     ),
   },
   error: _(
-    'Vi klarte ikke å koble til Feide. Prøv igjen.',
-    'We could not connect with Feide. Please try again.',
-    'Vi klarte ikkje å koble til Feide. Prøv igjen.',
+    'Klarte ikke å koble til Feide. Prøv igjen.',
+    "Couldn't connect with Feide. Please try again.",
+    'Klarte ikkje å koble til Feide. Prøv igjen.',
   ),
   alreadyConnectedError: {
     title: _(

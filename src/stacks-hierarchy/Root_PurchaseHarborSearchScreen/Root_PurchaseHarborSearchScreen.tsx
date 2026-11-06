@@ -104,10 +104,12 @@ export const Root_PurchaseHarborSearchScreen = ({
         {harborsQuery.isLoading && <Loading />}
         {harborsQuery.isError && (
           <>
-            <ScreenReaderAnnouncement message={t(dictionary.genericErrorMsg)} />
+            <ScreenReaderAnnouncement
+              message={t(HarborSearchTexts.messages.loadingError)}
+            />
             <MessageInfoBox
               type="error"
-              message={t(dictionary.genericErrorMsg)}
+              message={t(HarborSearchTexts.messages.loadingError)}
               onPressConfig={{
                 text: t(dictionary.retry),
                 action: harborsQuery.refetch,

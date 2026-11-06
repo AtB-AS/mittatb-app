@@ -4,9 +4,9 @@ import {orgSpecificTranslations} from '../../orgSpecificTranslations';
 
 const PurchaseOverviewTexts = {
   travelSearchInfo: _(
-    'Vi har fylt inn oppstartstidspunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
-    'We have filled in the start time and stops for your journey. Please check that the details are correct.',
-    'Vi har fylt inn oppstartstidspunkt og haldeplassar for reisa di. Ver venleg og sjekk at detaljane er korrekte.',
+    'Appen har fylt inn oppstartstidspunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
+    'The app has filled in the start time and stops for your journey. Please check that the details are correct.',
+    'Appen har fylt inn oppstartstidspunkt og haldeplassar for reisa di. Ver venleg og sjekk at detaljane er korrekte.',
   ),
   errorMessageBox: {
     title: _(
@@ -15,9 +15,9 @@ const PurchaseOverviewTexts = {
       'Det oppstod ein feil',
     ),
     message: _(
-      'Vi klarte ikke å søke opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
-      'We were unable to look up the price. Please try again, or contact customer service for assistance.',
-      'Vi klarte ikkje å søkje opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Klarte ikke å søke opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      "Couldn't look up the price. Please try again, or contact customer service for assistance.",
+      'Klarte ikkje å søkje opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
     productUnavailable: {
       title: (productName: string) =>
