@@ -6,14 +6,10 @@ import {Platform, View} from 'react-native';
 import {MapRoute} from './MapRoute';
 import {createMapLines, getMapBounds} from '../utils';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {NativeTouchable} from '@atb/components/native-touchable';
+import {Button} from '@atb/components/button';
 import {ServiceJourneyPolyline} from '@atb/api/types/serviceJourney';
-import {shadows} from '@atb/modules/map';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {Skeleton} from '@atb/components/skeleton';
 
 export type MapProps = {
   serviceJourneyPolylines: ServiceJourneyPolyline[];
@@ -48,7 +44,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
    * https://github.com/rnmapbox/maps/issues/2705
    */
   useEffect(() => {
-    if (isLoading) return;
     if (Platform.OS === 'ios') {
       setTimeout(
         () =>
@@ -56,13 +51,9 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         100,
       );
     }
-  }, [bounds, isLoading]);
+  }, [bounds]);
 
   const styles = useStyles();
-
-  if (isLoading) {
-    return <Skeleton style={styles.mapSkeleton} />;
-  }
 
   return (
     <View>
@@ -74,7 +65,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           zoomEnabled={false}
           {...mapViewConfig}
           compassEnabled={false}
-          onPress={onExpand}
+          onPress={isLoading ? undefined : onExpand}
         >
           <MapboxGL.Camera
             {...MapCameraConfig}
@@ -84,22 +75,21 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           <MapRoute lines={features} />
         </MapboxGL.MapView>
         <View style={styles.pillOverlay} pointerEvents="box-none">
-          <NativeTouchable
-            variant="block"
-            style={styles.pill}
-            onPress={onExpand}
-            accessibilityRole="button"
-          >
-            {isLive && (
-              <ThemeIcon
-                svg={themeName === 'dark' ? RealtimeDark : RealtimeLight}
-              />
-            )}
-            <ThemeText typography="body__m__strong" type="primary">
-              {buttonText}
-            </ThemeText>
-            <ThemeIcon svg={ChevronRight} />
-          </NativeTouchable>
+          <Button
+            expanded={false}
+            surfaceColor="neutral"
+            text={buttonText}
+            leftIcon={
+              isLive
+                ? {svg: themeName === 'dark' ? RealtimeDark : RealtimeLight}
+                : undefined
+            }
+            rightIcon={{svg: ChevronRight}}
+            loading={isLoading}
+            hasShadow
+            style={styles.button}
+            onPress={() => onExpand?.()}
+          />
         </View>
       </View>
     </View>
@@ -113,10 +103,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.color.surface.neutral.subtle.background,
     overflow: 'hidden',
   },
-  mapSkeleton: {
-    height: 100,
-    borderRadius: theme.border.radius.regular,
-  },
   pillOverlay: {
     position: 'absolute',
     top: 0,
@@ -127,14 +113,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'flex-end',
     paddingHorizontal: theme.spacing.medium,
   },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.medium,
-    padding: theme.spacing.medium,
-    backgroundColor: theme.color.surface.neutral.strong.background,
-    borderRadius: theme.border.radius.circle,
-    ...shadows,
+  button: {
+    alignSelf: 'flex-end',
   },
   map: {
     width: '100%',
