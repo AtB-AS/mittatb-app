@@ -17,6 +17,7 @@ type Args = {
   offers: ReserveOffer[];
   paymentMethod?: PaymentMethod;
   paymentAgreementId?: number;
+  createPaymentAgreement?: boolean;
   recipient?: TicketRecipientType;
   shouldSavePaymentMethod: boolean;
   onSuccess?: (reserveOfferResponse: ReserveOfferResponse) => void;
@@ -27,6 +28,7 @@ export const useReserveOfferMutation = ({
   offers,
   paymentMethod,
   paymentAgreementId,
+  createPaymentAgreement,
   recipient,
   shouldSavePaymentMethod,
   onSuccess,
@@ -46,6 +48,7 @@ export const useReserveOfferMutation = ({
           ? undefined
           : paymentMethod?.recurringPayment?.id,
         paymentAgreementId,
+        createPaymentAgreement,
         shouldSavePaymentMethod,
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
