@@ -75,11 +75,15 @@ import {useStoredTripPatterns} from '@atb/modules/experimental-store-trip-patter
 import {useIsExperimentalEnabled} from '@atb/modules/experimental';
 import type {TripPattern} from '@atb/api/types/trips';
 import {openUrl} from '@atb/utils/open-url';
+import {useDelayGate} from '@atb/utils/use-delay-gate';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
 import queryString from 'query-string';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreventRemove} from '@react-navigation/native';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
+
+const MAX_PAYMENT_AGREEMENTS_WAIT_MS = 3 * ONE_SECOND_MS;
 
 export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   navigation,
@@ -192,6 +196,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const paymentAgreementId = agreementPaymentType
     ? getLatestPaymentAgreement(paymentAgreements, agreementPaymentType)?.id
     : undefined;
+  // Wait for the agreements before paying, but not for too long, since paying
+  // with Vipps without an agreement still works.
+  const hasWaitedForPaymentAgreements = useDelayGate(
+    MAX_PAYMENT_AGREEMENTS_WAIT_MS,
+    isFetchingPaymentAgreements,
+  );
+  const isWaitingForPaymentAgreements =
+    shouldUsePaymentAgreement &&
+    isFetchingPaymentAgreements &&
+    !hasWaitedForPaymentAgreements;
   // The agreements must be loaded, so the user isn't offered to create an
   // agreement that already exists or is being created.
   const canCreatePaymentAgreement =
@@ -607,9 +621,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         <PaymentButton
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}
-          isFetchingPaymentAgreements={
-            shouldUsePaymentAgreement && isFetchingPaymentAgreements
-          }
+          isWaitingForPaymentAgreements={isWaitingForPaymentAgreements}
           mode={params.mode}
           tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
@@ -648,7 +660,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 type PaymentButtonProps = {
   isSearchingOffer: boolean;
   isOfferError: boolean;
-  isFetchingPaymentAgreements: boolean;
+  isWaitingForPaymentAgreements: boolean;
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
   tripAnalytics?: TripAnalytics;
@@ -661,7 +673,7 @@ type PaymentButtonProps = {
 const PaymentButton = ({
   isSearchingOffer,
   isOfferError,
-  isFetchingPaymentAgreements,
+  isWaitingForPaymentAgreements,
   totalPrice,
   mode,
   tripAnalytics,
@@ -718,7 +730,7 @@ const PaymentButton = ({
       disabled={
         !!isOfferError ||
         reserveStatus === 'success' ||
-        isFetchingPaymentAgreements
+        isWaitingForPaymentAgreements
       }
       onPress={() => {
         if (paymentMethod) {
