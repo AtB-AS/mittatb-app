@@ -22,3 +22,11 @@ onFlowComplete:
 - runFlow:
     file: travelSearch/changeTimeForTravelSearch.yaml
     label: 'Travel search with time change'
+
+- runFlow:
+    file: travelSearch/filterTravelSearch.yaml
+    label: 'Travel search with transport mode filter'
+
+- runFlow:
+    file: travelSearch/walkBikeSearch.yaml
+    label: 'Travel search with walk and bike options'

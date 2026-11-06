@@ -6,11 +6,11 @@ name: 'Mobile token in settings'
     label: 'Navigate to Profile tab'
 
 - scrollUntilVisible:
-      element:
-          id: ${output.profile.settings}
-      direction: UP
-      timeout: 10000
-      label: 'Scroll to settings'
+    element:
+      id: ${output.profile.settings}
+    direction: UP
+    timeout: 10000
+    label: 'Scroll to settings'
 - tapOn:
     id: ${output.profile.settings}
     label: 'Navigate to settings'

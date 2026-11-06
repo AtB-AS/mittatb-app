@@ -30,6 +30,32 @@ name: 'Simple travel search'
       id: ${output.tripSearch.result(0)}
     timeout: 20000
     label: 'Wait for trip results'
+
+# Copy start time and duration from the overview
+- runFlow:
+    when:
+      visible:
+        id: ${output.tripSearch.aimedTime(0)}
+    commands:
+      - copyTextFrom:
+          id: ${output.tripSearch.aimedTime(0)}
+          label: 'Copy scheduled time from overview'
+- runFlow:
+    when:
+      notVisible:
+        id: ${output.tripSearch.aimedTime(0)}
+    commands:
+      - copyTextFrom:
+          id: ${output.tripSearch.time(0)}
+          label: 'Copy time from overview'
+- evalScript: ${output.overviewStartTime = maestro.copiedText}
+- copyTextFrom:
+    id: ${output.tripSearch.duration}
+    childOf:
+      id: ${output.tripSearch.firstResult}
+    label: 'Copy duration from overview'
+- evalScript: ${output.overviewDuration = maestro.copiedText}
+
 - tapOn:
     id: ${output.tripSearch.firstResult}
     label: 'Open first trip result'
@@ -44,6 +70,50 @@ name: 'Simple travel search'
 - assertVisible:
     text: ${'.*' + output.myToPlace + '.*'}
     label: 'Verify to name'
+
+# Compare start time and duration in the details with the overview
+- evalScript: ${output.detailsStartTime = ''}
+- runFlow:
+    when:
+      visible:
+        id: ${output.tripDetails.aimedTime}
+        childOf:
+          id: ${output.tripDetails.firstLegFrom}
+    commands:
+      - copyTextFrom:
+          id: ${output.tripDetails.aimedTime}
+          childOf:
+            id: ${output.tripDetails.firstLegFrom}
+          label: 'Copy aimed start time from details'
+      - evalScript: ${output.detailsStartTime = maestro.copiedText}
+- runFlow:
+    when:
+      true: ${!output.detailsStartTime}
+    commands:
+      - copyTextFrom:
+          id: ${output.tripDetails.scheduledTime}
+          childOf:
+            id: ${output.tripDetails.firstLegFrom}
+          label: 'Copy scheduled start time from details'
+      - evalScript: ${output.detailsStartTime = maestro.copiedText}
+- copyTextFrom:
+    id: ${output.tripDetails.duration}
+    label: 'Copy duration from details'
+- evalScript: ${output.detailsDuration = maestro.copiedText}
+- runScript:
+    file: ../../utils/tripTimes.js
+    env:
+      OVERVIEW_START: ${output.overviewStartTime}
+      DETAILS_START: ${output.detailsStartTime}
+      OVERVIEW_DURATION: ${output.overviewDuration}
+      DETAILS_DURATION: ${output.detailsDuration}
+- assertTrue:
+    condition: ${output.startTimeIsCorrect}
+    label: 'Verify start time is the same in overview and details'
+- assertTrue:
+    condition: ${output.durationIsCorrect}
+    label: 'Verify duration is the same in overview and details'
+
 - tapOn:
     id: ${output.nav.back}
     label: 'Go back'

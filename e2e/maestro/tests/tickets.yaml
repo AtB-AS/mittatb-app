@@ -24,6 +24,10 @@ onFlowComplete:
     label: 'Purchase history'
 
 - runFlow:
+    file: tickets/ticketPurchaseChoices.yaml
+    label: 'Ticket purchase choices'
+
+- runFlow:
     file: tickets/ticketPurchase.yaml
     label: 'Ticket purchase'
 
