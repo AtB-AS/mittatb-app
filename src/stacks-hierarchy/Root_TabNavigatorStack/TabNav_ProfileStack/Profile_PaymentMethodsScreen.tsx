@@ -26,7 +26,11 @@ import {View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
+import {
+  ExpiryMessage,
+  PaymentBrand,
+  usePaymentAgreementsNotification,
+} from '@atb/modules/payment';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
@@ -87,6 +91,8 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
+  const showAgreementsNotification =
+    usePaymentAgreementsNotification(paymentAgreements);
   const hasPaymentAgreementsError =
     isPaymentAgreementsError ||
     addPaymentAgreement.isError ||
@@ -188,6 +194,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                   addPaymentAgreement.mutate(paymentType)
                 }
                 onStop={onStopPaymentAgreement}
+                showNotification={showAgreementsNotification}
                 isLoading={
                   addPaymentAgreement.isPending ||
                   stopPaymentAgreement.isPending
