@@ -34,7 +34,7 @@ export const PaymentAgreementBox = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  // Only Vipps agreements are supported for now
+  // The texts are specific to Vipps
   if (paymentType !== PaymentType.Vipps) return null;
 
   const title = t(

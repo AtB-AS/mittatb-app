@@ -12,6 +12,7 @@ import {
   PaymentType,
   ReserveOffer,
   getLatestPaymentAgreement,
+  isPaymentAgreementSupported,
   useCancelPaymentMutation,
   useListPaymentAgreementsQuery,
   type PreReservation,
@@ -173,14 +174,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     ...baggageProductOffers,
   ];
 
-  const shouldUsePaymentAgreement =
+  const agreementPaymentType =
     isVippsPaymentAgreementEnabled &&
-    paymentMethod?.paymentType === PaymentType.Vipps &&
-    !isFree;
+    !isFree &&
+    isPaymentAgreementSupported(paymentMethod?.paymentType)
+      ? paymentMethod?.paymentType
+      : undefined;
+  const shouldUsePaymentAgreement = !!agreementPaymentType;
   const {data: paymentAgreements, isFetching: isFetchingPaymentAgreements} =
     useListPaymentAgreementsQuery(shouldUsePaymentAgreement);
-  const paymentAgreementId = shouldUsePaymentAgreement
-    ? getLatestPaymentAgreement(paymentAgreements, PaymentType.Vipps)?.id
+  const paymentAgreementId = agreementPaymentType
+    ? getLatestPaymentAgreement(paymentAgreements, agreementPaymentType)?.id
     : undefined;
 
   const reserveMutation = useReserveOfferMutation({
