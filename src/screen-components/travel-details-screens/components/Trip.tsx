@@ -139,7 +139,7 @@ export const Trip: React.FC<TripProps> = ({
     <View style={styles.container}>
       {!isScreenReaderEnabled && tripPatternLegs && (
         <CompactTravelDetailsMap
-          serviceJourneyPolylines={mapLegs}
+          serviceJourneyPolylines={tripPatternLegs}
           isLive={hasLiveVehicle}
           isLoading={isMapLoading}
           buttonText={t(
