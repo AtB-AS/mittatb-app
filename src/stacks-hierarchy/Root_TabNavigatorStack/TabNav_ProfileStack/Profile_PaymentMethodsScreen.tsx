@@ -15,7 +15,7 @@ import {
   PaymentType,
   RecurringPayment,
   useAddPaymentAgreementMutation,
-  useListPaymentAgreementsQuery,
+  usePaymentAgreementsQuery,
   useStopPaymentAgreementMutation,
 } from '@atb/modules/ticketing';
 import {ProfileTexts, useTranslation} from '@atb/translations';
@@ -83,12 +83,16 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const showPaymentAgreements =
     isVippsPaymentAgreementEnabled && paymentTypes.includes(PaymentType.Vipps);
   const {
-    data: paymentAgreements,
+    data: paymentAgreementsData,
     isLoading: isLoadingPaymentAgreements,
     isFetching: isFetchingPaymentAgreements,
     isError: isPaymentAgreementsError,
     refetch: refetchPaymentAgreements,
-  } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
+  } = usePaymentAgreementsQuery(isFocused && showPaymentAgreements, {
+    refetchWhilePending: true,
+  });
+  const paymentAgreements = paymentAgreementsData?.active;
+  const pendingPaymentAgreements = paymentAgreementsData?.pending;
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
   const showAgreementsNotification =
@@ -190,10 +194,15 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
             {showPaymentAgreements && paymentAgreements && (
               <PaymentAgreementsSection
                 agreements={paymentAgreements}
+                pendingAgreements={pendingPaymentAgreements}
                 onActivate={(paymentType) =>
                   addPaymentAgreement.mutate(paymentType)
                 }
                 onStop={onStopPaymentAgreement}
+                // Not active yet, so it can be cancelled without confirming
+                onCancel={(pendingAgreement) =>
+                  stopPaymentAgreement.mutate(pendingAgreement.id)
+                }
                 showNotification={showAgreementsNotification}
                 isLoading={
                   addPaymentAgreement.isPending ||
