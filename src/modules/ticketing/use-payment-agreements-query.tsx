@@ -73,8 +73,12 @@ export const usePaymentAgreementsQuery = (
       refetchWhilePending && query.state.data?.some(isPendingPaymentAgreement)
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
         : false,
+    // Long enough to reuse the agreements preloaded on the purchase overview
+    // screen. Changes made in the app invalidate them anyway.
+    staleTime: ONE_MINUTE_MS,
     gcTime: ONE_HOUR_MS,
-    refetchOnWindowFocus,
+    // Also when not stale, since the agreements may have changed in Vipps
+    refetchOnWindowFocus: refetchOnWindowFocus ? 'always' : false,
     enabled: enabled && isLoggedIn && !!abtCustomerId,
   });
 };
