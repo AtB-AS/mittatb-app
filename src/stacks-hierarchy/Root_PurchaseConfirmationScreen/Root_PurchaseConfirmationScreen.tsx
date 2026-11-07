@@ -189,23 +189,24 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       ? paymentMethod?.paymentType
       : undefined;
   const shouldUsePaymentAgreement = !!agreementPaymentType;
-  const {data: paymentAgreementsData, isFetching: isFetchingPaymentAgreements} =
+  const {data: paymentAgreementsData, isLoading: isLoadingPaymentAgreements} =
     usePaymentAgreementsQuery(shouldUsePaymentAgreement);
   const paymentAgreements = paymentAgreementsData?.active;
   const pendingPaymentAgreements = paymentAgreementsData?.pending;
   const paymentAgreementId = agreementPaymentType
     ? getLatestPaymentAgreement(paymentAgreements, agreementPaymentType)?.id
     : undefined;
-  // Wait for the agreements before paying, but not for too long, since paying
-  // with Vipps without an agreement still works.
+  // Wait for the agreements before paying, unless they are already loaded, e.g.
+  // preloaded on the overview screen. But not for too long, since paying with
+  // Vipps without an agreement still works.
+  const shouldWaitForPaymentAgreements =
+    shouldUsePaymentAgreement && isLoadingPaymentAgreements;
   const hasWaitedForPaymentAgreements = useDelayGate(
     MAX_PAYMENT_AGREEMENTS_WAIT_MS,
-    isFetchingPaymentAgreements,
+    shouldWaitForPaymentAgreements,
   );
   const isWaitingForPaymentAgreements =
-    shouldUsePaymentAgreement &&
-    isFetchingPaymentAgreements &&
-    !hasWaitedForPaymentAgreements;
+    shouldWaitForPaymentAgreements && !hasWaitedForPaymentAgreements;
   // The agreements must be loaded, so the user isn't offered to create an
   // agreement that already exists or is being created.
   const canCreatePaymentAgreement =

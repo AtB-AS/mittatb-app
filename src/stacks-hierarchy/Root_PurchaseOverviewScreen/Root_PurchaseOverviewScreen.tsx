@@ -1,5 +1,8 @@
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {getReferenceDataName} from '@atb/modules/configuration';
+import {
+  getReferenceDataName,
+  useFirestoreConfigurationContext,
+} from '@atb/modules/configuration';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {
   dictionary,
@@ -29,7 +32,12 @@ import {Snackbar, useSnackbar} from '@atb/components/snackbar';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {useProductAlternatives} from '@atb/modules/ticketing';
+import {
+  isPaymentAgreementSupported,
+  usePaymentAgreementsQuery,
+  useProductAlternatives,
+} from '@atb/modules/ticketing';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {
@@ -68,6 +76,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
+
+  // Preloads the payment agreements, so the payment doesn't have to wait for
+  // them on the confirmation screen
+  const {isVippsPaymentAgreementEnabled} = useFeatureTogglesContext();
+  const {paymentTypes} = useFirestoreConfigurationContext();
+  usePaymentAgreementsQuery(
+    isVippsPaymentAgreementEnabled &&
+      !isFree &&
+      paymentTypes.some(isPaymentAgreementSupported),
+  );
 
   const preassignedFareProductAlternatives = useProductAlternatives(selection);
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();

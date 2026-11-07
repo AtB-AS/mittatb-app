@@ -44,10 +44,17 @@ const selectPaymentAgreements = (paymentAgreements: PaymentAgreement[]) => ({
  *
  * With `refetchWhilePending`, it refetches regularly while there are pending
  * agreements, so they move to the active ones as soon as they are ready.
+ *
+ * With `refetchOnWindowFocus`, it refetches when the app is opened again, since
+ * the agreements can change outside of the app, e.g. when activating one in
+ * Vipps.
  */
 export const usePaymentAgreementsQuery = (
   enabled: boolean,
-  {refetchWhilePending = false}: {refetchWhilePending?: boolean} = {},
+  {
+    refetchWhilePending = false,
+    refetchOnWindowFocus = false,
+  }: {refetchWhilePending?: boolean; refetchOnWindowFocus?: boolean} = {},
 ) => {
   const {abtCustomerId, isLoggedIn} = useAuthContext();
 
@@ -67,9 +74,7 @@ export const usePaymentAgreementsQuery = (
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
         : false,
     gcTime: ONE_HOUR_MS,
-    // The agreements can change outside of the app, e.g. when activating one in
-    // Vipps, so refetch when the app is opened again.
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus,
     enabled: enabled && isLoggedIn && !!abtCustomerId,
   });
 };
