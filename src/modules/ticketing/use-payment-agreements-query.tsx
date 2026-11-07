@@ -45,16 +45,17 @@ const selectPaymentAgreements = (paymentAgreements: PaymentAgreement[]) => ({
  * With `refetchWhilePending`, it refetches regularly while there are pending
  * agreements, so they move to the active ones as soon as they are ready.
  *
- * With `refetchOnWindowFocus`, it refetches when the app is opened again, since
- * the agreements can change outside of the app, e.g. when activating one in
- * Vipps.
+ * Otherwise, fetched agreements are reused for an hour, since changes made in
+ * the app refetch them anyway. With `refetchWhenShown`, it refetches whenever
+ * it's enabled or the app is opened again instead, since the agreements can
+ * change outside of the app, e.g. when activating one in Vipps.
  */
 export const usePaymentAgreementsQuery = (
   enabled: boolean,
   {
     refetchWhilePending = false,
-    refetchOnWindowFocus = false,
-  }: {refetchWhilePending?: boolean; refetchOnWindowFocus?: boolean} = {},
+    refetchWhenShown = false,
+  }: {refetchWhilePending?: boolean; refetchWhenShown?: boolean} = {},
 ) => {
   const {abtCustomerId, isLoggedIn} = useAuthContext();
 
@@ -73,12 +74,9 @@ export const usePaymentAgreementsQuery = (
       refetchWhilePending && query.state.data?.some(isPendingPaymentAgreement)
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
         : false,
-    // Long enough to reuse the agreements preloaded on the purchase overview
-    // screen. Changes made in the app invalidate them anyway.
-    staleTime: ONE_MINUTE_MS,
+    staleTime: refetchWhenShown ? 0 : ONE_HOUR_MS,
     gcTime: ONE_HOUR_MS,
-    // Also when not stale, since the agreements may have changed in Vipps
-    refetchOnWindowFocus: refetchOnWindowFocus ? 'always' : false,
+    refetchOnWindowFocus: refetchWhenShown,
     enabled: enabled && isLoggedIn && !!abtCustomerId,
   });
 };

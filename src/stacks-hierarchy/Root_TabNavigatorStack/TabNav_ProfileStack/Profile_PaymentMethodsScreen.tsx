@@ -90,7 +90,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     refetch: refetchPaymentAgreements,
   } = usePaymentAgreementsQuery(isFocused && showPaymentAgreements, {
     refetchWhilePending: true,
-    refetchOnWindowFocus: true,
+    refetchWhenShown: true,
   });
   const paymentAgreements = paymentAgreementsData?.active;
   const pendingPaymentAgreements = paymentAgreementsData?.pending;
