@@ -19,3 +19,4 @@ export {isCardPaymentMethod, isNonRecurringPaymentType} from './utils';
 export {useSelectedShmoPaymentMethod} from './hooks/use-selected-shmo-payment-method';
 export {usePaymentAgreementDiscovery} from './hooks/use-payment-agreement-discovery';
 export {usePaymentAgreementsNotification} from './hooks/use-payment-agreements-notification';
+export {usePreloadPaymentAgreements} from './hooks/use-preload-payment-agreements';
