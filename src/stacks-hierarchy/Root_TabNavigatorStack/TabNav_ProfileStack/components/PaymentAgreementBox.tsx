@@ -9,24 +9,30 @@ import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {formatToShortDateWithFullYear} from '@atb/utils/date';
+import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {View} from 'react-native';
+
+const PENDING_PAYMENT_AGREEMENT_DELAY_MS = 300;
 
 type Props = {
   paymentType: PaymentType;
   /** The latest active payment agreement of this payment type, if any */
   agreement: PaymentAgreement | undefined;
+  /** The latest payment agreement of this payment type being created, if any */
+  pendingAgreement: PaymentAgreement | undefined;
   onActivate: () => void;
   onStop: (agreement: PaymentAgreement) => void;
   isLoading: boolean;
 };
 
 /**
- * Shows how to activate a payment agreement of the given payment type, or lets
- * the user stop the active one.
+ * Shows how to activate a payment agreement of the given payment type, that
+ * one is being created, or lets the user stop the active one.
  */
 export const PaymentAgreementBox = ({
   paymentType,
   agreement,
+  pendingAgreement,
   onActivate,
   onStop,
   isLoading,
@@ -34,18 +40,31 @@ export const PaymentAgreementBox = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
 
+  // An active agreement wins over a pending one
+  const hasOnlyPendingAgreement = !agreement && !!pendingAgreement;
+  // Agreements are often activated right after returning from Vipps, so only
+  // show it as pending if it stays pending for a moment, to avoid a flicker.
+  const hasBeenPendingForAMoment = useDelayGate(
+    PENDING_PAYMENT_AGREEMENT_DELAY_MS,
+    hasOnlyPendingAgreement,
+  );
+  const showAsPending = hasOnlyPendingAgreement && hasBeenPendingForAMoment;
+
   // The texts are specific to Vipps
   if (paymentType !== PaymentType.Vipps) return null;
-
   const title = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.title
-      : PaymentMethodsTexts.agreements.vipps.inactive.title,
+      : showAsPending
+        ? PaymentMethodsTexts.agreements.vipps.pending.title
+        : PaymentMethodsTexts.agreements.vipps.inactive.title,
   );
   const description = t(
     agreement
       ? PaymentMethodsTexts.agreements.vipps.active.description
-      : PaymentMethodsTexts.agreements.vipps.inactive.description,
+      : showAsPending
+        ? PaymentMethodsTexts.agreements.vipps.pending.description
+        : PaymentMethodsTexts.agreements.vipps.inactive.description,
   );
 
   return (
@@ -80,8 +99,8 @@ export const PaymentAgreementBox = ({
           </View>
         </View>
       </GenericSectionItem>
-      <GenericSectionItem>
-        {agreement ? (
+      {agreement ? (
+        <GenericSectionItem>
           <Button
             surfaceColor="error"
             expanded={true}
@@ -91,18 +110,23 @@ export const PaymentAgreementBox = ({
             onPress={() => onStop(agreement)}
             testID="stopVippsAgreementButton"
           />
-        ) : (
+        </GenericSectionItem>
+      ) : showAsPending ? null : (
+        <GenericSectionItem>
           <Button
             surfaceColor="accent"
             expanded={true}
             text={t(PaymentMethodsTexts.agreements.vipps.inactive.button)}
             rightIcon={{svg: ExternalLink}}
             loading={isLoading}
+            // Also before it's shown as pending, so a second agreement can't be
+            // created in the meantime
+            disabled={hasOnlyPendingAgreement}
             onPress={onActivate}
             testID="activateVippsAgreementButton"
           />
-        )}
-      </GenericSectionItem>
+        </GenericSectionItem>
+      )}
     </Section>
   );
 };

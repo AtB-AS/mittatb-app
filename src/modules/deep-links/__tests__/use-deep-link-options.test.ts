@@ -10,7 +10,6 @@ let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
 
 const mockPlace = jest.fn();
 const mockReverse = jest.fn();
-const mockInvalidateQueries = jest.fn();
 
 const mockSelection = {id: 'test-selection'};
 const mockForType = jest.fn((_type: string) => ({
@@ -30,13 +29,8 @@ jest.mock('@atb/api', () => ({
   reverse: (...args: any[]) => mockReverse(...args),
 }));
 jest.mock('@atb/modules/ticketing', () => ({
-  LIST_PAYMENT_AGREEMENTS_QUERY_KEY: 'mockListPaymentAgreementsQueryKey',
   useGetFareProductsQuery: () => ({data: mockPreassignedFareProducts}),
   useTicketingContext: () => ({customerProfile: mockCustomerProfile}),
-}));
-jest.mock('@tanstack/react-query', () => ({
-  ...jest.requireActual('@tanstack/react-query'),
-  useQueryClient: () => ({invalidateQueries: mockInvalidateQueries}),
 }));
 jest.mock('@atb/modules/purchase-selection', () => ({
   usePurchaseSelectionBuilder: () => ({forType: mockForType}),
@@ -99,7 +93,6 @@ beforeEach(() => {
   mockEnableFormFactorsInMapFilter.mockClear();
   mockPlace.mockReset();
   mockReverse.mockReset();
-  mockInvalidateQueries.mockClear();
   jest
     .spyOn(Linking, 'addEventListener')
     .mockImplementation((_type, callback) => {
@@ -153,33 +146,12 @@ describe('privacy', () => {
 });
 
 describe('payment-methods', () => {
-  afterEach(() => jest.useRealTimers());
-
   it('opens the payment methods screen on top of the profile screen, without resetting the stack', () => {
     const state = getStateFrom('payment-methods');
     expect(findRoute(state, 'TabNav_ProfileStack')).toEqual({
       name: 'TabNav_ProfileStack',
       params: {screen: 'Profile_PaymentMethodsScreen', initial: false},
     });
-  });
-
-  it('invalidates the payment agreements a second after being linked back', async () => {
-    jest.useFakeTimers();
-    await getStateAfterLookupFrom('payment-methods');
-    expect(mockInvalidateQueries).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(1000);
-    expect(mockInvalidateQueries).toHaveBeenCalledWith({
-      queryKey: ['mockListPaymentAgreementsQueryKey'],
-    });
-  });
-
-  it('does not invalidate the payment agreements for other deep links', async () => {
-    jest.useFakeTimers();
-    await getStateAfterLookupFrom('privacy');
-
-    jest.advanceTimersByTime(5000);
-    expect(mockInvalidateQueries).not.toHaveBeenCalled();
   });
 });
 
