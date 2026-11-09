@@ -9,6 +9,7 @@ import {
   PostHog,
   type PostHogOptions,
   PostHogProvider,
+  type PostHogSessionReplayConfig,
 } from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {AnalyticsEventContext} from './types';
@@ -19,15 +20,26 @@ import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 
 let client: PostHog | undefined;
 
+const SESSION_REPLAY_CONFIG: PostHogSessionReplayConfig = {
+  maskAllTextInputs: false,
+  maskAllImages: false,
+  maskAllSandboxedViews: true,
+  captureLog: true,
+  captureNetworkTelemetry: true,
+};
+
 const initPosthogClient = (
   apiKey: string,
   host: string,
   isPosthogEnabled: boolean,
+  isPosthogSessionReplayEnabled: boolean,
 ): PostHog | undefined => {
   if (!isPosthogEnabled || !apiKey || !host || client) return client;
 
   client = new PostHog(apiKey, {
     host,
+    enableSessionReplay: isPosthogSessionReplayEnabled,
+    sessionReplayConfig: SESSION_REPLAY_CONFIG,
   });
 
   return client;
@@ -47,14 +59,20 @@ type Props = {
 
 export const AnalyticsContextProvider = ({children}: Props) => {
   const {userId, authenticationType} = useAuthContext();
-  const {isPosthogEnabled} = useFeatureTogglesContext();
+  const {isPosthogEnabled, isPosthogSessionReplayEnabled} =
+    useFeatureTogglesContext();
 
   const client = useMemo(
     () =>
       isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY
-        ? initPosthogClient(POSTHOG_API_KEY, POSTHOG_HOST, isPosthogEnabled)
+        ? initPosthogClient(
+            POSTHOG_API_KEY,
+            POSTHOG_HOST,
+            isPosthogEnabled,
+            isPosthogSessionReplayEnabled,
+          )
         : undefined,
-    [isPosthogEnabled],
+    [isPosthogEnabled, isPosthogSessionReplayEnabled],
   );
 
   useEffect(() => {

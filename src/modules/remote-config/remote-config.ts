@@ -45,6 +45,7 @@ export type RemoteConfig = {
   enable_only_stop_places_checkbox: boolean;
   enable_parking_violations_reporting: boolean;
   enable_posthog: boolean;
+  enable_posthog_session_replay: boolean;
   enable_push_notifications: boolean;
   enable_refunds: boolean;
   enable_save_trips: boolean;
@@ -125,6 +126,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_only_stop_places_checkbox: false,
   enable_parking_violations_reporting: false,
   enable_posthog: false,
+  enable_posthog_session_replay: false,
   enable_push_notifications: false,
   enable_refunds: true,
   enable_save_trips: true,
@@ -264,6 +266,9 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_parking_violations_reporting;
   const enable_posthog =
     values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
+  const enable_posthog_session_replay =
+    values['enable_posthog_session_replay']?.asBoolean() ??
+    defaultRemoteConfig.enable_posthog_session_replay;
   const enable_push_notifications =
     values['enable_push_notifications']?.asBoolean() ??
     defaultRemoteConfig.enable_push_notifications;
@@ -422,6 +427,7 @@ export function getConfig(): RemoteConfig {
     enable_only_stop_places_checkbox,
     enable_parking_violations_reporting,
     enable_posthog,
+    enable_posthog_session_replay,
     enable_push_notifications,
     enable_refunds,
     enable_save_trips,
