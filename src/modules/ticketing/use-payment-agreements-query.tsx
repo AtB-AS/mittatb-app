@@ -5,7 +5,8 @@ import {
   listPaymentAgreements,
 } from '@atb/modules/ticketing';
 import {useQuery} from '@tanstack/react-query';
-import {ONE_HOUR_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS, ONE_MINUTE_MS, ONE_SECOND_MS} from '@atb/utils/durations';
+import {parseDate} from '@atb/utils/date';
 
 const LIST_PAYMENT_AGREEMENTS_QUERY_KEY =
   'GET_LIST_PAYMENT_AGREEMENTS_QUERY_KEY';
@@ -21,10 +22,19 @@ const hasStatus =
   (status: PaymentAgreementStatus) => (paymentAgreement: PaymentAgreement) =>
     paymentAgreement.status === status;
 
+// Vipps expires pending agreements after 10 minutes, so don't show them as
+// pending for longer, even if they haven't been marked as expired yet.
+const PENDING_PAYMENT_AGREEMENT_MAX_AGE_MS = 10 * ONE_MINUTE_MS;
+
+/** Still being created, e.g. waiting for the user to accept it in Vipps */
+const isPendingPaymentAgreement = (paymentAgreement: PaymentAgreement) =>
+  paymentAgreement.status === PaymentAgreementStatus.Pending &&
+  Date.now() - parseDate(paymentAgreement.createdAt).getTime() <
+    PENDING_PAYMENT_AGREEMENT_MAX_AGE_MS;
+
 const selectPaymentAgreements = (paymentAgreements: PaymentAgreement[]) => ({
   active: paymentAgreements.filter(hasStatus(PaymentAgreementStatus.Active)),
-  /** Still being created, e.g. waiting for the user to accept it in Vipps */
-  pending: paymentAgreements.filter(hasStatus(PaymentAgreementStatus.Pending)),
+  pending: paymentAgreements.filter(isPendingPaymentAgreement),
 });
 
 /**
@@ -50,8 +60,7 @@ export const usePaymentAgreementsQuery = (
       ]),
     select: selectPaymentAgreements,
     refetchInterval: (query) =>
-      refetchWhilePending &&
-      query.state.data?.some(hasStatus(PaymentAgreementStatus.Pending))
+      refetchWhilePending && query.state.data?.some(isPendingPaymentAgreement)
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
         : false,
     gcTime: ONE_HOUR_MS,

@@ -199,10 +199,6 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                   addPaymentAgreement.mutate(paymentType)
                 }
                 onStop={onStopPaymentAgreement}
-                // Not active yet, so it can be cancelled without confirming
-                onCancel={(pendingAgreement) =>
-                  stopPaymentAgreement.mutate(pendingAgreement.id)
-                }
                 showNotification={showAgreementsNotification}
                 isLoading={
                   addPaymentAgreement.isPending ||

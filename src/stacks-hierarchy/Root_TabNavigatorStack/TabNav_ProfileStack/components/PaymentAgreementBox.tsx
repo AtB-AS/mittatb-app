@@ -10,6 +10,7 @@ import {useTranslation} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {formatToShortDateWithFullYear} from '@atb/utils/date';
 import {useDelayGate} from '@atb/utils/use-delay-gate';
+import {openUrl} from '@atb/utils/open-url';
 import {View} from 'react-native';
 
 const PENDING_PAYMENT_AGREEMENT_DELAY_MS = 300;
@@ -22,13 +23,12 @@ type Props = {
   pendingAgreement: PaymentAgreement | undefined;
   onActivate: () => void;
   onStop: (agreement: PaymentAgreement) => void;
-  onCancel: (pendingAgreement: PaymentAgreement) => void;
   isLoading: boolean;
 };
 
 /**
  * Shows how to activate a payment agreement of the given payment type, lets
- * the user cancel one being created, or stop the active one.
+ * the user complete one being created, or stop the active one.
  */
 export const PaymentAgreementBox = ({
   paymentType,
@@ -36,7 +36,6 @@ export const PaymentAgreementBox = ({
   pendingAgreement,
   onActivate,
   onStop,
-  onCancel,
   isLoading,
 }: Props) => {
   const styles = useStyles();
@@ -51,6 +50,7 @@ export const PaymentAgreementBox = ({
     hasOnlyPendingAgreement,
   );
   const showAsPending = hasOnlyPendingAgreement && hasBeenPendingForAMoment;
+  const pendingConfirmationUrl = pendingAgreement?.confirmationUrl;
 
   // The texts are specific to Vipps
   if (paymentType !== PaymentType.Vipps) return null;
@@ -101,8 +101,8 @@ export const PaymentAgreementBox = ({
           </View>
         </View>
       </GenericSectionItem>
-      <GenericSectionItem>
-        {agreement ? (
+      {agreement ? (
+        <GenericSectionItem>
           <Button
             surfaceColor="error"
             expanded={true}
@@ -112,17 +112,24 @@ export const PaymentAgreementBox = ({
             onPress={() => onStop(agreement)}
             testID="stopVippsAgreementButton"
           />
-        ) : showAsPending && pendingAgreement ? (
-          <Button
-            surfaceColor="error"
-            expanded={true}
-            mode="secondary"
-            text={t(PaymentMethodsTexts.agreements.vipps.pending.cancelButton)}
-            loading={isLoading}
-            onPress={() => onCancel(pendingAgreement)}
-            testID="cancelVippsAgreementButton"
-          />
-        ) : (
+        </GenericSectionItem>
+      ) : showAsPending ? (
+        // Agreements created as part of a payment have no link to complete
+        // them, so they are just shown as pending
+        pendingConfirmationUrl && (
+          <GenericSectionItem>
+            <Button
+              surfaceColor="accent"
+              expanded={true}
+              text={t(PaymentMethodsTexts.agreements.vipps.pending.button)}
+              rightIcon={{svg: ExternalLink}}
+              onPress={() => openUrl(pendingConfirmationUrl)}
+              testID="completeVippsAgreementButton"
+            />
+          </GenericSectionItem>
+        )
+      ) : (
+        <GenericSectionItem>
           <Button
             surfaceColor="accent"
             expanded={true}
@@ -135,8 +142,8 @@ export const PaymentAgreementBox = ({
             onPress={onActivate}
             testID="activateVippsAgreementButton"
           />
-        )}
-      </GenericSectionItem>
+        </GenericSectionItem>
+      )}
     </Section>
   );
 };

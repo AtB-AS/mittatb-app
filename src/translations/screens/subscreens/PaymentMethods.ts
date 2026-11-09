@@ -150,7 +150,7 @@ const PaymentMethodsTexts = {
           'It may take some time before the agreement is ready.',
           'Det kan ta litt tid før avtalen er klar.',
         ),
-        cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
+        button: _('Fullfør i Vipps', 'Complete in Vipps', 'Fullfør i Vipps'),
       },
     },
     stopModal: {

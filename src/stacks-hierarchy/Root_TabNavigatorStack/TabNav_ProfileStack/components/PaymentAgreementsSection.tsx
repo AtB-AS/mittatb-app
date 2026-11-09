@@ -21,7 +21,6 @@ type Props = {
   pendingAgreements: PaymentAgreement[] | undefined;
   onActivate: (paymentType: PaymentType) => void;
   onStop: (agreement: PaymentAgreement) => void;
-  onCancel: (pendingAgreement: PaymentAgreement) => void;
   isLoading: boolean;
   /** Highlights the section to help the user discover payment agreements */
   showNotification?: boolean;
@@ -32,7 +31,6 @@ export const PaymentAgreementsSection = ({
   pendingAgreements,
   onActivate,
   onStop,
-  onCancel,
   isLoading,
   showNotification,
 }: Props) => {
@@ -56,7 +54,6 @@ export const PaymentAgreementsSection = ({
           )}
           onActivate={() => onActivate(paymentType)}
           onStop={onStop}
-          onCancel={onCancel}
           isLoading={isLoading}
         />
       ))}
