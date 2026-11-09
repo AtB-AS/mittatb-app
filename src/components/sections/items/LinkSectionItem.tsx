@@ -64,18 +64,24 @@ export const LinkSectionItem = forwardRef<any, Props>(
     const {contentContainer, topContainer} = useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
+    // The custom label is left out of the spread further down, so it doesn't
+    // override the notification count added to it below
+    const {
+      accessibilityLabel: customAccessibilityLabel,
+      ...otherAccessibility
+    } = accessibility ?? {};
     const accessibilityWithOverrides = disabled
-      ? {...accessibility, accessibilityHint: undefined}
-      : accessibility;
+      ? {...otherAccessibility, accessibilityHint: undefined}
+      : otherAccessibility;
     const accessibilityLabel =
-      accessibilityWithOverrides?.accessibilityLabel ??
-      text +
-        screenReaderPause +
-        (subtitle ? subtitle + screenReaderPause : '') +
-        (notificationCount
-          ? t(NotificationBadgeTexts.a11yLabel(notificationCount)) +
-            screenReaderPause
-          : '');
+      (customAccessibilityLabel ??
+        text +
+          screenReaderPause +
+          (subtitle ? subtitle + screenReaderPause : '')) +
+      (notificationCount
+        ? t(NotificationBadgeTexts.a11yLabel(notificationCount)) +
+          screenReaderPause
+        : '');
 
     const leftAccessory =
       leftElement ?? (leftIcon ? <Icon icon={leftIcon} /> : null);

@@ -38,6 +38,7 @@ export function ContentHeading({
         typography="body__s"
         type="secondary"
         accessibilityLabel={accessibilityLabel}
+        style={styles.text}
       >
         {text}
       </ThemeText>
@@ -51,7 +52,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    columnGap: theme.spacing.small,
     marginTop: theme.spacing.medium,
     marginHorizontal: theme.spacing.medium,
+  },
+  text: {
+    // Wraps a long heading, so the notification badge stays visible
+    flexShrink: 1,
   },
 }));
