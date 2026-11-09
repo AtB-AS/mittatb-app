@@ -37,6 +37,8 @@ import {useAuthContext} from '@atb/modules/auth';
 import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
+import {usePaymentAgreementDiscovery} from '@atb/modules/payment';
+import {NotificationBadgeTexts} from '@atb/translations/components/NotificationBadge';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -70,6 +72,7 @@ export const Root_TabNavigatorStack = () => {
   const {customerNumber} = useAuthContext();
   const unreadCount = useChatUnreadCount();
   const serverOverrides = useDebugServerOverrides();
+  const {shouldShowPaymentAgreementDiscovery} = usePaymentAgreementDiscovery();
 
   useEffect(() => {
     if (
@@ -91,7 +94,8 @@ export const Root_TabNavigatorStack = () => {
     if (
       customerNumber === undefined ||
       unreadCount ||
-      serverOverrides.length > 0
+      serverOverrides.length > 0 ||
+      shouldShowPaymentAgreementDiscovery
     ) {
       return {
         color: theme.color.status.error.primary,
@@ -131,6 +135,11 @@ export const Root_TabNavigatorStack = () => {
       IconSelected: ProfileFill,
       testID: 'profileTab',
       notification: getProfileNotification(),
+      // Announces the first step of the guide to the payment agreements, like
+      // the notification badges on the way there
+      notificationAccessibilityLabel: shouldShowPaymentAgreementDiscovery
+        ? t(NotificationBadgeTexts.a11yLabel(1))
+        : undefined,
     },
   };
 
