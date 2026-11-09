@@ -129,6 +129,9 @@ export const PaymentAgreementBox = ({
             text={t(PaymentMethodsTexts.agreements.vipps.inactive.button)}
             rightIcon={{svg: ExternalLink}}
             loading={isLoading}
+            // Also before it's shown as pending, so a second agreement can't be
+            // created in the meantime
+            disabled={hasOnlyPendingAgreement}
             onPress={onActivate}
             testID="activateVippsAgreementButton"
           />
