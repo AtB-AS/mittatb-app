@@ -59,6 +59,9 @@ export const usePaymentAgreementsQuery = (
         PaymentAgreementStatus.Active,
       ]),
     select: selectPaymentAgreements,
+    // Gives every response a new reference, so the selected pending agreements
+    // are filtered by age again even when nothing else has changed
+    structuralSharing: false,
     refetchInterval: (query) =>
       refetchWhilePending && query.state.data?.some(isPendingPaymentAgreement)
         ? PENDING_PAYMENT_AGREEMENTS_REFETCH_INTERVAL_MS
