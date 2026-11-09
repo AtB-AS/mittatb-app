@@ -4,6 +4,7 @@ import {
   PaymentAgreement,
 } from '@atb/modules/ticketing';
 import {usePaymentAgreementDiscovery} from './use-payment-agreement-discovery';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 /**
  * Whether to show the notification on the payment agreements. The agreements
@@ -18,15 +19,24 @@ export const usePaymentAgreementsNotification = (
     completePaymentAgreementDiscovery,
   } = usePaymentAgreementDiscovery();
   const [isDiscoveredThisVisit, setIsDiscoveredThisVisit] = useState(false);
+  const isFocused = useIsFocusedAndActive();
   useEffect(() => {
-    if (!shouldShowPaymentAgreementDiscovery) return;
+    if (!isFocused || !shouldShowPaymentAgreementDiscovery) return;
     setIsDiscoveredThisVisit(true);
     completePaymentAgreementDiscovery();
-  }, [shouldShowPaymentAgreementDiscovery, completePaymentAgreementDiscovery]);
+  }, [
+    isFocused,
+    shouldShowPaymentAgreementDiscovery,
+    completePaymentAgreementDiscovery,
+  ]);
 
   const hasSupportedPaymentAgreement = paymentAgreements?.some(
     (paymentAgreement) =>
       isPaymentAgreementSupported(paymentAgreement.paymentType),
   );
+  useEffect(() => {
+    if (hasSupportedPaymentAgreement) setIsDiscoveredThisVisit(false);
+  }, [hasSupportedPaymentAgreement]);
+
   return isDiscoveredThisVisit && !hasSupportedPaymentAgreement;
 };
