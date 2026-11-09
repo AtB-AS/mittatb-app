@@ -7,14 +7,15 @@ import {
 
 /**
  * Preloads the payment agreements, so the payment doesn't have to wait for
- * them on the confirmation screen.
+ * them on the confirmation screen. Only when payment agreements are available,
+ * and `enabled`, e.g. not when the trip is free.
  */
-export const usePreloadPaymentAgreements = ({isFree}: {isFree: boolean}) => {
+export const usePreloadPaymentAgreements = (enabled: boolean) => {
   const {isVippsPaymentAgreementEnabled} = useFeatureTogglesContext();
   const {paymentTypes} = useFirestoreConfigurationContext();
   usePaymentAgreementsQuery(
-    isVippsPaymentAgreementEnabled &&
-      !isFree &&
+    enabled &&
+      isVippsPaymentAgreementEnabled &&
       paymentTypes.some(isPaymentAgreementSupported),
   );
 };

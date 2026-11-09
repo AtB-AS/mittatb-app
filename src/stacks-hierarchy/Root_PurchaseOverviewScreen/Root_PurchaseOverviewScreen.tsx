@@ -69,7 +69,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
-  usePreloadPaymentAgreements({isFree});
+  usePreloadPaymentAgreements(!isFree);
 
   const preassignedFareProductAlternatives = useProductAlternatives(selection);
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
