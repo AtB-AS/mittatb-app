@@ -97,9 +97,6 @@ export const PaymentAgreementSchema = z.object({
   // ISO 8601 timestamp for when the agreement was last updated. Not set if it
   // has not been modified since it was created.
   updatedAt: z.iso.datetime({offset: true}).optional(),
-  // Where the user confirms a pending agreement, e.g. in Vipps. Only set while
-  // the agreement is pending, and when the backend has it.
-  confirmationUrl: z.string().optional(),
 });
 export type PaymentAgreement = z.infer<typeof PaymentAgreementSchema>;
 
