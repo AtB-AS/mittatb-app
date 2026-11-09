@@ -90,6 +90,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     refetch: refetchPaymentAgreements,
   } = usePaymentAgreementsQuery(isFocused && showPaymentAgreements, {
     refetchWhilePending: true,
+    refetchWhenShown: true,
   });
   const paymentAgreements = paymentAgreementsData?.active;
   const pendingPaymentAgreements = paymentAgreementsData?.pending;
@@ -132,6 +133,10 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const refreshControlProps = useManualRefreshControlProps({
     refreshing: recurringPaymentFetching || isFetchingPaymentAgreements,
     onRefresh: () => {
+      // The errors from adding or stopping an agreement don't go away by
+      // themselves, even though the agreements are refetched afterwards
+      addPaymentAgreement.reset();
+      stopPaymentAgreement.reset();
       refetchRecurringPayment();
       if (showPaymentAgreements) refetchPaymentAgreements();
     },
