@@ -212,7 +212,6 @@ export const Root_ReportShmoDamageScreen = ({
         <Button
           surfaceColor="accent"
           loading={supportRequestStatus === 'pending'}
-          disabled={selectedDamages.length === 0}
           expanded={true}
           mode="primary"
           text={t(ContactShmoOperatorTexts.submitButton)}
