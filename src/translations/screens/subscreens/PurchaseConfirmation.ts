@@ -199,6 +199,15 @@ const PurchaseConfirmationTexts = {
     'The payment was not completed. Please try again, or contact customer service for assistance.',
     'Betalinga vart ikkje fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
+  createPaymentAgreement: {
+    vipps: {
+      title: _(
+        'Enklere betaling neste gang?',
+        'Easier payment next time?',
+        'Enklare betaling neste gong?',
+      ),
+    },
+  },
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   fram: {

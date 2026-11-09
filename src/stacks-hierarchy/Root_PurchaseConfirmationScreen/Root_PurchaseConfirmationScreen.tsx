@@ -40,6 +40,7 @@ import {PaymentMethod} from '@atb/modules/payment';
 import {PreassignedFareContractSummary} from './components/PreassignedFareProductSummary';
 import {SelectPaymentMethodSheet} from '@atb/modules/payment';
 import {PriceSummary} from './components/PriceSummary';
+import {CreatePaymentAgreementCheckbox} from './components/CreatePaymentAgreementCheckbox';
 import {useReserveOfferMutation} from './use-reserve-offer-mutation';
 import {useOnFareContractReceived} from './use-on-fare-contract-received';
 import {usePurchaseCallbackListener} from './use-purchase-callback-listener';
@@ -110,8 +111,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {recipient} = params;
   const productAlternatives = useProductAlternatives(selection);
 
-  const {isSaveTripsEnabled, isVippsPaymentAgreementEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isSaveTripsEnabled,
+    isVippsPaymentAgreementEnabled,
+    isPaymentAgreementOnboardingCheckboxEnabled,
+  } = useFeatureTogglesContext();
   const isAutoSaveTripsEnabled = useIsExperimentalEnabled();
   const {addTripPattern, canAddTripPattern} = useStoredTripPatterns();
   // Several sources can end the same purchase, so only save the trip and
@@ -186,11 +190,22 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const paymentAgreementId = agreementPaymentType
     ? getLatestPaymentAgreement(paymentAgreements, agreementPaymentType)?.id
     : undefined;
+  // The agreements must be loaded, so the user isn't offered to create an
+  // agreement that already exists.
+  const canCreatePaymentAgreement =
+    isPaymentAgreementOnboardingCheckboxEnabled &&
+    !!agreementPaymentType &&
+    paymentAgreements !== undefined &&
+    !paymentAgreementId;
+  const [isCreatePaymentAgreementChecked, setIsCreatePaymentAgreementChecked] =
+    useState(false);
 
   const reserveMutation = useReserveOfferMutation({
     offers,
     paymentMethod: isFree ? undefined : paymentMethod,
     paymentAgreementId,
+    createPaymentAgreement:
+      canCreatePaymentAgreement && isCreatePaymentAgreementChecked,
     recipient,
     shouldSavePaymentMethod,
     paymentData,
@@ -564,6 +579,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               onPress={selectPaymentMethod}
               ref={onCloseFocusRef}
             />
+            {canCreatePaymentAgreement && (
+              <CreatePaymentAgreementCheckbox
+                paymentType={agreementPaymentType}
+                isChecked={isCreatePaymentAgreementChecked}
+                onPress={() => setIsCreatePaymentAgreementChecked((c) => !c)}
+              />
+            )}
           </Section>
         )}
         {!!relevantTicketBonusProduct && !isFree && isBonusActiveForUser && (
