@@ -76,6 +76,14 @@ export const AnalyticsContextProvider = ({children}: Props) => {
   );
 
   useEffect(() => {
+    if (isPosthogSessionReplayEnabled) {
+      client?.startSessionRecording();
+    } else {
+      client?.stopSessionRecording();
+    }
+  }, [client, isPosthogSessionReplayEnabled]);
+
+  useEffect(() => {
     if (userId) {
       client?.identify(userId, {authenticationType});
     }
