@@ -19,6 +19,7 @@ import {
   type RefundReasonType,
 } from '@atb/modules/configuration';
 import {
+  dictionary,
   FareContractTexts,
   getTextForLanguage,
   useTranslation,
@@ -97,7 +98,7 @@ export function Root_RefundConfirmationScreen({navigation, route}: Props) {
         {!!refundReasons?.length && (
           <>
             <ContentHeading
-              text={t(FareContractTexts.refund.refundReasonTitle)}
+              text={`${t(FareContractTexts.refund.refundReasonTitle)} (${t(dictionary.required)})`}
             />
             <RadioGroupSection<RefundReasonType>
               items={refundReasons}
