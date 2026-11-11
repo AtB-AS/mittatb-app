@@ -114,6 +114,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_posthog',
   },
   {
+    name: 'isPosthogSessionReplayEnabled',
+    remoteConfigKey: 'enable_posthog_session_replay',
+  },
+  {
     name: 'isProductApiV2Enabled',
     remoteConfigKey: 'use_product_api_v2',
   },

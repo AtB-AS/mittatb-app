@@ -7,6 +7,7 @@ import {
   BottomSheetModalMethods,
 } from '../bottom-sheet';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {SessionReplayMask} from '@atb/modules/analytics';
 
 type Props = {
   file: string | undefined;
@@ -42,11 +43,13 @@ export const ImageConfirmationBottomSheet = ({
     >
       <View style={styles.container}>
         {!!file && (
-          <Image
-            source={{uri: file}}
-            style={styles.image}
-            resizeMode="contain"
-          />
+          <SessionReplayMask>
+            <Image
+              source={{uri: file}}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          </SessionReplayMask>
         )}
         <Button
           surfaceColor="accent"
