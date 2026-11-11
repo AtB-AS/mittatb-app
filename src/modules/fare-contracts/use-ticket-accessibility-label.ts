@@ -5,7 +5,7 @@ import {
   UserProfile,
 } from '@atb-as/config-specs';
 import {UniqueWithCount} from '@atb/utils/unique-with-count';
-import {getReferenceDataName, PointToPointValidity} from '../configuration';
+import {getReferenceDataName} from '../configuration';
 import {TravelRightDirection} from '@atb-as/utils';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useStopPlacesByModeQuery} from '@atb/queries/use-stop-places-by-mode-query';
@@ -18,14 +18,14 @@ export function useTicketAccessibilityLabel(
   userProfilesWithCount: UniqueWithCount<UserProfile>[],
   baggageProductsWithCount: UniqueWithCount<BaggageProduct>[],
   fareZones: FareZone[],
-  pointToPointValidity: PointToPointValidity | undefined,
+  fromTo: {fromId: string; toId: string} | undefined,
   direction: TravelRightDirection | undefined,
 ): string {
   const {t, language} = useTranslation();
 
   const harborsQuery = useStopPlacesByModeQuery(
     fareProductTypeConfig?.transportModes,
-    !!pointToPointValidity,
+    !!fromTo,
   );
 
   const travellersText = getTravellersText(
@@ -61,14 +61,11 @@ export function useTicketAccessibilityLabel(
         )} ${fromZoneName}, ${toZoneName}`;
 
   const harborInfo = () => {
-    if (pointToPointValidity && direction) {
+    if (fromTo && direction) {
       const fromName =
-        harborsQuery.data?.find(
-          (sp) => sp.id === pointToPointValidity.fromPlace,
-        )?.name ?? '';
+        harborsQuery.data?.find((sp) => sp.id === fromTo.fromId)?.name ?? '';
       const toName =
-        harborsQuery.data?.find((sp) => sp.id === pointToPointValidity.toPlace)
-          ?.name ?? '';
+        harborsQuery.data?.find((sp) => sp.id === fromTo.toId)?.name ?? '';
       return direction === TravelRightDirection.Both
         ? t(
             FareContractTexts.a11yTicketInfoLabels.harbors.returnTrip(

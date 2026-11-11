@@ -84,7 +84,12 @@ export const RecentFareContract = ({
     userProfilesWithCount,
     baggageProductsWithCount,
     [fromFareZone, toFareZone].filter(isDefined) as FareZone[],
-    pointToPointValidity,
+    pointToPointValidity
+      ? {
+          fromId: pointToPointValidity.fromPlace,
+          toId: pointToPointValidity.toPlace,
+        }
+      : undefined,
     direction,
   );
 

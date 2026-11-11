@@ -133,7 +133,7 @@ export const TravelInfoSectionItem = ({
     baggageProductsWithCount,
     travelRightFareZones ?? [],
     travelRightFromPlace && travelRightToPlace
-      ? {fromPlace: travelRightFromPlace, toPlace: travelRightToPlace}
+      ? {fromId: travelRightFromPlace, toId: travelRightToPlace}
       : undefined,
     direction,
   );
