@@ -11,37 +11,29 @@ import {onlyUniques} from '@atb/utils/only-uniques';
 export const useHarborsQuery = (
   transportModes?: ProductTypeTransportModes[],
 ) => {
-  const defaultModes = [TransportMode.Water];
+  const waterTransportModes = transportModes?.filter(
+    (t) => t.mode === TransportMode.Water,
+  );
+
   const defaultSubmodes = [
     TransportSubmode.HighSpeedPassengerService,
     TransportSubmode.HighSpeedVehicleService,
   ];
 
-  const uniqueModes = transportModes
-    ? transportModes
-        .map((tm) => tm.mode)
-        .filter(onlyUniques)
-        .filter(isValidTransportMode)
-    : defaultModes;
-
-  const uniqueSubmodes = transportModes
-    ? transportModes
+  const uniqueSubmodes = waterTransportModes
+    ? waterTransportModes
         .map((tm) => tm.subMode)
         .filter(onlyUniques)
         .filter(isValidTransportSubmode)
     : defaultSubmodes;
 
   return useQuery({
-    queryKey: ['harbors', uniqueModes, uniqueSubmodes],
-    queryFn: () => getStopPlacesByMode(uniqueModes, uniqueSubmodes),
-    staleTime: ONE_HOUR_MS,
-    gcTime: ONE_HOUR_MS,
+    queryKey: ['harbors', uniqueSubmodes],
+    enabled: !transportModes || uniqueSubmodes.length > 0,
+    queryFn: () => getStopPlacesByMode([TransportMode.Water], uniqueSubmodes),
+    staleTime: ONE_HOUR_MS * 6,
   });
 };
-
-function isValidTransportMode(mode: any): mode is TransportMode {
-  return Object.values(TransportMode).includes(mode);
-}
 
 function isValidTransportSubmode(subMode: any): subMode is TransportSubmode {
   return Object.values(TransportSubmode).includes(subMode);
