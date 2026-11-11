@@ -47,6 +47,7 @@ export type RemoteConfig = {
   enable_payment_agreement_onboarding_checkbox: boolean;
   enable_payment_agreement_onboarding_dots: boolean;
   enable_posthog: boolean;
+  enable_posthog_session_replay: boolean;
   enable_push_notifications: boolean;
   enable_refunds: boolean;
   enable_save_trips: boolean;
@@ -129,6 +130,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_payment_agreement_onboarding_checkbox: false,
   enable_payment_agreement_onboarding_dots: false,
   enable_posthog: false,
+  enable_posthog_session_replay: false,
   enable_push_notifications: false,
   enable_refunds: true,
   enable_save_trips: true,
@@ -274,6 +276,9 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_payment_agreement_onboarding_dots;
   const enable_posthog =
     values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
+  const enable_posthog_session_replay =
+    values['enable_posthog_session_replay']?.asBoolean() ??
+    defaultRemoteConfig.enable_posthog_session_replay;
   const enable_push_notifications =
     values['enable_push_notifications']?.asBoolean() ??
     defaultRemoteConfig.enable_push_notifications;
@@ -434,6 +439,7 @@ export function getConfig(): RemoteConfig {
     enable_payment_agreement_onboarding_checkbox,
     enable_payment_agreement_onboarding_dots,
     enable_posthog,
+    enable_posthog_session_replay,
     enable_push_notifications,
     enable_refunds,
     enable_save_trips,

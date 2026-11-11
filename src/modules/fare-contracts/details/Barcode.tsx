@@ -32,6 +32,7 @@ import {
 } from '@atb/components/bottom-sheet';
 import {Loading} from '@atb/components/loading';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
+import {SessionReplayMask} from '@atb/modules/analytics';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -40,7 +41,6 @@ type Props = {
 
 export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {t} = useTranslation();
-  const {mobileTokenStatus} = useMobileTokenContext();
   const {enable_new_token_barcode} = useRemoteConfigContext();
   const isFocusedAndActive = useIsFocusedAndActive();
 
@@ -57,6 +57,25 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
 
   if (validityStatus !== 'valid') return null;
 
+  return (
+    <SessionReplayMask>
+      <BarcodeContent
+        fc={fc}
+        enableNewTokenBarcode={enable_new_token_barcode}
+      />
+    </SessionReplayMask>
+  );
+}
+
+const BarcodeContent = ({
+  fc,
+  enableNewTokenBarcode,
+}: {
+  fc: FareContractType;
+  enableNewTokenBarcode: boolean;
+}) => {
+  const {mobileTokenStatus} = useMobileTokenContext();
+
   switch (mobileTokenStatus) {
     case 'loading':
       return <LoadingBarcode />;
@@ -65,7 +84,7 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
     case 'staticQr':
       return <StaticQrCode fc={fc} />;
     case 'success-and-inspectable':
-      if (enable_new_token_barcode) {
+      if (enableNewTokenBarcode) {
         return <BarcodeInspectionView />;
       } else {
         return <MobileTokenAztec fc={fc} />;
@@ -75,7 +94,7 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
     case 'error':
       return <BarcodeError />;
   }
-}
+};
 
 function useScreenBrightnessIncrease() {
   const isActive = useIsFocusedAndActive();
@@ -400,7 +419,7 @@ const StaticBarcodeBottomSheet = ({
       enableDynamicSizing={false}
       snapPoints={['80%']}
     >
-      <View style={styles.staticBottomContainer}>
+      <SessionReplayMask style={styles.staticBottomContainer}>
         <View style={[styles.aztecCode, styles.staticQrCode]}>
           <NativeTouchable
             variant="block"
@@ -416,7 +435,7 @@ const StaticBarcodeBottomSheet = ({
             </SecureView>
           </NativeTouchable>
         </View>
-      </View>
+      </SessionReplayMask>
     </BottomSheetModal>
   );
 };

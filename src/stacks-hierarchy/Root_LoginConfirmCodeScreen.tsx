@@ -21,6 +21,7 @@ import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {formatPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Loading} from '@atb/components/loading';
+import {SessionReplayMask} from '@atb/modules/analytics';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
@@ -102,20 +103,22 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
               )}
             </ThemeText>
           </View>
-          <Section>
-            <TextInputSectionItem
-              label={t(LoginTexts.confirmCode.input.label)}
-              placeholder={t(LoginTexts.confirmCode.input.placeholder)}
-              onChangeText={setCode}
-              keyboardType="number-pad"
-              textContentType="oneTimeCode"
-              showClear={true}
-              inlineLabel={false}
-              value={code}
-              autoFocus={true}
-              testID="loginConfirmCodeInput"
-            />
-          </Section>
+          <SessionReplayMask>
+            <Section>
+              <TextInputSectionItem
+                label={t(LoginTexts.confirmCode.input.label)}
+                placeholder={t(LoginTexts.confirmCode.input.placeholder)}
+                onChangeText={setCode}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                showClear={true}
+                inlineLabel={false}
+                value={code}
+                autoFocus={true}
+                testID="loginConfirmCodeInput"
+              />
+            </Section>
+          </SessionReplayMask>
           <View style={styles.buttonView}>
             {isLoading && <Loading style={styles.loading} size="large" />}
 

@@ -1552,6 +1552,29 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
+  - PostHog (3.92.7)
+  - posthog-react-native-plugin (2.13.0):
+    - hermes-engine
+    - PostHog (~> 3.92.7)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - PromisesObjC (2.4.1)
   - RCTDeprecation (0.86.3)
   - RCTRequired (0.86.3)
@@ -4262,6 +4285,7 @@ DEPENDENCIES:
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - Intercom
   - "intercom-react-native (from `../node_modules/@intercom/intercom-react-native`)"
+  - "posthog-react-native-plugin (from `../node_modules/@posthog/react-native-plugin`)"
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
   - RCTSwiftUI (from `../node_modules/react-native/ReactApple/RCTSwiftUI`)
@@ -4414,6 +4438,7 @@ SPEC REPOS:
     - MapboxCoreMaps
     - MapboxMaps
     - nanopb
+    - PostHog
     - PromisesObjC
     - React-Codegen
     - RecaptchaInterop
@@ -4476,6 +4501,8 @@ EXTERNAL SOURCES:
     :tag: hermes-v250829098.0.17
   intercom-react-native:
     :path: "../node_modules/@intercom/intercom-react-native"
+  posthog-react-native-plugin:
+    :path: "../node_modules/@posthog/react-native-plugin"
   RCTDeprecation:
     :path: "../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation"
   RCTRequired:
@@ -4747,6 +4774,8 @@ SPEC CHECKSUMS:
   MapboxCoreMaps: de1a4461d0ab5d65d907f06e8d82fdbe06bb3213
   MapboxMaps: 22340ae0e0d47b2e4761019b1d6c569ab04e088d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  PostHog: 3be87dd32b214e0dffb424d454ba41422c6e1b0b
+  posthog-react-native-plugin: 428114a8ac622348f3d52a99472a8c5b30968758
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   RCTDeprecation: 5268fe9d45036e52deb765d242297f1011e17333
   RCTRequired: 4ecfd325edd95cbbdc202163fb9cb2ba54ac3c9f
