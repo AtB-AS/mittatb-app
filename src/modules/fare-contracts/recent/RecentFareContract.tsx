@@ -13,7 +13,7 @@ import {
 } from '@atb/modules/configuration';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {getTransportModeText} from '@atb/components/transportation-modes';
-import {useHarborsQuery} from '@atb/queries';
+import {useStopPlacesByModeQuery} from '@atb/queries';
 import {TileWithButton} from '@atb/components/tile';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
@@ -61,7 +61,10 @@ export const RecentFareContract = ({
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
 
-  const harborsQuery = useHarborsQuery(fareProductTypeConfig?.transportModes);
+  const harborsQuery = useStopPlacesByModeQuery(
+    fareProductTypeConfig?.transportModes,
+    !!pointToPointValidity,
+  );
 
   const productName = getReferenceDataName(preassignedFareProduct, language);
 
@@ -81,8 +84,7 @@ export const RecentFareContract = ({
     userProfilesWithCount,
     baggageProductsWithCount,
     [fromFareZone, toFareZone].filter(isDefined) as FareZone[],
-    pointToPointValidity?.fromPlace,
-    pointToPointValidity?.toPlace,
+    pointToPointValidity,
     direction,
   );
 

@@ -4,7 +4,7 @@ import {
 } from '@atb/modules/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarborConnectionOverrides} from './use-harbor-connection-overrides';
-import {useHarborsQuery} from '@atb/queries';
+import {useStopPlacesByModeQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import {unionBy} from 'lodash';
 import {StopPlaceFragmentWithIsFree} from './types';
@@ -26,7 +26,7 @@ export const useHarbors = ({
   fromHarborId?: string;
   transportModes?: ProductTypeTransportModes[];
 } = {}) => {
-  const allHarborsQuery = useHarborsQuery(transportModes);
+  const allHarborsQuery = useStopPlacesByModeQuery(transportModes);
   const connectionsQuery = useConnectionsQuery(fromHarborId);
   const overrides = useHarborConnectionOverrides(fromHarborId);
 
