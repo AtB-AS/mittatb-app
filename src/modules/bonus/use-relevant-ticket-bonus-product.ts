@@ -14,6 +14,9 @@ export function useRelevantTicketBonusProduct(
   if (selection.isOnBehalfOf) return undefined;
   if (selection.userProfilesWithCount.length !== 1) return undefined;
   if (selection.userProfilesWithCount[0].count !== 1) return undefined;
+  // Sales gives no bonus discount when a supplement, like a bike, is bought along with the ticket.
+  if (selection.supplementProductsWithCount.some((sp) => sp.count > 0))
+    return undefined;
 
   return activeBonusProducts?.find(
     (p) =>
