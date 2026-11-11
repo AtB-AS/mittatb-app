@@ -4,7 +4,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ONE_DAY_MS, ONE_HOUR_MS} from '@atb/utils/durations';
+import {ONE_HOUR_MS, ONE_WEEK_MS} from '@atb/utils/durations';
 import {ProductTypeTransportModes} from '@atb-as/config-specs';
 import {onlyUniques} from '@atb/utils/only-uniques';
 
@@ -26,8 +26,11 @@ export const useStopPlacesByModeQuery = (
     queryKey: ['stopPlacesByMode', uniqueModes, uniqueSubmodes],
     enabled: enabled && !!transportModes.length,
     queryFn: () => getStopPlacesByMode(uniqueModes, uniqueSubmodes),
-    staleTime: ONE_HOUR_MS * 6,
-    gcTime: ONE_DAY_MS,
+    staleTime: ONE_HOUR_MS * 12,
+    gcTime: ONE_WEEK_MS,
+    meta: {
+      persistInAsyncStorage: true,
+    },
   });
 };
 
