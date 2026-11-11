@@ -247,11 +247,7 @@ const FareContractTexts = {
       'Angre kjøpet av billetten og få pengane tilbake. Beløpet er tilbake på kontoen din innan få virkedagar.',
     ),
     confirm: _('Angre kjøp', 'Cancel purchase', 'Angre kjøp'),
-    refundReasonTitle: _(
-      'Velg en årsak (obligatorisk)',
-      'Select a reason (required)',
-      'Vel ein årsak (obligatorisk)',
-    ),
+    refundReasonTitle: _('Velg en årsak', 'Select a reason', 'Vel ein årsak'),
     missingReasonError: _(
       'Du må velge en årsak før du kan angre kjøpet.',
       'You need to select a reason before cancelling the purchase.',

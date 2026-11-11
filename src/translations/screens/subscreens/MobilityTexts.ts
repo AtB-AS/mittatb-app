@@ -82,11 +82,7 @@ export const MobilityTexts = {
     title: _('Meld skade', 'Report damage', 'Meld skade'),
 
     damages: {
-      header: _(
-        'Hva er feil? (obligatorisk)',
-        'What is wrong? (required)',
-        'Kva er feil? (obligatorisk)',
-      ),
+      header: _('Hva er feil?', 'What is wrong?', 'Kva er feil?'),
       errorMessage: _(
         'Vennligst velg minst én ting som er feil.',
         'Please select at least one thing that is wrong.',

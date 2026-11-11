@@ -172,6 +172,7 @@ export const Root_SmartParkAndRideEditScreen = ({
           inputProps={{
             value: licensePlate,
             onChangeText: setLicensePlate,
+            required: true,
           }}
         />
 
