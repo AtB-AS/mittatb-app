@@ -209,7 +209,7 @@ const dictionary = {
   selected: _('Valgt', 'selected', 'Valgt'),
   unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
   zone: _('Sone', 'Zone', 'Sone'),
-  required: _('obligatorisk', 'required', 'obligatorisk'),
+  required: _('påkrevd', 'required', 'påkravd'),
   telephone: (tel: string) => _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
 };
 
