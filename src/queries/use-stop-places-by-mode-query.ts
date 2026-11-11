@@ -9,32 +9,22 @@ import {ProductTypeTransportModes} from '@atb-as/config-specs';
 import {onlyUniques} from '@atb/utils/only-uniques';
 
 export const useStopPlacesByModeQuery = (
-  transportModes?: ProductTypeTransportModes[],
+  transportModes: ProductTypeTransportModes[] = [],
   enabled: boolean = true,
 ) => {
-  const defaultModes = [TransportMode.Water];
-  const defaultSubmodes = [
-    TransportSubmode.HighSpeedPassengerService,
-    TransportSubmode.HighSpeedVehicleService,
-  ];
-
   const uniqueModes = transportModes
-    ? transportModes
-        .map((tm) => tm.mode)
-        .filter(onlyUniques)
-        .filter(isValidTransportMode)
-    : defaultModes;
+    .map((tm) => tm.mode)
+    .filter(onlyUniques)
+    .filter(isValidTransportMode);
 
   const uniqueSubmodes = transportModes
-    ? transportModes
-        .map((tm) => tm.subMode)
-        .filter(onlyUniques)
-        .filter(isValidTransportSubmode)
-    : defaultSubmodes;
+    .map((tm) => tm.subMode)
+    .filter(onlyUniques)
+    .filter(isValidTransportSubmode);
 
   return useQuery({
     queryKey: ['stopPlacesByMode', uniqueModes, uniqueSubmodes],
-    enabled,
+    enabled: enabled && !!transportModes.length,
     queryFn: () => getStopPlacesByMode(uniqueModes, uniqueSubmodes),
     staleTime: ONE_HOUR_MS * 6,
     gcTime: ONE_DAY_MS,
