@@ -209,14 +209,6 @@ export const GeolocationContextProvider = ({children}: Props) => {
       locationName,
     });
 
-  // On iOS, `getCurrentPosition` pauses an active watch without resuming it,
-  // so the watch is restarted after each call.
-  // https://github.com/michalchudziak/react-native-geolocation/pull/334
-  const [watchRestartCount, setWatchRestartCount] = useState(0);
-  const restartWatchOnIos = useCallback(() => {
-    if (Platform.OS === 'ios') setWatchRestartCount((count) => count + 1);
-  }, []);
-
   useEffect(() => {
     if (appStatus === 'active') {
       if (!locationIsAvailable) {
@@ -241,24 +233,18 @@ export const GeolocationContextProvider = ({children}: Props) => {
         return () => Geolocation.clearWatch(watchId);
       }
     }
-  }, [geoLocationName, locationIsAvailable, appStatus, watchRestartCount]);
+  }, [geoLocationName, locationIsAvailable, appStatus]);
 
   const currentLocationError = state.locationError;
 
   useEffect(() => {
     if (!!currentLocationError && appStatus === 'active') {
       Geolocation.getCurrentPosition(
-        (position) => {
-          updateLocation(position, geoLocationName);
-          restartWatchOnIos();
-        },
-        (error) => {
-          handleLocationError(error);
-          restartWatchOnIos();
-        },
+        (position) => updateLocation(position, geoLocationName),
+        handleLocationError,
       );
     }
-  }, [currentLocationError, appStatus, geoLocationName, restartWatchOnIos]);
+  }, [currentLocationError, appStatus, geoLocationName]);
 
   useEffect(() => {
     async function checkPermission() {
@@ -312,24 +298,17 @@ export const GeolocationContextProvider = ({children}: Props) => {
                 geoLocationName,
               );
               resolve(currentLocation?.coordinates);
-              restartWatchOnIos();
             },
             (error) => {
               handleLocationError(error);
               resolve(undefined);
-              restartWatchOnIos();
             },
             config,
           );
         }
       });
     },
-    [
-      geoLocationName,
-      state.status,
-      requestLocationPermission,
-      restartWatchOnIos,
-    ],
+    [geoLocationName, state.status, requestLocationPermission],
   );
 
   return (
