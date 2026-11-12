@@ -14,6 +14,8 @@ export function useRelevantTicketBonusProduct(
   if (selection.isOnBehalfOf) return undefined;
   if (selection.userProfilesWithCount.length !== 1) return undefined;
   if (selection.userProfilesWithCount[0].count !== 1) return undefined;
+  if (selection.supplementProductsWithCount.some((sp) => sp.count > 0))
+    return undefined;
 
   return activeBonusProducts?.find(
     (p) =>
