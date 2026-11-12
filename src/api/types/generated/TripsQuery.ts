@@ -8,6 +8,7 @@ export type TripsQueryVariables = Types.Exact<{
   arriveBy: Types.Scalars['Boolean']['input'];
   when?: Types.Maybe<Types.Scalars['DateTime']['input']>;
   cursor?: Types.Maybe<Types.Scalars['String']['input']>;
+  numTripPatterns?: Types.Maybe<Types.Scalars['Int']['input']>;
   transferSlack?: Types.Maybe<Types.Scalars['Int']['input']>;
   transferPenalty?: Types.Maybe<Types.Scalars['Int']['input']>;
   waitReluctance?: Types.Maybe<Types.Scalars['Float']['input']>;

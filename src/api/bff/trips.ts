@@ -31,6 +31,7 @@ function cleanQuery(query: TripsQueryVariables) {
     when: query.when,
     arriveBy: query.arriveBy,
     cursor: query.cursor,
+    numTripPatterns: query.numTripPatterns,
     transferSlack: query.transferSlack,
     transferPenalty: query.transferPenalty,
     waitReluctance: query.waitReluctance,
