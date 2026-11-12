@@ -20,7 +20,7 @@ import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStac
 import {useThemeContext} from '@atb/theme';
 import {settingToRouteName} from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {BottomTabBar, BottomTabBarItem} from './BottomTabBar';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
@@ -37,7 +37,11 @@ import {useAuthContext} from '@atb/modules/auth';
 import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
-import {usePaymentAgreementDiscovery} from '@atb/modules/payment';
+import {
+  usePaymentAgreementDiscovery,
+  usePaymentAgreementAnalyticsProperties,
+} from '@atb/modules/payment';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NotificationBadgeTexts} from '@atb/translations/components/NotificationBadge';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
@@ -73,6 +77,29 @@ export const Root_TabNavigatorStack = () => {
   const unreadCount = useChatUnreadCount();
   const serverOverrides = useDebugServerOverrides();
   const {shouldShowPaymentAgreementDiscovery} = usePaymentAgreementDiscovery();
+  const paymentAgreementAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
+  const {logEvent} = useAnalyticsContext();
+
+  // Counts the users who get the notification, once per app session to keep
+  // the number of events down
+  const hasLoggedPaymentAgreementNotificationRef = useRef(false);
+  useEffect(() => {
+    if (
+      !shouldShowPaymentAgreementDiscovery ||
+      hasLoggedPaymentAgreementNotificationRef.current
+    ) {
+      return;
+    }
+    hasLoggedPaymentAgreementNotificationRef.current = true;
+    logEvent('Profile', 'Payment agreement notification shown', {
+      ...paymentAgreementAnalyticsProperties,
+    });
+  }, [
+    shouldShowPaymentAgreementDiscovery,
+    paymentAgreementAnalyticsProperties,
+    logEvent,
+  ]);
 
   useEffect(() => {
     if (
@@ -140,6 +167,15 @@ export const Root_TabNavigatorStack = () => {
       notificationAccessibilityLabel: shouldShowPaymentAgreementDiscovery
         ? t(NotificationBadgeTexts.a11yLabel(1))
         : undefined,
+      onPress: () => {
+        // Only while showing the payment agreement notification, to keep the
+        // number of events down
+        if (!shouldShowPaymentAgreementDiscovery) return;
+        logEvent('Profile', 'Profile tab clicked', {
+          paymentAgreementNotification: true,
+          ...paymentAgreementAnalyticsProperties,
+        });
+      },
     },
   };
 
