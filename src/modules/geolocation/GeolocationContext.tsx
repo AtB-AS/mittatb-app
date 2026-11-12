@@ -209,6 +209,14 @@ export const GeolocationContextProvider = ({children}: Props) => {
       locationName,
     });
 
+  // On iOS, `getCurrentPosition` pauses an active watch without resuming it,
+  // so the watch is restarted after each call.
+  // https://github.com/michalchudziak/react-native-geolocation/pull/334
+  const [watchRestartCount, setWatchRestartCount] = useState(0);
+  const restartWatchOnIos = useCallback(() => {
+    if (Platform.OS === 'ios') setWatchRestartCount((count) => count + 1);
+  }, []);
+
   useEffect(() => {
     if (appStatus === 'active') {
       if (!locationIsAvailable) {
@@ -216,24 +224,41 @@ export const GeolocationContextProvider = ({children}: Props) => {
       } else {
         const watchId = Geolocation.watchPosition(
           (position) => updateLocation(position, geoLocationName),
-          handleLocationError,
+          (error) => {
+            // On iOS, POSITION_UNAVAILABLE (kCLErrorLocationUnknown) is
+            // temporary, and the watch keeps trying to get a location.
+            // https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/locationmanager(_:didfailwitherror:)
+            if (
+              Platform.OS === 'ios' &&
+              error.code === error.POSITION_UNAVAILABLE
+            ) {
+              return;
+            }
+            handleLocationError(error);
+          },
           config,
         );
         return () => Geolocation.clearWatch(watchId);
       }
     }
-  }, [geoLocationName, locationIsAvailable, appStatus]);
+  }, [geoLocationName, locationIsAvailable, appStatus, watchRestartCount]);
 
   const currentLocationError = state.locationError;
 
   useEffect(() => {
     if (!!currentLocationError && appStatus === 'active') {
       Geolocation.getCurrentPosition(
-        (position) => updateLocation(position, geoLocationName),
-        handleLocationError,
+        (position) => {
+          updateLocation(position, geoLocationName);
+          restartWatchOnIos();
+        },
+        (error) => {
+          handleLocationError(error);
+          restartWatchOnIos();
+        },
       );
     }
-  }, [currentLocationError, appStatus, geoLocationName]);
+  }, [currentLocationError, appStatus, geoLocationName, restartWatchOnIos]);
 
   useEffect(() => {
     async function checkPermission() {
@@ -287,17 +312,24 @@ export const GeolocationContextProvider = ({children}: Props) => {
                 geoLocationName,
               );
               resolve(currentLocation?.coordinates);
+              restartWatchOnIos();
             },
             (error) => {
               handleLocationError(error);
               resolve(undefined);
+              restartWatchOnIos();
             },
             config,
           );
         }
       });
     },
-    [geoLocationName, state.status, requestLocationPermission],
+    [
+      geoLocationName,
+      state.status,
+      requestLocationPermission,
+      restartWatchOnIos,
+    ],
   );
 
   return (
