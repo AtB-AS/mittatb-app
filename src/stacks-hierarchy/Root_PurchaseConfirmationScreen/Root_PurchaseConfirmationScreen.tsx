@@ -34,6 +34,7 @@ import {View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   savePreviousPayment,
+  usePaymentAgreementAnalyticsProperties,
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
 import {PaymentMethod} from '@atb/modules/payment';
@@ -217,6 +218,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     !getLatestPaymentAgreement(pendingPaymentAgreements, agreementPaymentType);
   const [isCreatePaymentAgreementChecked, setIsCreatePaymentAgreementChecked] =
     useState(false);
+  const paymentAgreementOnboardingAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
+  const paymentAgreementAnalyticsProperties = {
+    ...paymentAgreementOnboardingAnalyticsProperties,
+    // Only set when the checkbox is shown, so it's possible to see how many
+    // check it each time they pay
+    createPaymentAgreement: canCreatePaymentAgreement
+      ? isCreatePaymentAgreementChecked
+      : undefined,
+    // Only set when paying with an agreement, to keep the other payments
+    // downsampled
+    withPaymentAgreement: paymentAgreementId ? true : undefined,
+  };
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -623,6 +637,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}
           isWaitingForPaymentAgreements={isWaitingForPaymentAgreements}
+          paymentAgreementAnalyticsProperties={
+            paymentAgreementAnalyticsProperties
+          }
           mode={params.mode}
           tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
@@ -662,6 +679,7 @@ type PaymentButtonProps = {
   isSearchingOffer: boolean;
   isOfferError: boolean;
   isWaitingForPaymentAgreements: boolean;
+  paymentAgreementAnalyticsProperties: Record<string, unknown>;
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
   tripAnalytics?: TripAnalytics;
@@ -675,6 +693,7 @@ const PaymentButton = ({
   isSearchingOffer,
   isOfferError,
   isWaitingForPaymentAgreements,
+  paymentAgreementAnalyticsProperties,
   totalPrice,
   mode,
   tripAnalytics,
@@ -739,6 +758,7 @@ const PaymentButton = ({
             paymentMethod: paymentMethod?.paymentType,
             mode: mode,
             ...tripAnalytics,
+            ...paymentAgreementAnalyticsProperties,
           });
         }
         onGoToPayment();
