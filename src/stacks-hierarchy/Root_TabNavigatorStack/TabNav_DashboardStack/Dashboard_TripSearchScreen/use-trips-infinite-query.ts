@@ -22,6 +22,8 @@ import {ErrorResponse} from '@atb-as/utils';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 import {TripsProps} from './use-trips';
 
+export const NUMBER_OF_TRIP_PATTERNS_PER_PAGE = 5;
+
 export type TripsInfiniteQueryProps = TripsProps & {
   journeySearchModes: Modes;
 };
@@ -83,6 +85,7 @@ export function createTripsQuery(
     from,
     to,
     cursor,
+    numTripPatterns: NUMBER_OF_TRIP_PATTERNS_PER_PAGE,
     when: searchTime?.date,
     arriveBy,
     modes: journeySearchModes,
