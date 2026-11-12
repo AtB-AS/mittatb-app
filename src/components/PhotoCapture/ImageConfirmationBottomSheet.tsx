@@ -34,10 +34,14 @@ export const ImageConfirmationBottomSheet = ({
   const {theme} = useThemeContext();
   const {height: windowHeight} = useWindowDimensions();
   const [availableWidth, setAvailableWidth] = useState(0);
-  const [imageSize, setImageSize] = useState<{
+  const [loadedImage, setLoadedImage] = useState<{
+    uri: string;
     width: number;
     height: number;
   }>();
+  // Only use the loaded size if it belongs to the current file, since this
+  // component stays mounted while the previewed file changes.
+  const imageSize = loadedImage?.uri === file ? loadedImage : undefined;
 
   const framePadding = theme.spacing.small;
   const maxWidth = availableWidth - 2 * framePadding;
@@ -68,7 +72,8 @@ export const ImageConfirmationBottomSheet = ({
                   style={[styles.image, imageDimensions]}
                   resizeMode="contain"
                   onLoad={(e) =>
-                    setImageSize({
+                    setLoadedImage({
+                      uri: file,
                       width: e.nativeEvent.source.width,
                       height: e.nativeEvent.source.height,
                     })
