@@ -5,7 +5,7 @@ import {SvgProps} from 'react-native-svg';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 
 export type BottomTabBarItem = {
   label: string;
@@ -13,6 +13,8 @@ export type BottomTabBarItem = {
   IconSelected: (props: SvgProps) => React.JSX.Element;
   testID: string;
   notification?: ThemeIconProps['notification'];
+  /** Read by screen readers after the label, since the notification is only visual */
+  notificationAccessibilityLabel?: string;
 };
 
 /**
@@ -60,7 +62,13 @@ export const BottomTabBar = ({
             // back to 'button' there (same as react-navigation).
             accessibilityRole={Platform.select({ios: 'button', default: 'tab'})}
             accessibilityState={{selected: focused}}
-            accessibilityLabel={item.label}
+            accessibilityLabel={
+              item.notification && item.notificationAccessibilityLabel
+                ? item.label +
+                  screenReaderPause +
+                  item.notificationAccessibilityLabel
+                : item.label
+            }
             style={({pressed}) => [styles.tab, pressed && styles.tabPressed]}
           >
             <ThemeIcon

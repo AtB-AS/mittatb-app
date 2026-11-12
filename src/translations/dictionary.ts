@@ -208,12 +208,8 @@ const dictionary = {
   unchecked: _('ikke avhuket', 'unchecked', 'Ikkje avhuket'),
   selected: _('Valgt', 'selected', 'Valgt'),
   unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
-  genericErrorMsg: _(
-    'Noe gikk galt',
-    'Something went wrong',
-    `Noko gjekk gale`,
-  ),
   zone: _('Sone', 'Zone', 'Sone'),
+  required: _('påkrevd', 'required', 'påkravd'),
   telephone: (tel: string) => _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
 };
 

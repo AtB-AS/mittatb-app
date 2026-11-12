@@ -38,9 +38,9 @@ const PhoneInputTexts = {
       'Du har prøvd for mange gangar. Ver venleg og vent nokon minutt før du prøver igjen.',
     ),
     unknown_error: _(
-      'Noe gikk galt. Prøv igjen, eller kontakt kundeservice for hjelp.',
-      'Something went wrong. Please try again or contact customer service for assistance.',
-      'Noko gjekk gale. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Klarte ikke å sende engangskoden. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      "Couldn't send the one-time code. Please try again or contact customer service for assistance.",
+      'Klarte ikkje å sende eingongskoden. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
   },
 };

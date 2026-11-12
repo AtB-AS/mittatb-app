@@ -171,6 +171,7 @@ export const BikeStationIntegrationView = ({
                 operatorId: station?.system.operator.id ?? '',
                 stationId: station?.id ?? '',
                 formFactor: FormFactor.Bicycle,
+                systemId: station?.system.id,
               });
             }}
           />

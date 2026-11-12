@@ -13,6 +13,7 @@ import type {PreReq} from '@atb/api/types/mobility';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ShmoHelpScreenProps} from '@atb/stacks-hierarchy/Root_ShmoHelp/Root_ShmoHelpScreen';
+import type {ReportShmoDamageParams} from '@atb/stacks-hierarchy';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -100,6 +101,13 @@ export const Map_RootScreen = ({
     [navigation],
   );
 
+  const navigateToReportShmoDamage = useCallback(
+    (params: ReportShmoDamageParams) => {
+      navigation.navigate('Root_ReportShmoDamageScreen', params);
+    },
+    [navigation],
+  );
+
   const navigateToShmoOnboarding = useCallback(
     (formFactor?: FormFactor, preReqs?: PreReq[]) => {
       navigation.navigate('Root_ShmoOnboardingScreen', {formFactor, preReqs});
@@ -182,6 +190,7 @@ export const Map_RootScreen = ({
       navigateToDetails={navigateToDetails}
       navigateToTripSearch={navigateToTripSearch}
       navigateToShmoSupport={navigateToShmoSupport}
+      navigateToReportShmoDamage={navigateToReportShmoDamage}
       navigateToShmoOnboarding={navigateToShmoOnboarding}
       navigateToReportParkingViolation={navigateToReportParkingViolation}
       navigateToParkingPhoto={navigateToParkingPhoto}

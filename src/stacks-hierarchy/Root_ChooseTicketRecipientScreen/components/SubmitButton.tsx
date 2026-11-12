@@ -6,7 +6,6 @@ import {TicketRecipientType} from '@atb/modules/ticketing';
 import {StyleSheet} from '@atb/theme';
 import {
   OnBehalfOfTexts,
-  PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
@@ -126,7 +125,7 @@ export const SubmitButton = ({
         <MessageInfoBox
           style={styles.errorMessage}
           type="error"
-          message={t(PhoneInputTexts.errors[error])}
+          message={t(OnBehalfOfTexts.errors.lookup_failed)}
         />
       )}
 

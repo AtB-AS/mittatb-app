@@ -1,0 +1,115 @@
+appId: ${APP_ID}
+name: 'Ticket purchase'
+---
+- tapOn:
+    id: ${output.nav.menu.tickets}
+    label: 'Navigate to Tickets tab'
+
+# Choose single ticket
+- runFlow:
+    when:
+      notVisible:
+        id: ${output.tickets.fareProduct('single')}
+    commands:
+      - tapOn:
+          id: ${output.nav.tickets.purchase}
+          label: 'Navigate to the purchase tickets tab'
+- runFlow:
+    file: ../../common/removeGlobalMessages.yaml
+    label: 'Remove all global messages'
+- assertVisible:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Verify that single ticket is shown'
+- tapOn:
+    id: ${output.tickets.fareProduct('single')}
+    label: 'Choose single ticket'
+- assertVisible: '.*Single ticket.*'
+
+# Change traveller
+- assertVisible:
+    id: ${output.tickets.selectedTravellers}
+    text: '.*Adult.*'
+    label: 'Verify default traveller'
+- tapOn:
+    id: ${output.tickets.selectTraveller}
+    label: 'Open traveller selection'
+- tapOn:
+    id: ${output.tickets.counter('adult', 'rem')}
+    label: 'Remove adult'
+- tapOn:
+    id: ${output.tickets.counter('child', 'add')}
+    label: 'Add child'
+- tapOn:
+    id: ${output.global.closeBottomSheet}
+    label: 'Close traveller selection'
+- assertVisible:
+    id: ${output.tickets.selectedTravellers}
+    text: '.*Child.*'
+    label: 'Verify chosen traveller'
+
+# Change zone
+- assertVisible:
+    id: ${output.tickets.selectedZone}
+    text: '.*Zone A.*'
+    label: 'Verify default zone'
+- tapOn:
+    id: ${output.tickets.selectZones}
+    label: 'Open zone selection'
+- extendedWaitUntil:
+    visible:
+      text: 'Deny'
+    timeout: 5000
+    label: 'Wait for OS location dialog'
+- tapOn:
+    text: 'Deny'
+    label: 'Deny location permission'
+- runFlow:
+    when:
+      visible: '.*(Share your location).*'
+    commands:
+      - tapOn:
+          text: 'CANCEL'
+          label: 'Deny location sharing'
+- tapOn:
+    id: ${output.tickets.searchFrom}
+    label: 'Search from zone'
+- tapOn:
+    id: ${output.tickets.fareZone('B2')}
+    label: 'Choose from zone B2'
+- tapOn:
+    id: ${output.tickets.searchTo}
+    label: 'Search to zone'
+- tapOn:
+    id: ${output.tickets.fareZone('B2')}
+    label: 'Choose to zone B2'
+- tapOn:
+    id: ${output.tickets.saveZones}
+    label: 'Save zones'
+- assertVisible:
+    id: ${output.tickets.selectedZone}
+    text: '.*Zone B2.*'
+    label: 'Verify chosen zone'
+
+- scrollUntilVisible:
+    element:
+      id: ${output.tickets.toPayment}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to payment button'
+- extendedWaitUntil:
+    visible:
+      id: ${output.tickets.offerPrice}
+    timeout: 10000
+    label: 'Wait for offer'
+- tapOn:
+    id: ${output.tickets.toPayment}
+    label: 'Navigate to purchase summary'
+- assertVisible: 'Ticket summary'
+- assertVisible: 'Valid in zone B2'
+- assertVisible: '1 Child'
+
+# Back
+- tapOn:
+    id: ${output.nav.back}
+- tapOn:
+    id: ${output.nav.back}

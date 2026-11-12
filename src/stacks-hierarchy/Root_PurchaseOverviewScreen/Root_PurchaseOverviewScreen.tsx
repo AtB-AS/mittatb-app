@@ -30,6 +30,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useProductAlternatives} from '@atb/modules/ticketing';
+import {usePreloadPaymentAgreements} from '@atb/modules/payment';
 import {useOtherDeviceIsInspectableWarning} from '@atb/modules/fare-contracts';
 import {useParamAsState} from '@atb/utils/use-param-as-state';
 import {
@@ -68,6 +69,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
 
   const isFree = params.selection.stopPlaces?.to?.isFree || false;
+  usePreloadPaymentAgreements(!isFree);
 
   const preassignedFareProductAlternatives = useProductAlternatives(selection);
   const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();

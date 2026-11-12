@@ -237,9 +237,9 @@ const ProfileTexts = {
           },
           permissionError: {
             message: _(
-              'Vi klarte ikke å redigere tillatelse. Prøv igjen, eller kontakt kundeservice for hjelp.',
-              'We were unable to change the permission. Please try again or contact customer service for assistance.',
-              'Vi klarte ikkje å redigera tillating. Prøv igjen, eller kontakt kundeservice for hjelp.',
+              'Klarte ikke å redigere tillatelse. Prøv igjen, eller kontakt kundeservice for hjelp.',
+              "Couldn't change the permission. Please try again or contact customer service for assistance.",
+              'Klarte ikkje å redigera tillating. Prøv igjen, eller kontakt kundeservice for hjelp.',
             ),
           },
         },

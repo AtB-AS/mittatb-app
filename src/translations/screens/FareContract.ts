@@ -187,9 +187,9 @@ const FareContractTexts = {
     },
     harbors: {
       error: _(
-        'Kunne ikke laste kaier.',
-        'Could not load harbors.',
-        'Kunne ikkje laste kaier.',
+        'Klarte ikke å hente kaier.',
+        "Couldn't load harbors.",
+        'Klarte ikkje å hente kaiar.',
       ),
     },
     fromTo: (from: string, to: string, isTwoWay: boolean) =>
@@ -247,20 +247,16 @@ const FareContractTexts = {
       'Angre kjøpet av billetten og få pengane tilbake. Beløpet er tilbake på kontoen din innan få virkedagar.',
     ),
     confirm: _('Angre kjøp', 'Cancel purchase', 'Angre kjøp'),
-    refundReasonTitle: _(
-      'Velg en årsak (obligatorisk)',
-      'Select a reason (required)',
-      'Vel ein årsak (obligatorisk)',
-    ),
+    refundReasonTitle: _('Velg en årsak', 'Select a reason', 'Vel ein årsak'),
     missingReasonError: _(
       'Du må velge en årsak før du kan angre kjøpet.',
       'You need to select a reason before cancelling the purchase.',
       'Du må velje ein årsak før du kan angre kjøpet.',
     ),
     genericError: _(
-      'Vi får ikke til å angre dette kjøpet. Prøv igjen eller kontakt kundeservice.',
-      'We are unable to cancel this purchase. Please try again or contact customer service.',
-      'Vi får ikkje til å angre dette kjøpet. Prøv igjen eller ta kontakt med kundeservice.',
+      'Klarte ikke å angre dette kjøpet. Prøv igjen, eller kontakt kundeservice.',
+      "Couldn't cancel this purchase. Please try again or contact customer service.",
+      'Klarte ikkje å angre dette kjøpet. Prøv igjen, eller ta kontakt med kundeservice.',
     ),
     genericErrorLink: _(
       'Kontakt kundeservice',
@@ -344,9 +340,9 @@ const FareContractTexts = {
         'Sender kvittering...',
       ),
       error: _(
-        'Vi klarte ikke å sende kvitteringen. Prøv igjen, eller kontakt kundeservice for hjelp.',
-        'We couldn´t send the receipt. Please try again or contact customer service for assistance.',
-        'Vi klarte ikkje å senda kvitteringa. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        'Klarte ikke å sende kvitteringen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        "Couldn't send the receipt. Please try again or contact customer service for assistance.",
+        'Klarte ikkje å senda kvitteringa. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
       success: (email: string, reference: string) =>
         _(

@@ -262,19 +262,14 @@ const TripDetailsTexts = {
     ),
     correspondenceNotGuaranteed: _('', '', ''),
     errorNetwork: _(
-      'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
-      `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
-      'Hei, er du på nett? Vi kan ikkje hente reiseforslag sidan tilkoplinga di til internett manglar eller er ustabil.',
+      'Klarte ikke å hente reiseforslag. Nettforbindelsen din mangler eller er ustabil.',
+      `Couldn't complete the search. Your device seems to be offline or the connection is unstable.`,
+      'Klarte ikkje å hente reiseforslag. Tilkoplinga di til internett manglar eller er ustabil.',
     ),
     errorDefault: _(
-      'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?',
-      'We could not update your trip plan. Perhaps your trip has changed or timed out?',
-      'Vi kunne ikkje oppdatere reiseforslaget ditt. Det kan hende reisa har endra seg eller er utdatert.',
-    ),
-    tripIncludesRailReplacementBus: _(
-      'Reisen inkluderer buss for tog.',
-      'This trip includes rail replacement bus.',
-      'Reisa inkluderer buss for tog.',
+      'Klarte ikke å oppdatere reiseforslaget ditt. Det kan hende reisen har endret seg eller er utdatert.',
+      "Couldn't update your trip plan. Perhaps your trip has changed or timed out?",
+      'Klarte ikkje å oppdatere reiseforslaget ditt. Det kan hende reisa har endra seg eller er utdatert.',
     ),
     departureIsRailReplacementBus: _(
       'Buss for tog',

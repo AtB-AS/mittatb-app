@@ -235,6 +235,19 @@ platform :ios do
     )
   end
 
+  desc 'Enable associated domains entitlement'
+  lane :enable_associated_domains_entitlement do
+    ensure_env_vars(
+      env_vars: ['APP_LINK_HOST']
+    )
+    update_plist(
+      plist_path: "./ios/atb/AtB.entitlements",
+      block: proc do |plist|
+        plist['com.apple.developer.associated-domains'] = ["applinks:#{ENV['APP_LINK_HOST']}"]
+      end
+    )
+  end
+
   lane :verify_installed_certificates do |options|
     keychain_path = options[:keychain] || File.expand_path("/Library/Keychains/System.keychain")
 
@@ -405,7 +418,7 @@ platform :android do
       flavor: app_flavor,
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
-      flags: "-PreactNativeArchitectures=#{ENV['ABI']}", 
+      flags: "-PreactNativeArchitectures=#{ENV['ABI']}",
       properties: {
         "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
         "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
@@ -470,7 +483,3 @@ platform :android do
     )
   end
 end
-
-
-
-

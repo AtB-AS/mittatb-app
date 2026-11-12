@@ -192,6 +192,11 @@ const SelectTravelTokenTexts = {
     },
   },
   toggleToken: {
+    toggleError: _(
+      'Klarte ikke å endre hvor billetten brukes.',
+      "Couldn't change where the ticket is used.",
+      'Klarte ikkje å endre kvar billetten blir brukt.',
+    ),
     title: _(
       'Bytt mellom t:kort / mobil',
       'Switch between t:card / phone',
@@ -255,9 +260,9 @@ const SelectTravelTokenTexts = {
       `Du har ikkje eit t:kort registrert. Hvis du ønskjer å bruke t:kort kan du legge til dette på profilen din i [nettbutikken](https://nettbutikk.atb.no).`,
     ),
     noMobileToken: _(
-      'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.',
-      `We're trying to get your phone ready for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not we'll try again once the internet connection is restored.`,
-      `Vi forsøker å klargjere mobilen din til å bruke billettane, men det ser ut til at det tar litt tid. Sjekk om du har tilkopling til internett, og hvis ikkje vil appen prøve på nytt neste gong du får tilkopling.`,
+      'Mobilen din klargjøres til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.',
+      `Your phone is being prepared for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not, the app will try again once the internet connection is restored.`,
+      `Mobilen din blir klargjord til å bruke billettane, men det ser ut til at det tar litt tid. Sjekk om du har tilkopling til internett, og viss ikkje vil appen prøve på nytt neste gong du får tilkopling.`,
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device', `Eining utan namn`),
   },

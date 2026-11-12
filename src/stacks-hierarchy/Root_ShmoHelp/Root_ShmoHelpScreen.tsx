@@ -9,14 +9,21 @@ import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {
+  formatOpeningHoursSchedule,
   useOperators,
   useShmoBookingQuery,
   useShmoFaqsQuery,
+  useSystemOpeningHoursQuery,
 } from '@atb/modules/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ShmoContactSection} from './components/ShmoContactSection';
 
 export type ShmoHelpScreenProps = RootStackScreenProps<'Root_ShmoHelpScreen'>;
+
+// Firestore FAQ ids are free-form content-editor strings, not guaranteed distinct from a fixed
+// sentinel -- tagging the opening-hours entry with its own variant (rather than comparing it
+// against FAQ ids as plain strings) rules out a collision expanding both at once.
+type OpenAccordionItem = {type: 'opening-hours'} | {type: 'faq'; id: string};
 
 export const Root_ShmoHelpScreen = ({
   navigation,
@@ -25,7 +32,7 @@ export const Root_ShmoHelpScreen = ({
   /* vehicleId is only for support request body in Root_ContactShmoOperatorScreen,
      it can be null when there is an active booking.
      The support api accepts either vehicleId(as assetId), bookingId, or stationId */
-  const {operatorId, formFactor} = route.params;
+  const {operatorId, formFactor, systemId} = route.params;
   const vehicleId =
     'vehicleId' in route.params ? route.params?.vehicleId : undefined;
   const bookingId =
@@ -43,20 +50,26 @@ export const Root_ShmoHelpScreen = ({
   const {t, language} = useTranslation();
   const contactInfo = operator?.support;
 
-  /* FAQs can differ per vehicle type. When opened for a booking, the vehicle
-     type is only known from the booking itself. */
-  const isBookingNeededForFaqs = !vehicleTypeId && !!bookingId;
+  /* FAQs can differ per vehicle type, and opening hours need a systemId. When
+     opened for a booking (e.g. from fare-contract details), these are only
+     known from the booking itself. */
+  const isBookingNeeded = (!vehicleTypeId || !systemId) && !!bookingId;
   const {data: booking, isLoading: isBookingLoading} = useShmoBookingQuery(
-    isBookingNeededForFaqs,
+    isBookingNeeded,
     bookingId,
+    false,
   );
   const {data: faqsResponse} = useShmoFaqsQuery(
-    !isBookingNeededForFaqs || !isBookingLoading,
+    !isBookingNeeded || !isBookingLoading,
     operatorId,
     vehicleTypeId ?? booking?.asset.vehicleTypeId ?? undefined,
   );
   const faqs = faqsResponse?.faqs ?? [];
-  const [currentlyOpenFaqIndex, setCurrentlyOpenFaqIndex] = useState<number>();
+  const resolvedSystemId = systemId ?? booking?.asset.systemId ?? undefined;
+  const {data: openingHours} = useSystemOpeningHoursQuery(resolvedSystemId);
+  const hasOpeningHours = !!openingHours?.schedule?.length;
+  const [openAccordionItem, setOpenAccordionItem] =
+    useState<OpenAccordionItem>();
   const focusRef = useFocusOnLoad(navigation);
 
   const contactParams = {
@@ -105,11 +118,31 @@ export const Root_ShmoHelpScreen = ({
           }
         />
 
-        {faqs.length > 0 && (
+        {(hasOpeningHours || faqs.length > 0) && (
           <>
             <ContentHeading text={t(ShmoHelpTexts.faq)} />
             <Section>
-              {faqs.map((item, index) => (
+              {!!openingHours?.schedule?.length && (
+                <ExpandableSectionItem
+                  text={t(ShmoHelpTexts.openingHours)}
+                  textType="body__m"
+                  showIconText={false}
+                  expanded={openAccordionItem?.type === 'opening-hours'}
+                  onPress={() => {
+                    setOpenAccordionItem({type: 'opening-hours'});
+                  }}
+                  expandContent={
+                    <ThemeText type="secondary">
+                      {formatOpeningHoursSchedule(
+                        openingHours.schedule,
+                        language,
+                        t,
+                      ).join('\n')}
+                    </ThemeText>
+                  }
+                />
+              )}
+              {faqs.map((item) => (
                 <ExpandableSectionItem
                   key={item.id}
                   text={
@@ -117,9 +150,12 @@ export const Root_ShmoHelpScreen = ({
                   }
                   textType="body__m"
                   showIconText={false}
-                  expanded={currentlyOpenFaqIndex === index}
+                  expanded={
+                    openAccordionItem?.type === 'faq' &&
+                    openAccordionItem.id === item.id
+                  }
                   onPress={() => {
-                    setCurrentlyOpenFaqIndex(index);
+                    setOpenAccordionItem({type: 'faq', id: item.id});
                   }}
                   expandContent={
                     <ThemeText isMarkdown={true} type="secondary">

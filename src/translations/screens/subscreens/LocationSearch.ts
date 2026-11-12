@@ -66,19 +66,19 @@ const LocationSearchTexts = {
   },
   messages: {
     networkError: _(
-      'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.',
-      `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
-      `Hei, er du på nett? Vi klarar ikkje søke sidan tilkoplinga til internett manglar eller er ustabil.`,
+      'Klarte ikke å søke. Nettforbindelsen din mangler eller er ustabil.',
+      `Couldn't complete the search. Your device seems to be offline or the connection is unstable.`,
+      `Klarte ikkje å søke. Tilkoplinga til internett manglar eller er ustabil.`,
     ),
     defaultError: _(
-      'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
-      'Something went wrong with the search. Please try again or contact customer service for assistance.',
-      'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Klarte ikke å fullføre søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      "Couldn't complete the search. Please try again or contact customer service for assistance.",
+      'Klarte ikkje å fullføre søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
     emptyResult: _(
-      'Fant ingen søkeresultat',
-      'We could not find any search results',
-      `Fann ingen søkeresultat`,
+      'Fant ingen søkeresultat.',
+      'No search results found.',
+      `Fann ingen søkeresultat.`,
     ),
   },
   mapSelection: {
@@ -91,9 +91,9 @@ const LocationSearchTexts = {
       },
       noResult: {
         title: _(
-          'Akkurat her finner vi ikke noe reisetilbud.',
-          'We could not find any available mobility service at this location',
-          'Her finn vi ikkje noko reisetilbod akkurat no.',
+          'Fant ikke noe reisetilbud akkurat her',
+          'No mobility service found at this location',
+          'Fann ikkje noko reisetilbod her akkurat no',
         ),
         message: _(
           'Er du i nærheten av en adresse, vei eller stoppested?',
@@ -103,9 +103,9 @@ const LocationSearchTexts = {
       },
       networkError: {
         title: _(
-          'Vi kan ikke oppdatere kartet.',
-          'We failed to update your map',
-          'Vi kan ikkje oppdatere kartet.',
+          'Klarte ikke å oppdatere kartet',
+          "Couldn't update your map",
+          'Klarte ikkje å oppdatere kartet',
         ),
         message: _(
           'Nettforbindelsen din mangler eller er ustabil.',
@@ -115,9 +115,9 @@ const LocationSearchTexts = {
       },
       updateError: {
         title: _(
-          'Vi klarte ikke å oppdatere kartet.',
-          'We couldn´t update the map.',
-          'Vi klarte ikkje å oppdatere kartet.',
+          'Klarte ikke å oppdatere kartet',
+          "Couldn't update the map",
+          'Klarte ikkje å oppdatere kartet',
         ),
         message: _(
           'Prøv igjen, eller kontakt kundeservice for hjelp.',

@@ -13,9 +13,9 @@ const ForceUpdateTexts = {
   ),
   externalButton: _('Oppdater appen', 'Update the app', 'Oppdater appen'),
   errorMessage: _(
-    'Noe gikk galt. Vennligst prøv på nytt, eller gå inn i app-butikken på enheten din for å oppdatere.',
-    'Something went wrong. Please try again, or go to the store on your device to update the app.',
-    'Noko gjekk gale. Ver venleg og prøv på nytt, eller gå inn i app-butikken på eininga di for å oppdatere.',
+    'Klarte ikke å åpne app-butikken. Prøv igjen, eller gå inn i app-butikken på enheten din for å oppdatere.',
+    "Couldn't open the store. Please try again, or go to the store on your device to update the app.",
+    'Klarte ikkje å opne app-butikken. Prøv igjen, eller gå inn i app-butikken på eininga di for å oppdatere.',
   ),
 };
 export default ForceUpdateTexts;

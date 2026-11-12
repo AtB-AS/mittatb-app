@@ -1,8 +1,8 @@
-import {APP_SCHEME} from '@env';
 import {renderHook} from '@testing-library/react-native';
 import {Linking} from 'react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useDeepLinks} from '../use-deep-links';
+import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from '../prefixes';
 
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
@@ -10,7 +10,6 @@ let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
 
 const mockPlace = jest.fn();
 const mockReverse = jest.fn();
-const mockInvalidateQueries = jest.fn();
 
 const mockSelection = {id: 'test-selection'};
 const mockForType = jest.fn((_type: string) => ({
@@ -30,13 +29,8 @@ jest.mock('@atb/api', () => ({
   reverse: (...args: any[]) => mockReverse(...args),
 }));
 jest.mock('@atb/modules/ticketing', () => ({
-  LIST_PAYMENT_AGREEMENTS_QUERY_KEY: 'mockListPaymentAgreementsQueryKey',
   useGetFareProductsQuery: () => ({data: mockPreassignedFareProducts}),
   useTicketingContext: () => ({customerProfile: mockCustomerProfile}),
-}));
-jest.mock('@tanstack/react-query', () => ({
-  ...jest.requireActual('@tanstack/react-query'),
-  useQueryClient: () => ({invalidateQueries: mockInvalidateQueries}),
 }));
 jest.mock('@atb/modules/purchase-selection', () => ({
   usePurchaseSelectionBuilder: () => ({forType: mockForType}),
@@ -46,6 +40,10 @@ jest.mock('@atb/modules/map', () => ({
 }));
 // Unused by the hook, but imported by ./utils, and pulls in native modules
 jest.mock('@atb/modules/fare-zones-selector', () => ({}));
+jest.mock('../prefixes', () => ({
+  APP_SCHEME_PREFIX: 'atb://',
+  APP_LINK_PREFIX: 'https://app.example',
+}));
 
 const TEST_PRODUCT = {
   id: 'P1',
@@ -80,7 +78,7 @@ const getStateAfterLookupFrom = async (url: string) => {
   const {result} = renderHook(() => useDeepLinks());
   const {subscribe, getStateFromPath, config} = result.current;
   const handled = new Promise<void>((resolve) => subscribe!(() => resolve()));
-  onUrl({url: `${APP_SCHEME}://${url}`});
+  onUrl({url: APP_SCHEME_PREFIX + url});
   await handled;
   return getStateFromPath!(url, config);
 };
@@ -95,7 +93,6 @@ beforeEach(() => {
   mockEnableFormFactorsInMapFilter.mockClear();
   mockPlace.mockReset();
   mockReverse.mockReset();
-  mockInvalidateQueries.mockClear();
   jest
     .spyOn(Linking, 'addEventListener')
     .mockImplementation((_type, callback) => {
@@ -105,10 +102,14 @@ beforeEach(() => {
 });
 
 describe('prefixes', () => {
-  it('only handles the app scheme', () => {
+  it('handles the app scheme', () => {
     const {result} = renderHook(() => useDeepLinks());
-    expect(result.current.prefixes).toHaveLength(1);
     expect(result.current.prefixes![0]).toMatch(/^[a-z-]+:\/\/$/);
+  });
+
+  it('handles app links', () => {
+    const {result} = renderHook(() => useDeepLinks());
+    expect(result.current.prefixes!.slice(1)).toEqual([APP_LINK_PREFIX]);
   });
 });
 
@@ -145,33 +146,12 @@ describe('privacy', () => {
 });
 
 describe('payment-methods', () => {
-  afterEach(() => jest.useRealTimers());
-
   it('opens the payment methods screen on top of the profile screen, without resetting the stack', () => {
     const state = getStateFrom('payment-methods');
     expect(findRoute(state, 'TabNav_ProfileStack')).toEqual({
       name: 'TabNav_ProfileStack',
       params: {screen: 'Profile_PaymentMethodsScreen', initial: false},
     });
-  });
-
-  it('invalidates the payment agreements a second after being linked back', async () => {
-    jest.useFakeTimers();
-    await getStateAfterLookupFrom('payment-methods');
-    expect(mockInvalidateQueries).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(1000);
-    expect(mockInvalidateQueries).toHaveBeenCalledWith({
-      queryKey: ['mockListPaymentAgreementsQueryKey'],
-    });
-  });
-
-  it('does not invalidate the payment agreements for other deep links', async () => {
-    jest.useFakeTimers();
-    await getStateAfterLookupFrom('privacy');
-
-    jest.advanceTimersByTime(5000);
-    expect(mockInvalidateQueries).not.toHaveBeenCalled();
   });
 });
 
@@ -395,6 +375,82 @@ describe('trip search', () => {
         result.current.config,
       ),
     ).toBeUndefined();
+  });
+});
+
+describe('planner web', () => {
+  it('opens the stop place', () => {
+    const state = getStateFrom('/departures/NSR:StopPlace:41613');
+    expect(findRoute(state, 'Departures_PlaceScreen')).toEqual({
+      name: 'Departures_PlaceScreen',
+      params: {
+        place: {id: 'NSR:StopPlace:41613'},
+        selectedQuayId: undefined,
+        showOnlyFavoritesByDefault: false,
+        mode: 'Departure',
+      },
+    });
+  });
+
+  it('decodes the stop place id', () => {
+    const state = getStateFrom('/departures/NSR%3AStopPlace%3A41613');
+    expect(findRoute(state, 'Departures_PlaceScreen')?.params).toMatchObject({
+      place: {id: 'NSR:StopPlace:41613'},
+    });
+  });
+
+  it('opens the quay', () => {
+    const state = getStateFrom(
+      '/departures/NSR:StopPlace:41613?quay=NSR%3AQuay%3A71184',
+    );
+    expect(findRoute(state, 'Departures_PlaceScreen')?.params).toMatchObject({
+      place: {id: 'NSR:StopPlace:41613'},
+      selectedQuayId: 'NSR:Quay:71184',
+    });
+  });
+
+  describe('search time', () => {
+    const now = new Date('2026-10-30T12:00:00Z');
+    const getSearchTime = (query: string) => {
+      jest.useFakeTimers().setSystemTime(now);
+      const state = getStateFrom(`/departures/NSR:StopPlace:41613?${query}`);
+      jest.useRealTimers();
+      return findRoute(state, 'Departures_PlaceScreen')?.params
+        .initialSearchTime;
+    };
+
+    it('opens with a future search time', () => {
+      const searchTime = new Date('2026-10-30T14:00:00Z');
+      expect(
+        getSearchTime(`searchMode=departBy&searchTime=${searchTime.getTime()}`),
+      ).toEqual({option: 'departure', date: '2026-10-30T14:00:00.000Z'});
+    });
+
+    it('falls back to now when the search time is in the past', () => {
+      const searchTime = new Date('2026-10-30T10:00:00Z');
+      expect(
+        getSearchTime(`searchMode=departBy&searchTime=${searchTime.getTime()}`),
+      ).toBeUndefined();
+    });
+
+    it.each(['', 'abc', '1793401200000abc', 'NaN', 'Infinity'])(
+      'falls back to now with an invalid search time %p',
+      (searchTime) => {
+        expect(
+          getSearchTime(`searchMode=departBy&searchTime=${searchTime}`),
+        ).toBeUndefined();
+      },
+    );
+  });
+
+  it('does not handle departure details', () => {
+    expect(
+      getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
+    ).toBeUndefined();
+  });
+
+  it('does not handle ids other than NSR ids', () => {
+    expect(getStateFrom('/departures/foo')).toBeUndefined();
   });
 });
 

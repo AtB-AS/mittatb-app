@@ -40,12 +40,14 @@ export type RemoteConfig = {
   enable_nynorsk: boolean;
   enable_new_token_barcode: boolean;
   enable_new_token_barcode_base64: boolean;
-  enable_new_travel_card_booking: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
   enable_only_stop_places_checkbox: boolean;
   enable_parking_violations_reporting: boolean;
+  enable_payment_agreement_onboarding_checkbox: boolean;
+  enable_payment_agreement_onboarding_dots: boolean;
   enable_posthog: boolean;
+  enable_posthog_session_replay: boolean;
   enable_push_notifications: boolean;
   enable_refunds: boolean;
   enable_save_trips: boolean;
@@ -66,7 +68,7 @@ export type RemoteConfig = {
   enable_travel_aid: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
-  enable_vipps_payment_agreement: boolean;
+  enable_vipps_payment_agreements: boolean;
   enable_virtual_stations: boolean;
   enable_in_app_review: boolean;
   enable_in_app_review_for_announcements: boolean;
@@ -120,13 +122,15 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
-  enable_new_travel_card_booking: false,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
   enable_onboarding_login: true,
   enable_only_stop_places_checkbox: false,
   enable_parking_violations_reporting: false,
+  enable_payment_agreement_onboarding_checkbox: false,
+  enable_payment_agreement_onboarding_dots: false,
   enable_posthog: false,
+  enable_posthog_session_replay: false,
   enable_push_notifications: false,
   enable_refunds: true,
   enable_save_trips: true,
@@ -149,7 +153,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_travel_aid: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
-  enable_vipps_payment_agreement: false,
+  enable_vipps_payment_agreements: false,
   enable_virtual_stations: false,
   enable_in_app_review: false,
   enable_in_app_review_for_announcements: false,
@@ -250,9 +254,6 @@ export function getConfig(): RemoteConfig {
   const enable_new_token_barcode_base64 =
     values['enable_new_token_barcode_base64']?.asBoolean() ??
     defaultRemoteConfig.enable_new_token_barcode_base64;
-  const enable_new_travel_card_booking =
-    values['enable_new_travel_card_booking']?.asBoolean() ??
-    defaultRemoteConfig.enable_new_travel_card_booking;
   const enable_nynorsk =
     values['enable_nynorsk']?.asBoolean() ?? defaultRemoteConfig.enable_nynorsk;
   const enable_on_behalf_of =
@@ -267,8 +268,17 @@ export function getConfig(): RemoteConfig {
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
+  const enable_payment_agreement_onboarding_checkbox =
+    values['enable_payment_agreement_onboarding_checkbox']?.asBoolean() ??
+    defaultRemoteConfig.enable_payment_agreement_onboarding_checkbox;
+  const enable_payment_agreement_onboarding_dots =
+    values['enable_payment_agreement_onboarding_dots']?.asBoolean() ??
+    defaultRemoteConfig.enable_payment_agreement_onboarding_dots;
   const enable_posthog =
     values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
+  const enable_posthog_session_replay =
+    values['enable_posthog_session_replay']?.asBoolean() ??
+    defaultRemoteConfig.enable_posthog_session_replay;
   const enable_push_notifications =
     values['enable_push_notifications']?.asBoolean() ??
     defaultRemoteConfig.enable_push_notifications;
@@ -326,9 +336,9 @@ export function getConfig(): RemoteConfig {
   const enable_vipps_login =
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
-  const enable_vipps_payment_agreement =
-    values['enable_vipps_payment_agreement']?.asBoolean() ??
-    defaultRemoteConfig.enable_vipps_payment_agreement;
+  const enable_vipps_payment_agreements =
+    values['enable_vipps_payment_agreements']?.asBoolean() ??
+    defaultRemoteConfig.enable_vipps_payment_agreements;
   const enable_virtual_stations =
     values['enable_virtual_stations']?.asBoolean() ??
     defaultRemoteConfig.enable_virtual_stations;
@@ -421,13 +431,15 @@ export function getConfig(): RemoteConfig {
     enable_non_transit_trip_search,
     enable_new_token_barcode,
     enable_new_token_barcode_base64,
-    enable_new_travel_card_booking,
     enable_nynorsk,
     enable_on_behalf_of,
     enable_onboarding_login,
     enable_only_stop_places_checkbox,
     enable_parking_violations_reporting,
+    enable_payment_agreement_onboarding_checkbox,
+    enable_payment_agreement_onboarding_dots,
     enable_posthog,
+    enable_posthog_session_replay,
     enable_push_notifications,
     enable_refunds,
     enable_save_trips,
@@ -448,7 +460,7 @@ export function getConfig(): RemoteConfig {
     enable_travel_aid,
     enable_vehicles_in_map,
     enable_vipps_login,
-    enable_vipps_payment_agreement,
+    enable_vipps_payment_agreements,
     enable_virtual_stations,
     enable_in_app_review,
     enable_in_app_review_for_announcements,

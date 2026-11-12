@@ -82,10 +82,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_non_transit_trip_search',
   },
   {
-    name: 'isNewTravelCardBookingEnabled',
-    remoteConfigKey: 'enable_new_travel_card_booking',
-  },
-  {
     name: 'isNynorskEnabled',
     remoteConfigKey: 'enable_nynorsk',
   },
@@ -106,8 +102,20 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_parking_violations_reporting',
   },
   {
+    name: 'isPaymentAgreementOnboardingCheckboxEnabled',
+    remoteConfigKey: 'enable_payment_agreement_onboarding_checkbox',
+  },
+  {
+    name: 'isPaymentAgreementOnboardingDotsEnabled',
+    remoteConfigKey: 'enable_payment_agreement_onboarding_dots',
+  },
+  {
     name: 'isPosthogEnabled',
     remoteConfigKey: 'enable_posthog',
+  },
+  {
+    name: 'isPosthogSessionReplayEnabled',
+    remoteConfigKey: 'enable_posthog_session_replay',
   },
   {
     name: 'isProductApiV2Enabled',
@@ -175,7 +183,7 @@ export const toggleSpecifications = [
   },
   {
     name: 'isVippsPaymentAgreementEnabled',
-    remoteConfigKey: 'enable_vipps_payment_agreement',
+    remoteConfigKey: 'enable_vipps_payment_agreements',
   },
   {
     name: 'isVirtualStationsEnabled',

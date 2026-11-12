@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -17,18 +17,11 @@ import {ContactShmoOperatorTexts} from '@atb/translations/screens/ContactScooter
 import {
   MAX_SUPPORT_COMMENT_LENGTH,
   SendSupportRequestBody,
-  SendSupportRequestBodyInput,
-  SendSupportRequestBodySchema,
   SupportType,
 } from '@atb/api/types/mobility';
-import {useAuthContext} from '@atb/modules/auth';
-import {getParsedPrefixAndPhoneNumber} from '@atb/utils/phone-number-utils';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSendSupportRequestMutation} from '@atb/modules/mobility';
-import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
-import {useProfileQuery} from '@atb/queries';
-import {CustomerProfile} from '@atb/api/types/profile';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   isActiveTripBooking,
@@ -38,6 +31,10 @@ import {
 } from '@atb/modules/mobility';
 import {FullScreenView} from '@atb/components/screen-view';
 import {SupportImageSection} from './components/SupportImageSection';
+import {
+  getCurrentPlace,
+  useSupportContactForm,
+} from './use-support-contact-form';
 import {SUPPORT_IMAGE_FILE_TYPE, useSupportImages} from './use-support-images';
 
 export type Root_ContactShmoOperatorScreenProps =
@@ -179,7 +176,9 @@ export const Root_ContactShmoOperatorScreen = ({
           onRemoveImage={removeImage}
           onTakePhoto={() => navigation.navigate('Root_SupportPhotoScreen')}
         />
-        <ContentHeading text={t(ContactShmoOperatorTexts.contactInfo.header)} />
+        <ContentHeading
+          text={t(ContactShmoOperatorTexts.contactInfo.headerPlain)}
+        />
         <Section>
           <TextInputSectionItem
             value={requestBody.contactInformationEndUser.email ?? ''}
@@ -193,6 +192,7 @@ export const Root_ContactShmoOperatorScreen = ({
               }))
             }
             label={t(ContactShmoOperatorTexts.contactInfo.email.label)}
+            required
             placeholder={t(
               ContactShmoOperatorTexts.contactInfo.email.placeholder,
             )}
@@ -305,44 +305,20 @@ const useShmoContactFormController = (
   stationId: string | undefined,
   onSuccess: () => void,
 ) => {
-  const {phoneNumber: authPhoneNumberWithPrefix} = useAuthContext();
-  const {prefix: authPhonePrefix, phoneNumber: authPhoneNumber} =
-    getParsedPrefixAndPhoneNumber(authPhoneNumberWithPrefix);
-
-  const [requestBody, setRequestBody] = useState<SendSupportRequestBodyInput>({
-    supportType: SupportType.OTHER,
-    comment: '',
-    contactInformationEndUser: {
-      phonePrefix: authPhonePrefix ?? '47',
-      phoneNumber: authPhoneNumber ?? '',
-      email: '',
-    },
-  });
-
-  const profileOnSuccess = useCallback((data: CustomerProfile) => {
-    setRequestBody((prev) => ({
-      ...prev,
-      contactInformationEndUser: {
-        ...prev.contactInformationEndUser,
-        email: data?.email,
-      },
-    }));
-  }, []);
-
-  useProfileQuery(profileOnSuccess);
-
-  const [showError, setShowError] = useState(false);
-
-  const {images, isAddingImages, hasImageError, pickFromLibrary, removeImage} =
-    useSupportImages();
-
   const {
+    requestBody,
+    setRequestBody,
+    showError,
+    setShowError,
     isCommentValid,
     isPhoneNumberValid,
     isEmailValid,
     isAllInputValid,
     validatedRequestBody,
-  } = validateSchema(requestBody);
+  } = useSupportContactForm(SupportType.OTHER);
+
+  const {images, isAddingImages, hasImageError, pickFromLibrary, removeImage} =
+    useSupportImages();
 
   const {mutate: sendSupportRequest, status: supportRequestStatus} =
     useSendSupportRequestMutation(operatorId, onSuccess);
@@ -350,7 +326,6 @@ const useShmoContactFormController = (
   const onSubmit = () => {
     if (isAddingImages) return;
     if (isAllInputValid && validatedRequestBody) {
-      const currentUserCoordinates = getCurrentCoordinatesGlobal();
       const files = images.map((image, index) => ({
         fileName: `supportPhoto${index + 1}.jpg`,
         fileType: SUPPORT_IMAGE_FILE_TYPE,
@@ -363,14 +338,7 @@ const useShmoContactFormController = (
         bookingId,
         stationId,
         ...(files.length > 0 && {files}),
-        ...(currentUserCoordinates && {
-          place: {
-            coordinates: {
-              latitude: currentUserCoordinates.latitude,
-              longitude: currentUserCoordinates.longitude,
-            },
-          },
-        }),
+        ...getCurrentPlace(),
       };
       sendSupportRequest(requestBody);
     }
@@ -392,19 +360,5 @@ const useShmoContactFormController = (
     images,
     pickFromLibrary,
     removeImage,
-  };
-};
-
-export const validateSchema = (body: SendSupportRequestBodyInput) => {
-  const result = SendSupportRequestBodySchema.safeParse(body);
-  const formattedErrors = result.success ? undefined : result?.error?.format();
-  return {
-    isCommentValid: !formattedErrors?.comment?._errors?.length,
-    isPhoneNumberValid:
-      !formattedErrors?.contactInformationEndUser?.phone?._errors?.length,
-    isEmailValid:
-      !formattedErrors?.contactInformationEndUser?.email?._errors?.length,
-    isAllInputValid: result.success,
-    validatedRequestBody: result.success ? result.data : undefined,
   };
 };

@@ -84,6 +84,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           inputProps={{
             value: licensePlate,
             onChangeText: setLicensePlate,
+            required: true,
           }}
         />
       </View>

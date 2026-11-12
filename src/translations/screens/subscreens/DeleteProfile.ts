@@ -47,11 +47,15 @@ const DeleteProfileTexts = {
     cancel: _('Avbryt', 'Cancel', 'Avbryt'),
   },
   deleteError: {
-    title: _('Feil ved sletting', 'Error when deleting', 'Feil ved sletting'),
+    title: _(
+      'Klarte ikke å slette profilen',
+      "Couldn't delete profile",
+      'Klarte ikkje å slette profilen',
+    ),
     message: _(
-      'Det oppstod en  feil når vi prøvde å slette Profil. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt kundeservice.',
-      'An error occurred when we tried deleting Profile. Try again later and if it still does not work, please contact customer service.',
-      'Det oppsto ein feil då vi prøvde å slette Profil. Prøv igjen seinare, og dersom det framleis ikkje fungerer, ver venleg og kontakt kundeservice.',
+      'Klarte ikke å slette profilen din. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt kundeservice.',
+      "Couldn't delete your profile. Try again later and if it still does not work, please contact customer service.",
+      'Klarte ikkje å slette profilen din. Prøv igjen seinare, og dersom det framleis ikkje fungerer, ver venleg og kontakt kundeservice.',
     ),
   },
 };
@@ -108,10 +112,15 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
       ),
     },
     deleteError: {
+      title: _(
+        'Klarte ikke å slette brukeren',
+        "Couldn't delete user",
+        'Klarte ikkje å slette brukaren',
+      ),
       message: _(
-        'Det oppstod en feil når vi prøvde å slette din bruker. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt FRAM Kundesenter.',
-        'An error occurred when we tried deleting your user. Try again later and if it still does not work, please contact FRAM Customer Centre.',
-        'Det oppstod ein feil då vi prøvde å sletta brukaren din. Prøv igjen seinare, og om det ikkje hjelper, kontakt FRAM Kundesenter.',
+        'Klarte ikke å slette brukeren din. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt FRAM Kundesenter.',
+        "Couldn't delete your user. Try again later and if it still does not work, please contact FRAM Customer Centre.",
+        'Klarte ikkje å sletta brukaren din. Prøv igjen seinare, og om det ikkje hjelper, kontakt FRAM Kundesenter.',
       ),
     },
   },

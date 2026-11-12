@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.93.0",
+  "version": "1.94.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -45,6 +45,7 @@
     "@intercom/intercom-react-native": "9.4.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.2.1",
+    "@posthog/react-native-plugin": "^2.13.0",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-clipboard/clipboard": "^1.16.0",
     "@react-native-community/datetimepicker": "^8.4.4",
@@ -93,7 +94,7 @@
     "opening_hours": "^3.9.0",
     "phone": "^3.1.58",
     "polylabel": "^2.0.1",
-    "posthog-react-native": "^4.7.1",
+    "posthog-react-native": "^4.85.3",
     "qrcode": "1.5.4",
     "query-string": "^9.3.1",
     "react": "19.2.3",

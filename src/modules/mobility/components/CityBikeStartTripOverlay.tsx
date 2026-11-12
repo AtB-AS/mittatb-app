@@ -10,9 +10,9 @@ import {
   ThemedStartCityBike,
   ThemedElectricCityBikeStationPerson,
 } from '@atb/theme/ThemedAssets';
-import {LinkSectionItem} from '@atb/components/sections';
 import {ShmoBooking} from '@atb/api/types/mobility';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
+import {SupportButton} from './SupportButton';
 import {
   FormFactor,
   PropulsionType,
@@ -72,19 +72,16 @@ export const CityBikeStartTripOverlay = ({
           </ThemeText>
         </View>
       </ScrollView>
-      <View style={styles.supportButton}>
-        <LinkSectionItem
-          text={t(MobilityTexts.helpText)}
-          onPress={() => {
-            navigateToSupport({
-              bookingId: activeBooking.bookingId,
-              operatorId: activeBooking.asset.operator.id,
-              formFactor: FormFactor.Bicycle,
-            });
-          }}
-          radius="top-bottom"
-        />
-      </View>
+      <SupportButton
+        navigateToSupport={() => {
+          navigateToSupport({
+            bookingId: activeBooking.bookingId,
+            operatorId: activeBooking.asset.operator.id,
+            formFactor: FormFactor.Bicycle,
+            systemId: activeBooking.asset.systemId ?? undefined,
+          });
+        }}
+      />
     </View>
   );
 };
@@ -125,8 +122,5 @@ const useStyles = StyleSheet.createThemeHook((theme, {top: safeTopInset}) => ({
   },
   contentText: {
     textAlign: 'center',
-  },
-  supportButton: {
-    width: '100%',
   },
 }));

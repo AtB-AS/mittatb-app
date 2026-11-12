@@ -105,24 +105,20 @@ export const ContactShmoOperatorTexts = {
     },
     camera: {
       title: _('Ta bilde', 'Take photo', 'Ta bilete'),
-      instruction: _(
-        'Vis gjerne hele kjøretøyet og det som er galt.',
-        'Try to show the whole vehicle and what is wrong with it.',
-        'Vis gjerne heile køyretøyet og det som er gale.',
-      ),
     },
     error: _(
-      'Vi klarte ikke å hente bildet. Vennligst prøv på nytt.',
-      'We could not load the image. Please try again.',
-      'Vi klarte ikkje å hente biletet. Ver vennleg og prøv på nytt.',
+      'Klarte ikke å hente bildet. Prøv igjen.',
+      "Couldn't load the image. Please try again.",
+      'Klarte ikkje å hente biletet. Prøv igjen.',
     ),
   },
   contactInfo: {
     header: _(
-      'Din kontaktinfo (E-postadresse er obligatorisk)',
-      'Your contact info (Email address is required)',
-      'Kontaktinfoen din (E-postadressa er obligatorisk)',
+      'Din kontaktinfo (fyll inn minst én)',
+      'Your contact info (fill in at least one)',
+      'Kontaktinfoen din (fyll inn minst éin)',
     ),
+    headerPlain: _('Din kontaktinfo', 'Your contact info', 'Kontaktinfoen din'),
     email: {
       label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
       placeholder: _(
@@ -168,9 +164,9 @@ export const ContactShmoOperatorTexts = {
 
   submitError: (operatorName: string) => {
     return _(
-      `Noe gikk galt, vi klarte ikke å sende meldingen til ${operatorName}. Vennligst prøv på nytt.`,
-      `Something went wrong, we could not send the message to ${operatorName}. Please try again.`,
-      `Noko gjekk gale, vi klarte ikkje å sende meldinga til ${operatorName}. Vennligst prøv på nytt.`,
+      `Klarte ikke å sende meldingen til ${operatorName}. Prøv igjen.`,
+      `Couldn't send the message to ${operatorName}. Please try again.`,
+      `Klarte ikkje å sende meldinga til ${operatorName}. Prøv igjen.`,
     );
   },
   confirmation: {

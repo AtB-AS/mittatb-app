@@ -4,8 +4,8 @@ import type {TripPattern} from '@atb/api/types/trips';
 import {
   getTextForLanguage,
   SituationsTexts,
+  TravelCardTexts,
   TripDetailsTexts,
-  TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
 import {
@@ -79,7 +79,7 @@ export const TravelCardNotifications: React.FC<
       if (leg.bookingArrangements) {
         transportItems.push({
           key: `booking-${leg.id}`,
-          message: t(TripSearchTexts.results.resultItem.footer.requiresBooking),
+          message: t(TravelCardTexts.header.requiresBooking),
         });
       }
     }

@@ -39,9 +39,9 @@ const DepartureDetailsTexts = {
         `${transportMode} stoppar ikkje her`,
       ),
     noActiveItem: _(
-      'Vi klarte ikke å laste av detaljer for denne reisen.',
-      'We are unable to load the details for this journey.',
-      'Vi klarte ikkje a laste av detaljar for denne reisa.',
+      'Klarte ikke å hente detaljer for denne reisen.',
+      "Couldn't load the details for this journey.",
+      'Klarte ikkje å hente detaljar for denne reisa.',
     ),
   },
 };

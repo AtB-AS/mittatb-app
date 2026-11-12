@@ -1,6 +1,6 @@
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {StyleSheet} from '@atb/theme';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {TravelAidTexts} from '@atb/translations';
 import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
@@ -53,7 +53,7 @@ export const StopSignalButton = ({
       {status === 'error' && (
         <MessageInfoBox
           type="error"
-          message={t(dictionary.genericErrorMsg)}
+          message={t(TravelAidTexts.stopButton.errorMessage)}
           a11yLiveRegion="assertive"
           style={styles.requestError}
         />

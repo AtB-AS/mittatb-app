@@ -75,9 +75,9 @@ const TicketingTexts = {
         'Fann ingen billett med denne hentekoden',
       ),
       errorGeneric: _(
-        'Noe gikk galt. Prøv igjen.',
-        'Something went wrong. Try again.',
-        'Noko gjekk gale. Prøv igjen.',
+        'Klarte ikke å hente billetten. Prøv igjen.',
+        "Couldn't load the ticket. Please try again.",
+        'Klarte ikkje å hente billetten. Prøv igjen.',
       ),
       infoTitle: _(
         'Hva er en hentekode?',
@@ -121,9 +121,9 @@ const TicketingTexts = {
       'Ingen aktive billettar',
     ),
     loadError: _(
-      'Vi klarte ikke å hente oppdatert informasjon om billettene dine.',
-      'We were unable to fetch updated information about your tickets.',
-      'Vi klarte ikkje å hente oppdatert informasjon om billettane dine.',
+      'Klarte ikke å hente oppdatert informasjon om billettene dine.',
+      "Couldn't load updated information about your tickets.",
+      'Klarte ikkje å hente oppdatert informasjon om billettane dine.',
     ),
     noActiveTicketsDetails: _(
       'Når du kjøper en billett, vil den vises her.',
@@ -264,9 +264,9 @@ const TicketingTexts = {
   scrollView: {
     errorLoadingTicket: (orderId: string) =>
       _(
-        `Noe gikk galt da vi prøvde å laste inn billett med ordre-id ${orderId}`,
-        `Something went wrong when we tried to load ticket with order id ${orderId}`,
-        `Noko gjekk gale då vi prøvde å laste inn billett med ordre-id ${orderId}`,
+        `Klarte ikke å hente billett med ordre-id ${orderId}.`,
+        `Couldn't load ticket with order id ${orderId}.`,
+        `Klarte ikkje å hente billett med ordre-id ${orderId}.`,
       ),
     paymentError: _(
       'Betalingen mislyktes. Sjekk om du har tilstrekkelige midler på konto eller prøv et annet betalingsmiddel.',
@@ -373,7 +373,6 @@ const TicketingTexts = {
       'Choose another day or adjust time',
       'Velg ein annan dag eller juster tidspunkt',
     ),
-    select: _('Velg', 'Select', 'Velg'),
     beforeStartOfFareContract: _(
       'Billett ikke aktiv',
       'Ticket not active',

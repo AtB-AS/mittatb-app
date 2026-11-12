@@ -11,6 +11,8 @@ import {LabelType} from '@atb/modules/configuration';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {useTranslation} from '@atb/translations';
 import {TagInfoTexts} from '@atb/translations/components/TagInfo';
+import {NotificationBadgeTexts} from '@atb/translations/components/NotificationBadge';
+import {NotificationBadge} from '@atb/components/notification-badge';
 import {Tag} from '@atb/components/tag';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {IconColor} from '@atb/components/theme-icon';
@@ -26,6 +28,8 @@ type Props = SectionItemProps<{
   subtitle?: string;
   /* Label will be placed by the icon. "Beta", "New", etc. */
   label?: LabelType;
+  /** Shows a notification badge with this count before the right icon */
+  notificationCount?: number;
   onPress?(): void;
   leftIcon?: IconProps;
   leftElement?: ReactNode;
@@ -43,6 +47,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       onPress,
       subtitle,
       label,
+      notificationCount,
       leftIcon,
       rightIcon = {svg: ChevronRight},
       accessibility,
@@ -59,12 +64,24 @@ export const LinkSectionItem = forwardRef<any, Props>(
     const {contentContainer, topContainer} = useSectionItem(props);
     const style = useSectionStyle();
     const linkSectionItemStyle = useStyles();
+    // The custom label is left out of the spread further down, so it doesn't
+    // override the notification count added to it below
+    const {
+      accessibilityLabel: customAccessibilityLabel,
+      ...otherAccessibility
+    } = accessibility ?? {};
     const accessibilityWithOverrides = disabled
-      ? {...accessibility, accessibilityHint: undefined}
-      : accessibility;
+      ? {...otherAccessibility, accessibilityHint: undefined}
+      : otherAccessibility;
     const accessibilityLabel =
-      accessibilityWithOverrides?.accessibilityLabel ??
-      text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
+      (customAccessibilityLabel ??
+        text +
+          screenReaderPause +
+          (subtitle ? subtitle + screenReaderPause : '')) +
+      (notificationCount
+        ? t(NotificationBadgeTexts.a11yLabel(notificationCount)) +
+          screenReaderPause
+        : '');
 
     const leftAccessory =
       leftElement ?? (leftIcon ? <Icon icon={leftIcon} /> : null);
@@ -112,6 +129,11 @@ export const LinkSectionItem = forwardRef<any, Props>(
               customStyle={linkSectionItemStyle.tag}
             />
           )}
+          {!!notificationCount && (
+            <View style={linkSectionItemStyle.notificationBadge}>
+              <NotificationBadge count={notificationCount} />
+            </View>
+          )}
           {rightIcon && <Icon icon={rightIcon} />}
         </View>
       </NativeTouchable>
@@ -145,6 +167,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     // Slight hack to prevent the section item from growing beyond normal size
     // to fit the tag.
     marginVertical: -theme.spacing.xSmall,
+  },
+  notificationBadge: {
+    alignSelf: 'center',
+    // Together with the gap, gives medium spacing to the right icon
+    marginRight: theme.spacing.xSmall,
   },
   textContainer: {flex: 1},
 }));

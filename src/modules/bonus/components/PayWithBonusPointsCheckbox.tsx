@@ -1,7 +1,6 @@
 import {useBonusBalanceQuery, BonusProductTypeEnum} from '@atb/modules/bonus';
-import {Checkbox} from '@atb/components/checkbox';
 import {
-  GenericClickableSectionItem,
+  CheckboxSectionItem,
   GenericSectionItem,
   Section,
   SectionProps,
@@ -75,28 +74,29 @@ export const PayWithBonusPointsCheckbox = ({
     });
   };
 
-  const content = (
+  const title = (
+    <View style={styles.horizontalRow}>
+      <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
+      <ThemeIcon svg={BonusStarFill} size="small" />
+      <ThemeText>
+        {t(BonusProgramTexts.amountPoints(bonusProduct.price.amount))}
+      </ThemeText>
+    </View>
+  );
+  const description =
+    getTextForLanguage(bonusProduct.paymentDescription, language) ?? '';
+
+  const insufficientBalanceContent = (
     <View style={styles.container}>
-      {!hasInsufficientBalance && <Checkbox checked={isChecked} />}
       <View style={styles.textContainer}>
-        <View style={styles.horizontalRow}>
-          <ThemeText>{t(BonusProgramTexts.spend)}</ThemeText>
-          <ThemeIcon svg={BonusStarFill} size="small" />
-          <ThemeText>
-            {t(BonusProgramTexts.amountPoints(bonusProduct.price.amount))}
-          </ThemeText>
-        </View>
+        {title}
 
-        <ThemeText type="secondary" style={styles.horizontalRow}>
-          {getTextForLanguage(bonusProduct.paymentDescription, language) ?? ''}
-        </ThemeText>
+        <ThemeText type="secondary">{description}</ThemeText>
 
-        {hasInsufficientBalance && (
-          <MessageInfoText
-            type="info"
-            message={t(BonusProgramTexts.notEnoughPoints)}
-          />
-        )}
+        <MessageInfoText
+          type="info"
+          message={t(BonusProgramTexts.notEnoughPoints)}
+        />
       </View>
     </View>
   );
@@ -107,7 +107,7 @@ export const PayWithBonusPointsCheckbox = ({
         {hasInsufficientBalance ? (
           <GenericSectionItem>
             <View style={{flex: 1}}>
-              {content}
+              {insufficientBalanceContent}
               <Pressable
                 onPress={() => logCheckboxEvent(false)}
                 accessible={false}
@@ -122,19 +122,17 @@ export const PayWithBonusPointsCheckbox = ({
             </View>
           </GenericSectionItem>
         ) : (
-          <GenericClickableSectionItem
-            active={isChecked}
+          <CheckboxSectionItem
+            title={title}
+            description={description}
+            isChecked={isChecked}
             onPress={() => {
               logCheckboxEvent(true, !isChecked);
               onPress();
             }}
             disabled={isError}
-            accessibilityRole="checkbox"
-            accessibilityState={{checked: isChecked}}
             accessibilityLabel={a11yLabel}
-          >
-            {content}
-          </GenericClickableSectionItem>
+          />
         )}
       </Section>
       {isError && (

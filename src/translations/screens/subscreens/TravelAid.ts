@@ -28,12 +28,17 @@ const TravelAidTexts = {
       'Not possible to send stop signal now',
       'Ikke mogleg å sende stoppsignal no',
     ),
+    errorMessage: _(
+      'Klarte ikke å sende stoppsignal.',
+      "Couldn't send stop signal.",
+      'Klarte ikkje å sende stoppsignal.',
+    ),
   },
   apiError: {
     message: _(
-      'Det oppstod en feil ved henting av reisedata for denne avgangen.',
-      'There was a problem loading travel data for this trip.',
-      'Det oppstod ein feil då vi prøvde å hente reisedata for denne avgangen.',
+      'Klarte ikke å hente reisedata for denne avgangen.',
+      "Couldn't load travel data for this trip.",
+      'Klarte ikkje å hente reisedata for denne avgangen.',
     ),
   },
   noEstimatedCallsError: {
@@ -50,9 +55,9 @@ const TravelAidTexts = {
       'Reisehjelp utilgjengeleg for denne avgangen',
     ),
     message: _(
-      'Vi har ingen kontakt med kjøretøyet. Prøv igjen senere eller velg en annen avgang.',
-      'We currently have no contact with the vehicle. Please try again later or choose a different departure.',
-      'Vi har ingen kontakt med køyretøyet. Prøv igjen seinare eller velg ein annan avgang.',
+      'Fikk ikke kontakt med kjøretøyet. Prøv igjen senere eller velg en annen avgang.',
+      "Couldn't reach the vehicle. Please try again later or choose a different departure.",
+      'Fekk ikkje kontakt med køyretøyet. Prøv igjen seinare eller velg ein annan avgang.',
     ),
   },
   onboarding: {

@@ -44,15 +44,6 @@ import {isDefined} from '@atb/utils/presence';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 
-export const getNoticesForLeg = (leg: Leg) =>
-  filterNotices([
-    ...(leg.line?.notices || []),
-    ...(leg.serviceJourney?.notices || []),
-    ...(leg.serviceJourney?.journeyPattern?.notices || []),
-    ...(leg.fromEstimatedCall?.notices || []),
-    ...(leg.toEstimatedCall?.notices || []),
-  ]);
-
 /** Get notices on "route" level: ServiceJourney, JourneyPatter, Line */
 export const getNoticesForRoute = (leg: Leg) =>
   filterNotices([

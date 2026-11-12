@@ -72,9 +72,9 @@ export const ParkingViolationTexts = {
       'Om QR-kode ikkje let seg scanne kan du oppgje utleigefirmaet manuelt',
     ),
     qrFailedDescription: _(
-      'Vi kjenner dessverre ikke igjen QR-koden, men du kan oppgi utleieiefirma manuelt.',
-      'Unfortunately, we do not recognize the QR code, but you can enter the provider manually.',
-      'Dessverre kjenner vi ikkje igjen QR-koden, men du kan velje utleigefirmaet manuelt.',
+      'Klarte ikke å gjenkjenne QR-koden, men du kan oppgi utleiefirma manuelt.',
+      "Couldn't recognize the QR code, but you can enter the provider manually.",
+      'Klarte ikkje å kjenne igjen QR-koden, men du kan velje utleigefirmaet manuelt.',
     ),
     unknownProvider: _('Ukjent firma', 'Unknown provider', 'Ukjend firma'),
   },
@@ -103,9 +103,9 @@ export const ParkingViolationTexts = {
   issue: {
     general: {
       message: _(
-        'Vi fikk ikke til å starte feilrapporteringen. Prøv igjen senere, eller kontakt kundeservice for hjelp',
-        'We were unable to start the error reporting. Please try again later, or contact customer service for assistance.',
-        'Vi fekk ikkje til å starte feilrapporteringa. Prøv igjen seinare, eller kontakt kundeservice for hjelp.',
+        'Klarte ikke å starte feilrapporteringen. Prøv igjen senere, eller kontakt kundeservice for hjelp.',
+        "Couldn't start the error reporting. Please try again later, or contact customer service for assistance.",
+        'Klarte ikkje å starte feilrapporteringa. Prøv igjen seinare, eller kontakt kundeservice for hjelp.',
       ),
     },
     positionNotGranted: {
@@ -123,16 +123,16 @@ export const ParkingViolationTexts = {
     },
     noLocation: {
       message: _(
-        'Vi fikk ikke til å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne den på nytt dersom problemet ikke løser seg.',
-        'We were unable to obtain your position. Try to move around a bit. Close the app, and open it again if the problem persists.',
-        'Vi fekk ikkje til å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne han på nytt om problemet ikkje løyser seg.',
+        'Klarte ikke å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne den på nytt dersom problemet ikke løser seg.',
+        "Couldn't obtain your position. Try to move around a bit. Close the app, and open it again if the problem persists.",
+        'Klarte ikkje å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne han på nytt om problemet ikkje løyser seg.',
       ),
     },
     sendReport: {
       message: _(
-        'Vi fikk ikke til å sende feilrapporteringen. Prøv igjen, eller kontakt kundeservice for hjelp',
-        'We were unable to submit the error report. Please try again or contact customer service for assistance.',
-        'Vi fekk ikkje til å sende feilrapporteringa. Prøv igjen, eller kontakt kundeservice for hjelp',
+        'Klarte ikke å sende feilrapporteringen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        "Couldn't submit the error report. Please try again or contact customer service for assistance.",
+        'Klarte ikkje å sende feilrapporteringa. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
     },
   },

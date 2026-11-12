@@ -22,6 +22,8 @@ import {
   VehicleAppSwitch,
   StationSchema,
   Station,
+  SystemOpeningHoursSchema,
+  SystemOpeningHours,
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
   ViolationsReportingInitQueryResultSchema,
@@ -230,6 +232,18 @@ export const getStation = (
       console.error('Error in StationSchema parsing: ', error);
       return null;
     });
+};
+
+export const getSystemOpeningHours = (
+  systemId: string,
+  opts?: AxiosRequestConfig,
+): Promise<SystemOpeningHours> => {
+  return client
+    .get<SystemOpeningHours>(`/mobility/v1/systems/${systemId}/opening-hours`, {
+      ...opts,
+      authWithIdToken: true,
+    })
+    .then((response) => SystemOpeningHoursSchema.parse(response.data));
 };
 
 export const initViolationsReporting = (

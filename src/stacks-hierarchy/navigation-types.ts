@@ -14,6 +14,7 @@ import {
   ParkingViolationType,
   PreReq,
   ShmoBooking,
+  ShmoDamage,
   ShmoPricingPlan,
 } from '@atb/api/types/mobility';
 import type {PriceAdjustmentType} from '@atb/api/types/benefit';
@@ -93,9 +94,19 @@ type ShmoOperatorParams = {operatorId: string} & (
   | {bookingId: string | undefined}
   | {stationId: string | undefined; vehicleTypeId?: string}
 );
-export type ShmoHelpParams = ShmoOperatorParams & {formFactor?: FormFactor};
+export type ShmoHelpParams = ShmoOperatorParams & {
+  formFactor?: FormFactor;
+  systemId?: string;
+};
 type Root_ShmoHelpScreenParams = ShmoHelpParams;
 type Root_ContactShmoOperatorScreenParams = ShmoHelpParams;
+
+export type ReportShmoDamageParams = {
+  operatorId: string;
+  bookingId: string;
+  supportedDamages: ShmoDamage[];
+};
+type Root_ReportShmoDamageScreenParams = ReportShmoDamageParams;
 
 type Root_ShmoPricingDetailsScreenParams = {
   pricingPlan: ShmoPricingPlan;
@@ -165,6 +176,7 @@ export type RootStackParamList = StackParams<{
   Root_ShmoOnboardingScreen: {formFactor?: FormFactor; preReqs?: PreReq[]};
   Root_ShmoPricingDetailsScreen: Root_ShmoPricingDetailsScreenParams;
   Root_ContactShmoOperatorScreen: Root_ContactShmoOperatorScreenParams;
+  Root_ReportShmoDamageScreen: Root_ReportShmoDamageScreenParams;
   Root_ContactShmoOperatorConfirmationScreen: Root_ContactShmoOperatorConfirmationScreenParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;

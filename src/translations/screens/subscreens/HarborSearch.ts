@@ -42,14 +42,14 @@ const HarborSearchTexts = {
   },
   messages: {
     networkError: _(
-      'Hei, er du på nett? Vi kan ikke søke siden nettforbindelsen din mangler eller er ustabil.',
-      'Hi, are you connected? We are unable to conduct a search, since your connection is missing or unstable',
-      'Hei, er du på nett? Vi kan ikkje hente reiseforslag sidan tilkoplinga di til internett manglar eller er ustabil.',
+      'Klarte ikke å søke. Nettforbindelsen din mangler eller er ustabil.',
+      "Couldn't complete the search. Your connection is missing or unstable.",
+      'Klarte ikkje å søke. Tilkoplinga di til internett manglar eller er ustabil.',
     ),
-    defaultError: _(
-      'Noe gikk galt med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
-      'Something went wrong with the search. Please try again or contact customer service for assistance.',
-      'Noko gjekk gale med søket. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    loadingError: _(
+      'Klarte ikke å hente kaier.',
+      "Couldn't load harbors.",
+      'Klarte ikkje å hente kaiar.',
     ),
     emptyResult: _(
       'Fant ingen søkeresultat',

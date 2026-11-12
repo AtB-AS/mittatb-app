@@ -63,7 +63,7 @@ const DeparturesTexts = {
   ),
   noDeparturesForFavorites: _(
     'Fant ingen avganger blant favorittene dine. Deaktiver "Vis kun favorittavganger" for å se alle avganger.',
-    'We found no departures among your favourites. Disable "View favourite departures only" to show all departures.',
+    'No departures found among your favourites. Disable "View favourite departures only" to show all departures.',
     'Fann ingen avgangar i favorittane dine. Deaktivér "Vis berre favorittavgangar" for å sjå alle avgangar.',
   ),
   quaySection: {
@@ -138,14 +138,14 @@ const DeparturesTexts = {
       'Ingen avgangar frå denne haldeplassen.',
     ),
     resultFailed: _(
-      'Kunne ikke laste avganger.',
-      'Could not load the departures.',
-      'Kunne ikkje laste avgangar.',
+      'Klarte ikke å hente avganger.',
+      "Couldn't load the departures.",
+      'Klarte ikkje å hente avgangar.',
     ),
     resultNotFound: _(
-      'Kunne ikke finne holdeplassen du leter etter.',
-      'Could not find the stop place you are looking for.',
-      'Kunne ikkje finne haldeplassen du leitar etter.',
+      'Klarte ikke å finne holdeplassen du leter etter.',
+      "Couldn't find the stop place you are looking for.",
+      'Klarte ikkje å finne haldeplassen du leitar etter.',
     ),
     noData: _('Ingen informasjon', 'No data', 'Ingen informasjon'),
   },

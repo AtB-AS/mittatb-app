@@ -9,9 +9,9 @@ const PurchaseConfirmationTexts = {
       'Det oppstod ein feil',
     ),
     message: _(
-      'Vi klarte ikke å søke opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
-      'We were unable to look up the price. Please try again, or contact customer service for assistance.',
-      'Vi klarte ikkje å søkje opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      'Klarte ikke å søke opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+      "Couldn't look up the price. Please try again, or contact customer service for assistance.",
+      'Klarte ikkje å søkje opp prisen. Prøv igjen, eller kontakt kundeservice for hjelp.',
     ),
   },
   title: _('Billettsammendrag', 'Ticket summary', 'Billettsamandrag'),
@@ -157,9 +157,9 @@ const PurchaseConfirmationTexts = {
   ),
   cancelPayment: _('Avbryt kjøp', 'Cancel purchase', 'Avbryt kjøp'),
   cancelPaymentError: _(
-    'Vi klarte ikke å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller kontakt kundesenteret.',
-    'We were unable to cancel your purchase. Please check if you have received the ticket, or contact customer service.',
-    'Vi klarte ikkje å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller ta kontakt med kundesenteret.',
+    'Klarte ikke å avbryte kjøpet ditt. Vennligst sjekk om du har mottatt billetten, eller kontakt kundesenteret.',
+    "Couldn't cancel your purchase. Please check if you have received the ticket, or contact customer service.",
+    'Klarte ikkje å avbryte kjøpet ditt. Ver venleg og sjekk om du har mottatt billetten, eller ta kontakt med kundesenteret.',
   ),
 
   choosePaymentMethod: {
@@ -185,20 +185,29 @@ const PurchaseConfirmationTexts = {
     `Ordinær pris`,
   ),
   reserveError: _(
-    'Vi klarte ikke å sette i gang betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
-    'We were unable to start the payment. Please try again, or contact customer service for assistance.',
-    'Vi klarte ikkje å starte betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    'Klarte ikke å sette i gang betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
+    "Couldn't start the payment. Please try again, or contact customer service for assistance.",
+    'Klarte ikkje å starte betalingen. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
   vippsInstalledError: _(
-    'Vi klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
-    'We were unable to set up the payment. Do you have the Vipps app installed?',
-    'Vi klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
+    'Klarte ikke å sette i gang betalingen. Har du Vipps-appen installert?',
+    "Couldn't set up the payment. Do you have the Vipps app installed?",
+    'Klarte ikkje å sette i gang betalingen. Har du Vipps-appen installert?',
   ),
   paymentNotCompletedError: _(
     'Betalingen ble ikke fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
     'The payment was not completed. Please try again, or contact customer service for assistance.',
     'Betalinga vart ikkje fullført. Prøv igjen, eller kontakt kundeservice for hjelp.',
   ),
+  createPaymentAgreement: {
+    vipps: {
+      title: _(
+        'Enklere betaling neste gang?',
+        'Easier payment next time?',
+        'Enklare betaling neste gong?',
+      ),
+    },
+  },
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   fram: {

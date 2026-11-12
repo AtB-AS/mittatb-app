@@ -6,7 +6,11 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {getTimeBetweenFormatted} from '@atb/utils/date';
+import {
+  getTimeBetweenFormatted,
+  secondsBetween,
+  secondsToDuration,
+} from '@atb/utils/date';
 import {
   getCurrencySymbol,
   getCurrencyMajorName,
@@ -28,7 +32,7 @@ export const ShmoTripDetailsSectionItem = ({
   withHeader,
   ...props
 }: SectionItemProps<Props>) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const styles = useStyles();
   const {topContainer} = useSectionItem(props);
@@ -43,14 +47,17 @@ export const ShmoTripDetailsSectionItem = ({
   );
 
   const timeUsed = getTimeBetweenFormatted(startDateTime, endDateTime);
+  const timeUsedA11yLabel = secondsToDuration(
+    secondsBetween(startDateTime, endDateTime),
+    language,
+    {units: ['h', 'm', 's']},
+  );
   return (
     <View style={[topContainer, styles.container]}>
       <View
         style={styles.leftSection}
         accessible={true}
-        accessibilityLabel={`${t(
-          MobilityTexts.cost,
-        )} ${formattedTotalAmount} ${currencyMajorName}`}
+        accessibilityLabel={`${t(MobilityTexts.time)} ${timeUsedA11yLabel}`}
       >
         {withHeader && (
           <ThemeText

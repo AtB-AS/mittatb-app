@@ -99,9 +99,9 @@ const BonusProgramTexts = {
       ),
     },
     noData: _(
-      'Vi klarer ikke hente informasjon om AtB Bonus. Sjekk om du har internett og prøv på nytt.',
-      'We are unable to fetch information about AtB Bonus. Check your internet connection and try again.',
-      'Me klarar ikkje hente informasjon om AtB Bonus. Sjekk om du har internett og prøv på nytt.',
+      'Klarte ikke å hente informasjon om AtB Bonus. Sjekk om du har internett og prøv på nytt.',
+      "Couldn't load information about AtB Bonus. Check your internet connection and try again.",
+      'Klarte ikkje å hente informasjon om AtB Bonus. Sjekk om du har internett og prøv på nytt.',
     ),
 
     noProfile: _(
@@ -110,14 +110,14 @@ const BonusProgramTexts = {
       'Du må logga inn før du kan bli med i AtB Bonus',
     ),
     noBonusBalance: _(
-      'Vi klarer ikke vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to display your points right now. You will still earn points as usual.',
-      'Me klarer ikkje visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
+      'Klarte ikke å vise poengene dine akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      "Couldn't display your points right now. You will still earn points as usual.",
+      'Klarte ikkje å visa poenga dine akkurat no. Du vil framleis tena poeng som vanleg.',
     ),
     noBonusProducts: _(
-      'Vi klarer ikke dette akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
-      'We are unable to display this right now. You will still earn points as usual.',
-      'Me klarer ikkje visa dette akkurat no. Du vil framleis tene poeng som vanleg.',
+      'Klarte ikke å vise dette akkurat nå. Du vil fortsatt tjene poeng som vanlig.',
+      "Couldn't display this right now. You will still earn points as usual.",
+      'Klarte ikkje å visa dette akkurat no. Du vil framleis tene poeng som vanleg.',
     ),
     readMore: {
       heading: _('Slik funker det', 'How it works', 'Slik funkar det'),
@@ -238,7 +238,11 @@ const BonusProgramTexts = {
       'Vilkår for AtB sine prøveprosjekt',
     ),
     error: {
-      title: _('Noe gikk galt', 'Something went wrong', 'Noe gikk galt'),
+      title: _(
+        'Klarte ikke å melde deg inn',
+        "Couldn't enroll you",
+        'Klarte ikkje å melde deg inn',
+      ),
       description: _(
         'Du ble ikke innmeldt i AtB Bonus. Prøv igjen senere.',
         'You were not enrolled in AtB Bonus. Please try again later.',
@@ -292,9 +296,9 @@ const BonusProgramTexts = {
         `Kode ${spellOut(code)}`,
       ),
     errorMessage: _(
-      'Vi klarte ikke å hente kampanjekodene dine. Prøv igjen senere.',
-      'We could not load your coupon codes. Please try again later.',
-      'Vi klarte ikkje å hente kampanjekodane dine. Prøv igjen seinare.',
+      'Klarte ikke å hente kampanjekodene dine. Prøv igjen senere.',
+      "Couldn't load your coupon codes. Please try again later.",
+      'Klarte ikkje å hente kampanjekodane dine. Prøv igjen seinare.',
     ),
     retry: _('Prøv igjen', 'Try again', 'Prøv igjen'),
   },

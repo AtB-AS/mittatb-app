@@ -1,5 +1,6 @@
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Coordinates} from '@atb/utils/coordinates';
+import type {DepartureSearchTime} from '@atb/components/date-selection';
 
 /**
  * Parses unknown param data as an integer, or falls back to undefined.
@@ -23,6 +24,20 @@ export const parseParamsAsCoordinates = (
   if (!isFinite(latitude) || !isFinite(longitude)) return undefined;
   if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return undefined;
   return {latitude, longitude};
+};
+
+/**
+ * Parses a planner web `searchTime` param (epoch milliseconds) as a departure
+ * search time, or falls back to undefined (now) if missing, invalid or in the
+ * past.
+ */
+export const parseParamAsSearchTime = (
+  searchTime: string | undefined,
+): DepartureSearchTime | undefined => {
+  if (!searchTime?.trim()) return undefined;
+  const date = new Date(Number(searchTime));
+  if (isNaN(date.getTime()) || date.getTime() <= Date.now()) return undefined;
+  return {option: 'departure', date: date.toISOString()};
 };
 
 /**

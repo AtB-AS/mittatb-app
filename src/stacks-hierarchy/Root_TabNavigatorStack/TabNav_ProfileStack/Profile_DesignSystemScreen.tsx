@@ -1,5 +1,5 @@
 import {ContrastColor} from '@atb/theme/colors';
-import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button} from '@atb/components/button';
@@ -29,6 +29,7 @@ import {
   MessageSectionItem,
   Section,
   TextInputSectionItem,
+  CheckboxSectionItem,
   ToggleSectionItem,
   PhoneInputSectionItem,
   RadioGroupSection,
@@ -218,26 +219,24 @@ export const Profile_DesignSystemScreen = ({
 
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="xSmall"
                 notification={{color: theme.color.status.valid.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="small"
                 notification={{color: theme.color.status.warning.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="error"
+                svg={Ticket}
                 notification={{color: theme.color.status.info.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="disabled"
+                svg={Ticket}
                 size="large"
                 notification={{color: theme.color.status.error.primary}}
               />
@@ -249,7 +248,7 @@ export const Profile_DesignSystemScreen = ({
 
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="xSmall"
                 notification={{
                   color: theme.color.status.valid.primary,
@@ -258,7 +257,7 @@ export const Profile_DesignSystemScreen = ({
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="small"
                 notification={{
                   color: theme.color.status.warning.primary,
@@ -267,8 +266,7 @@ export const Profile_DesignSystemScreen = ({
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="error"
+                svg={Ticket}
                 notification={{
                   color: theme.color.status.info.primary,
                   backgroundColor: theme.color.background.neutral[0],
@@ -276,8 +274,7 @@ export const Profile_DesignSystemScreen = ({
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="disabled"
+                svg={Ticket}
                 size="large"
                 notification={{
                   color: theme.color.status.error.primary,
@@ -662,7 +659,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Primary - block - surface/accent
+                  Primary - large - surface/accent
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -686,7 +683,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Primary - block - surface/neutral
+                  Primary - large - surface/neutral
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -710,7 +707,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Primary - block - surface/error
+                  Primary - large - surface/error
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -734,7 +731,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Secondary - block
+                  Secondary - large
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -758,7 +755,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  tertiary - block
+                  Tertiary - large
                 </ThemeText>
                 <View style={styles.buttonContainer}>
                   <Button
@@ -782,7 +779,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Medium button examples (surface/accent)
+                  Large, not expanded, button examples (surface/accent)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
@@ -833,7 +830,7 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   typography="heading__m"
                 >
-                  Pill button examples (surface/accent)
+                  Small button examples (surface/accent)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
@@ -1035,6 +1032,18 @@ export const Profile_DesignSystemScreen = ({
             text="Toggle with label"
             onValueChange={() => {}}
             label="new"
+          />
+          <CheckboxSectionItem
+            title="Some short text"
+            isChecked={selected}
+            onPress={() => setSelected(!selected)}
+          />
+          <CheckboxSectionItem
+            title="Checkbox with label"
+            description="With a description"
+            label="new"
+            isChecked={selected}
+            onPress={() => setSelected(!selected)}
           />
           <RadioSectionItem
             text="Some short text and interactive color"
