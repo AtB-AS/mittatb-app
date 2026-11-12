@@ -633,6 +633,19 @@ export type Translation = z.infer<typeof TranslationSchema>;
 export type Operator = z.infer<typeof OperatorSchema>;
 export type OperatorsResponse = z.infer<typeof OperatorsResponseSchema>;
 
+const ShmoFaqSchema = z.object({
+  id: z.string(),
+  title: LocalizedStringSchema,
+  description: LocalizedStringSchema,
+});
+
+export const ShmoFaqsResponseSchema = z.object({
+  faqs: z.array(ShmoFaqSchema),
+});
+
+export type ShmoFaq = z.infer<typeof ShmoFaqSchema>;
+export type ShmoFaqsResponse = z.infer<typeof ShmoFaqsResponseSchema>;
+
 const GeoJsonCoordinatesSchema = z.union([
   z.tuple([longitude, latitude]), // lon, lat
   z.tuple([longitude, latitude, z.number()]), // lon, lat, altitude

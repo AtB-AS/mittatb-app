@@ -357,7 +357,7 @@ export const VehicleSheet = ({
                          synthesised from the station and vehicle type, which is what
                          the support screens resolve it by. */
                       ...(vehicleId
-                        ? {vehicleId}
+                        ? {vehicleId, vehicleTypeId: vehicle?.vehicleType.id}
                         : {
                             stationId: mapState.stationId,
                             vehicleTypeId: mapState.vehicleTypeId,
