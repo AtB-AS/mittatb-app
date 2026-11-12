@@ -17,6 +17,7 @@ import {Flash, NoFlash} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {errorToMetadata, logToBugsnag} from '@atb/utils/bugsnag-utils';
 import DeviceInfo from 'react-native-device-info';
+import {SessionReplayMask} from '@atb/modules/analytics';
 
 type PhotoProps = {
   mode: 'photo';
@@ -86,19 +87,21 @@ export const Camera = ({
     <>
       {device && (
         <View style={styles.container}>
-          <VisionCamera
-            ref={camera}
-            style={StyleSheet.absoluteFill}
-            enableZoomGesture={true}
-            device={device}
-            isActive={isFocused}
-            resizeMode="cover"
-            video={false}
-            audio={false}
-            photo={mode === 'photo'}
-            torch={device?.hasTorch ? torch : undefined}
-            codeScanner={mode === 'qr' ? codeScanner : undefined}
-          />
+          <SessionReplayMask style={StyleSheet.absoluteFill}>
+            <VisionCamera
+              ref={camera}
+              style={StyleSheet.absoluteFill}
+              enableZoomGesture={true}
+              device={device}
+              isActive={isFocused}
+              resizeMode="cover"
+              video={false}
+              audio={false}
+              photo={mode === 'photo'}
+              torch={device?.hasTorch ? torch : undefined}
+              codeScanner={mode === 'qr' ? codeScanner : undefined}
+            />
+          </SessionReplayMask>
 
           {mode === 'qr' && (
             <View pointerEvents="none" style={styles.qrFrame} />

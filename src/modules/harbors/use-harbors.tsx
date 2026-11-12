@@ -4,11 +4,26 @@ import {
 } from '@atb/modules/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarborConnectionOverrides} from './use-harbor-connection-overrides';
-import {useHarborsQuery} from '@atb/queries';
+import {useStopPlacesByModeQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import {unionBy} from 'lodash';
 import {StopPlaceFragmentWithIsFree} from './types';
 import {useConnectionsQuery} from '@atb/queries/use-connections-query';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+
+const defaultTransportModes: ProductTypeTransportModes[] = [
+  {
+    mode: TransportMode.Water,
+    subMode: TransportSubmode.HighSpeedPassengerService,
+  },
+  {
+    mode: TransportMode.Water,
+    subMode: TransportSubmode.HighSpeedVehicleService,
+  },
+];
 
 /**
  * This hook is pretty generic, but it does serve a purpose as-is.
@@ -26,7 +41,9 @@ export const useHarbors = ({
   fromHarborId?: string;
   transportModes?: ProductTypeTransportModes[];
 } = {}) => {
-  const allHarborsQuery = useHarborsQuery(transportModes);
+  const allHarborsQuery = useStopPlacesByModeQuery(
+    transportModes ?? defaultTransportModes,
+  );
   const connectionsQuery = useConnectionsQuery(fromHarborId);
   const overrides = useHarborConnectionOverrides(fromHarborId);
 

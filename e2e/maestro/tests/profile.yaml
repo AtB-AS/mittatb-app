@@ -1,0 +1,67 @@
+appId: ${APP_ID}
+name: 'Profile'
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
+---
+- runFlow:
+    file: ../common/onboarding/anonymous.yaml
+    label: 'Onboarding'
+
+# Check the default options for notifications
+- tapOn:
+    id: ${output.nav.menu.profile}
+    label: 'Navigate to Profile tab'
+- tapOn:
+    id: ${output.profile.settings}
+    label: 'Navigate to settings'
+- tapOn:
+    id: ${output.profile.notifications}
+    label: 'Navigate to notifications'
+- assertVisible:
+    id: ${output.profile.notificationToggle('email')}
+    checked: false
+    label: 'Email notifications are off by default'
+- assertVisible:
+    id: ${output.profile.notificationToggle('push')}
+    checked: true
+    label: 'Push notifications are on by default'
+- assertVisible:
+    id: ${output.profile.notificationToggle('single')}
+    checked: false
+    label: 'Single ticket notifications are off by default'
+- assertVisible:
+    id: ${output.profile.notificationToggle('period')}
+    checked: true
+    label: 'Period ticket notifications are on by default'
+- scrollUntilVisible:
+    element:
+      id: ${output.profile.notificationToggle('on-behalf-of')}
+    direction: DOWN
+    timeout: 10000
+    label: 'Scroll to on-behalf-of notifications'
+- assertVisible:
+    id: ${output.profile.notificationToggle('night')}
+    checked: false
+    label: 'Night ticket notifications are off by default'
+- assertVisible:
+    id: ${output.profile.notificationToggle('carnet')}
+    checked: false
+    label: 'Carnet notifications are off by default'
+- assertVisible:
+    id: ${output.profile.notificationToggle('on-behalf-of')}
+    checked: true
+    label: 'On-behalf-of notifications are on by default'
+
+# Back
+- tapOn:
+    id: ${output.nav.back}
+- tapOn:
+    id: ${output.nav.back}

@@ -88,6 +88,7 @@ export const TravelCard: React.FC<TravelCardProps> = ({
             includeDayInfo={includeDayInfo}
             includeFromToInfo={includeFromToInfo}
             isSaved={isSaved}
+            testID={testID}
           />
           <View style={styles.legsContainer}>
             <View

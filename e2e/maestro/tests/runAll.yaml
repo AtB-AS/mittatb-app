@@ -1,6 +1,10 @@
 appId: ${APP_ID}
-name: 'Run tests'
+name: 'Run all tests'
 ---
+- runFlow:
+    file: frontpage.yaml
+    label: 'Frontpage'
+
 - runFlow:
     file: departures.yaml
     label: 'Departures'
@@ -8,6 +12,10 @@ name: 'Run tests'
 - runFlow:
     file: travelSearch.yaml
     label: 'Travel Search'
+
+- runFlow:
+    file: profile.yaml
+    label: 'Profile'
 
 - runFlow:
     file: mobileToken.yaml

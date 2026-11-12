@@ -51,7 +51,7 @@ flowchart TD
 
         install_node_s --> entur_s["Add Entur registry credentials"]
         entur_s --> yarn_s["pnpm install --frozen-lockfile"]
-        yarn_s --> ruby_s["Setup Ruby 3.1.0 + Bundler"]
+        yarn_s --> ruby_s["Setup Ruby 3.1.7 + Bundler"]
 
         ruby_s --> setup_out(["Outputs:
         matrix, abi, abi-filename"])
@@ -116,7 +116,7 @@ flowchart TD
 
     node --> pnpm_install["pnpm install --frozen-lockfile"]
 
-    pnpm_install --> ruby["Setup Ruby 3.1.0 + Bundler"]
+    pnpm_install --> ruby["Setup Ruby 3.1.7 + Bundler"]
 
     ruby --> set_env["Set environment
     override-environment.sh"]

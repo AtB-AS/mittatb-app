@@ -484,7 +484,7 @@ const WEEKDAY_TO_DAY: Record<Weekday, Day> = {
 
 /**
  * Formats a weekly opening-hours schedule into one display line per day-range group, e.g.
- * "Mandag - torsdag 00:00-23:59", or "Søndag Stengt" for a day-range with no open intervals.
+ * "Mandag - torsdag: 00:00-23:59", or "Søndag: Stengt" for a day-range with no open intervals.
  */
 export const formatOpeningHoursSchedule = (
   schedule: OpeningHoursDayRange[],
@@ -505,7 +505,7 @@ export const formatOpeningHoursSchedule = (
           .map(({opens, closes}) => `${opens}-${closes}`)
           .join(', ')
       : t(ShmoHelpTexts.closed);
-    return `${capitalizeFirstLetter(label)} ${hours}`;
+    return `${capitalizeFirstLetter(label)}: ${hours}`;
   });
 
 /**

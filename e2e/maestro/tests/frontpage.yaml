@@ -1,0 +1,198 @@
+appId: ${APP_ID}
+name: 'Frontpage'
+onFlowStart:
+  - runFlow:
+      file: ../elements/loadElements.yaml
+      label: 'Load elements'
+  - launchApp:
+      clearState: true
+      permissions:
+        location: deny
+onFlowComplete:
+  - stopApp
+---
+- evalScript: ${output.myStopPlace = 'Prinsens gate'}
+
+- runFlow:
+    file: ../common/onboarding/anonymous.yaml
+    label: 'Onboarding'
+- tapOn:
+    id: ${output.nav.menu.assistant}
+    label: 'Navigate to Assistant tab'
+
+# Remove dismissible messages - mainly to avoid scrolling on the page
+- runFlow:
+    file: ../common/removeGlobalMessages.yaml
+    label: 'Remove all global messages'
+- runFlow:
+    file: ../common/removeAnnouncements.yaml
+    label: 'Remove all announcements'
+
+# Add a favorite departure
+- assertVisible:
+    id: ${output.frontpage.favorite.noFavorites}
+    label: 'Verify that there are no favorites'
+- tapOn:
+    id: ${output.frontpage.favorite.addDeparture}
+    label: 'Add favorite departure'
+- runFlow:
+    file: ../common/locationSearch.yaml
+    env:
+      SEARCH_TYPE: 'from'
+      SEARCH_TEXT: ${output.myStopPlace}
+      ONLY_STOP_PLACE: 'true'
+    label: 'Search for stop place'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.line}
+    timeout: 10000
+    label: 'Wait for departure lines'
+- copyTextFrom:
+    id: ${output.frontpage.favorite.linePublicCode}
+    childOf:
+      id: ${output.frontpage.favorite.line}
+    label: 'Copy public code of the first line'
+- evalScript: ${output.myLinePublicCode = maestro.copiedText}
+- copyTextFrom:
+    id: ${output.frontpage.favorite.lineName}
+    childOf:
+      id: ${output.frontpage.favorite.line}
+    label: 'Copy name of the first line'
+- evalScript: ${output.myLineName = maestro.copiedText}
+- tapOn:
+    id: ${output.frontpage.favorite.line}
+    index: 0
+    label: 'Choose the first line'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.chooseSheet}
+    timeout: 5000
+    label: 'Wait for favorite choices'
+- tapOn:
+    id: ${output.frontpage.favorite.onlySelectedDeparture}
+    label: 'Choose only the selected departure'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.departures}
+    timeout: 10000
+    label: 'Wait for favorite departures'
+- assertVisible:
+    id: ${output.frontpage.favorite.stopPlaceTitle}
+    text: ${'.*' + output.myStopPlace + '.*'}
+    label: 'Verify favorite stop place'
+- assertVisible:
+    id: ${output.frontpage.favorite.lineTitle}
+    text: ${'.*' + output.myLinePublicCode + '.*' + output.myLineName + '.*'}
+    childOf:
+      id: ${output.frontpage.favorite.frontpageLine(0)}
+    label: 'Verify favorite line'
+- assertVisible:
+    id: ${output.frontpage.favorite.firstDepartureTime}
+    childOf:
+      id: ${output.frontpage.favorite.frontpageLineTimes(0)}
+    label: 'Verify favorite departure time'
+
+# Toggle the visibility of the favorite departure
+- assertNotVisible:
+    id: ${output.frontpage.favorite.addDeparture}
+    label: 'Verify that add favorite is not shown'
+- assertVisible:
+    id: ${output.frontpage.favorite.selectDepartures}
+    label: 'Verify select favorites button'
+- tapOn:
+    id: ${output.frontpage.favorite.selectDepartures}
+    label: 'Open favorite selection'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.selectSheet}
+    timeout: 5000
+    label: 'Wait for favorite selection'
+- tapOn:
+    id: ${output.frontpage.favorite.toggleVisibility}
+    label: 'Toggle out the favorite'
+- tapOn:
+    id: ${output.global.closeBottomSheet}
+    label: 'Close favorite selection'
+- assertNotVisible:
+    id: ${output.frontpage.favorite.departures}
+    label: 'Verify that the favorite is hidden'
+- assertNotVisible:
+    id: ${output.frontpage.favorite.noFavorites}
+    label: 'Verify that the no favorites info is not shown'
+- tapOn:
+    id: ${output.frontpage.favorite.selectDepartures}
+    label: 'Open favorite selection'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.selectSheet}
+    timeout: 5000
+    label: 'Wait for favorite selection'
+- tapOn:
+    id: ${output.frontpage.favorite.toggleVisibility}
+    label: 'Toggle in the favorite'
+- tapOn:
+    id: ${output.global.closeBottomSheet}
+    label: 'Close favorite selection'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.departures}
+    timeout: 5000
+    label: 'Verify that the favorite is shown'
+
+# Remove the favorite departure
+- assertNotVisible:
+    id: ${output.frontpage.favorite.noFavorites}
+    label: 'Verify that the no favorites info is not shown'
+- tapOn:
+    id: ${output.frontpage.favorite.selectDepartures}
+    label: 'Open favorite selection'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.selectSheet}
+    timeout: 5000
+    label: 'Wait for favorite selection'
+- tapOn:
+    id: ${output.frontpage.favorite.edit}
+    label: 'Edit favorites'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.list}
+    timeout: 5000
+    label: 'Wait for favorites list'
+- tapOn:
+    id: ${output.frontpage.favorite.delete}
+    label: 'Delete the favorite'
+- extendedWaitUntil:
+    visible:
+      text: '(?i)delete'
+    timeout: 5000
+    label: 'Wait for delete confirmation'
+- tapOn:
+    text: '(?i)delete'
+    label: 'Confirm delete'
+- tapOn:
+    id: ${output.nav.back}
+    label: 'Go back'
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.favorite.noFavorites}
+    timeout: 5000
+    label: 'Verify that the no favorites info is shown'
+- assertNotVisible:
+    id: ${output.frontpage.favorite.departures}
+    label: 'Verify that the favorite is removed'
+
+# Buy tickets link
+- extendedWaitUntil:
+    visible:
+      id: ${output.frontpage.scrollView}
+    timeout: 5000
+    label: 'Wait for frontpage'
+- tapOn:
+    id: ${output.frontpage.buyTickets}
+    label: 'Open tickets'
+- extendedWaitUntil:
+    visible:
+      id: ${output.nav.tickets.purchase}
+    timeout: 10000
+    label: 'Verify that the tickets tab is shown'
