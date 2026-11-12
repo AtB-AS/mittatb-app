@@ -1,6 +1,7 @@
 import {Button} from '@atb/components/button';
-import {StyleSheet} from '@atb/theme';
-import {Image, View} from 'react-native';
+import {StyleSheet, useThemeContext} from '@atb/theme';
+import {useState} from 'react';
+import {Image, useWindowDimensions, View} from 'react-native';
 import {
   BottomSheetHeaderType,
   BottomSheetModal,
@@ -31,6 +32,27 @@ export const ImageConfirmationBottomSheet = ({
   onDismiss,
 }: Props) => {
   const styles = useStyles();
+  const {theme} = useThemeContext();
+  const {height: windowHeight} = useWindowDimensions();
+  const [availableWidth, setAvailableWidth] = useState(0);
+  const [loadedImage, setLoadedImage] = useState<{
+    uri: string;
+    width: number;
+    height: number;
+  }>();
+  // Only use the loaded size if it belongs to the current file, since this
+  // component stays mounted while the previewed file changes.
+  const imageSize = loadedImage?.uri === file ? loadedImage : undefined;
+
+  const framePadding = theme.spacing.small;
+  const maxWidth = availableWidth - 2 * framePadding;
+  const maxHeight = windowHeight * 0.3;
+  const scale = imageSize
+    ? Math.min(maxWidth / imageSize.width, maxHeight / imageSize.height)
+    : 1;
+  const imageDimensions = imageSize
+    ? {width: imageSize.width * scale, height: imageSize.height * scale}
+    : {width: maxWidth, height: maxHeight};
 
   return (
     <BottomSheetModal
@@ -43,13 +65,26 @@ export const ImageConfirmationBottomSheet = ({
     >
       <View style={styles.container}>
         {!!file && (
-          <SessionReplayMask>
-            <Image
-              source={{uri: file}}
-              style={styles.image}
-              resizeMode="contain"
-            />
-          </SessionReplayMask>
+          <View onLayout={(e) => setAvailableWidth(e.nativeEvent.layout.width)}>
+            {availableWidth > 0 && (
+              <View style={styles.frame}>
+                <SessionReplayMask>
+                  <Image
+                    source={{uri: file}}
+                    style={[styles.image, imageDimensions]}
+                    resizeMode="contain"
+                    onLoad={(e) =>
+                      setLoadedImage({
+                        uri: file,
+                        width: e.nativeEvent.source.width,
+                        height: e.nativeEvent.source.height,
+                      })
+                    }
+                  />
+                </SessionReplayMask>
+              </View>
+            )}
+          </View>
         )}
         <Button
           surfaceColor="accent"
@@ -79,10 +114,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       marginHorizontal: theme.spacing.medium,
     },
+    frame: {
+      alignSelf: 'center',
+      padding: theme.spacing.small,
+      borderRadius: theme.border.radius.regular,
+      backgroundColor: theme.color.background.neutral[0].background,
+    },
     image: {
-      width: '100%',
-      aspectRatio: 4 / 3,
-      backgroundColor: theme.color.background.neutral[1].background,
+      borderRadius: theme.border.radius.small,
     },
     button: {
       marginTop: theme.spacing.medium,
