@@ -21,3 +21,4 @@ export {usePaymentAgreementDiscovery} from './hooks/use-payment-agreement-discov
 export {usePaymentAgreementsNotification} from './hooks/use-payment-agreements-notification';
 export {usePreloadPaymentAgreements} from './hooks/use-preload-payment-agreements';
 export {usePaymentAgreementAnalyticsProperties} from './hooks/use-payment-agreement-analytics-properties';
+export {usePaymentAgreementStatusAnalytics} from './hooks/use-payment-agreement-status-analytics';

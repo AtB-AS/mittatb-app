@@ -40,6 +40,7 @@ import {useDebugServerOverrides} from '@atb/modules/debug';
 import {
   usePaymentAgreementDiscovery,
   usePaymentAgreementAnalyticsProperties,
+  usePaymentAgreementStatusAnalytics,
 } from '@atb/modules/payment';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {NotificationBadgeTexts} from '@atb/translations/components/NotificationBadge';
@@ -80,6 +81,8 @@ export const Root_TabNavigatorStack = () => {
   const paymentAgreementAnalyticsProperties =
     usePaymentAgreementAnalyticsProperties();
   const {logEvent} = useAnalyticsContext();
+  // Lives for the whole app session, so it can follow pending agreements
+  usePaymentAgreementStatusAnalytics();
 
   // Counts the users who get the notification, once per app session to keep
   // the number of events down
