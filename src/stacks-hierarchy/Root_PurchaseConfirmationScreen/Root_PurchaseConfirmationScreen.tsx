@@ -654,13 +654,23 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       <SelectPaymentMethodSheet
         recurringPaymentMethods={recurringPaymentMethods}
         onSelect={(
-          paymentMethod: PaymentMethod,
+          newPaymentMethod: PaymentMethod,
           shouldSavePaymentMethod: boolean,
         ) => {
+          // Only while payment agreements are enabled, to see if users with
+          // an agreement change to another payment method
+          if (isVippsPaymentAgreementEnabled) {
+            analytics.logEvent('Ticketing', 'Payment method selected', {
+              paymentMethod: newPaymentMethod.paymentType,
+              previousPaymentMethod: paymentMethod?.paymentType,
+              hasActivePaymentAgreement: !!paymentAgreements?.length,
+              ...paymentAgreementOnboardingAnalyticsProperties,
+            });
+          }
           setVippsNotInstalledError(false);
           setPaymentNotCompletedError(false);
           reserveMutation.reset();
-          setSelectedPaymentMethod(paymentMethod);
+          setSelectedPaymentMethod(newPaymentMethod);
           setShouldSavePaymentMethod(shouldSavePaymentMethod);
           bottomSheetModalRef.current?.dismiss();
         }}
