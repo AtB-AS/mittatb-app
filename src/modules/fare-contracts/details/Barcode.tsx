@@ -43,6 +43,7 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {t} = useTranslation();
   const {enable_new_token_barcode} = useRemoteConfigContext();
   const isFocusedAndActive = useIsFocusedAndActive();
+  const styles = useStyles();
 
   useScreenBrightnessIncrease();
 
@@ -58,7 +59,7 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   if (validityStatus !== 'valid') return null;
 
   return (
-    <SessionReplayMask>
+    <SessionReplayMask style={styles.sessionReplayMask}>
       <BarcodeContent
         fc={fc}
         enableNewTokenBarcode={enable_new_token_barcode}
@@ -364,6 +365,9 @@ const StaticQrCode = ({fc}: {fc: FareContractType}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
+  sessionReplayMask: {
+    flex: 1,
+  },
   aztecCode: {
     width: '100%',
     aspectRatio: 1,
