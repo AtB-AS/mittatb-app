@@ -12,7 +12,6 @@ import {z} from 'zod';
 export const getBonusBalance = async (): Promise<number> => {
   const response = await client.get(`/bonus/v2/balance`, {
     authWithIdToken: true,
-    skipErrorLogging: (error) => error.response?.status === 404,
   });
 
   const value =

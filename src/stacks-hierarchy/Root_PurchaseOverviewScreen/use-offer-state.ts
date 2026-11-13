@@ -318,7 +318,6 @@ export function useOfferState({
             offers = await searchOffers(offerEndpoint, params, {
               cancelToken,
               authWithIdToken: true,
-              skipErrorLogging: isNotAvailableError,
             });
 
             cancelToken?.throwIfRequested();

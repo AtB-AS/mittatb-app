@@ -234,16 +234,3 @@ export const parseTokenServerErrors = (rawError: ErrorResponse) => {
     return errorKind;
   }
 };
-
-export const isRemoteTokenStateError = (err: any) => {
-  const {success, data} = ErrorResponse.safeParse(err.response?.data);
-  if (!success) return false;
-  const kind = parseErrorKind(data);
-  return (
-    kind instanceof TokenEncodingClockSkewRemoteTokenStateError ||
-    kind instanceof TokenMustBeRenewedRemoteTokenStateError ||
-    kind instanceof TokenMustBeReplacedError ||
-    kind instanceof TokenHasBeenRenewedError ||
-    kind instanceof TokenNotFoundError
-  );
-};

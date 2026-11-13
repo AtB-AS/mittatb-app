@@ -47,11 +47,7 @@ export const getCustomerAccountId = async (
     .post(
       `/profile/v1/search`,
       {phoneNumber: phoneNumber},
-      {
-        authWithIdToken: true,
-        skipErrorLogging: (error) =>
-          error.response?.status === 404 || error.response?.status === 400,
-      },
+      {authWithIdToken: true},
     )
     .then((response) => response.data.customerAccountId as string)
     .catch((error: RequestError) => {
@@ -90,10 +86,7 @@ export const getPhoneNumberFromId = async (
     .post<CustomerProfile>(
       `/profile/v1/lookup`,
       {customerAccountId: accountId},
-      {
-        authWithIdToken: true,
-        skipErrorLogging: (error) => error.response?.status === 400,
-      },
+      {authWithIdToken: true},
     )
     .then((response) => response.data.phone);
 };
