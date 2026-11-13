@@ -657,7 +657,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             analytics.logEvent('Ticketing', 'Payment method selected', {
               paymentMethod: newPaymentMethod.paymentType,
               previousPaymentMethod: paymentMethod?.paymentType,
-              hasActivePaymentAgreement: !!paymentAgreements?.length,
+              hasActivePaymentAgreement: paymentAgreements
+                ? paymentAgreements.length > 0
+                : undefined,
               ...paymentAgreementOnboardingAnalyticsProperties,
             });
           }
