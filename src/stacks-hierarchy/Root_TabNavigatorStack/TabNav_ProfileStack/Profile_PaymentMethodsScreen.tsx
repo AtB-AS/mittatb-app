@@ -29,8 +29,10 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {
   ExpiryMessage,
   PaymentBrand,
+  usePaymentAgreementAnalyticsProperties,
   usePaymentAgreementsNotification,
 } from '@atb/modules/payment';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
@@ -96,6 +98,9 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const pendingPaymentAgreements = paymentAgreementsData?.pending;
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
+  const paymentAgreementAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
+  const {logEvent} = useAnalyticsContext();
   const showAgreementsNotification =
     usePaymentAgreementsNotification(paymentAgreements);
   const hasPaymentAgreementsError =
@@ -200,9 +205,14 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
               <PaymentAgreementsSection
                 agreements={paymentAgreements}
                 pendingAgreements={pendingPaymentAgreements}
-                onActivate={(paymentType) =>
-                  addPaymentAgreement.mutate(paymentType)
-                }
+                onActivate={(paymentType) => {
+                  logEvent('Profile', 'Activate payment agreement clicked', {
+                    paymentType,
+                    paymentAgreementNotification: showAgreementsNotification,
+                    ...paymentAgreementAnalyticsProperties,
+                  });
+                  addPaymentAgreement.mutate(paymentType);
+                }}
                 onStop={onStopPaymentAgreement}
                 showNotification={showAgreementsNotification}
                 isLoading={
