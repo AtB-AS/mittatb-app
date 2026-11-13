@@ -171,8 +171,6 @@ export const Root_TabNavigatorStack = () => {
         ? t(NotificationBadgeTexts.a11yLabel(1))
         : undefined,
       onPress: () => {
-        // Only while showing the payment agreement notification, to keep the
-        // number of events down
         if (!shouldShowPaymentAgreementDiscovery) return;
         logEvent('Profile', 'Profile tab clicked', {
           paymentAgreementNotification: true,

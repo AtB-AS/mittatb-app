@@ -222,13 +222,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     usePaymentAgreementAnalyticsProperties();
   const paymentAgreementAnalyticsProperties = {
     ...paymentAgreementOnboardingAnalyticsProperties,
-    // Only set when the checkbox is shown, so it's possible to see how many
-    // check it each time they pay
     createPaymentAgreement: canCreatePaymentAgreement
       ? isCreatePaymentAgreementChecked
       : undefined,
-    // Only set when paying with an agreement, to keep the other payments
-    // downsampled
     withPaymentAgreement: paymentAgreementId ? true : undefined,
   };
 
@@ -657,8 +653,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           newPaymentMethod: PaymentMethod,
           shouldSavePaymentMethod: boolean,
         ) => {
-          // Only while payment agreements are enabled, to see if users with
-          // an agreement change to another payment method
           if (isVippsPaymentAgreementEnabled) {
             analytics.logEvent('Ticketing', 'Payment method selected', {
               paymentMethod: newPaymentMethod.paymentType,
