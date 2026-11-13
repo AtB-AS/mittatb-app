@@ -56,19 +56,15 @@ export const Map_RootScreen = ({
     (
       serviceJourneyId: string,
       serviceDate: string,
-      date: string | undefined,
       fromStopPosition: number,
-      isTripCancelled?: boolean,
     ) => {
-      if (!serviceJourneyId || !date) return;
+      if (!serviceJourneyId) return;
       navigation.navigate('Map_DepartureDetailsScreen', {
         items: [
           {
             serviceJourneyId,
             serviceDate,
-            date,
             fromStopPosition,
-            isTripCancelled,
           },
         ],
         activeItemIndex: 0,

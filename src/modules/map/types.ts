@@ -58,7 +58,6 @@ export type NavigateToQuayCallback = (place: StopPlace, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
   serviceJourneyId: string,
   serviceDate: string,
-  date: string | undefined,
   fromStopPosition: number,
   isTripCancelled?: boolean,
 ) => void;

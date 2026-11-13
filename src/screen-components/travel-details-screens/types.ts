@@ -4,11 +4,9 @@ import {TripPattern} from '@atb/api/types/trips';
 // make sure to update the widget as well.
 export type ServiceJourneyDeparture = {
   serviceJourneyId: string;
-  date: string;
   serviceDate: string;
   fromStopPosition: number;
   toStopPosition?: number;
-  isTripCancelled?: boolean;
 };
 
 export type TripPatternWithKey = TripPattern & {key: string};

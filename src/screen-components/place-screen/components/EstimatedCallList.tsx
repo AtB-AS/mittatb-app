@@ -85,9 +85,7 @@ export const EstimatedCallList = ({
       navigateToDetails?.(
         departure.serviceJourney.id,
         departure.date,
-        departure.aimedDepartureTime,
         departure.stopPositionInPattern,
-        departure.cancellation,
       );
     },
     [navigateToDetails],
