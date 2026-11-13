@@ -20,7 +20,6 @@ export const getBenefitsForUser = (): Promise<VoucherBenefitType[]> => {
   return client
     .get('/benefit/v1/voucher/customer-benefits', {
       authWithIdToken: true,
-      skipErrorLogging: (error) => error.response?.status === 404,
     })
     .then((response) => VoucherBenefit.array().parse(response.data ?? []))
     .catch((e) => {
@@ -41,7 +40,6 @@ export const getValueCode = (
       {},
       {
         authWithIdToken: true,
-        skipErrorLogging: (error) => error.response?.status === 404,
       },
     )
     .then((response) => String(response.data.code));

@@ -3,7 +3,7 @@ import {v4 as uuid} from 'uuid';
 import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
 import {RequestError, getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import {ErrorResponse} from '@atb-as/utils';
-import Bugsnag from '@bugsnag/react-native';
+import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 import {
   AppIdentifierHeaderName,
   AppVersionHeaderName,
@@ -33,8 +33,6 @@ declare module 'axios' {
   export interface AxiosRequestConfig {
     // Use id token as bearer token in authorization header
     authWithIdToken?: boolean;
-    // Whether the error logging to Bugsnag should be skipped for a given error
-    skipErrorLogging?: (error: AxiosError) => boolean;
   }
 }
 
@@ -129,19 +127,10 @@ function debugServerOverrideHandler(
 
 function responseErrorHandler(error: AxiosError): Promise<RequestError> {
   const errorResponse = parseErrorResponse(error);
-
-  if (!shouldSkipLogging(error)) {
-    const errorType = getAxiosErrorType(error);
-    if (errorType === 'default' || errorType === 'unknown') {
-      notifyError(error);
-    }
-  }
+  logAxiosError(error);
 
   return Promise.reject(errorResponse);
 }
-
-const shouldSkipLogging = (error: AxiosError) =>
-  error.config?.skipErrorLogging?.(error);
 
 const parseErrorResponse = (error: AxiosError): RequestError => {
   const errorType = getAxiosErrorType(error);
@@ -202,23 +191,20 @@ const parseErrorResponse = (error: AxiosError): RequestError => {
   }
 };
 
-const notifyError = (axiosError: AxiosError) => {
-  const idTokenMetadata = {
+const logAxiosError = (axiosError: AxiosError) => {
+  const errorMetadata = getAxiosErrorMetadata(axiosError);
+  console.warn(
+    'Axios error:',
+    errorMetadata.responseStatus,
+    errorMetadata.requestUrl,
+    errorMetadata.responseData,
+  );
+  logToBugsnag('Axios error', {
+    ...errorMetadata,
     idToken: getIdTokenGlobal(),
     idTokenValidityStatus: getIdTokenValidityStatus(
       getIdTokenExpirationTimeGlobal(),
     ),
-  };
-
-  // ID token breadcrumb logging on API error
-  Bugsnag.leaveBreadcrumb('ID Token', idTokenMetadata);
-
-  const errorMetadata = getAxiosErrorMetadata(axiosError);
-
-  Bugsnag.notify(axiosError, (event) => {
-    event.addMetadata('api', {...errorMetadata});
-    // ID token metadata on API error
-    event.addMetadata('ID Token', idTokenMetadata);
   });
 };
 

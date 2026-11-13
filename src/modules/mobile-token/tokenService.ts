@@ -18,7 +18,7 @@ import {
   TokenLimitResponse,
 } from './types';
 import {getDeviceName} from 'react-native-device-info';
-import {isRemoteTokenStateError, parseTokenServerErrors} from './utils';
+import {parseTokenServerErrors} from './utils';
 import {storage} from '@atb/modules/storage';
 import {API_BASE_URL} from '@env';
 import {getCurrentUserIdGlobal} from '@atb/modules/auth';
@@ -80,7 +80,6 @@ export const tokenService: TokenService = {
         },
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
-        skipErrorLogging: isRemoteTokenStateError,
         timeout: 15000,
       })
       .then((res) => res.data.pendingTokenDetails)
@@ -98,7 +97,6 @@ export const tokenService: TokenService = {
           baseURL: await getBaseUrl(),
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -113,7 +111,6 @@ export const tokenService: TokenService = {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError),
@@ -135,7 +132,6 @@ export const tokenService: TokenService = {
           baseURL: await getBaseUrl(),
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -157,7 +153,6 @@ export const tokenService: TokenService = {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: isRemoteTokenStateError,
       })
       .then(() => {})
       .catch(handleError),
@@ -171,7 +166,6 @@ export const tokenService: TokenService = {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
@@ -187,7 +181,6 @@ export const tokenService: TokenService = {
           baseURL: await getBaseUrl(),
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.removed)
@@ -202,7 +195,6 @@ export const tokenService: TokenService = {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
@@ -218,7 +210,6 @@ export const tokenService: TokenService = {
           baseURL: await getBaseUrl(),
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.tokens)
@@ -230,7 +221,6 @@ export const tokenService: TokenService = {
         baseURL: await getBaseUrl(),
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data)
       .catch(handleError),
