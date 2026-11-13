@@ -42,9 +42,6 @@ import {BottomSheetContextProvider} from './components/bottom-sheet/BottomSheetC
 import {EventStreamContextProvider} from './modules/event-stream/EventStreamContext';
 import {StoredTripPatternsContextProvider} from '@atb/modules/experimental-store-trip-patterns';
 
-// https://rnfirebase.io/migrating-to-v22
-(globalThis as any).RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
-
 configureAndStartBugsnag();
 configureReanimatedLogger({
   strict: false,
