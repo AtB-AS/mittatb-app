@@ -1,6 +1,7 @@
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {TripDetailsScreenComponent} from '@atb/screen-components/travel-details-screens';
 import {useAnalyticsContext} from '@atb/modules/analytics';
+import {useAuthContext} from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
@@ -8,6 +9,7 @@ type Props = DashboardScreenProps<'Dashboard_TripDetailsScreen'>;
 
 export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
   const analytics = useAnalyticsContext();
+  const {authenticationType} = useAuthContext();
   const focusRef = useFocusOnLoad(navigation);
   const isFocused = useIsFocusedAndActive();
 
@@ -28,6 +30,13 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
       }}
       onPressBuyTicket={(params, tripAnalytics) => {
         analytics.logEvent('Trip details', 'Buy ticket clicked', tripAnalytics);
+        if (
+          authenticationType !== 'phone' &&
+          params.selection.fareProductTypeConfig.configuration.requiresLogin
+        ) {
+          navigation.navigate('Root_LoginRequiredForFareProductScreen', {});
+          return;
+        }
         navigation.navigate('Root_PurchaseOverviewScreen', {
           ...params,
           tripAnalytics,

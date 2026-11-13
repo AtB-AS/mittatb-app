@@ -7,11 +7,22 @@ import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from '../prefixes';
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
 let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
+let mockAuthenticationType: 'none' | 'anonymous' | 'phone' = 'phone';
+let mockRequiresLogin = false;
 
 const mockPlace = jest.fn();
 const mockReverse = jest.fn();
 
-const mockSelection = {id: 'test-selection'};
+const mockSelection = {
+  id: 'test-selection',
+  fareProductTypeConfig: {
+    configuration: {
+      get requiresLogin() {
+        return mockRequiresLogin;
+      },
+    },
+  },
+};
 const mockForType = jest.fn((_type: string) => ({
   build: () => ({selection: mockSelection}),
 }));
@@ -23,6 +34,9 @@ jest.mock('@atb/modules/feature-toggles', () => ({
   useFeatureTogglesContext: () => ({
     isBonusEnabled: mockIsBonusEnabled,
   }),
+}));
+jest.mock('@atb/modules/auth', () => ({
+  useAuthContext: () => ({authenticationType: mockAuthenticationType}),
 }));
 jest.mock('@atb/api', () => ({
   place: (...args: any[]) => mockPlace(...args),
@@ -89,6 +103,8 @@ beforeEach(() => {
   mockIsBonusEnabled = false;
   mockPreassignedFareProducts = [];
   mockCustomerProfile = undefined;
+  mockAuthenticationType = 'phone';
+  mockRequiresLogin = false;
   mockForType.mockClear();
   mockEnableFormFactorsInMapFilter.mockClear();
   mockPlace.mockReset();
@@ -189,6 +205,35 @@ describe('purchase-overview', () => {
       name: 'Root_PurchaseOverviewScreen',
       params: {selection: mockSelection},
     });
+  });
+
+  it('opens the login required screen when the product requires login and the user is not logged in', () => {
+    mockPreassignedFareProducts = [TEST_PRODUCT];
+    mockAuthenticationType = 'anonymous';
+    mockRequiresLogin = true;
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(
+      findRoute(state, 'Root_LoginRequiredForFareProductScreen'),
+    ).toBeDefined();
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toBeUndefined();
+  });
+
+  it('opens purchase overview when the product requires login and the user is logged in', () => {
+    mockPreassignedFareProducts = [TEST_PRODUCT];
+    mockAuthenticationType = 'phone';
+    mockRequiresLogin = true;
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toBeDefined();
+    expect(
+      findRoute(state, 'Root_LoginRequiredForFareProductScreen'),
+    ).toBeUndefined();
+  });
+
+  it('opens purchase overview when the product does not require login and the user is not logged in', () => {
+    mockPreassignedFareProducts = [TEST_PRODUCT];
+    mockAuthenticationType = 'anonymous';
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toBeDefined();
   });
 
   it('is not handled when the product is not sellable in the app', () => {

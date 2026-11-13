@@ -11,6 +11,7 @@ import {
   PartialRoute,
 } from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {AuthenticationType, useAuthContext} from '@atb/modules/auth';
 import {
   CustomerProfile,
   PreassignedFareProduct,
@@ -45,6 +46,7 @@ export function useDeepLinks() {
   const {isBonusEnabled} = useFeatureTogglesContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
+  const {authenticationType} = useAuthContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
 
@@ -129,6 +131,7 @@ export function useDeepLinks() {
             preassignedFareProducts,
             customerProfile,
             purchaseSelectionBuilder,
+            authenticationType,
           );
         case 'departures':
         case 'widget':
@@ -269,6 +272,7 @@ function routeForPurchaseOverview(
   preassignedFareProducts: PreassignedFareProduct[],
   customerProfile: CustomerProfile | undefined,
   purchaseSelectionBuilder: PurchaseSelectionEmptyBuilder,
+  authenticationType: AuthenticationType,
 ): ResultState | undefined {
   if (params.type) {
     const isSellable = preassignedFareProducts.some(
@@ -278,6 +282,17 @@ function routeForPurchaseOverview(
     );
     if (isSellable) {
       const {selection} = purchaseSelectionBuilder.forType(params.type).build();
+      if (
+        authenticationType !== 'phone' &&
+        selection.fareProductTypeConfig.configuration.requiresLogin
+      ) {
+        return {
+          routes: [
+            {name: 'Root_TabNavigatorStack'},
+            {name: 'Root_LoginRequiredForFareProductScreen', params: {}},
+          ],
+        } as ResultState;
+      }
       return {
         routes: [
           {name: 'Root_TabNavigatorStack'},
