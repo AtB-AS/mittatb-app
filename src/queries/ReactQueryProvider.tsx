@@ -9,6 +9,8 @@ import {APP_VERSION} from '@env';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      // Run queries even when offline to trigger errors instead of pausing.
+      networkMode: 'always',
       retry: (failureCount, error) => {
         if (isAxiosError(error) && error.response?.status === 429) {
           return false;
@@ -16,6 +18,10 @@ const queryClient = new QueryClient({
         return failureCount < 3; // Default is 3
       },
       refetchOnWindowFocus: false,
+    },
+    mutations: {
+      // Run mutations even when offline to trigger errors instead of pausing.
+      networkMode: 'always',
     },
   },
 });

@@ -50,6 +50,7 @@
     "@react-native-clipboard/clipboard": "^1.16.0",
     "@react-native-community/datetimepicker": "^8.4.4",
     "@react-native-community/geolocation": "^3.3.0",
+    "@react-native-community/netinfo": "^12.0.1",
     "@react-native-firebase/analytics": "26.4.0",
     "@react-native-firebase/app": "26.4.0",
     "@react-native-firebase/auth": "26.4.0",
