@@ -111,19 +111,14 @@ export const PlaceScreenComponent = ({
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
-    date: string | undefined,
     fromStopPosition: number,
-    isTripCancelled?: boolean,
   ) => {
-    if (!date) return;
     onPressDeparture?.(
       [
         {
           serviceJourneyId,
           serviceDate,
-          date,
           fromStopPosition,
-          isTripCancelled,
         },
       ],
       0,

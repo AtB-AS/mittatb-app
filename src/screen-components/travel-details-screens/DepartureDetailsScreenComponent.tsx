@@ -123,7 +123,6 @@ export const DepartureDetailsScreenComponent = ({
   const {modesWeSellTicketsFor} = useFirestoreConfigurationContext();
 
   const activeItem = items[activeItemIndexState];
-  const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
   const {t, language} = useTranslation();
@@ -194,7 +193,7 @@ export const DepartureDetailsScreenComponent = ({
   const shouldShowTravelAid =
     travelAidPreferenceEnabled &&
     isTravelAidEnabled &&
-    !activeItem.isTripCancelled;
+    !focusedEstimatedCall?.cancellation;
 
   const shouldShowLive = getShouldShowLiveVehicle(estimatedCallsWithMetadata);
 
@@ -381,7 +380,7 @@ export const DepartureDetailsScreenComponent = ({
                 )}
               </View>
             )}
-            {realtimeText && !activeItem.isTripCancelled && (
+            {realtimeText && !focusedEstimatedCall?.cancellation && (
               <View style={styles.headerSubSection}>
                 <LastPassedStop realtimeText={realtimeText} />
               </View>
@@ -407,9 +406,9 @@ export const DepartureDetailsScreenComponent = ({
                 page={activeItemIndexState + 1}
                 totalPages={items.length}
                 onNavigate={onPaginationPress}
-                showPagination={hasMultipleItems}
-                currentDate={activeItem?.date}
-                isTripCancelled={activeItem?.isTripCancelled}
+                showPagination={items.length > 1}
+                currentDate={focusedEstimatedCall?.aimedDepartureTime}
+                isTripCancelled={focusedEstimatedCall?.cancellation}
               />
             ) : (
               <MessageInfoBox
@@ -417,11 +416,18 @@ export const DepartureDetailsScreenComponent = ({
                 message={t(DepartureDetailsTexts.messages.noActiveItem)}
               />
             )
-          ) : !isWithinSameDate(new Date(), activeItem.date) ? (
+          ) : focusedEstimatedCall &&
+            !isWithinSameDate(
+              new Date(),
+              focusedEstimatedCall.aimedDepartureTime,
+            ) ? (
             <>
               <View style={styles.date}>
                 <ThemeText typography="body__m" type="secondary">
-                  {formatToVerboseFullDate(activeItem.date, language)}
+                  {formatToVerboseFullDate(
+                    focusedEstimatedCall.aimedDepartureTime,
+                    language,
+                  )}
                 </ThemeText>
               </View>
               <Divider style={styles.border} />
@@ -439,7 +445,7 @@ export const DepartureDetailsScreenComponent = ({
             />
           )}
 
-          {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
+          {focusedEstimatedCall?.cancellation && <CancelledDepartureMessage />}
 
           {situations.map((situation) => (
             <SituationMessageBox
