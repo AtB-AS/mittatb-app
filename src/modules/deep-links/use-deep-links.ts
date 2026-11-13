@@ -13,6 +13,7 @@ import {
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {
   CustomerProfile,
+  logPaymentAgreementVippsReturn,
   PreassignedFareProduct,
   useGetFareProductsQuery,
   useTicketingContext,
@@ -61,6 +62,9 @@ export function useDeepLinks() {
 
     if (path === 'trip-search') {
       tripSearchLocationsRef.current = await resolveTripSearchLocations(params);
+    }
+    if (path === 'payment-methods') {
+      logPaymentAgreementVippsReturn();
     }
   }, []);
 
