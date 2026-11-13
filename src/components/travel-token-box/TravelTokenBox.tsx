@@ -107,7 +107,7 @@ export function TravelTokenBox({
         text={
           inspectableToken
             ? t(TravelTokenBoxTexts.change)
-            : t(TravelTokenBoxTexts.select)
+            : t(dictionary.select)
         }
         testID="changeTravelTokenButton"
       />
