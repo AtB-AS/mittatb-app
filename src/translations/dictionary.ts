@@ -180,6 +180,7 @@ const dictionary = {
     },
     atTime: _(`kl.`, `at`, `kl.`),
   },
+  select: _('Velg', 'Select', 'Vel'),
   distance: {
     km: _('km', 'km', `km`),
     m: _('m', 'm', `m`),

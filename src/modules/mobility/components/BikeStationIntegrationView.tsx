@@ -1,6 +1,6 @@
 import React from 'react';
-import {useTranslation} from '@atb/translations';
-import {StyleSheet} from '@atb/theme';
+import {dictionary, useTranslation} from '@atb/translations';
+import {StyleSheet, useThemeContext} from '@atb/theme';
 import {View} from 'react-native';
 import {Station} from '@atb/api/types/mobility';
 import {
@@ -19,7 +19,7 @@ import {
   FormFactor,
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ShmoHelpParams} from '@atb/stacks-hierarchy';
 import {useVehiclesByVehicleTypeIdsQueries} from '../queries/use-vehicles-by-vehicle-type-ids-queries';
@@ -28,10 +28,7 @@ import {Loading} from '@atb/components/loading';
 import {useQueryClient} from '@tanstack/react-query';
 import {getVehicleQueryKey} from '../queries/use-vehicle-query';
 import {SupportButton} from './SupportButton';
-import {
-  ThemedCityBikeStation,
-  ThemedParkingIcon,
-} from '@atb/theme/ThemedAssets';
+import {ThemedParkingIcon} from '@atb/theme/ThemedAssets';
 
 type Props = {
   station: Station;
@@ -52,11 +49,15 @@ export const BikeStationIntegrationView = ({
   onPressVehicleType,
 }: Props) => {
   const {t, language} = useTranslation();
+  const {theme} = useThemeContext();
   const queryClient = useQueryClient();
   const styles = useStyles();
-  const vehicleTypeIds = (station?.vehicleTypesAvailable ?? []).map(
-    (e) => e.vehicleType.id,
-  );
+  const vehicleTypesAvailable = station?.vehicleTypesAvailable ?? [];
+  const vehicleTypeIds = vehicleTypesAvailable.map((e) => e.vehicleType.id);
+
+  const hasNoAvailableBikes =
+    vehicleTypesAvailable.length > 0 &&
+    vehicleTypesAvailable.every((e) => e.count === 0);
   const vehicleQueries = useVehiclesByVehicleTypeIdsQueries(
     vehicleTypeIds,
     station?.id,
@@ -97,61 +98,92 @@ export const BikeStationIntegrationView = ({
             message={t(ShmoWarnings.operatorClosed(operatorName, openingTime))}
           />
         )}
-        <View style={styles.illustration}>
-          <ThemedCityBikeStation />
-        </View>
-        <Section>
-          {station?.vehicleTypesAvailable
-            ?.filter((e) => {
-              if (e.count > 0) return true;
-            })
-            .map((e, index) => (
-              <LinkSectionItem
-                key={index}
-                text={t(
-                  MobilityTexts.vehicleName(
-                    e.vehicleType.formFactor ?? FormFactor.Bicycle,
-                    false,
-                    e.vehicleType.propulsionType,
-                  ),
-                )}
-                subtitle={t(MobilityTexts.freeBikes(e.count.toString()))}
-                leftElement={
-                  <TransportationIconBox
-                    mode="bicycle"
-                    subMode={
-                      e.vehicleType.propulsionType ===
-                        PropulsionType.ElectricAssist ||
-                      e.vehicleType.propulsionType === PropulsionType.Electric
-                        ? 'ebicycle'
-                        : undefined
-                    }
-                    rounded={true}
-                  />
-                }
-                onPress={() => {
-                  const vehicle =
-                    vehicleQueries[vehicleTypeIds.indexOf(e.vehicleType.id)]
-                      ?.data?.[0];
-
-                  if (vehicle?.id) {
-                    queryClient.setQueryData(
-                      getVehicleQueryKey(vehicle.id),
-                      vehicle,
-                    );
-                    onPressVehicleType(false, vehicle.id);
-                  } else {
-                    onPressVehicleType(
-                      true,
-                      undefined,
-                      e.vehicleType.id,
-                      station.id,
-                    );
+        {hasNoAvailableBikes && (
+          <MessageInfoBox
+            type="warning"
+            message={t(BicycleTexts.stations.noBikesAvailable)}
+          />
+        )}
+        {vehicleTypesAvailable.length > 0 && (
+          <Section>
+            {vehicleTypesAvailable.map((e, index) => {
+              const vehicleTypeName = t(
+                MobilityTexts.vehicleName(
+                  e.vehicleType.formFactor ?? FormFactor.Bicycle,
+                  false,
+                  e.vehicleType.propulsionType,
+                ),
+              );
+              const availabilityText = t(
+                MobilityTexts.freeBikes(e.count.toString()),
+              );
+              const icon = (
+                <TransportationIconBox
+                  mode="bicycle"
+                  subMode={
+                    e.vehicleType.propulsionType ===
+                      PropulsionType.ElectricAssist ||
+                    e.vehicleType.propulsionType === PropulsionType.Electric
+                      ? 'ebicycle'
+                      : undefined
                   }
-                }}
-              />
-            ))}
-        </Section>
+                  rounded={true}
+                />
+              );
+
+              return e.count === 0 ? (
+                <GenericSectionItem
+                  key={index}
+                  accessibility={{
+                    accessible: true,
+                    accessibilityLabel:
+                      vehicleTypeName + screenReaderPause + availabilityText,
+                  }}
+                >
+                  <View style={styles.vehicleType}>
+                    {icon}
+                    <View style={styles.vehicleTypeTexts}>
+                      <ThemeText color={theme.color.surface.neutral.strong}>
+                        {vehicleTypeName}
+                      </ThemeText>
+                      <ThemeText type="secondary" typography="body__s">
+                        {availabilityText}
+                      </ThemeText>
+                    </View>
+                  </View>
+                </GenericSectionItem>
+              ) : (
+                <LinkSectionItem
+                  key={index}
+                  text={vehicleTypeName}
+                  subtitle={availabilityText}
+                  leftElement={icon}
+                  buttonTextRight={t(dictionary.select)}
+                  onPress={() => {
+                    const vehicle =
+                      vehicleQueries[vehicleTypeIds.indexOf(e.vehicleType.id)]
+                        ?.data?.[0];
+
+                    if (vehicle?.id) {
+                      queryClient.setQueryData(
+                        getVehicleQueryKey(vehicle.id),
+                        vehicle,
+                      );
+                      onPressVehicleType(false, vehicle.id);
+                    } else {
+                      onPressVehicleType(
+                        true,
+                        undefined,
+                        e.vehicleType.id,
+                        station.id,
+                      );
+                    }
+                  }}
+                />
+              );
+            })}
+          </Section>
+        )}
         <Section>
           <GenericSectionItem style={styles.freeParkingSection}>
             <ThemeIcon svg={ThemedParkingIcon} size="large" />
@@ -188,8 +220,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingBottom: theme.spacing.medium,
       gap: theme.spacing.small,
     },
-    illustration: {
+    vehicleType: {
+      flex: 1,
+      flexDirection: 'row',
       alignItems: 'center',
+      gap: theme.spacing.small,
+    },
+    vehicleTypeTexts: {
+      flex: 1,
     },
     freeParkingSection: {
       flexDirection: 'row',
