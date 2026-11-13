@@ -216,7 +216,18 @@ export const GeolocationContextProvider = ({children}: Props) => {
       } else {
         const watchId = Geolocation.watchPosition(
           (position) => updateLocation(position, geoLocationName),
-          handleLocationError,
+          (error) => {
+            // On iOS, POSITION_UNAVAILABLE (kCLErrorLocationUnknown) is
+            // temporary, and the watch keeps trying to get a location.
+            // https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/locationmanager(_:didfailwitherror:)
+            if (
+              Platform.OS === 'ios' &&
+              error.code === error.POSITION_UNAVAILABLE
+            ) {
+              return;
+            }
+            handleLocationError(error);
+          },
           config,
         );
         return () => Geolocation.clearWatch(watchId);
