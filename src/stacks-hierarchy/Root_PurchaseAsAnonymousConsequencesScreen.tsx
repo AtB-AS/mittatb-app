@@ -12,7 +12,12 @@ import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ButtonProps} from '@atb/components/button';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
+import {
+  GenericSectionItem,
+  Section,
+  SectionItemProps,
+} from '@atb/components/sections';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
@@ -29,7 +34,6 @@ import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
 const getThemeColor = (theme: Theme) => theme.color.background.accent[0];
-const getAccentColor = (theme: Theme) => theme.color.surface.accent.subtle;
 
 export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   navigation,
@@ -91,10 +95,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   focusRef,
 }: AnonymousPurchaseConsequencesScreenComponentProps) => {
   const styles = useStyle();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
-
-  const themeColor = getThemeColor(theme);
 
   const loginButton: ButtonProps = {
     surfaceColor: 'accent',
@@ -129,46 +130,44 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       secondaryTestID={onPressLogin ? 'acceptLimitations' : ''}
     >
       <View ref={focusRef} accessible>
-        <ThemeText
-          typography="heading__xl"
-          color={themeColor}
-          style={styles.header}
-        >
+        <ThemeText typography="heading__xl" style={styles.header}>
           {t(AnonymousPurchasesTexts.consequences.title)}
         </ThemeText>
       </View>
-      <Consequence
-        value={t(AnonymousPurchasesTexts.consequences.messages[0])}
-        icon={<ThemeIcon svg={Phone} color={themeColor} size="large" />}
-      />
-      <Consequence
-        value={t(AnonymousPurchasesTexts.consequences.messages[1])}
-        icon={<ThemeIcon svg={Receipt} color={themeColor} size="large" />}
-      />
-      <Consequence
-        value={t(AnonymousPurchasesTexts.consequences.messages[2])}
-        icon={<ThemeIcon svg={Support} color={themeColor} size="large" />}
-      />
+      <Section>
+        <ConsequenceSectionItem
+          value={t(AnonymousPurchasesTexts.consequences.messages[0])}
+          icon={<ThemeIcon svg={Phone} size="large" />}
+        />
+        <ConsequenceSectionItem
+          value={t(AnonymousPurchasesTexts.consequences.messages[1])}
+          icon={<ThemeIcon svg={Receipt} size="large" />}
+        />
+        <ConsequenceSectionItem
+          value={t(AnonymousPurchasesTexts.consequences.messages[2])}
+          icon={<ThemeIcon svg={Support} size="large" />}
+        />
+      </Section>
     </OnboardingFullScreenView>
   );
 };
 
-export const Consequence = ({
+const ConsequenceSectionItem = ({
   value,
   icon,
-}: {
+  ...sectionProps
+}: SectionItemProps<{
   value: string;
   icon: React.JSX.Element;
-}) => {
+}>) => {
   const styles = useStyle();
-  const {theme} = useThemeContext();
   return (
-    <View style={styles.consequence}>
-      <View style={styles.icon}>{icon}</View>
-      <ThemeText style={styles.description} color={getThemeColor(theme)}>
-        {value}
-      </ThemeText>
-    </View>
+    <GenericSectionItem {...sectionProps}>
+      <View style={styles.consequence}>
+        {icon}
+        <ThemeText style={styles.description}>{value}</ThemeText>
+      </View>
+    </GenericSectionItem>
   );
 };
 
@@ -238,18 +237,11 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacing.medium,
   },
   description: {
-    paddingHorizontal: theme.spacing.medium,
     flex: 1,
   },
-  icon: {
-    justifyContent: 'center',
-    paddingHorizontal: theme.spacing.medium,
-  },
   consequence: {
-    backgroundColor: getAccentColor(theme).background,
-    borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacing.medium,
     flexDirection: 'row',
-    padding: theme.spacing.medium,
+    alignItems: 'center',
+    gap: theme.spacing.large,
   },
 }));
