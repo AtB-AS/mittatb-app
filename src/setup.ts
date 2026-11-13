@@ -1,4 +1,4 @@
-import {getAuth, signOut} from '@react-native-firebase/auth';
+import {getAuth, signOut, deleteUser} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {v4 as uuid} from 'uuid';
 
@@ -32,7 +32,7 @@ async function cleanUpAuthUser() {
   const user = getAuth().currentUser;
   if (user) {
     if (user.isAnonymous) {
-      await user.delete();
+      await deleteUser(user);
     } else {
       await signOut(getAuth());
     }
