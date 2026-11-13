@@ -52,12 +52,12 @@ export const BikeStationIntegrationView = ({
   const {theme} = useThemeContext();
   const queryClient = useQueryClient();
   const styles = useStyles();
-  const vehicleTypesAvailable = station?.vehicleTypesAvailable ?? [];
-  const vehicleTypeIds = vehicleTypesAvailable.map((e) => e.vehicleType.id);
+  const vehicleTypesAvailable = station?.vehicleTypesAvailable;
+  const vehicleTypeIds =
+    vehicleTypesAvailable?.map((e) => e.vehicleType.id) ?? [];
 
-  const hasNoAvailableBikes =
-    vehicleTypesAvailable.length > 0 &&
-    vehicleTypesAvailable.every((e) => e.count === 0);
+  const hasNoAvailableVehicles =
+    vehicleTypesAvailable?.every((e) => e.count === 0) ?? false;
   const vehicleQueries = useVehiclesByVehicleTypeIdsQueries(
     vehicleTypeIds,
     station?.id,
@@ -98,13 +98,13 @@ export const BikeStationIntegrationView = ({
             message={t(ShmoWarnings.operatorClosed(operatorName, openingTime))}
           />
         )}
-        {hasNoAvailableBikes && (
+        {hasNoAvailableVehicles && (
           <MessageInfoBox
             type="warning"
             message={t(BicycleTexts.stations.noBikesAvailable)}
           />
         )}
-        {vehicleTypesAvailable.length > 0 && (
+        {!!vehicleTypesAvailable?.length && (
           <Section>
             {vehicleTypesAvailable.map((e, index) => {
               const vehicleTypeName = t(
