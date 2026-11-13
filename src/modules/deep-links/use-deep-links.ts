@@ -400,7 +400,6 @@ function routeForDepartures(
   if (path === 'widgetdetails') {
     const item: ServiceJourneyDeparture = {
       serviceJourneyId: params.serviceJourneyId as string,
-      date: params.date || new Date().toISOString(),
       serviceDate: params.serviceDate as string,
       fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
       toStopPosition: parseParamAsInt(params.toStopPosition),

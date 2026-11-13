@@ -539,7 +539,6 @@ describe('widget', () => {
         items: [
           {
             serviceJourneyId: 'ATB:ServiceJourney:1_1',
-            date: '2026-09-03T07:45:00Z',
             serviceDate: '2026-09-03',
             fromStopPosition: 13,
             toStopPosition: undefined,
@@ -547,17 +546,5 @@ describe('widget', () => {
         ],
       },
     });
-  });
-
-  it('falls back to now when the departure has no date', () => {
-    jest.useFakeTimers().setSystemTime(new Date('2026-09-03T07:45:00Z'));
-    const state = getStateFrom(
-      `widgetdetails?${stopParams}&serviceJourneyId=ATB:ServiceJourney:1_1&serviceDate=2026-09-03&fromStopPosition=0`,
-    );
-    jest.useRealTimers();
-
-    const details = findRoute(state, 'Departures_DepartureDetailsScreen');
-    expect(details.params.items[0].date).toBe('2026-09-03T07:45:00.000Z');
-    expect(details.params.items[0].fromStopPosition).toBe(0);
   });
 });
