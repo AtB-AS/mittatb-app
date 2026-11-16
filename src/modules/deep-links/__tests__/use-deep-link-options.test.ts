@@ -488,10 +488,48 @@ describe('planner web', () => {
     );
   });
 
-  it('does not handle departure details', () => {
-    expect(
-      getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
-    ).toBeUndefined();
+  describe('departure details', () => {
+    // Links as built by the trip section in planner web
+    const getDetailsItem = (url: string) =>
+      findRoute(getStateFrom(url), 'Departures_DepartureDetailsScreen')?.params
+        .items[0];
+
+    it('decodes the service journey id', () => {
+      expect(
+        getDetailsItem(
+          '/departures/details/ATB%3AServiceJourney%3A1_1?date=2026-11-16&fromStopPosition=3',
+        ),
+      ).toMatchObject({serviceJourneyId: 'ATB:ServiceJourney:1_1'});
+    });
+
+    it('opens from the first stop', () => {
+      expect(
+        getDetailsItem(
+          '/departures/details/ATB:ServiceJourney:1_1?date=2026-11-16&fromStopPosition=0',
+        ),
+      ).toEqual({
+        serviceJourneyId: 'ATB:ServiceJourney:1_1',
+        serviceDate: '2026-11-16',
+        fromStopPosition: 0,
+        toStopPosition: undefined,
+      });
+    });
+
+    it('opens from the first stop with legacy quay params', () => {
+      expect(
+        getDetailsItem(
+          '/departures/details/ATB:ServiceJourney:1_1?date=2026-11-16&fromQuayId=NSR:Quay:71184&toQuayId=NSR:Quay:71185',
+        ),
+      ).toMatchObject({fromStopPosition: 0, toStopPosition: undefined});
+    });
+
+    it('is not handled without a date', () => {
+      expect(
+        getStateFrom(
+          '/departures/details/ATB:ServiceJourney:1_1?fromStopPosition=3',
+        ),
+      ).toBeUndefined();
+    });
   });
 
   it('does not handle ids other than NSR ids', () => {
