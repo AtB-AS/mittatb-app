@@ -28,6 +28,25 @@ const TravelAidTexts = {
       'Not possible to send stop signal now',
       'Ikke mogleg å sende stoppsignal no',
     ),
+    unavailable: {
+      title: _(
+        'Stoppknapp er ikke tilgjengelig',
+        'Stop button is not available',
+        'Stoppknapp er ikkje tilgjengeleg',
+      ),
+      tooEarly: (duration: string) =>
+        _(
+          `Du kan sende stoppsignal til sjåføren fra ${duration} før avgang.`,
+          `You can send a stop signal to the driver from ${duration} before departure.`,
+          `Du kan sende stoppsignal til sjåføren frå ${duration} før avgang.`,
+        ),
+      tooLate: (duration: string) =>
+        _(
+          `Det må være minst ${duration} til avgang for å sende stoppsignal til sjåføren.`,
+          `There must be at least ${duration} until departure to send a stop signal to the driver.`,
+          `Det må vere minst ${duration} til avgang for å sende stoppsignal til sjåføren.`,
+        ),
+    },
     errorMessage: _(
       'Klarte ikke å sende stoppsignal.',
       "Couldn't send stop signal.",
