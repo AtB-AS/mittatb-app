@@ -6,6 +6,8 @@ import {TravelAidTexts} from '@atb/translations';
 import type {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {AUTHORITY} from '@env';
 import {secondsToMinutesLong} from '@atb/utils/date';
+import {ONE_SECOND_MS} from '@atb/utils/durations';
+import {useNow} from '@atb/utils/use-now';
 import React from 'react';
 import type {ServiceJourneyWithGuaranteedCalls} from '../types';
 import {View} from 'react-native';
@@ -37,6 +39,8 @@ export const StopSignalButton = ({
   const styles = useStyles();
   const {stopSignalButtonConfig: config} = useFirestoreConfigurationContext();
   const analytics = useAnalyticsContext();
+  // Re-evaluate the activation window even when the polled data is unchanged
+  const now = useNow(10 * ONE_SECOND_MS);
 
   if (!isTravelAidStopButtonEnabled) return null;
 
@@ -48,7 +52,13 @@ export const StopSignalButton = ({
   const shouldShow = shouldShowStopButton(serviceJourney, selectedCall, config);
   if (!shouldShow) return null;
 
-  const availability = getStopButtonAvailability(selectedCall, config);
+  const availability = getStopButtonAvailability(
+    selectedCall,
+    config,
+    new Date(now),
+  );
+
+  const showButton = availability === 'available' || status === 'pending';
 
   return (
     <View>
@@ -60,7 +70,7 @@ export const StopSignalButton = ({
           style={styles.requestError}
         />
       )}
-      {status !== 'success' && availability === 'available' && (
+      {status !== 'success' && showButton && (
         <Button
           surfaceColor="accent"
           expanded={true}
@@ -76,7 +86,7 @@ export const StopSignalButton = ({
           loading={status === 'pending'}
         />
       )}
-      {status !== 'success' && availability !== 'available' && (
+      {status !== 'success' && !showButton && (
         <StopButtonUnavailableInfo
           availability={availability}
           config={config}
