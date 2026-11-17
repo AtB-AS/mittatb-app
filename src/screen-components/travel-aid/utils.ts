@@ -30,7 +30,7 @@ export const getStopButtonAvailability = (
   config: StopSignalButtonConfigType,
   now: Date = new Date(),
 ): StopButtonAvailability => {
-  if (!call.realtime) return 'noRealtime';
+  if (!call.realtime || !call.expectedArrivalTime) return 'noRealtime';
 
   const activationWindowStart = addMinutes(
     call.expectedArrivalTime,

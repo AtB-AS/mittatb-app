@@ -23,6 +23,16 @@ describe('getStopButtonAvailability', () => {
     );
   });
 
+  it('is noRealtime when the call has no expected arrival time', () => {
+    const callWithoutArrival = {
+      realtime: true,
+      expectedArrivalTime: undefined,
+    } as EstimatedCallWithQuayFragment;
+    expect(
+      getStopButtonAvailability(callWithoutArrival, config, at('11:30:00')),
+    ).toBe('noRealtime');
+  });
+
   it('is tooEarly before the activation window starts', () => {
     expect(getStopButtonAvailability(call(true), config, at('10:30:00'))).toBe(
       'tooEarly',
