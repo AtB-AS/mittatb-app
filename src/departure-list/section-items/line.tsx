@@ -76,10 +76,8 @@ export function LineItem({
 
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
-    date: dep.aimedTime,
     fromStopPosition: dep.stopPositionInPattern,
     serviceDate: dep.serviceDate,
-    isTripCancelled: dep.cancellation,
   }));
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup

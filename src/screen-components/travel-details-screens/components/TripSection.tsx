@@ -622,7 +622,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
     if (pressedLeg.serviceJourney?.id) {
       const departureData: ServiceJourneyDeparture = {
         serviceJourneyId: pressedLeg.serviceJourney.id,
-        date: pressedLeg.expectedStartTime,
         serviceDate: pressedLeg.intermediateEstimatedCalls[0]?.date,
         fromStopPosition:
           pressedLeg.fromEstimatedCall?.stopPositionInPattern || 0,
