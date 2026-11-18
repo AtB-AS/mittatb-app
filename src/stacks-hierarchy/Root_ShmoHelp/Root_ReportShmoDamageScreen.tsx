@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {
   CheckboxSectionItem,
@@ -78,7 +78,9 @@ export const Root_ReportShmoDamageScreen = ({
       focusRef={focusRef}
     >
       <View style={styles.contentContainer}>
-        <ContentHeading text={t(MobilityTexts.reportDamage.damages.header)} />
+        <ContentHeading
+          text={`${t(MobilityTexts.reportDamage.damages.header)} (${t(dictionary.required)})`}
+        />
         {supportedDamages.length === 0 ? (
           <MessageInfoBox
             message={t(

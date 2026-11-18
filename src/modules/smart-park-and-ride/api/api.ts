@@ -22,7 +22,6 @@ export const getVehicleRegistrations = async (): Promise<
 > => {
   const response = await client.get(`/spar/v1/vehicle-registrations`, {
     authWithIdToken: true,
-    skipErrorLogging: (error) => error.response?.status === 404,
   });
   return VehicleRegistrationSchema.array().parse(response?.data?.vehicles);
 };
@@ -50,7 +49,6 @@ export const searchVehicleInformation = async (
 ): Promise<SvvVehicleInfo> => {
   const response = await client.get(`/spar/v1/search-vehicle/${licensePlate}`, {
     authWithIdToken: true,
-    skipErrorLogging: (error) => error.response?.status === 400,
   });
   return SvvVehicleInfoSchema.parse(response?.data);
 };

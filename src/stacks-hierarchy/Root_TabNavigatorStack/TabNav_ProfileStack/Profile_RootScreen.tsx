@@ -47,7 +47,10 @@ import {Info, Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
-import {usePaymentAgreementDiscovery} from '@atb/modules/payment';
+import {
+  usePaymentAgreementDiscovery,
+  usePaymentAgreementAnalyticsProperties,
+} from '@atb/modules/payment';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {GlobalMessage} from '@atb/modules/global-messages';
@@ -95,6 +98,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   } = useFeatureTogglesContext();
   const unreadCount = useChatUnreadCount();
   const {shouldShowPaymentAgreementDiscovery} = usePaymentAgreementDiscovery();
+  const paymentAgreementAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
   const neutralContrastColor = theme.color.background.neutral[1];
@@ -275,9 +280,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 notificationCount={
                   shouldShowPaymentAgreementDiscovery ? 1 : undefined
                 }
-                onPress={() =>
-                  navigation.navigate('Profile_PaymentMethodsScreen')
-                }
+                onPress={() => {
+                  analytics.logEvent('Profile', 'Payment methods clicked', {
+                    paymentAgreementNotification:
+                      shouldShowPaymentAgreementDiscovery,
+                    ...paymentAgreementAnalyticsProperties,
+                  });
+                  navigation.navigate('Profile_PaymentMethodsScreen');
+                }}
               />
             )}
             <LinkSectionItem

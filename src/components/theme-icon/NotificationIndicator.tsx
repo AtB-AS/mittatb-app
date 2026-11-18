@@ -24,8 +24,10 @@ export const NotificationIndicator = ({
   const notificationColor = color.background;
   const borderColor = backgroundColor?.background;
   const fontScale = useFontScale();
-  const indicatorSize = getIndicatorSize(iconSize, !!borderColor, fontScale);
   const borderWidth = (iconSize === 'xSmall' ? 1 : 2) * fontScale;
+  const dotSize = getDotSize(iconSize) * fontScale;
+  // The border is drawn inside the view, so add it to keep the dot size
+  const indicatorSize = borderColor ? dotSize + borderWidth * 2 : dotSize;
   return (
     <View
       style={{
@@ -46,20 +48,17 @@ export const NotificationIndicator = ({
   );
 };
 
-const getIndicatorSize = (
-  size: ThemeIconProps['size'],
-  hasBorder: boolean,
-  fontScale: number,
-) => {
+const getDotSize = (size: ThemeIconProps['size']) => {
   switch (size) {
     case 'xSmall':
-      return (hasBorder ? 6 : 5) * fontScale;
+      return 6;
     case 'small':
-      return (hasBorder ? 8 : 7) * fontScale;
-    case 'normal':
-      return (hasBorder ? 11 : 9) * fontScale;
+      return 8;
     case 'large':
-      return (hasBorder ? 13 : 11) * fontScale;
+      return 12;
+    case 'normal':
+    default:
+      return 10;
   }
 };
 

@@ -9,6 +9,7 @@ import type {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-
 import type {TripPatternWithKey} from '@atb/screen-components/travel-details-screens';
 import {useJourneyModes} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hooks';
 import {
+  NUMBER_OF_TRIP_PATTERNS_PER_PAGE,
   TripsInfiniteQueryProps,
   useTripsInfiniteQuery,
 } from './use-trips-infinite-query';
@@ -18,7 +19,6 @@ import {Location} from '@atb/modules/favorites';
 import {TripSearchTime} from '../types';
 
 const MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES = 5;
-const TARGET_NUMBER_OF_INITIAL_HITS = 8;
 
 export type TripsProps = {
   fromLocation?: Location;
@@ -96,7 +96,7 @@ export function useTrips(
 
   const shouldAutoLoadMoreInitialTrips =
     hasNextPage &&
-    tripPatterns.length < TARGET_NUMBER_OF_INITIAL_HITS &&
+    tripPatterns.length < NUMBER_OF_TRIP_PATTERNS_PER_PAGE &&
     performedSearchesCount < MAX_NUMBER_OF_CHAINED_INITIAL_SEARCHES;
 
   useEffect(() => {

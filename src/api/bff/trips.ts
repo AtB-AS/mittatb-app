@@ -31,6 +31,7 @@ function cleanQuery(query: TripsQueryVariables) {
     when: query.when,
     arriveBy: query.arriveBy,
     cursor: query.cursor,
+    numTripPatterns: query.numTripPatterns,
     transferSlack: query.transferSlack,
     transferPenalty: query.transferPenalty,
     waitReluctance: query.waitReluctance,
@@ -72,10 +73,6 @@ export async function tripsSearch(
   const url = 'bff/v2/trips';
 
   const results = await post<TripsQuery>(url, cleanQuery(query), opts);
-
-  Bugsnag.leaveBreadcrumb('results', {
-    patterns: results.trip?.tripPatterns ?? 'none',
-  });
 
   return results;
 }
@@ -138,7 +135,6 @@ async function post<T>(
 ) {
   const response = await client.post<T>(url, query, {
     ...opts,
-    skipErrorLogging: (error) => error.response?.status === 410,
   });
 
   return response.data;

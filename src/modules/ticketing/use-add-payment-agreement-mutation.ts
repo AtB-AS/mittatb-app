@@ -7,6 +7,7 @@ import {
   PaymentType,
 } from '@atb/modules/ticketing';
 import {openUrlOrThrow} from '@atb/utils/open-url';
+import {markPaymentAgreementVippsOpened} from './payment-agreement-vipps-return';
 
 export const useAddPaymentAgreementMutation = () => {
   const queryClient = useQueryClient();
@@ -19,6 +20,7 @@ export const useAddPaymentAgreementMutation = () => {
         `${APP_SCHEME}://payment-methods`,
       );
       await openUrlOrThrow(confirmationUrl);
+      markPaymentAgreementVippsOpened();
     },
     // Also when failing, since the agreement could have been created before
     // opening Vipps failed.

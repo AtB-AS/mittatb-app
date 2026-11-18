@@ -34,6 +34,7 @@ type Props = SectionItemProps<{
   leftIcon?: IconProps;
   leftElement?: ReactNode;
   rightIcon?: IconProps;
+  buttonTextRight?: string;
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
@@ -50,6 +51,7 @@ export const LinkSectionItem = forwardRef<any, Props>(
       notificationCount,
       leftIcon,
       rightIcon = {svg: ChevronRight},
+      buttonTextRight,
       accessibility,
       disabled,
       textType,
@@ -134,7 +136,12 @@ export const LinkSectionItem = forwardRef<any, Props>(
               <NotificationBadge count={notificationCount} />
             </View>
           )}
-          {rightIcon && <Icon icon={rightIcon} />}
+          <View style={linkSectionItemStyle.rightContainer}>
+            {buttonTextRight && (
+              <ThemeText typography="body__s">{buttonTextRight}</ThemeText>
+            )}
+            {rightIcon && <Icon icon={rightIcon} />}
+          </View>
         </View>
       </NativeTouchable>
     );
@@ -160,6 +167,11 @@ const Icon = ({icon}: {icon: IconProps}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  rightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.xSmall,
+  },
   disabled: {opacity: 0.2},
   gap: {gap: theme.spacing.small},
   tag: {

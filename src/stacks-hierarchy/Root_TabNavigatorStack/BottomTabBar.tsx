@@ -15,6 +15,8 @@ export type BottomTabBarItem = {
   notification?: ThemeIconProps['notification'];
   /** Read by screen readers after the label, since the notification is only visual */
   notificationAccessibilityLabel?: string;
+  /** Called when the tab is pressed, before navigating to it */
+  onPress?: () => void;
 };
 
 /**
@@ -44,6 +46,7 @@ export const BottomTabBar = ({
           : theme.color.surface.neutral.strong.foreground.secondary;
 
         const onPress = () => {
+          item.onPress?.();
           const event = navigation.emit({
             type: 'tabPress',
             target: route.key,

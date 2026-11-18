@@ -34,6 +34,7 @@ import {View} from 'react-native';
 import {useOfferState} from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {
   savePreviousPayment,
+  usePaymentAgreementAnalyticsProperties,
   usePreviousPaymentMethods,
 } from '@atb/modules/payment';
 import {PaymentMethod} from '@atb/modules/payment';
@@ -217,6 +218,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     !getLatestPaymentAgreement(pendingPaymentAgreements, agreementPaymentType);
   const [isCreatePaymentAgreementChecked, setIsCreatePaymentAgreementChecked] =
     useState(false);
+  const paymentAgreementOnboardingAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
+  const paymentAgreementAnalyticsProperties = {
+    ...paymentAgreementOnboardingAnalyticsProperties,
+    createPaymentAgreement: canCreatePaymentAgreement
+      ? isCreatePaymentAgreementChecked
+      : undefined,
+    withPaymentAgreement: paymentAgreementId ? true : undefined,
+  };
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -623,6 +633,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           isSearchingOffer={isSearchingOffer}
           isOfferError={!!offerError}
           isWaitingForPaymentAgreements={isWaitingForPaymentAgreements}
+          paymentAgreementAnalyticsProperties={
+            paymentAgreementAnalyticsProperties
+          }
           mode={params.mode}
           tripAnalytics={params.tripAnalytics}
           onCloseFocusRef={onCloseFocusRef}
@@ -637,13 +650,23 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       <SelectPaymentMethodSheet
         recurringPaymentMethods={recurringPaymentMethods}
         onSelect={(
-          paymentMethod: PaymentMethod,
+          newPaymentMethod: PaymentMethod,
           shouldSavePaymentMethod: boolean,
         ) => {
+          if (isVippsPaymentAgreementEnabled) {
+            analytics.logEvent('Ticketing', 'Payment method selected', {
+              paymentMethod: newPaymentMethod.paymentType,
+              previousPaymentMethod: paymentMethod?.paymentType,
+              hasActivePaymentAgreement: paymentAgreements
+                ? paymentAgreements.length > 0
+                : undefined,
+              ...paymentAgreementOnboardingAnalyticsProperties,
+            });
+          }
           setVippsNotInstalledError(false);
           setPaymentNotCompletedError(false);
           reserveMutation.reset();
-          setSelectedPaymentMethod(paymentMethod);
+          setSelectedPaymentMethod(newPaymentMethod);
           setShouldSavePaymentMethod(shouldSavePaymentMethod);
           bottomSheetModalRef.current?.dismiss();
         }}
@@ -662,6 +685,7 @@ type PaymentButtonProps = {
   isSearchingOffer: boolean;
   isOfferError: boolean;
   isWaitingForPaymentAgreements: boolean;
+  paymentAgreementAnalyticsProperties: Record<string, unknown>;
   totalPrice: number;
   mode: 'TravelSearch' | 'Ticket' | undefined;
   tripAnalytics?: TripAnalytics;
@@ -675,6 +699,7 @@ const PaymentButton = ({
   isSearchingOffer,
   isOfferError,
   isWaitingForPaymentAgreements,
+  paymentAgreementAnalyticsProperties,
   totalPrice,
   mode,
   tripAnalytics,
@@ -739,6 +764,7 @@ const PaymentButton = ({
             paymentMethod: paymentMethod?.paymentType,
             mode: mode,
             ...tripAnalytics,
+            ...paymentAgreementAnalyticsProperties,
           });
         }
         onGoToPayment();

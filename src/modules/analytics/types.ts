@@ -13,6 +13,7 @@ export type AnalyticsEventContext =
   | 'Onboarding'
   | 'OnPress event'
   | 'Parking violations'
+  | 'Payment agreement'
   | 'Profile'
   | 'Receipt'
   | 'Ticket assistant'

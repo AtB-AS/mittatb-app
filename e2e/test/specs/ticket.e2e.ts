@@ -29,10 +29,7 @@ describe('Ticket', () => {
       );
 
       await TicketBuyPage.anonymousWarning.click();
-      await ElementHelper.waitForElement(
-        'text',
-        'Restrictions on anonymous ticket purchases',
-      );
+      await ElementHelper.waitForElement('text', "If you don't log in");
 
       // Restrictions page
       expect(await OnboardingPage.logIn.isEnabled()).toBe(true);

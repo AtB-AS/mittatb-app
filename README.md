@@ -26,7 +26,8 @@ Since iOS development is only supported on MacOS, using MacOS for development is
 
 ### Requirements
 
-1. Ruby v3.1.0: With something like [rbenv](https://github.com/rbenv/rbenv)
+1. Ruby v3.1.7: With something like [rbenv](https://github.com/rbenv/rbenv)
+   > ⓘ With newer Xcode versions (such as 26.4), install with `CFLAGS="-Wno-default-const-init-field-unsafe" rbenv install 3.1.7`. See **Common errors** below.
 2. See [React Native: Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment)
    > ⓘ If bundler fails or not installed, use `gem install bundler -v <version>`, where `<version>` is the one listed at the bottom of [Gemfile.lock](./Gemfile.lock) (`BUNDLED WITH: 2.x.x`).
    > If encountering errors, following the suggested gem installs might solve it.
@@ -101,6 +102,19 @@ Run `pnpm doctor` at any time to check that all requirements and setup steps are
 #### Missing `cocoapods-patch` or other ruby dependencies
 
 Sometimes, we add new dependencies to the Gemfile, requiring a new bundle install. If you encounter an issue where a library is missing, please do a new `bundle install` in the root directory.
+
+#### `cannot load such file -- socket` when running `bundle install`
+
+Newer Xcode versions make Ruby 3.1 skip building its `socket` extension, without failing the install. Reinstall Ruby with the offending warning disabled, then rebuild the native gems:
+
+```sh
+CFLAGS="-Wno-default-const-init-field-unsafe" rbenv install -f 3.1.7
+bundle pristine
+```
+
+#### `incompatible library version` after changing Ruby version
+
+Native gems in `vendor/bundle` were built for the previous Ruby version. Rebuild them with `bundle pristine`.
 
 #### Missing `ANDROID_SDK_ROOT`
 

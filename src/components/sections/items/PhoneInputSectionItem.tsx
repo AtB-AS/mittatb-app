@@ -34,6 +34,10 @@ type Props = SectionItemProps<
     showClear?: boolean;
     onClear?: () => void;
     errorText?: string;
+    /**
+     * Marks the field as required by appending a text to the label.
+     */
+    required?: boolean;
     focusRef?: Ref<any>;
   }
 >;
@@ -43,6 +47,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     {
       errorText = undefined,
       label,
+      required,
       prefix,
       onChangePrefix,
       onFocus,
@@ -166,7 +171,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           >
             {label && (
               <ThemeText typography="body__s" style={styles.label}>
-                {label}
+                {required ? `${label} (${t(dictionary.required)})` : label}
               </ThemeText>
             )}
             <View style={styles.inputRow}>

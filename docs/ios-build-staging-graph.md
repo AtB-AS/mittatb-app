@@ -54,7 +54,7 @@ flowchart TD
         yarn_check -- Yes --> yarn_s["pnpm install --frozen-lockfile"]
         yarn_check -- No --> ruby_s
 
-        yarn_s --> ruby_s["Setup Ruby 3.1.0 + Bundler"]
+        yarn_s --> ruby_s["Setup Ruby 3.1.7 + Bundler"]
 
         ruby_s --> xcode_check{"force-build = true
         OR pods cache miss?"}
@@ -105,7 +105,7 @@ flowchart TD
 
     entur --> node["Install Node v22"]
 
-    node --> ruby["Setup Ruby 3.1.0 + Bundler"]
+    node --> ruby["Setup Ruby 3.1.7 + Bundler"]
 
     ruby --> nm_check{"force-build = true?"}
 

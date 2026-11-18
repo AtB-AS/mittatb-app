@@ -30,3 +30,4 @@ export {
 export * from './api';
 export * from './types';
 export * from './utils';
+export {logPaymentAgreementVippsReturn} from './payment-agreement-vipps-return';

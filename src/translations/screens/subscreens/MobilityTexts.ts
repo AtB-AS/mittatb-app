@@ -82,11 +82,7 @@ export const MobilityTexts = {
     title: _('Meld skade', 'Report damage', 'Meld skade'),
 
     damages: {
-      header: _(
-        'Hva er feil? (obligatorisk)',
-        'What is wrong? (required)',
-        'Kva er feil? (obligatorisk)',
-      ),
+      header: _('Hva er feil?', 'What is wrong?', 'Kva er feil?'),
       errorMessage: _(
         'Vennligst velg minst én ting som er feil.',
         'Please select at least one thing that is wrong.',
@@ -183,7 +179,11 @@ export const MobilityTexts = {
     campaignPrice: _('Kampanjepris', 'Campaign price', 'Kampanjepris'),
   },
   freeBikes: (amount: string) => {
-    return _(amount + ' ledige', amount + ' available', amount + ' ledige');
+    return _(
+      amount + ' tilgjengelig',
+      amount + ' available',
+      amount + ' tilgjengeleg',
+    );
   },
   freeBikeParkingSpaces: (amount: number) => {
     return _(
@@ -571,6 +571,11 @@ export const BicycleTexts = {
       'Klarte ikke å finne denne sykkelstasjonen.',
       "Couldn't find this bike station.",
       'Klarte ikkje å finne denne sykkelstasjonen.',
+    ),
+    noBikesAvailable: _(
+      'Det er ingen tilgjengelige sykler på denne stasjonen. Prøv en annen stasjon.',
+      'There are no available bikes at this station. Try another station.',
+      'Det er ingen tilgjengelege syklar på denne stasjonen. Prøv ein annan stasjon.',
     ),
   },
   humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),

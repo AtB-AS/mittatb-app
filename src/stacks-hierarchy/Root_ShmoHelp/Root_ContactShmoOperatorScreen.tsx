@@ -177,7 +177,7 @@ export const Root_ContactShmoOperatorScreen = ({
           onTakePhoto={() => navigation.navigate('Root_SupportPhotoScreen')}
         />
         <ContentHeading
-          text={t(ContactShmoOperatorTexts.contactInfo.headerEmailRequired)}
+          text={t(ContactShmoOperatorTexts.contactInfo.headerPlain)}
         />
         <Section>
           <TextInputSectionItem
@@ -192,6 +192,7 @@ export const Root_ContactShmoOperatorScreen = ({
               }))
             }
             label={t(ContactShmoOperatorTexts.contactInfo.email.label)}
+            required
             placeholder={t(
               ContactShmoOperatorTexts.contactInfo.email.placeholder,
             )}
