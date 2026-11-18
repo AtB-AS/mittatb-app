@@ -1,6 +1,5 @@
 allowBuilds:
   '@firebase/util': true
-  '@parcel/watcher': false
   '@shopify/react-native-skia': true
   esbuild: true
   protobufjs: true

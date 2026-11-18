@@ -184,11 +184,7 @@ export const GeolocationContextProvider = ({children}: Props) => {
   );
 
   async function handleLocationError(locationError: GeolocationError) {
-    const status = await checkGeolocationPermission(false);
-    const locationEnabled = await isLocationEnabled();
-    if (status !== 'granted' || !locationEnabled) {
-      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
-    } else {
+    if (!(await handlePermissionLoss(dispatch))) {
       dispatch({type: 'LOCATION_ERROR', locationError});
     }
   }
@@ -217,13 +213,14 @@ export const GeolocationContextProvider = ({children}: Props) => {
         const watchId = Geolocation.watchPosition(
           (position) => updateLocation(position, geoLocationName),
           (error) => {
-            // On iOS, POSITION_UNAVAILABLE (kCLErrorLocationUnknown) is
-            // temporary, and the watch keeps trying to get a location.
+            // On iOS, POSITION_UNAVAILABLE is usually temporary and the watch
+            // keeps running, but it can also mean permission was restricted.
             // https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/locationmanager(_:didfailwitherror:)
             if (
               Platform.OS === 'ios' &&
               error.code === error.POSITION_UNAVAILABLE
             ) {
+              handlePermissionLoss(dispatch);
               return;
             }
             handleLocationError(error);
@@ -324,6 +321,18 @@ export const GeolocationContextProvider = ({children}: Props) => {
       {children}
     </GeolocationContext.Provider>
   );
+};
+
+const handlePermissionLoss = async (
+  dispatch: React.Dispatch<GeolocationReducerAction>,
+): Promise<boolean> => {
+  const status = await checkGeolocationPermission(false);
+  const locationEnabled = await isLocationEnabled();
+  if (status !== 'granted' || !locationEnabled) {
+    dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
+    return true;
+  }
+  return false;
 };
 
 const requestGeolocationPermission = async (
