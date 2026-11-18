@@ -1,0 +1,56 @@
+name: Select orgs
+on:
+  workflow_call:
+    outputs:
+      orgs:
+        description: 'JSON array of orgs to build, e.g. ["troms","fram","nfk"]'
+        value: ${{ jobs.select.outputs.orgs }}
+
+# Only reads the tag name, so the job token needs no permissions
+permissions: {}
+
+env:
+  # All orgs the store workflows can build. A release tag must be vX.YY[.Z]-rcN, optionally
+  # followed by -<org> suffixes (e.g. v1.91-rc3-troms-fram-nfk) to build only those orgs;
+  # a tag without suffixes builds all. Any other tag fails, so a typo can't build all orgs.
+  ORGS: atb nfk fram troms
+
+jobs:
+  select:
+    name: Select orgs from tag
+    runs-on: ubuntu-latest
+    outputs:
+      orgs: ${{ steps.orgs.outputs.orgs }}
+    steps:
+      - name: Select orgs
+        id: orgs
+        env:
+          REF: ${{ github.ref_name }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          selected=()
+          if [[ "$EVENT" == "release" ]]; then
+            if [[ ! "$REF" =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?-rc[0-9]+((-[a-z]+)*)$ ]]; then
+              echo "::error::Release tag '$REF' must match vX.YY[.Z]-rcN[-<org>...]"
+              exit 1
+            fi
+            for org in $(tr '-' ' ' <<< "${BASH_REMATCH[2]}"); do
+              if [[ " $ORGS " != *" $org "* ]]; then
+                echo "::error::Unknown org '$org' in release tag '$REF' (known: $ORGS)"
+                exit 1
+              fi
+              if [[ " ${selected[*]} " == *" $org "* ]]; then
+                echo "::error::Org '$org' is listed more than once in release tag '$REF'"
+                exit 1
+              fi
+              selected+=("$org")
+            done
+          else
+            # Debug builds (workflow_dispatch) don't upload; match org names in the branch name
+            for org in $ORGS; do
+              [[ "$REF" == *"$org"* ]] && selected+=("$org")
+            done
+          fi
+          [ ${#selected[@]} -eq 0 ] && selected=($ORGS)
+          echo "Building: ${selected[*]}"
+          echo "orgs=$(printf '%s\n' "${selected[@]}" | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"

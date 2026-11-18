@@ -17,6 +17,7 @@ Run from the project root:
 pnpm release --preview   # Show what will happen, without making any changes
 pnpm release             # Create the release as a draft on GitHub
 pnpm release --publish   # Create and publish the release, which triggers the store build
+pnpm release --orgs troms,fram,nfk   # Only build these orgs, e.g. v1.30-rc3-troms-fram-nfk
 ```
 
 What the script does depends on the branch you are on:
@@ -25,7 +26,7 @@ What the script does depends on the branch you are on:
   1. Creates and pushes the next release branch, e.g. `release/1.30` if the latest is `release/1.29`.
   2. Creates the release `v1.30-rc1` with changelog on GitHub (draft unless `--publish`).
   3. Creates a draft PR to `master` bumping the version to `1.31`, and registers the bumped version at Entur (see [Bump version number](#on-master-bump-version-number)).
-- **On `release/x.xx`**: creates the next release candidate, e.g. `v1.30-rc3` if `v1.30-rc2` is the latest tag (org-specific tags are included when finding the latest). Warns if the version in `package.json` doesn't match the release branch.
+- **On `release/x.xx`**: creates the next release candidate, e.g. `v1.30-rc3` if `v1.30-rc2` is the latest tag (org-specific tags are included when finding the latest). Warns if the version in `package.json` doesn't match the release branch. With `--orgs`, the orgIds are appended to the tag, e.g. `v1.30-rc3-troms-fram-nfk`, see [Org-specific releases](#org-specific-releases). `--orgs` can't be used when starting a new release cycle.
 - **On any other branch**: runs as if on `master`, in preview mode only.
 
 If the release was created as a draft, review the changelog and publish it as described in [Release in GitHub](#release-in-github).
@@ -33,11 +34,17 @@ If the release was created as a draft, review the changelog and publish it as de
 > [!WARNING]
 > **Check the app version in the `.env` files and make sure they are the correct version for the release. If not, bump the version with `./scripts/update-app-version.sh`.**
 
+### Org-specific releases
+
+If you want to release only for some organizations, append their orgIds to the release tag, e.g. `v1.20-rc3-nfk` for an NFK-only release or `v1.20-rc3-troms-fram-nfk` for Troms, FRAM and NFK. Only those organizations are built and uploaded; the others get no build job. A tag without orgIds builds all organizations.
+
+The store workflows only accept tags of the form `vX.YY[.Z]-rcN[-<orgId>...]`, where each orgId is one of `atb`, `nfk`, `fram` or `troms` (see `.github/workflows/select-orgs.yml`). Any other tag, such as one with a misspelled orgId, fails before anything is built or uploaded, so a typo can't release to all organizations.
+
+Create org-specific releases with `pnpm release --orgs <orgId,...>` on the release branch. It validates the orgIds against `select-orgs.yml`. Please note that the releases after an org specific release may miss some information from the auto generated changelogs that may have to be manually added.
+
 ### Manual release
 
-Use the manual steps below if the script doesn't fit, for example for org-specific releases.
-
-If you want to release only for a given organization, the release tag must include the orgId specifier for the organization. The uploading jobs for other organizations will then exit and fail. An example tag for an NFK-only release is the tag `v1.20-rc3-nfk`. Since the release script doesn't create org-specific tags, create these with `pnpm release-draft` as described below. Please note that the releases after an org specific release may miss some information from the auto generated changelogs that may have to be manually added.
+Use the manual steps below if the script doesn't fit.
 
 Skip the first two steps of creating release-branch and bumping version number on master if the release is a new release candidate on an existing major version.
 
