@@ -51,6 +51,7 @@ type Props = {
   photoNavigation: (bookingId: string) => void;
   onForceClose: () => void;
   mapViewRef: RefObject<MapView | null>;
+  lastMapIdleAt?: number;
   locationArrowOnPress: () => void;
   navigateToScanQrCode: () => void;
   navigateToPricingDetails: NavigateToPricingDetails;
@@ -61,6 +62,7 @@ export const ActiveShmoSheet = ({
   photoNavigation,
   onForceClose,
   mapViewRef,
+  lastMapIdleAt,
   locationArrowOnPress,
   navigateToScanQrCode,
   navigateToPricingDetails,
@@ -88,6 +90,7 @@ export const ActiveShmoSheet = ({
   const {geofencingZoneWarning} = useGeofencingZoneWarning(
     activeBooking?.asset.id ?? '',
     mapViewRef,
+    lastMapIdleAt,
   );
 
   const {isShmoPauseButtonEnabled} = useFeatureTogglesContext();
