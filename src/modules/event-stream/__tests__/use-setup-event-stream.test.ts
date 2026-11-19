@@ -36,12 +36,18 @@ function createWebSocket() {
   return {readyState: WebSocket.OPEN, send: jest.fn()} as unknown as WebSocket;
 }
 
+let currentWs: WebSocket | undefined;
+
 function open(ws = createWebSocket()) {
+  currentWs = ws;
   act(() => getSubscriptionProps().onOpen?.(ws));
   return ws;
 }
 
 function close() {
+  if (currentWs) {
+    (currentWs as {readyState: number}).readyState = WebSocket.CLOSED;
+  }
   act(() =>
     getSubscriptionProps().onClose?.({code: 1006} as WebSocketCloseEvent),
   );
@@ -55,6 +61,7 @@ describe('useSetupEventStream reconnect', () => {
     mockUseSubscription.mockClear();
     mockGetIdTokenGlobal.mockReturnValue('token');
     callback.mockClear();
+    currentWs = undefined;
   });
 
   afterEach(() => {
@@ -124,12 +131,13 @@ describe('useSetupEventStream reconnect', () => {
     const replacedWs = open();
     // Replaced without `onClose`, like `useSubscription` does on cleanup.
     (replacedWs as {readyState: number}).readyState = WebSocket.CLOSED;
-    open();
+    const ws = open();
 
     mockGetIdTokenGlobal.mockReturnValue('token');
     act(() => jest.advanceTimersByTime(1000));
 
     expect(replacedWs.send).not.toHaveBeenCalled();
+    expect(ws.send).toHaveBeenCalledWith('AUTH token');
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
