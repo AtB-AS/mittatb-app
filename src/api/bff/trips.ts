@@ -74,10 +74,6 @@ export async function tripsSearch(
 
   const results = await post<TripsQuery>(url, cleanQuery(query), opts);
 
-  Bugsnag.leaveBreadcrumb('results', {
-    patterns: results.trip?.tripPatterns ?? 'none',
-  });
-
   return results;
 }
 

@@ -120,6 +120,12 @@ export function useDeepLinks() {
           parseParamAsSearchTime(params.searchTime),
         );
 
+      const serviceJourneyId = path.match(
+        /^departures\/details\/([^/]+)$/,
+      )?.[1];
+      if (serviceJourneyId)
+        return routeForDepartureDetails(serviceJourneyId, params);
+
       switch (path) {
         case 'map':
           return routeForMap(params, enableFormFactorsInMapFilter);
@@ -400,7 +406,6 @@ function routeForDepartures(
   if (path === 'widgetdetails') {
     const item: ServiceJourneyDeparture = {
       serviceJourneyId: params.serviceJourneyId as string,
-      date: params.date || new Date().toISOString(),
       serviceDate: params.serviceDate as string,
       fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
       toStopPosition: parseParamAsInt(params.toStopPosition),
@@ -431,4 +436,43 @@ function routeForDepartures(
       },
     ],
   };
+}
+
+/**
+ * `https://{APP_LINK_HOST}/departures/details/{serviceJourneyId}?date=...&fromStopPosition=...&toStopPosition=...`
+ */
+function routeForDepartureDetails(
+  serviceJourneyId: string,
+  params: DeepLink['params'],
+): ResultState | undefined {
+  if (!params.date) return;
+  const item: ServiceJourneyDeparture = {
+    serviceJourneyId,
+    serviceDate: params.date,
+    fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
+    toStopPosition: parseParamAsInt(params.toStopPosition),
+  };
+  return {
+    routes: [
+      {
+        name: 'Root_TabNavigatorStack',
+        state: {
+          routes: [
+            {
+              name: 'TabNav_DeparturesStack',
+              state: {
+                routes: [
+                  {name: 'Departures_NearbyStopPlacesScreen'},
+                  {
+                    name: 'Departures_DepartureDetailsScreen',
+                    params: {activeItemIndex: 0, items: [item]},
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  } as ResultState;
 }

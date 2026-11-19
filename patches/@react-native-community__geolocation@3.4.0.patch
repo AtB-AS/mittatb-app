@@ -1,0 +1,16 @@
+diff --git a/ios/RNCGeolocation.mm b/ios/RNCGeolocation.mm
+index 03df64dd6709a5dbe06a64f29ff0a09243c73d82..384d6aa13eb21576fb70b10181fbe992c612113b 100644
+--- a/ios/RNCGeolocation.mm
++++ b/ios/RNCGeolocation.mm
+@@ -412,7 +412,10 @@ - (void)enableBackgroundLocationUpdates
+                           useSignificantChanges:options.useSignificantChanges];
+ 
+   if (didPause) {
+-    [self startObserving];
++    // Resume the paused watch with its options. `[self startObserving]` calls the
++    // empty RCTEventEmitter method instead, which leaves the watch stopped.
++    // https://github.com/michalchudziak/react-native-geolocation/pull/334
++    [self startObserving:_observerOptions];
+   }
+ }
+ 

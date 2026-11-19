@@ -36,7 +36,6 @@ type Props = {
   navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
-    date: string | undefined,
     fromStopPosition: number,
   ) => void;
   searchTime: DepartureSearchTime;

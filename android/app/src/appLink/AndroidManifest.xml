@@ -9,7 +9,7 @@
                 <data
                     android:scheme="https"
                     android:host="${appLinkHost}"
-                    android:pathPrefix="/departures/NSR:" />
+                    android:pathPrefix="/departures/" />
             </intent-filter>
         </activity>
     </application>
