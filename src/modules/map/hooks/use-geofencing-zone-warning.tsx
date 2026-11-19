@@ -16,16 +16,19 @@ import {throttle} from '@atb/utils/throttle';
 import {Coordinates} from '@atb/utils/coordinates';
 import {GeofencingZoneCode} from '@atb-as/theme';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 export const useGeofencingZoneWarning = (
   vehicleId?: string,
   mapViewRef?: RefObject<MapView | null>,
+  lastMapIdleAt?: number,
 ) => {
   const {isGeofencingZonesAsTilesEnabled} = useFeatureTogglesContext();
   const [geofencingZoneWarning, setGeofencingZoneWarning] =
     useState<GeofencingZoneContent | null>(null);
   const {getGeofencingZoneContent} = useGeofencingZoneContent();
   const {location} = useGeolocationContext();
+  const appStateStatus = useAppStateStatus();
 
   const throttledCallback = useRef(
     throttle(async (coordinates: Coordinates) => {
@@ -79,11 +82,21 @@ export const useGeofencingZoneWarning = (
     }, 1000),
   ).current;
 
+  // Re-check the warning on location change, map idle and app foreground,
+  // since the rendered zones may have been outdated at the last location update.
   useEffect(() => {
+    if (appStateStatus !== 'active') return;
     if (location?.coordinates) {
       throttledCallback(location.coordinates);
     }
-  }, [location?.coordinates, throttledCallback, vehicleId, mapViewRef]);
+  }, [
+    location?.coordinates,
+    throttledCallback,
+    vehicleId,
+    mapViewRef,
+    lastMapIdleAt,
+    appStateStatus,
+  ]);
 
   return {geofencingZoneWarning};
 };
