@@ -1,6 +1,11 @@
 import {isLoggedInAuthenticationType, mapAuthenticationType} from '../utils';
 import {isValidPassword} from '../email-login-session';
 
+// utils imports the time module, which pulls in the API client and @env.
+jest.mock('@atb/modules/time', () => ({
+  getServerNowGlobal: () => Date.now(),
+}));
+
 const user = (fields: object) => fields as any;
 
 describe('mapAuthenticationType', () => {
