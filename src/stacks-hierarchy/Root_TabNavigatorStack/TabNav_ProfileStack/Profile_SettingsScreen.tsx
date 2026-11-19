@@ -8,7 +8,7 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {AccesstbilityCircle} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {Student, Travellers} from '@atb/assets/svg/mono-icons/ticketing';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
@@ -84,7 +84,7 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
             />
           ) : null}
 
-          {authenticationType === 'phone' && (
+          {isLoggedInAuthenticationType(authenticationType) && (
             <LinkSectionItem
               text={
                 disable_travelcard
@@ -102,7 +102,7 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
               testID="travelTokenButton"
             />
           )}
-          {authenticationType === 'phone' && (
+          {isLoggedInAuthenticationType(authenticationType) && (
             <LinkSectionItem
               text={t(
                 ProfileTexts.sections.account.linkSectionItems.editProfile
@@ -112,18 +112,19 @@ export const Profile_SettingsScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_EditProfileScreen')}
             />
           )}
-          {isFeideConnectionEnabled && authenticationType === 'phone' && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.feide.label,
-              )}
-              leftIcon={{svg: Student}}
-              onPress={() =>
-                navigation.navigate('Profile_FeideConnectionScreen')
-              }
-              testID="feideConnectionButton"
-            />
-          )}
+          {isFeideConnectionEnabled &&
+            isLoggedInAuthenticationType(authenticationType) && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.settings.linkSectionItems.feide.label,
+                )}
+                leftIcon={{svg: Student}}
+                onPress={() =>
+                  navigation.navigate('Profile_FeideConnectionScreen')
+                }
+                testID="feideConnectionButton"
+              />
+            )}
         </Section>
 
         <ContentHeading

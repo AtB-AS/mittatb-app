@@ -1,3 +1,4 @@
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -23,14 +24,13 @@ import {
   BonusProductList,
 } from '@atb/modules/bonus';
 import {useIsEnrolled, KnownProgramId} from '@atb/modules/enrollment';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {isDefined} from '@atb/utils/presence';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {LogIn} from '@atb/assets/svg/mono-icons/profile';
 import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {Button} from '@atb/components/button';
 import {Loading} from '@atb/components/loading';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -52,8 +52,8 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
   const {authenticationType} = useAuthContext();
-  const {enable_vipps_login} = useRemoteConfigContext();
-  const isLoggedIn = authenticationType === 'phone';
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
+  const isLoggedIn = isLoggedInAuthenticationType(authenticationType);
   const {
     data: activeBonusProducts,
     isLoading: isBonusProductsLoading,
@@ -140,7 +140,7 @@ export const Profile_BonusScreen = ({navigation}: Props) => {
                     'Root_LoginAvailableFareContractWarningScreen',
                     {},
                   );
-                } else if (enable_vipps_login) {
+                } else if (isLoginOptionsScreenEnabled) {
                   navigation.navigate('Root_LoginOptionsScreen', {
                     showGoBack: true,
                     transitionOverride: 'slide-from-bottom',

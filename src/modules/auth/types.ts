@@ -1,6 +1,6 @@
 import {IdTokenResult, User} from '@react-native-firebase/auth';
 
-export type AuthenticationType = 'none' | 'anonymous' | 'phone';
+export type AuthenticationType = 'none' | 'anonymous' | 'phone' | 'email';
 
 export type AuthStatus =
   | 'loading'
@@ -25,6 +25,16 @@ export type PhoneSignInErrorCode =
   | 'invalid_phone'
   | 'unknown_error'
   | 'too_many_attempts';
+export type EmailSignInErrorCode =
+  | 'invalid_email'
+  | 'wrong_credentials'
+  | 'email_not_verified'
+  | 'weak_password'
+  | 'invalid_code'
+  | 'session_expired'
+  | 'user_exists'
+  | 'too_many_attempts'
+  | 'unknown_error';
 export type VippsSignInErrorCode =
   | 'access_denied'
   | 'outdated_app_version'

@@ -27,6 +27,8 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {
   ChevronRight,
+  ExpandLess,
+  ExpandMore,
   ExternalLink,
 } from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
@@ -37,6 +39,8 @@ import {
   openInAppBrowser,
 } from '@atb/modules/in-app-browser';
 import {Loading} from '@atb/components/loading';
+import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {useRemoteConfigContext} from '@atb/modules/remote-config';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
@@ -62,6 +66,9 @@ export const Root_LoginOptionsScreen = ({
   >(undefined);
   const {configurableLinks} = useFirestoreConfigurationContext();
   const {completeOnboardingSection} = useOnboardingContext();
+  const {isEmailLoginEnabled} = useFeatureTogglesContext();
+  const {enable_vipps_login} = useRemoteConfigContext();
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   const {mutateAsync: authVipps} = useAuthenticateVipps({
     onSuccess: (url) => openInAppBrowser(url),
@@ -140,6 +147,22 @@ export const Root_LoginOptionsScreen = ({
     return () => eventSubscription.remove();
   }, [appStatus]);
 
+  const phoneButton = (
+    <Button
+      surfaceColor="accent"
+      expanded={true}
+      mode={isEmailLoginEnabled ? 'secondary' : 'primary'}
+      onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
+      text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
+      accessibilityHint={t(
+        LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
+      )}
+      disabled={isLoading}
+      rightIcon={{svg: ChevronRight}}
+      testID="chooseLoginPhoneButton"
+    />
+  );
+
   const termsInfoUrl = getTextForLanguage(
     configurableLinks?.termsInfo,
     language,
@@ -185,20 +208,55 @@ export const Root_LoginOptionsScreen = ({
         </ThemeText>
 
         <View style={styles.buttonContainer}>
-          <VippsLoginButton onPress={authVipps} disabled={isLoading} />
-          <Button
-            surfaceColor="accent"
-            expanded={true}
-            mode="primary"
-            onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
-            text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
-            accessibilityHint={t(
-              LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
-            )}
-            disabled={isLoading}
-            rightIcon={{svg: ChevronRight}}
-            testID="chooseLoginPhoneButton"
-          />
+          {isEmailLoginEnabled ? (
+            <>
+              <Button
+                surfaceColor="accent"
+                expanded={true}
+                mode="primary"
+                onPress={() =>
+                  navigation.navigate('Root_LoginEmailInputScreen')
+                }
+                text={t(LoginTexts.logInOptions.options.email.label)}
+                accessibilityHint={t(
+                  LoginTexts.logInOptions.options.email.a11yLabel,
+                )}
+                disabled={isLoading}
+                rightIcon={{svg: ChevronRight}}
+                testID="chooseLoginEmailButton"
+              />
+              <Button
+                surfaceColor="accent"
+                expanded={true}
+                mode="tertiary"
+                onPress={() => setShowMoreOptions((show) => !show)}
+                text={t(
+                  showMoreOptions
+                    ? LoginTexts.logInOptions.options.moreOptions.hide
+                    : LoginTexts.logInOptions.options.moreOptions.show,
+                )}
+                accessibilityState={{expanded: showMoreOptions}}
+                rightIcon={{svg: showMoreOptions ? ExpandLess : ExpandMore}}
+                testID="moreLoginOptionsButton"
+              />
+              {showMoreOptions && (
+                <>
+                  {enable_vipps_login && (
+                    <VippsLoginButton
+                      onPress={authVipps}
+                      disabled={isLoading}
+                    />
+                  )}
+                  {phoneButton}
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <VippsLoginButton onPress={authVipps} disabled={isLoading} />
+              {phoneButton}
+            </>
+          )}
           <Button
             surfaceColor="accent"
             expanded={true}

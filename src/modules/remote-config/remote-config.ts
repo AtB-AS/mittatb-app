@@ -68,6 +68,7 @@ export type RemoteConfig = {
   enable_travel_aid: boolean;
   enable_vehicles_in_map: boolean;
   enable_vipps_login: boolean;
+  enable_email_login: boolean;
   enable_vipps_payment_agreements: boolean;
   enable_virtual_stations: boolean;
   enable_in_app_review: boolean;
@@ -153,6 +154,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_travel_aid: false,
   enable_vehicles_in_map: false,
   enable_vipps_login: false,
+  enable_email_login: false,
   enable_vipps_payment_agreements: false,
   enable_virtual_stations: false,
   enable_in_app_review: false,
@@ -336,6 +338,9 @@ export function getConfig(): RemoteConfig {
   const enable_vipps_login =
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
+  const enable_email_login =
+    values['enable_email_login']?.asBoolean() ??
+    defaultRemoteConfig.enable_email_login;
   const enable_vipps_payment_agreements =
     values['enable_vipps_payment_agreements']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_payment_agreements;
@@ -460,6 +465,7 @@ export function getConfig(): RemoteConfig {
     enable_travel_aid,
     enable_vehicles_in_map,
     enable_vipps_login,
+    enable_email_login,
     enable_vipps_payment_agreements,
     enable_virtual_stations,
     enable_in_app_review,

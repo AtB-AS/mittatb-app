@@ -84,6 +84,8 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
+      - name: Ensure pnpm store path exists
+        run: mkdir -p "$(pnpm store path --silent)"
 
       - name: Add Entur private registry credentials
         shell: bash

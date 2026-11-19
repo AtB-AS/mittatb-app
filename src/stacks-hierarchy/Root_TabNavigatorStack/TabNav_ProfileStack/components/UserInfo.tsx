@@ -7,7 +7,7 @@ import {
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useAnalyticsContext} from '@atb/modules/analytics';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {StyleSheet, Theme} from '@atb/theme';
 import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
@@ -32,7 +32,7 @@ export const UserInfo = ({navigateToEditProfileScreen}: UserInfoProps) => {
 
   return (
     <Section>
-      {authenticationType === 'phone' && (
+      {isLoggedInAuthenticationType(authenticationType) && (
         <LoggedInInfoSectionItem onPress={navigateToEditProfileScreen} />
       )}
       {authenticationType === 'anonymous' && <LoggedOutInfoSectionItem />}
@@ -68,8 +68,9 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
   ({onPress, ...props}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
-    const {phoneNumber, customerNumber} = useAuthContext();
-    const formattedPhoneNumber = phoneNumber && formatPhoneNumber(phoneNumber);
+    const {phoneNumber, email, customerNumber} = useAuthContext();
+    const loggedInWith =
+      (phoneNumber && formatPhoneNumber(phoneNumber)) || email;
     const {topContainer} = useSectionItem(props);
 
     return (
@@ -81,10 +82,10 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
         accessibilityRole="button"
         accessibilityLabel={[
           t(ProfileTexts.sections.account.infoItems.heading),
-          formattedPhoneNumber
+          loggedInWith
             ? t(
                 ProfileTexts.sections.account.infoItems.loggedInWith(
-                  formattedPhoneNumber,
+                  loggedInWith,
                 ),
               )
             : '',
@@ -104,7 +105,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
               {t(ProfileTexts.sections.account.infoItems.heading)}
             </ThemeText>
             <View>
-              {formattedPhoneNumber && (
+              {loggedInWith && (
                 <ThemeText
                   typography="body__s"
                   type="secondary"
@@ -112,7 +113,7 @@ const LoggedInInfoSectionItem = forwardRef<any, LoggedInInfoSectionItemProps>(
                 >
                   {t(
                     ProfileTexts.sections.account.infoItems.loggedInWith(
-                      formattedPhoneNumber,
+                      loggedInWith,
                     ),
                   )}
                 </ThemeText>

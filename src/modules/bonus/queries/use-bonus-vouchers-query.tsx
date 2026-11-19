@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {getBonusVouchers} from '../api/api';
 import {useIsBonusActiveForUser} from '../use-is-bonus-active-for-user';
 
@@ -12,7 +12,7 @@ export const useBonusVouchersQuery = () => {
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const isEnabled =
     authStatus === 'authenticated' &&
-    authenticationType === 'phone' &&
+    isLoggedInAuthenticationType(authenticationType) &&
     isBonusActiveForUser;
 
   return useQuery({

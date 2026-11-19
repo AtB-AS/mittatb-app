@@ -30,7 +30,7 @@ import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-chang
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
 import {isEqual} from 'lodash';
-import {mapAuthenticationType} from './utils';
+import {isLoggedInAuthenticationType, mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useUpdateIntercomOnUserChange} from '@atb/modules/auth';
 import {useLocaleContext} from '@atb/modules/locale';
@@ -156,6 +156,7 @@ type AuthContextState = {
   authStatus: AuthStatus;
   userId?: string;
   phoneNumber?: string;
+  email?: string;
   customerNumber?: number;
   abtCustomerId?: string;
   signInWithPhoneNumber: (
@@ -200,6 +201,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         authStatus: state.authStatus,
         userId: state.user?.uid,
         phoneNumber: state.user?.phoneNumber || undefined,
+        email: state.user?.email || undefined,
         customerNumber: state.idTokenResult?.claims['customer_number'] as
           | number
           | undefined,
@@ -224,7 +226,9 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
           await signInAnonymously(getAuth());
         }, []),
         authenticationType: mapAuthenticationType(state.user),
-        isLoggedIn: mapAuthenticationType(state.user) === 'phone',
+        isLoggedIn: isLoggedInAuthenticationType(
+          mapAuthenticationType(state.user),
+        ),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
         debug: {

@@ -1,4 +1,4 @@
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {listRecurringPayments} from '@atb/modules/ticketing';
 import {useQuery} from '@tanstack/react-query';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
@@ -15,7 +15,7 @@ export const useListRecurringPaymentsQuery = (enabled: boolean) => {
       authenticationType,
     ],
     queryFn: async () => {
-      if (authenticationType === 'phone' && abtCustomerId) {
+      if (isLoggedInAuthenticationType(authenticationType) && abtCustomerId) {
         return await listRecurringPayments();
       }
       return [];

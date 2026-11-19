@@ -26,6 +26,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_city_bikes_in_map',
   },
   {
+    name: 'isEmailLoginEnabled',
+    remoteConfigKey: 'enable_email_login',
+  },
+  {
     name: 'isEventStreamEnabled',
     remoteConfigKey: 'enable_event_stream',
   },

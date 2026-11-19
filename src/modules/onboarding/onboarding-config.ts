@@ -1,4 +1,5 @@
 import {OnboardingSectionConfig} from '@atb/modules/onboarding';
+import {isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {Platform} from 'react-native';
 import {extendedOnboardingId} from './extended-onboarding';
 import {sparOnboardingId} from '../smart-park-and-ride';
@@ -73,7 +74,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
     }) =>
       mobileTokenStatus === 'success-not-inspectable' &&
       !travelCardDisabled &&
-      authenticationType === 'phone',
+      isLoggedInAuthenticationType(authenticationType),
   },
   {
     isOnboardedStoreKey: '@ATB_mobile_token_without_travelcard_onboarded',
@@ -88,7 +89,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
     }) =>
       mobileTokenStatus === 'success-not-inspectable' &&
       travelCardDisabled &&
-      authenticationType === 'phone',
+      isLoggedInAuthenticationType(authenticationType),
   },
   {
     isOnboardedStoreKey: '@ATB_travel_aid_onboarded',

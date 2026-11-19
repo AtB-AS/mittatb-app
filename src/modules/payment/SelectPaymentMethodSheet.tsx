@@ -8,7 +8,7 @@ import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {PaymentType} from '@atb/modules/ticketing';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
@@ -171,7 +171,7 @@ export const SelectPaymentMethodSheet: React.FC<Props> = ({
           />
         </View>
 
-        {authenticationType !== 'phone' && (
+        {!isLoggedInAuthenticationType(authenticationType) && (
           <MessageInfoText
             message={t(AnonymousPurchases.consequences.select_payment_method)}
             type="warning"

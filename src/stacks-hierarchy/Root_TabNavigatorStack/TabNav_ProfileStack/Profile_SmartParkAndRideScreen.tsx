@@ -22,7 +22,7 @@ import {spellOut} from '@atb/utils/accessibility';
 import {statusTypeToIcon} from '@atb/utils/status-type-to-icon';
 import {ThemedCarRegister} from '@atb/theme/ThemedAssets';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useState} from 'react';
 import {ProfileScreenProps} from './navigation-types';
@@ -55,7 +55,7 @@ export const Profile_SmartParkAndRideScreen = ({route, navigation}: Props) => {
   const {authenticationType} = useAuthContext();
   const analytics = useAnalyticsContext();
   const [showNotLoggedInWarning, setShowNotLoggedInWarning] = useState(
-    authenticationType !== 'phone',
+    !isLoggedInAuthenticationType(authenticationType),
   );
 
   const canAddVehicleRegistrations =

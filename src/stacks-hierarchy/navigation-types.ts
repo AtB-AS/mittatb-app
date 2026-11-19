@@ -68,6 +68,22 @@ export type Root_LoginConfirmCodeScreenParams = {
   phoneNumber: string;
 };
 
+export type EmailCodePurpose = 'signup' | 'verify' | 'reset';
+
+export type Root_LoginEmailPasswordScreenParams = {
+  email: string;
+};
+
+export type Root_LoginEmailCreatePasswordScreenParams = {
+  email: string;
+  purpose: 'signup' | 'reset';
+};
+
+export type Root_LoginEmailConfirmCodeScreenParams = {
+  email: string;
+  purpose: EmailCodePurpose;
+};
+
 export type Root_LoginRequiredForFareProductScreenParams = {
   title?: string;
   text?: string;
@@ -167,6 +183,10 @@ export type RootStackParamList = StackParams<{
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
   Root_LoginPhoneInputScreen: undefined;
+  Root_LoginEmailInputScreen: undefined;
+  Root_LoginEmailPasswordScreen: Root_LoginEmailPasswordScreenParams;
+  Root_LoginEmailCreatePasswordScreen: Root_LoginEmailCreatePasswordScreenParams;
+  Root_LoginEmailConfirmCodeScreen: Root_LoginEmailConfirmCodeScreenParams;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ParkingViolationsSelectScreen: undefined;
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;

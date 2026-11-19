@@ -1,8 +1,21 @@
 import {Dispatch} from 'react';
 import {getAuth, signInWithCustomToken} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
-import {AuthReducerAction, ConfirmationErrorCode} from './types';
-import {authenticateWithSms, verifySms} from '@atb/api/identity';
+import {
+  AuthReducerAction,
+  ConfirmationErrorCode,
+  EmailSignInErrorCode,
+} from './types';
+import {
+  authenticateWithSms,
+  emailCreate,
+  emailLogIn,
+  emailReset,
+  emailResetConfirm,
+  emailStart,
+  EmailStartResponse,
+  verifySms,
+} from '@atb/api/identity';
 import {Language} from '@atb/translations';
 import {
   isErrorResponse,
@@ -73,6 +86,99 @@ export const authConfirmCode = async (
     return 'unknown_error';
   }
 };
+
+/**
+ * Maps identity e-mail endpoint errors to error codes. See the "Step 1 API"
+ * section in the identity repo's docs/auth-initiative-poc.md.
+ */
+const toEmailSignInErrorCode = (e: unknown): EmailSignInErrorCode => {
+  const error = e as RequestError;
+  if (!isErrorResponse(error)) return 'unknown_error';
+
+  const status = error.http.code;
+  const errorCode = errorDetailsToResponseData(error)?.error_code;
+  switch (status) {
+    case 400:
+      if (errorCode === 'INVALID_CODE') return 'invalid_code';
+      // No code stored, i.e. it expired or was used up
+      if (errorCode === 'NOT_FOUND') return 'session_expired';
+      if (errorCode === 'WEAK_PASSWORD') return 'weak_password';
+      if (errorCode === 'BAD_REQUEST') return 'invalid_email';
+      break;
+    case 401:
+      return 'wrong_credentials';
+    case 403:
+      if (errorCode === 'EMAIL_NOT_VERIFIED') return 'email_not_verified';
+      break;
+    case 409:
+      return 'user_exists';
+    case 429:
+      return 'too_many_attempts';
+  }
+
+  notifyBugsnag('Unexpected response on e-mail login', {
+    errorGroupHash: 'LoginEmail',
+    metadata: {status, responseData: error.details},
+  });
+  return 'unknown_error';
+};
+
+type EmailResult<T> =
+  | {data: T; error?: never}
+  | {data?: never; error: EmailSignInErrorCode};
+
+export const authEmailStart = async (
+  email: string,
+  language: Language,
+): Promise<EmailResult<EmailStartResponse>> => {
+  try {
+    return {data: await emailStart(email, language)};
+  } catch (e) {
+    return {error: toEmailSignInErrorCode(e)};
+  }
+};
+
+export const authEmailReset = async (
+  email: string,
+  language: Language,
+): Promise<EmailSignInErrorCode | undefined> => {
+  try {
+    await emailReset(email, language);
+  } catch (e) {
+    return toEmailSignInErrorCode(e);
+  }
+};
+
+const signInWithEmailToken = async (
+  getToken: () => Promise<string>,
+): Promise<EmailSignInErrorCode | undefined> => {
+  let token: string;
+  try {
+    token = await getToken();
+  } catch (e) {
+    return toEmailSignInErrorCode(e);
+  }
+  return authSignInWithCustomToken(token);
+};
+
+export const authEmailCreate = (
+  email: string,
+  password: string,
+  code: string,
+) => signInWithEmailToken(() => emailCreate(email, password, code));
+
+export const authEmailLogIn = (
+  email: string,
+  password: string,
+  language: Language,
+  code?: string,
+) => signInWithEmailToken(() => emailLogIn(email, password, language, code));
+
+export const authEmailResetConfirm = (
+  email: string,
+  code: string,
+  newPassword: string,
+) => signInWithEmailToken(() => emailResetConfirm(email, code, newPassword));
 
 export const authSignInWithCustomToken = async (token: string) => {
   try {
