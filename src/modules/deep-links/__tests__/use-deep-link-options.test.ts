@@ -7,7 +7,7 @@ import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from '../prefixes';
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
 let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
-let mockAuthenticationType: 'none' | 'anonymous' | 'phone' = 'phone';
+let mockAuthenticationType: 'none' | 'anonymous' | 'phone' | 'email' = 'phone';
 let mockRequiresLogin = false;
 
 const mockPlace = jest.fn();
@@ -37,6 +37,8 @@ jest.mock('@atb/modules/feature-toggles', () => ({
 }));
 jest.mock('@atb/modules/auth', () => ({
   useAuthContext: () => ({authenticationType: mockAuthenticationType}),
+  isLoggedInAuthenticationType: (authenticationType: string) =>
+    authenticationType === 'phone' || authenticationType === 'email',
 }));
 jest.mock('@atb/api', () => ({
   place: (...args: any[]) => mockPlace(...args),

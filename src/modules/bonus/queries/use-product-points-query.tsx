@@ -1,12 +1,13 @@
 import {useQuery} from '@tanstack/react-query';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {getProductPoints} from '../api/api';
 
 export const useProductPointsQuery = () => {
   const {authStatus} = useAuthContext();
   const {authenticationType} = useAuthContext();
   const isEnabled =
-    authStatus === 'authenticated' && authenticationType === 'phone';
+    authStatus === 'authenticated' &&
+    isLoggedInAuthenticationType(authenticationType);
 
   return useQuery({
     enabled: isEnabled,

@@ -8,7 +8,7 @@ import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfile
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useThemeContext} from '@atb/theme';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -137,7 +137,7 @@ export const Profile_EditProfileScreen = ({
         </View>
       )}
     >
-      {authenticationType !== 'phone' ? (
+      {!isLoggedInAuthenticationType(authenticationType) ? (
         <View style={styles.noAccount}>
           <MessageInfoBox
             type="error"
@@ -210,7 +210,11 @@ export const Profile_EditProfileScreen = ({
               ) : (
                 <Section style={[styles.section, styles.sectionBottomPadding]}>
                   <TextInputSectionItem
-                    editable={!isLoadingOrSubmittingProfile}
+                    // The login e-mail can't be changed here, see D13
+                    editable={
+                      !isLoadingOrSubmittingProfile &&
+                      authenticationType !== 'email'
+                    }
                     value={email}
                     onChangeText={(value) => {
                       setEmail(value);

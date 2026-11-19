@@ -58,6 +58,88 @@ export const verifySms = async (
   return result.data;
 };
 
+type IdentityLanguage = 'nob' | 'eng';
+
+const toIdentityLanguage = (language: Language): IdentityLanguage =>
+  language === Language.English ? 'eng' : 'nob';
+
+export type EmailStartResponse =
+  | {next: 'verify-code'}
+  | {next: 'password'}
+  | {next: 'federated'; providers: string[]};
+
+/**
+ * Starts e-mail login. Sends a sign-up code if no account exists, otherwise
+ * tells which step comes next.
+ */
+export const emailStart = async (
+  email: string,
+  language: Language,
+): Promise<EmailStartResponse> => {
+  const result = await client.post<EmailStartResponse>(
+    '/identity/v1/email/start',
+    {email, mode: 'code', language: toIdentityLanguage(language)},
+  );
+  return result.data;
+};
+
+/** Creates the account and returns a custom token. */
+export const emailCreate = async (
+  email: string,
+  password: string,
+  code: string,
+): Promise<string> => {
+  const result = await client.post<string>('/identity/v1/email/create', {
+    email,
+    password,
+    confirmationCode: code,
+  });
+  return result.data;
+};
+
+/**
+ * Logs in and returns a custom token. Fails with 403 EMAIL_NOT_VERIFIED when
+ * the e-mail is not verified; a code is then sent, and the call must be
+ * repeated with `code`.
+ */
+export const emailLogIn = async (
+  email: string,
+  password: string,
+  language: Language,
+  code?: string,
+): Promise<string> => {
+  const result = await client.post<string>('/identity/v1/email/log-in', {
+    email,
+    password,
+    code,
+    language: toIdentityLanguage(language),
+  });
+  return result.data;
+};
+
+/** Sends a password reset code if the account exists. */
+export const emailReset = async (email: string, language: Language) => {
+  await client.post('/identity/v1/email/reset', {
+    email,
+    mode: 'code',
+    language: toIdentityLanguage(language),
+  });
+};
+
+/** Sets a new password and returns a custom token. */
+export const emailResetConfirm = async (
+  email: string,
+  code: string,
+  newPassword: string,
+): Promise<string> => {
+  const result = await client.post<string>('/identity/v1/email/reset/confirm', {
+    email,
+    code,
+    newPassword,
+  });
+  return result.data;
+};
+
 export const authorizeVippsUser = async (): Promise<string> => {
   try {
     const state = await generateState();

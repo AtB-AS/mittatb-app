@@ -1,4 +1,4 @@
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import React, {Ref} from 'react';
 import {
   RootNavigationProps,
@@ -39,7 +39,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   navigation,
   route: {params},
 }: Props) => {
-  const {enable_vipps_login} = useRemoteConfigContext();
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
   const completeUserCreationOnboardingAndEnterApp =
@@ -49,7 +49,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
     let screen: keyof RootStackParamList = 'Root_LoginPhoneInputScreen';
     if (getHasReservationOrAvailableFareContract()) {
       screen = 'Root_LoginAvailableFareContractWarningScreen';
-    } else if (enable_vipps_login) {
+    } else if (isLoginOptionsScreenEnabled) {
       screen = 'Root_LoginOptionsScreen';
       return navigation.navigate(screen, {showGoBack: true});
     }

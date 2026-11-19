@@ -1,5 +1,5 @@
 import {useQuery} from '@tanstack/react-query';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {getBonusAmountEarned} from '../api/api';
 import {useIsBonusActiveForUser} from '../use-is-bonus-active-for-user';
 
@@ -16,7 +16,7 @@ export const useBonusAmountEarnedQuery = (
 ) => {
   const {userId, authStatus} = useAuthContext();
   const {authenticationType} = useAuthContext();
-  const isLoggedIn = authenticationType === 'phone';
+  const isLoggedIn = isLoggedInAuthenticationType(authenticationType);
   const isBonusActiveForUser = useIsBonusActiveForUser();
 
   return useQuery({

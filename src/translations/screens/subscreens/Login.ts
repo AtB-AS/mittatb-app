@@ -23,6 +23,22 @@ const LoginTexts = {
           'Eingongskode på SMS',
         ),
       },
+      email: {
+        label: _(
+          'Fortsett med e-post',
+          'Continue with e-mail',
+          'Hald fram med e-post',
+        ),
+        a11yLabel: _(
+          'Fortsett med e-post og passord',
+          'Continue with e-mail and password',
+          'Hald fram med e-post og passord',
+        ),
+      },
+      moreOptions: {
+        show: _('Flere alternativer', 'More options', 'Fleire alternativ'),
+        hide: _('Færre alternativer', 'Fewer options', 'Færre alternativ'),
+      },
       vipps: {
         label: _('Fortsett med ', 'Log in with ', 'Hald fram med '),
         a11yLabel: _(
@@ -170,6 +186,133 @@ const LoginTexts = {
         'Du har prøvd for mange ganger. Vennligst vent litt før du prøver igjen.',
         'You have tried too many times. Please wait a bit before trying again.',
         'Du har prøvd for mange gonger. Ver venleg og vent litt før du prøver igjen.',
+      ),
+    },
+  },
+  email: {
+    input: {
+      title: _(
+        'Logg inn med e-post',
+        'Log in with e-mail',
+        'Logg inn med e-post',
+      ),
+      description: _(
+        'Skriv inn e-postadressen din. Har du ikke konto, lager vi en til deg.',
+        "Enter your e-mail address. If you don't have an account, we'll create one for you.",
+        'Skriv inn e-postadressa di. Har du ikkje konto, lagar vi ein til deg.',
+      ),
+      label: _('E-post', 'E-mail', 'E-post'),
+      placeholder: _(
+        'Skriv inn e-postadressen din',
+        'Enter your e-mail address',
+        'Skriv inn e-postadressa di',
+      ),
+      mainButton: _('Fortsett', 'Continue', 'Hald fram'),
+      federated: (providers: string) =>
+        _(
+          `Denne e-postadressen brukes med ${providers}. Logg inn med ${providers}, eller lag et passord.`,
+          `This e-mail address is used with ${providers}. Log in with ${providers}, or create a password.`,
+          `Denne e-postadressa blir brukt med ${providers}. Logg inn med ${providers}, eller lag eit passord.`,
+        ),
+      createPasswordButton: _('Lag passord', 'Create password', 'Lag passord'),
+    },
+    password: {
+      title: _('Skriv inn passord', 'Enter password', 'Skriv inn passord'),
+      description: (email: string) =>
+        _(
+          `Logg inn som ${email}`,
+          `Log in as ${email}`,
+          `Logg inn som ${email}`,
+        ),
+      label: _('Passord', 'Password', 'Passord'),
+      placeholder: _(
+        'Skriv inn passordet ditt',
+        'Enter your password',
+        'Skriv inn passordet ditt',
+      ),
+      mainButton: _('Logg inn', 'Log in', 'Logg inn'),
+      forgotPassword: _(
+        'Glemt passord?',
+        'Forgot password?',
+        'Gløymt passord?',
+      ),
+    },
+    createPassword: {
+      signUpTitle: _('Lag et passord', 'Create a password', 'Lag eit passord'),
+      resetTitle: _(
+        'Velg nytt passord',
+        'Choose a new password',
+        'Vel nytt passord',
+      ),
+      description: (minLength: number) =>
+        _(
+          `Passordet må ha minst ${minLength} tegn.`,
+          `The password must have at least ${minLength} characters.`,
+          `Passordet må ha minst ${minLength} teikn.`,
+        ),
+      label: _('Passord', 'Password', 'Passord'),
+      placeholder: _('Velg et passord', 'Choose a password', 'Vel eit passord'),
+      mainButton: _('Fortsett', 'Continue', 'Hald fram'),
+    },
+    confirmCode: {
+      description: (email: string) =>
+        _(
+          `Skriv inn engangskoden vi sendte til ${email}`,
+          `Enter the one-time code we sent to ${email}`,
+          `Skriv inn eingongskoden vi sende til ${email}`,
+        ),
+      verifyDescription: (email: string) =>
+        _(
+          `E-postadressen din er ikke bekreftet. Skriv inn engangskoden vi sendte til ${email}`,
+          `Your e-mail address is not verified. Enter the one-time code we sent to ${email}`,
+          `E-postadressa di er ikkje stadfesta. Skriv inn eingongskoden vi sende til ${email}`,
+        ),
+    },
+    errors: {
+      invalid_email: _(
+        'Er du sikker på at e-postadressen er riktig?',
+        'Are you certain the e-mail address is correct?',
+        'Er du sikker på at e-postadressa er riktig?',
+      ),
+      wrong_credentials: _(
+        'Feil e-post eller passord.',
+        'Wrong e-mail or password.',
+        'Feil e-post eller passord.',
+      ),
+      email_not_verified: _(
+        'E-postadressen er ikke bekreftet.',
+        'The e-mail address is not verified.',
+        'E-postadressa er ikkje stadfesta.',
+      ),
+      weak_password: _(
+        'Passordet må ha mellom 8 og 128 tegn.',
+        'The password must have between 8 and 128 characters.',
+        'Passordet må ha mellom 8 og 128 teikn.',
+      ),
+      invalid_code: _(
+        'Engangskoden er ugyldig. Sjekk at den er riktig, eller be om en ny.',
+        'The one-time code is invalid. Ensure that it is correct, or request a new one.',
+        'Eingongskoden er ugyldig. Sjekk at den er riktig, eller be om ein ny.',
+      ),
+      session_expired: _(
+        'Engangskoden har utløpt. Vennligst be om en ny.',
+        'The one-time code has expired. Please request a new one.',
+        'Eingongskoden har gått ut. Ver venleg og be om ein ny.',
+      ),
+      user_exists: _(
+        'Det finnes allerede en konto med denne e-postadressen.',
+        'An account with this e-mail address already exists.',
+        'Det finst allereie ein konto med denne e-postadressa.',
+      ),
+      too_many_attempts: _(
+        'Du har prøvd for mange ganger. Vennligst vent litt før du prøver igjen.',
+        'You have tried too many times. Please wait a bit before trying again.',
+        'Du har prøvd for mange gonger. Ver venleg og vent litt før du prøver igjen.',
+      ),
+      unknown_error: _(
+        'Klarte ikke å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',
+        "Couldn't log you in. Please try again or contact customer service for assistance.",
+        'Klarte ikkje å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',
       ),
     },
   },
