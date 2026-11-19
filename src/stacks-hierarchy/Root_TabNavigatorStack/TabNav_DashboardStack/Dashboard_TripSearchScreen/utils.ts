@@ -1,5 +1,9 @@
 import {Location} from '@atb/modules/favorites';
-import {TransportModeFilterOptionWithSelectionType} from '@atb/modules/travel-search-filters';
+import {
+  InitialTravelSearchFilters,
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchPreferenceWithSelectionType,
+} from '@atb/modules/travel-search-filters';
 import {
   StreetMode,
   TransportMode,
@@ -72,6 +76,27 @@ export const areDefaultFiltersSelected = (
   if (!transportModes || transportModes.length === 0) return false;
   return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
 };
+
+export const selectTransportModeFiltersById = (
+  transportModes: TransportModeFilterOptionWithSelectionType[] | undefined,
+  ids: string[] | undefined,
+): TransportModeFilterOptionWithSelectionType[] | undefined => {
+  if (!transportModes) return undefined;
+  if (!ids?.some((id) => transportModes.some((tm) => tm.id === id))) {
+    return undefined;
+  }
+  return transportModes.map((tm) => ({...tm, selected: ids.includes(tm.id)}));
+};
+
+export const overridePreferenceValues = (
+  preferences: TravelSearchPreferenceWithSelectionType[],
+  overrideValues: InitialTravelSearchFilters['travelSearchPreferences'],
+): TravelSearchPreferenceWithSelectionType[] =>
+  preferences.map((preference) => {
+    const overrideValue = overrideValues?.[preference.type];
+    if (overrideValue === undefined) return preference;
+    return {...preference, overrideValue};
+  });
 
 const isVenue = (location: Location): boolean => {
   return 'layer' in location && location.layer === 'venue';

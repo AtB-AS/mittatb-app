@@ -112,9 +112,10 @@ export function createTripsQuery(
   if (travelSearchFiltersSelection?.travelSearchPreferences) {
     travelSearchFiltersSelection.travelSearchPreferences.forEach(
       (preference) => {
-        const value = preference.options.find(
-          (o) => o.id === preference.selectedOption,
-        )?.value;
+        const value =
+          preference.overrideValue ??
+          preference.options.find((o) => o.id === preference.selectedOption)
+            ?.value;
         if (isDefined(value)) {
           query[preference.type] = value;
         }

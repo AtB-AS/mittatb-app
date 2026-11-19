@@ -10,6 +10,10 @@
                     android:scheme="https"
                     android:host="${appLinkHost}"
                     android:pathPrefix="/departures/" />
+                <data
+                    android:scheme="https"
+                    android:host="${appLinkHost}"
+                    android:path="/assistant" />
             </intent-filter>
         </activity>
     </application>

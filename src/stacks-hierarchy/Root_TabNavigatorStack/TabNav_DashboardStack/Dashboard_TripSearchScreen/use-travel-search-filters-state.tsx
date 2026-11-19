@@ -3,6 +3,11 @@ import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useFiltersContext} from '@atb/modules/travel-search-filters';
 import {TravelSearchFiltersSelectionType} from '@atb/modules/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/modules/travel-search-filters';
+import type {InitialTravelSearchFilters} from '@atb/modules/travel-search-filters';
+import {
+  overridePreferenceValues,
+  selectTransportModeFiltersById,
+} from './utils';
 
 type TravelSearchFiltersState =
   | {
@@ -24,8 +29,13 @@ type TravelSearchFiltersState =
 /**
  * The travel search filters state, including whether it is enabled or not, the
  * selected filters, and a function for opening the bottom sheet.
+ *
+ * @param initialFilters - Filters to start with instead of the user's selection,
+ * e.g. from a deep link. These are not saved.
  */
-export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
+export const useTravelSearchFiltersState = (
+  initialFilters?: InitialTravelSearchFilters,
+): TravelSearchFiltersState => {
   const {travelSearchFilters} = useFirestoreConfigurationContext();
   const {filters, setFilters} = useFiltersContext();
 
@@ -47,10 +57,17 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     })) ?? [];
 
   const initialTransportModeSelection =
-    filters?.transportModes ?? defaultTransportModeFilterOptions;
+    selectTransportModeFiltersById(
+      defaultTransportModeFilterOptions,
+      initialFilters?.transportModes,
+    ) ??
+    filters?.transportModes ??
+    defaultTransportModeFilterOptions;
 
-  const initialTravelSearchPreferences =
-    filters?.travelSearchPreferences ?? defaultTravelSearchPreferences;
+  const initialTravelSearchPreferences = overridePreferenceValues(
+    filters?.travelSearchPreferences ?? defaultTravelSearchPreferences,
+    initialFilters?.travelSearchPreferences,
+  );
 
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({

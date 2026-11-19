@@ -25,6 +25,8 @@ import {
   parseParamAsFormFactors,
   parseParamAsInt,
   parseParamAsSearchTime,
+  parseParamsAsTravelSearchFilters,
+  parseParamsAsTripSearchTime,
 } from './utils';
 import {initialUrl} from './initial-url';
 import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from './prefixes';
@@ -38,6 +40,8 @@ import {usePurchaseSelectionBuilder} from '@atb/modules/purchase-selection';
 import {PurchaseSelectionEmptyBuilder} from '@atb/modules/purchase-selection';
 import {MapFilterType, useEnableFormFactorsInMapFilter} from '../map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+// eslint-disable-next-line no-restricted-imports
+import type {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -62,7 +66,7 @@ export function useDeepLinks() {
       pathAndQuery = pathAndQuery.replace(APP_LINK_PREFIX, '');
     const {path, params} = parseDeepLink(pathAndQuery);
 
-    if (path === 'trip-search') {
+    if (path === 'trip-search' || path === 'assistant') {
       tripSearchLocationsRef.current = await resolveTripSearchLocations(params);
     }
     if (path === 'payment-methods') {
@@ -152,6 +156,18 @@ export function useDeepLinks() {
         case 'trip-search':
           if (!tripSearchLocationsRef.current) return;
           return routeForTripSearch(tripSearchLocationsRef.current);
+        case 'assistant': {
+          const locations = tripSearchLocationsRef.current;
+          if (!locations?.fromLocation || !locations.toLocation) return;
+          return routeForTripSearch({
+            ...locations,
+            searchTime: parseParamsAsTripSearchTime(
+              params.searchMode,
+              params.searchTime,
+            ),
+            initialFilters: parseParamsAsTravelSearchFilters(params),
+          });
+        }
         default:
           return getStateFromPath(pathAndQuery, config);
       }
@@ -347,9 +363,10 @@ function routeForWidgetAddFavoriteDeparture(): ResultState | undefined {
 
 /**
  * `atb://trip-search?fromLat=63.4326&fromLon=10.3951&toId=NSR:StopPlace:59872`
+ * `https://{APP_LINK_HOST}/assistant?fromLat=...&fromLon=...&toId=...&searchMode=departBy&searchTime=...&filter=bus,rail&walkSpeed=1.3&transferSlack=120`
  */
 function routeForTripSearch(
-  locations: TripSearchLocations,
+  params: TripSearchScreenParams,
 ): ResultState | undefined {
   return {
     routes: [
@@ -364,7 +381,7 @@ function routeForTripSearch(
                   {name: 'Dashboard_RootScreen', index: 0},
                   {
                     name: 'Dashboard_TripSearchScreen',
-                    params: locations,
+                    params,
                   },
                 ],
               },
