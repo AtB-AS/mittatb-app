@@ -20,7 +20,7 @@ export function usePreviousPaymentMethods(enabled: boolean = true): {
   const [previousPaymentMethod, setPreviousPaymentMethod] =
     useState<PaymentMethod>();
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const {isApplePayEnabled} = useFeatureTogglesContext();
+  const {isApplePayEnabled, isGooglePayEnabled} = useFeatureTogglesContext();
 
   const isValidPaymentMethod = useCallback(
     (paymentMethod: PaymentMethod | undefined) => {
@@ -69,7 +69,7 @@ export function usePreviousPaymentMethods(enabled: boolean = true): {
 
       return true;
     },
-    [recurringPayments, paymentTypes, isApplePayEnabled],
+    [recurringPayments, paymentTypes, isApplePayEnabled, isGooglePayEnabled],
   );
 
   useEffect(() => {

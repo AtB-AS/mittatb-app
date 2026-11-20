@@ -25,7 +25,8 @@ export const SinglePaymentMethod = ({
   index,
 }: SinglePaymentMethodProps) => {
   const {t, language} = useTranslation();
-  const {isApplePayEnabled} = useFeatureTogglesContext();
+  const {isApplePayEnabled, isGooglePayEnabled} = useFeatureTogglesContext();
+
   const styles = useStyles();
 
   function getPaymentTexts(method: PaymentMethod): {

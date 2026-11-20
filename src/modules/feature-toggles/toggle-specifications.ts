@@ -62,6 +62,10 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_geofencing_zones_as_tiles',
   },
   {
+    name: 'isGooglePayEnabled',
+    remoteConfigKey: 'enable_google_pay',
+  },
+  {
     name: 'isLoadingScreenEnabled',
     remoteConfigKey: 'enable_loading_screen',
   },

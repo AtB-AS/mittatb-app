@@ -64,8 +64,11 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     recurringPaymentError,
     onAddRecurringPayment,
   } = useRecurringPayment();
-  const {isApplePayEnabled, isVippsPaymentAgreementEnabled} =
-    useFeatureTogglesContext();
+  const {
+    isApplePayEnabled,
+    isGooglePayEnabled,
+    isVippsPaymentAgreementEnabled,
+  } = useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
   const isLoggedIn = authenticationType === 'phone';
   const {enable_vipps_login} = useRemoteConfigContext();
