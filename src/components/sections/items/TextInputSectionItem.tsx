@@ -28,6 +28,10 @@ type TextProps = SectionItemProps<
     onClear?: () => void;
     errorText?: string;
     /**
+     * Marks the field as required by appending a text to the label.
+     */
+    required?: boolean;
+    /**
      * Content shown in place of the clear button. Hidden while `showClear` is true.
      */
     suffixNode?: React.ReactNode;
@@ -48,6 +52,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       errorText = undefined,
       label,
       inlineLabel = true,
+      required,
       onFocus,
       onBlur,
       showClear,
@@ -137,7 +142,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
         <ThemeText typography="body__s" style={styles.label}>
-          {label}
+          {required ? `${label} (${t(dictionary.required)})` : label}
         </ThemeText>
         <View
           style={[

@@ -12,7 +12,8 @@ type IsOnboardedStoreKey =
   | '@ATB_mobile_token_onboarded'
   | '@ATB_mobile_token_without_travelcard_onboarded'
   | '@ATB_smart_park_and_ride_onboarded'
-  | '@ATB_travel_aid_onboarded';
+  | '@ATB_travel_aid_onboarded'
+  | '@ATB_payment_agreement_discovery_onboarded';
 
 export type OnboardingSectionId =
   | 'extendedOnboarding'
@@ -22,7 +23,8 @@ export type OnboardingSectionId =
   | 'mobileToken'
   | 'mobileTokenWithoutTravelcard'
   | 'smartParkAndRide'
-  | 'travelAid';
+  | 'travelAid'
+  | 'paymentAgreementDiscovery';
 
 export type ShouldShowArgsType = {
   locationPermissionStatus: PermissionStatus | null;

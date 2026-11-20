@@ -171,6 +171,11 @@ export type ReserveOfferRequest = {
    */
   paymentAgreementId?: number;
   /**
+   * Create a payment agreement as part of this payment. Mutually exclusive
+   * with `recurringPaymentId` and `paymentAgreementId`.
+   */
+  createAgreement?: boolean;
+  /**
    * Payment type and the store payment flag should be provided if not using a
    * previously stored payment card
    */

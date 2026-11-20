@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # install correct ruby version with rbenv, which can be installed with brew install rbenv
-ruby '3.1.0'
+ruby '3.1.7'
 
 gem 'bundler', '~> 2.6.5'
 

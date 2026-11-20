@@ -10,16 +10,15 @@ import {
   Route,
   PartialRoute,
 } from '@react-navigation/native';
-import {useQueryClient} from '@tanstack/react-query';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
+import {AuthenticationType, useAuthContext} from '@atb/modules/auth';
 import {
   CustomerProfile,
-  LIST_PAYMENT_AGREEMENTS_QUERY_KEY,
+  logPaymentAgreementVippsReturn,
   PreassignedFareProduct,
   useGetFareProductsQuery,
   useTicketingContext,
 } from '@atb/modules/ticketing';
-import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {isProductSellableInApp} from '@atb/utils/is-product-sellable-in-app';
 import {DeepLink, parseDeepLink} from './parse-deep-link';
 import {
@@ -48,39 +47,28 @@ export function useDeepLinks() {
   const {isBonusEnabled} = useFeatureTogglesContext();
   const {data: preassignedFareProducts} = useGetFareProductsQuery();
   const {customerProfile} = useTicketingContext();
+  const {authenticationType} = useAuthContext();
   const purchaseSelectionBuilder = usePurchaseSelectionBuilder();
   const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
-  const queryClient = useQueryClient();
 
   const tripSearchLocationsRef = useRef<TripSearchLocations>(undefined);
 
   /**
    * Asynchronous work that happends before getStateFromPath is called.
    */
-  const prepare = useCallback(
-    async (url: string) => {
-      let pathAndQuery = url.replace(APP_SCHEME_PREFIX, '');
-      if (APP_LINK_PREFIX)
-        pathAndQuery = pathAndQuery.replace(APP_LINK_PREFIX, '');
-      const {path, params} = parseDeepLink(pathAndQuery);
+  const prepare = useCallback(async (url: string) => {
+    let pathAndQuery = url.replace(APP_SCHEME_PREFIX, '');
+    if (APP_LINK_PREFIX)
+      pathAndQuery = pathAndQuery.replace(APP_LINK_PREFIX, '');
+    const {path, params} = parseDeepLink(pathAndQuery);
 
-      if (path === 'trip-search') {
-        tripSearchLocationsRef.current =
-          await resolveTripSearchLocations(params);
-      }
-      if (path === 'payment-methods') {
-        // Temporary until payment agreement events are supported. Entur can
-        // take a moment to set the agreement to active after the user has
-        // confirmed it in Vipps, which sends the user back here.
-        setTimeout(() => {
-          queryClient.invalidateQueries({
-            queryKey: [LIST_PAYMENT_AGREEMENTS_QUERY_KEY],
-          });
-        }, ONE_SECOND_MS);
-      }
-    },
-    [queryClient],
-  );
+    if (path === 'trip-search') {
+      tripSearchLocationsRef.current = await resolveTripSearchLocations(params);
+    }
+    if (path === 'payment-methods') {
+      logPaymentAgreementVippsReturn();
+    }
+  }, []);
 
   const subscribe = useCallback(
     (listener: (url: string) => void) => {
@@ -132,6 +120,12 @@ export function useDeepLinks() {
           parseParamAsSearchTime(params.searchTime),
         );
 
+      const serviceJourneyId = path.match(
+        /^departures\/details\/([^/]+)$/,
+      )?.[1];
+      if (serviceJourneyId)
+        return routeForDepartureDetails(serviceJourneyId, params);
+
       switch (path) {
         case 'map':
           return routeForMap(params, enableFormFactorsInMapFilter);
@@ -147,6 +141,7 @@ export function useDeepLinks() {
             preassignedFareProducts,
             customerProfile,
             purchaseSelectionBuilder,
+            authenticationType,
           );
         case 'departures':
         case 'widget':
@@ -287,6 +282,7 @@ function routeForPurchaseOverview(
   preassignedFareProducts: PreassignedFareProduct[],
   customerProfile: CustomerProfile | undefined,
   purchaseSelectionBuilder: PurchaseSelectionEmptyBuilder,
+  authenticationType: AuthenticationType,
 ): ResultState | undefined {
   if (params.type) {
     const isSellable = preassignedFareProducts.some(
@@ -296,6 +292,17 @@ function routeForPurchaseOverview(
     );
     if (isSellable) {
       const {selection} = purchaseSelectionBuilder.forType(params.type).build();
+      if (
+        authenticationType !== 'phone' &&
+        selection.fareProductTypeConfig.configuration.requiresLogin
+      ) {
+        return {
+          routes: [
+            {name: 'Root_TabNavigatorStack'},
+            {name: 'Root_LoginRequiredForFareProductScreen', params: {}},
+          ],
+        } as ResultState;
+      }
       return {
         routes: [
           {name: 'Root_TabNavigatorStack'},
@@ -399,7 +406,6 @@ function routeForDepartures(
   if (path === 'widgetdetails') {
     const item: ServiceJourneyDeparture = {
       serviceJourneyId: params.serviceJourneyId as string,
-      date: params.date || new Date().toISOString(),
       serviceDate: params.serviceDate as string,
       fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
       toStopPosition: parseParamAsInt(params.toStopPosition),
@@ -430,4 +436,43 @@ function routeForDepartures(
       },
     ],
   };
+}
+
+/**
+ * `https://{APP_LINK_HOST}/departures/details/{serviceJourneyId}?date=...&fromStopPosition=...&toStopPosition=...`
+ */
+function routeForDepartureDetails(
+  serviceJourneyId: string,
+  params: DeepLink['params'],
+): ResultState | undefined {
+  if (!params.date) return;
+  const item: ServiceJourneyDeparture = {
+    serviceJourneyId,
+    serviceDate: params.date,
+    fromStopPosition: parseParamAsInt(params.fromStopPosition) || 0,
+    toStopPosition: parseParamAsInt(params.toStopPosition),
+  };
+  return {
+    routes: [
+      {
+        name: 'Root_TabNavigatorStack',
+        state: {
+          routes: [
+            {
+              name: 'TabNav_DeparturesStack',
+              state: {
+                routes: [
+                  {name: 'Departures_NearbyStopPlacesScreen'},
+                  {
+                    name: 'Departures_DepartureDetailsScreen',
+                    params: {activeItemIndex: 0, items: [item]},
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  } as ResultState;
 }

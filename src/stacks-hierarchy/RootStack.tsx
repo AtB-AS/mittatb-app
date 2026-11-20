@@ -65,7 +65,10 @@ import {Root_ReportShmoDamageScreen} from './Root_ShmoHelp/Root_ReportShmoDamage
 import {AnalyticsContextProvider} from '@atb/modules/analytics';
 import {Root_ParkingPhotoScreen} from './Root_ParkingPhotoScreen';
 import {Root_TripSelectionScreen} from '@atb/stacks-hierarchy/Root_TripSelectionScreen/Root_TripSelectionScreen';
-import {useSetupReactQueryWindowFocus} from '@atb/queries';
+import {
+  useSetupReactQueryOnlineManager,
+  useSetupReactQueryWindowFocus,
+} from '@atb/queries';
 import {
   Root_SmartParkAndRideAddScreen,
   Root_SmartParkAndRideEditScreen,
@@ -104,6 +107,7 @@ export const RootStack = () => {
 
   useTestIds();
   useSetupReactQueryWindowFocus();
+  useSetupReactQueryOnlineManager();
 
   // init Intercom user
   useRegisterIntercomUser();

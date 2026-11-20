@@ -176,7 +176,6 @@ export const MapBottomSheets = ({
           formFactor,
           systemId,
         ) => {
-          handleCloseSheet();
           navigateToShmoSupport({
             operatorId,
             bookingId,
@@ -189,7 +188,6 @@ export const MapBottomSheets = ({
           bookingId,
           supportedDamages,
         ) => {
-          handleCloseSheet();
           navigateToReportShmoDamage({
             operatorId,
             bookingId,

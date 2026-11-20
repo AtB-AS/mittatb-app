@@ -17,6 +17,7 @@ type Args = {
   offers: ReserveOffer[];
   paymentMethod?: PaymentMethod;
   paymentAgreementId?: number;
+  createPaymentAgreement?: boolean;
   recipient?: TicketRecipientType;
   shouldSavePaymentMethod: boolean;
   onSuccess?: (reserveOfferResponse: ReserveOfferResponse) => void;
@@ -27,6 +28,7 @@ export const useReserveOfferMutation = ({
   offers,
   paymentMethod,
   paymentAgreementId,
+  createPaymentAgreement,
   recipient,
   shouldSavePaymentMethod,
   onSuccess,
@@ -46,6 +48,7 @@ export const useReserveOfferMutation = ({
           ? undefined
           : paymentMethod?.recurringPayment?.id,
         paymentAgreementId,
+        createPaymentAgreement,
         shouldSavePaymentMethod,
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
@@ -64,10 +67,12 @@ export const useReserveOfferMutation = ({
       }
       onSuccess?.(data);
     },
-    onError: () => {
-      // The payment agreement could have been stopped elsewhere, so refetch the
-      // list before the next attempt.
-      if (paymentAgreementId) {
+    onSettled: (_data, error) => {
+      // A created payment agreement should show up as pending. Also when
+      // failing, since the agreement could have been created anyway. And when
+      // paying with an agreement fails, it could have been stopped elsewhere,
+      // so refetch the list before the next attempt.
+      if (createPaymentAgreement || (error && paymentAgreementId)) {
         queryClient.invalidateQueries({
           queryKey: getListPaymentAgreementsQueryKey(abtCustomerId, isLoggedIn),
         });

@@ -7,16 +7,15 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ShmoHelpTexts} from '@atb/translations/screens/ShmoHelp';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
 import {
   formatOpeningHoursSchedule,
   useOperators,
   useShmoBookingQuery,
+  useShmoFaqsQuery,
   useSystemOpeningHoursQuery,
 } from '@atb/modules/mobility';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ShmoContactSection} from './components/ShmoContactSection';
 
 export type ShmoHelpScreenProps = RootStackScreenProps<'Root_ShmoHelpScreen'>;
@@ -43,27 +42,32 @@ export const Root_ShmoHelpScreen = ({
   const vehicleTypeId =
     'vehicleTypeId' in route.params ? route.params?.vehicleTypeId : undefined;
 
-  const isBicycle = formFactor === FormFactor.Bicycle;
-
   const operators = useOperators();
   const operator = operators.byId(operatorId);
   const operatorName = operator?.name;
 
   const style = useStyles();
   const {t, language} = useTranslation();
-  const {scooterFaqs, bicycleFaqs} = useFirestoreConfigurationContext();
   const contactInfo = operator?.support;
 
-  const faqs = isBicycle ? bicycleFaqs : scooterFaqs;
-  // Fare-contract details only has a bookingId, no systemId -- fall back to the booking for it.
-  const {data: fallbackBooking} = useShmoBookingQuery(
-    !systemId && !!bookingId,
+  /* FAQs can differ per vehicle type, and opening hours need a systemId. When
+     opened for a booking (e.g. from fare-contract details), these are only
+     known from the booking itself. */
+  const isBookingNeeded = (!vehicleTypeId || !systemId) && !!bookingId;
+  const {data: booking, isLoading: isBookingLoading} = useShmoBookingQuery(
+    isBookingNeeded,
     bookingId,
     false,
   );
-  const resolvedSystemId =
-    systemId ?? fallbackBooking?.asset.systemId ?? undefined;
+  const {data: faqsResponse} = useShmoFaqsQuery(
+    !isBookingNeeded || !isBookingLoading,
+    operatorId,
+    vehicleTypeId ?? booking?.asset.vehicleTypeId ?? undefined,
+  );
+  const faqs = faqsResponse?.faqs ?? [];
+  const resolvedSystemId = systemId ?? booking?.asset.systemId ?? undefined;
   const {data: openingHours} = useSystemOpeningHoursQuery(resolvedSystemId);
+  const hasOpeningHours = !!openingHours?.schedule?.length;
   const [openAccordionItem, setOpenAccordionItem] =
     useState<OpenAccordionItem>();
   const focusRef = useFocusOnLoad(navigation);
@@ -114,49 +118,58 @@ export const Root_ShmoHelpScreen = ({
           }
         />
 
-        <ContentHeading text={t(ShmoHelpTexts.faq)} />
-        <Section>
-          {!!openingHours?.schedule?.length && (
-            <ExpandableSectionItem
-              text={t(ShmoHelpTexts.openingHours)}
-              textType="body__m"
-              showIconText={false}
-              expanded={openAccordionItem?.type === 'opening-hours'}
-              onPress={() => {
-                setOpenAccordionItem({type: 'opening-hours'});
-              }}
-              expandContent={
-                <ThemeText type="secondary">
-                  {formatOpeningHoursSchedule(
-                    openingHours.schedule,
-                    language,
-                    t,
-                  ).join('\n')}
-                </ThemeText>
-              }
-            />
-          )}
-          {faqs?.map((item) => (
-            <ExpandableSectionItem
-              key={item.id}
-              text={getTextForLanguage(item.title, language) ?? ''}
-              textType="body__m"
-              showIconText={false}
-              expanded={
-                openAccordionItem?.type === 'faq' &&
-                openAccordionItem.id === item.id
-              }
-              onPress={() => {
-                setOpenAccordionItem({type: 'faq', id: item.id});
-              }}
-              expandContent={
-                <ThemeText isMarkdown={true} type="secondary">
-                  {getTextForLanguage(item.description, language)}
-                </ThemeText>
-              }
-            />
-          ))}
-        </Section>
+        {(hasOpeningHours || faqs.length > 0) && (
+          <>
+            <ContentHeading text={t(ShmoHelpTexts.faq)} />
+            <Section>
+              {!!openingHours?.schedule?.length && (
+                <ExpandableSectionItem
+                  text={t(ShmoHelpTexts.openingHours)}
+                  textType="body__m"
+                  showIconText={false}
+                  expanded={openAccordionItem?.type === 'opening-hours'}
+                  onPress={() => {
+                    setOpenAccordionItem({type: 'opening-hours'});
+                  }}
+                  expandContent={
+                    <ThemeText type="secondary">
+                      {formatOpeningHoursSchedule(
+                        openingHours.schedule,
+                        language,
+                        t,
+                      ).join('\n')}
+                    </ThemeText>
+                  }
+                />
+              )}
+              {faqs.map((item) => (
+                <ExpandableSectionItem
+                  key={item.id}
+                  text={
+                    getTextForLanguage(item.title.translation, language) ?? ''
+                  }
+                  textType="body__m"
+                  showIconText={false}
+                  expanded={
+                    openAccordionItem?.type === 'faq' &&
+                    openAccordionItem.id === item.id
+                  }
+                  onPress={() => {
+                    setOpenAccordionItem({type: 'faq', id: item.id});
+                  }}
+                  expandContent={
+                    <ThemeText isMarkdown={true} type="secondary">
+                      {getTextForLanguage(
+                        item.description.translation,
+                        language,
+                      )}
+                    </ThemeText>
+                  }
+                />
+              ))}
+            </Section>
+          </>
+        )}
       </View>
     </FullScreenView>
   );

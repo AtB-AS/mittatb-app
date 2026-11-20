@@ -116,4 +116,12 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] = [
       currentRouteName === 'Profile_SmartParkAndRideScreen' &&
       !hasVehicleRegistrations,
   },
+  {
+    isOnboardedStoreKey: '@ATB_payment_agreement_discovery_onboarded',
+    onboardingSectionId: 'paymentAgreementDiscovery',
+    // Has no screen of its own. It is shown as notification dots guiding to the
+    // payment agreements instead, see usePaymentAgreementDiscovery, so it
+    // should never be picked by the onboarding flow.
+    shouldShowPredicate: () => false,
+  },
 ];

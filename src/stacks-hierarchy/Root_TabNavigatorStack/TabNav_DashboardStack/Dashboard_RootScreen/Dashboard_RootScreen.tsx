@@ -375,8 +375,9 @@ function useUpdatedLocation(
 
       switch (searchedLocation.resultType) {
         case 'search':
-        case 'geolocation':
           return updater(searchedLocation);
+        case 'geolocation':
+          return updater(currentLocation ?? searchedLocation);
         case 'journey': {
           const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],

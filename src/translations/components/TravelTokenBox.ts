@@ -28,7 +28,6 @@ const TravelTokenBoxTexts = {
     ),
   },
   change: _('Endre', 'Change', 'Endre'),
-  select: _('Velg', 'Select', 'Vel'),
 };
 
 export default orgSpecificTranslations(TravelTokenBoxTexts, {

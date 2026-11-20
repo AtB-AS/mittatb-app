@@ -188,6 +188,7 @@ type ReserveOfferParams = {
   shouldSavePaymentMethod: boolean;
   recurringPaymentId?: number;
   paymentAgreementId?: number;
+  createPaymentAgreement?: boolean;
   autoSale: boolean;
   phoneNumber?: string;
   recipient?: TicketRecipientType;
@@ -251,6 +252,7 @@ export async function reserveOffers({
   shouldSavePaymentMethod,
   recurringPaymentId,
   paymentAgreementId,
+  createPaymentAgreement,
   paymentData,
 }: ReserveOfferParams): Promise<ReserveOfferResponse> {
   const url = 'sales/v1/reserve';
@@ -262,6 +264,7 @@ export async function reserveOffers({
     storePayment: shouldSavePaymentMethod,
     recurringPaymentId,
     paymentAgreementId,
+    createAgreement: createPaymentAgreement,
     scaExemption,
     customerAccountId,
     autoSale,

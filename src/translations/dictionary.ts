@@ -180,6 +180,7 @@ const dictionary = {
     },
     atTime: _(`kl.`, `at`, `kl.`),
   },
+  select: _('Velg', 'Select', 'Vel'),
   distance: {
     km: _('km', 'km', `km`),
     m: _('m', 'm', `m`),
@@ -209,6 +210,7 @@ const dictionary = {
   selected: _('Valgt', 'selected', 'Valgt'),
   unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
   zone: _('Sone', 'Zone', 'Sone'),
+  required: _('påkrevd', 'required', 'påkravd'),
   telephone: (tel: string) => _(`tlf. ${tel}`, `tel. ${tel}`, `tlf. ${tel}`),
 };
 

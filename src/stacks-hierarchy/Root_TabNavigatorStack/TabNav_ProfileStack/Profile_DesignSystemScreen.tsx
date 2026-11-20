@@ -1,5 +1,5 @@
 import {ContrastColor} from '@atb/theme/colors';
-import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button} from '@atb/components/button';
@@ -219,26 +219,24 @@ export const Profile_DesignSystemScreen = ({
 
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="xSmall"
                 notification={{color: theme.color.status.valid.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="small"
                 notification={{color: theme.color.status.warning.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="error"
+                svg={Ticket}
                 notification={{color: theme.color.status.info.primary}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="disabled"
+                svg={Ticket}
                 size="large"
                 notification={{color: theme.color.status.error.primary}}
               />
@@ -250,7 +248,7 @@ export const Profile_DesignSystemScreen = ({
 
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="xSmall"
                 notification={{
                   color: theme.color.status.valid.primary,
@@ -259,7 +257,7 @@ export const Profile_DesignSystemScreen = ({
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
+                svg={Ticket}
                 size="small"
                 notification={{
                   color: theme.color.status.warning.primary,
@@ -268,8 +266,7 @@ export const Profile_DesignSystemScreen = ({
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="error"
+                svg={Ticket}
                 notification={{
                   color: theme.color.status.info.primary,
                   backgroundColor: theme.color.background.neutral[0],
@@ -277,8 +274,7 @@ export const Profile_DesignSystemScreen = ({
               />
               <ThemeIcon
                 style={{marginRight: 12}}
-                svg={Feedback}
-                color="disabled"
+                svg={Ticket}
                 size="large"
                 notification={{
                   color: theme.color.status.error.primary,

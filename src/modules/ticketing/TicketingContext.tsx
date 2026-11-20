@@ -150,10 +150,20 @@ export const TicketingContextProvider = ({children}: Props) => {
   const {enable_ticketing} = useRemoteConfigContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
-  const {useStreamEventListener} = useEventStreamContext();
+  const {useStreamEventListener, useStreamReconnectListener} =
+    useEventStreamContext();
   const queryClient = useQueryClient();
 
   useStreamEventListener(EventKind.FareContract, () => {
+    if (isEventStreamFareContractsEnabled) {
+      invalidateFareContractsQuery(queryClient);
+    }
+  });
+
+  // Fare contract events may have been missed while disconnected. Always
+  // refetched, since fetches done before the stream reconnected may also have
+  // missed them.
+  useStreamReconnectListener(() => {
     if (isEventStreamFareContractsEnabled) {
       invalidateFareContractsQuery(queryClient);
     }

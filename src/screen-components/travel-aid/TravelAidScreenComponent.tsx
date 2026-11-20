@@ -258,7 +258,10 @@ const TravelAidSection = ({
               </ThemeText>
               <ThemeText typography="heading__m">{quayName}</ThemeText>
             </LiveRegionWrapper>
-            <TimeInfo state={{status, focusedEstimatedCall}} />
+            <TimeInfo
+              key={focusedEstimatedCall.stopPositionInPattern}
+              state={{status, focusedEstimatedCall}}
+            />
           </View>
           <StopSignalButton
             serviceJourney={serviceJourney}

@@ -20,7 +20,7 @@ import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStac
 import {useThemeContext} from '@atb/theme';
 import {settingToRouteName} from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {BottomTabBar, BottomTabBarItem} from './BottomTabBar';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
@@ -37,6 +37,13 @@ import {useAuthContext} from '@atb/modules/auth';
 import {isDefined} from '@atb/utils/presence';
 import {useChatUnreadCount} from '@atb/modules/chat';
 import {useDebugServerOverrides} from '@atb/modules/debug';
+import {
+  usePaymentAgreementDiscovery,
+  usePaymentAgreementAnalyticsProperties,
+  usePaymentAgreementStatusAnalytics,
+} from '@atb/modules/payment';
+import {useAnalyticsContext} from '@atb/modules/analytics';
+import {NotificationBadgeTexts} from '@atb/translations/components/NotificationBadge';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -70,6 +77,32 @@ export const Root_TabNavigatorStack = () => {
   const {customerNumber} = useAuthContext();
   const unreadCount = useChatUnreadCount();
   const serverOverrides = useDebugServerOverrides();
+  const {shouldShowPaymentAgreementDiscovery} = usePaymentAgreementDiscovery();
+  const paymentAgreementAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
+  const {logEvent} = useAnalyticsContext();
+  // Lives for the whole app session, so it can follow pending agreements
+  usePaymentAgreementStatusAnalytics();
+
+  // Counts the users who get the notification, once per app session to keep
+  // the number of events down
+  const hasLoggedPaymentAgreementNotificationRef = useRef(false);
+  useEffect(() => {
+    if (
+      !shouldShowPaymentAgreementDiscovery ||
+      hasLoggedPaymentAgreementNotificationRef.current
+    ) {
+      return;
+    }
+    hasLoggedPaymentAgreementNotificationRef.current = true;
+    logEvent('Profile', 'Payment agreement notification shown', {
+      ...paymentAgreementAnalyticsProperties,
+    });
+  }, [
+    shouldShowPaymentAgreementDiscovery,
+    paymentAgreementAnalyticsProperties,
+    logEvent,
+  ]);
 
   useEffect(() => {
     if (
@@ -91,7 +124,8 @@ export const Root_TabNavigatorStack = () => {
     if (
       customerNumber === undefined ||
       unreadCount ||
-      serverOverrides.length > 0
+      serverOverrides.length > 0 ||
+      shouldShowPaymentAgreementDiscovery
     ) {
       return {
         color: theme.color.status.error.primary,
@@ -131,6 +165,18 @@ export const Root_TabNavigatorStack = () => {
       IconSelected: ProfileFill,
       testID: 'profileTab',
       notification: getProfileNotification(),
+      // Announces the first step of the guide to the payment agreements, like
+      // the notification badges on the way there
+      notificationAccessibilityLabel: shouldShowPaymentAgreementDiscovery
+        ? t(NotificationBadgeTexts.a11yLabel(1))
+        : undefined,
+      onPress: () => {
+        if (!shouldShowPaymentAgreementDiscovery) return;
+        logEvent('Profile', 'Profile tab clicked', {
+          paymentAgreementNotification: true,
+          ...paymentAgreementAnalyticsProperties,
+        });
+      },
     },
   };
 

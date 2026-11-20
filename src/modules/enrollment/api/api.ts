@@ -9,7 +9,6 @@ export async function enrollIntoProgramWithCode(code: string) {
   return await client
     .post<EnrollmentType>(url, body, {
       authWithIdToken: true,
-      skipErrorLogging: (error) => error.response?.status === 422,
     })
     .then((response) => Enrollment.parse(response.data));
 }
@@ -20,7 +19,6 @@ export async function enrollIntoProgramWithId(programId: string) {
   return await client
     .post<EnrollmentType>(url, undefined, {
       authWithIdToken: true,
-      skipErrorLogging: (error) => error.response?.status === 422,
     })
     .then((response) => Enrollment.parse(response.data));
 }

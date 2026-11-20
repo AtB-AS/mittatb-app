@@ -43,6 +43,7 @@ export const PhoneAndNameInputSection = ({
       <Section>
         <PhoneInputSectionItem
           label={t(PhoneInputTexts.input.title)}
+          required
           value={phone}
           onChangeText={onChangePhone}
           prefix={prefix}
@@ -62,6 +63,7 @@ export const PhoneAndNameInputSection = ({
         {settingName && (
           <TextInputSectionItem
             label={t(OnBehalfOfTexts.nameInputLabel)}
+            required
             placeholder={t(OnBehalfOfTexts.nameInputPlaceholder)}
             onChangeText={onChangeName}
             value={name}

@@ -139,6 +139,18 @@ const PaymentMethodsTexts = {
           _(`Oppdatert ${date}`, `Updated ${date}`, `Oppdatert ${date}`),
         stopButton: _('Avslutt', 'End', 'Avslutt'),
       },
+      pending: {
+        title: _(
+          'Venter på bekreftelse fra Vipps...',
+          'Waiting for confirmation from Vipps...',
+          'Ventar på stadfesting frå Vipps...',
+        ),
+        description: _(
+          'Det kan ta litt tid før avtalen er klar.',
+          'It may take some time before the agreement is ready.',
+          'Det kan ta litt tid før avtalen er klar.',
+        ),
+      },
     },
     stopModal: {
       title: _(

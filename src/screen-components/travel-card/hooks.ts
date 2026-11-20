@@ -21,7 +21,7 @@ export const useTripPatternInfo = (tripPattern: TripPattern) => {
   let from = tripPattern.legs[0];
   let fromName = from.fromPlace.name;
   const to = tripPattern.legs[tripPattern.legs.length - 1];
-  const toName = to.toPlace.name ?? '';
+  const toName = getQuayName(to.toPlace.quay) || to.toPlace.name || '';
   if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
     from = tripPattern.legs[1];
     fromName = getQuayName(from.fromPlace.quay);

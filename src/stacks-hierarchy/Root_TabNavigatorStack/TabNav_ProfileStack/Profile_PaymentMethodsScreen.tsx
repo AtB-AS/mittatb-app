@@ -15,7 +15,7 @@ import {
   PaymentType,
   RecurringPayment,
   useAddPaymentAgreementMutation,
-  useListPaymentAgreementsQuery,
+  usePaymentAgreementsQuery,
   useStopPaymentAgreementMutation,
 } from '@atb/modules/ticketing';
 import {ProfileTexts, useTranslation} from '@atb/translations';
@@ -26,7 +26,13 @@ import {View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {ExpiryMessage, PaymentBrand} from '@atb/modules/payment';
+import {
+  ExpiryMessage,
+  PaymentBrand,
+  usePaymentAgreementAnalyticsProperties,
+  usePaymentAgreementsNotification,
+} from '@atb/modules/payment';
+import {useAnalyticsContext} from '@atb/modules/analytics';
 import {useRecurringPayment} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ProfileScreenProps} from './navigation-types';
@@ -79,14 +85,24 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const showPaymentAgreements =
     isVippsPaymentAgreementEnabled && paymentTypes.includes(PaymentType.Vipps);
   const {
-    data: paymentAgreements,
+    data: paymentAgreementsData,
     isLoading: isLoadingPaymentAgreements,
     isFetching: isFetchingPaymentAgreements,
     isError: isPaymentAgreementsError,
     refetch: refetchPaymentAgreements,
-  } = useListPaymentAgreementsQuery(isFocused && showPaymentAgreements);
+  } = usePaymentAgreementsQuery(isFocused && showPaymentAgreements, {
+    refetchWhilePending: true,
+    refetchWhenShown: true,
+  });
+  const paymentAgreements = paymentAgreementsData?.active;
+  const pendingPaymentAgreements = paymentAgreementsData?.pending;
   const addPaymentAgreement = useAddPaymentAgreementMutation();
   const stopPaymentAgreement = useStopPaymentAgreementMutation();
+  const paymentAgreementAnalyticsProperties =
+    usePaymentAgreementAnalyticsProperties();
+  const {logEvent} = useAnalyticsContext();
+  const showAgreementsNotification =
+    usePaymentAgreementsNotification(paymentAgreements);
   const hasPaymentAgreementsError =
     isPaymentAgreementsError ||
     addPaymentAgreement.isError ||
@@ -122,6 +138,10 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const refreshControlProps = useManualRefreshControlProps({
     refreshing: recurringPaymentFetching || isFetchingPaymentAgreements,
     onRefresh: () => {
+      // The errors from adding or stopping an agreement don't go away by
+      // themselves, even though the agreements are refetched afterwards
+      addPaymentAgreement.reset();
+      stopPaymentAgreement.reset();
       refetchRecurringPayment();
       if (showPaymentAgreements) refetchPaymentAgreements();
     },
@@ -184,10 +204,17 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
             {showPaymentAgreements && paymentAgreements && (
               <PaymentAgreementsSection
                 agreements={paymentAgreements}
-                onActivate={(paymentType) =>
-                  addPaymentAgreement.mutate(paymentType)
-                }
+                pendingAgreements={pendingPaymentAgreements}
+                onActivate={(paymentType) => {
+                  logEvent('Profile', 'Activate payment agreement clicked', {
+                    paymentType,
+                    paymentAgreementNotification: showAgreementsNotification,
+                    ...paymentAgreementAnalyticsProperties,
+                  });
+                  addPaymentAgreement.mutate(paymentType);
+                }}
                 onStop={onStopPaymentAgreement}
+                showNotification={showAgreementsNotification}
                 isLoading={
                   addPaymentAgreement.isPending ||
                   stopPaymentAgreement.isPending

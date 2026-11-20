@@ -118,11 +118,7 @@ export const ContactShmoOperatorTexts = {
       'Your contact info (fill in at least one)',
       'Kontaktinfoen din (fyll inn minst éin)',
     ),
-    headerEmailRequired: _(
-      'Din kontaktinfo (E-postadresse er obligatorisk)',
-      'Your contact info (Email address is required)',
-      'Kontaktinfoen din (E-postadressa er obligatorisk)',
-    ),
+    headerPlain: _('Din kontaktinfo', 'Your contact info', 'Kontaktinfoen din'),
     email: {
       label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
       placeholder: _(

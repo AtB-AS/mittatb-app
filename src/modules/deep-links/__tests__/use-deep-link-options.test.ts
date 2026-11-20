@@ -7,12 +7,22 @@ import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from '../prefixes';
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
 let mockCustomerProfile: {debug?: boolean} | undefined = undefined;
+let mockAuthenticationType: 'none' | 'anonymous' | 'phone' = 'phone';
+let mockRequiresLogin = false;
 
 const mockPlace = jest.fn();
 const mockReverse = jest.fn();
-const mockInvalidateQueries = jest.fn();
 
-const mockSelection = {id: 'test-selection'};
+const mockSelection = {
+  id: 'test-selection',
+  fareProductTypeConfig: {
+    configuration: {
+      get requiresLogin() {
+        return mockRequiresLogin;
+      },
+    },
+  },
+};
 const mockForType = jest.fn((_type: string) => ({
   build: () => ({selection: mockSelection}),
 }));
@@ -25,18 +35,16 @@ jest.mock('@atb/modules/feature-toggles', () => ({
     isBonusEnabled: mockIsBonusEnabled,
   }),
 }));
+jest.mock('@atb/modules/auth', () => ({
+  useAuthContext: () => ({authenticationType: mockAuthenticationType}),
+}));
 jest.mock('@atb/api', () => ({
   place: (...args: any[]) => mockPlace(...args),
   reverse: (...args: any[]) => mockReverse(...args),
 }));
 jest.mock('@atb/modules/ticketing', () => ({
-  LIST_PAYMENT_AGREEMENTS_QUERY_KEY: 'mockListPaymentAgreementsQueryKey',
   useGetFareProductsQuery: () => ({data: mockPreassignedFareProducts}),
   useTicketingContext: () => ({customerProfile: mockCustomerProfile}),
-}));
-jest.mock('@tanstack/react-query', () => ({
-  ...jest.requireActual('@tanstack/react-query'),
-  useQueryClient: () => ({invalidateQueries: mockInvalidateQueries}),
 }));
 jest.mock('@atb/modules/purchase-selection', () => ({
   usePurchaseSelectionBuilder: () => ({forType: mockForType}),
@@ -95,11 +103,12 @@ beforeEach(() => {
   mockIsBonusEnabled = false;
   mockPreassignedFareProducts = [];
   mockCustomerProfile = undefined;
+  mockAuthenticationType = 'phone';
+  mockRequiresLogin = false;
   mockForType.mockClear();
   mockEnableFormFactorsInMapFilter.mockClear();
   mockPlace.mockReset();
   mockReverse.mockReset();
-  mockInvalidateQueries.mockClear();
   jest
     .spyOn(Linking, 'addEventListener')
     .mockImplementation((_type, callback) => {
@@ -153,33 +162,12 @@ describe('privacy', () => {
 });
 
 describe('payment-methods', () => {
-  afterEach(() => jest.useRealTimers());
-
   it('opens the payment methods screen on top of the profile screen, without resetting the stack', () => {
     const state = getStateFrom('payment-methods');
     expect(findRoute(state, 'TabNav_ProfileStack')).toEqual({
       name: 'TabNav_ProfileStack',
       params: {screen: 'Profile_PaymentMethodsScreen', initial: false},
     });
-  });
-
-  it('invalidates the payment agreements a second after being linked back', async () => {
-    jest.useFakeTimers();
-    await getStateAfterLookupFrom('payment-methods');
-    expect(mockInvalidateQueries).not.toHaveBeenCalled();
-
-    jest.advanceTimersByTime(1000);
-    expect(mockInvalidateQueries).toHaveBeenCalledWith({
-      queryKey: ['mockListPaymentAgreementsQueryKey'],
-    });
-  });
-
-  it('does not invalidate the payment agreements for other deep links', async () => {
-    jest.useFakeTimers();
-    await getStateAfterLookupFrom('privacy');
-
-    jest.advanceTimersByTime(5000);
-    expect(mockInvalidateQueries).not.toHaveBeenCalled();
   });
 });
 
@@ -217,6 +205,35 @@ describe('purchase-overview', () => {
       name: 'Root_PurchaseOverviewScreen',
       params: {selection: mockSelection},
     });
+  });
+
+  it('opens the login required screen when the product requires login and the user is not logged in', () => {
+    mockPreassignedFareProducts = [TEST_PRODUCT];
+    mockAuthenticationType = 'anonymous';
+    mockRequiresLogin = true;
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(
+      findRoute(state, 'Root_LoginRequiredForFareProductScreen'),
+    ).toBeDefined();
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toBeUndefined();
+  });
+
+  it('opens purchase overview when the product requires login and the user is logged in', () => {
+    mockPreassignedFareProducts = [TEST_PRODUCT];
+    mockAuthenticationType = 'phone';
+    mockRequiresLogin = true;
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toBeDefined();
+    expect(
+      findRoute(state, 'Root_LoginRequiredForFareProductScreen'),
+    ).toBeUndefined();
+  });
+
+  it('opens purchase overview when the product does not require login and the user is not logged in', () => {
+    mockPreassignedFareProducts = [TEST_PRODUCT];
+    mockAuthenticationType = 'anonymous';
+    const state = getStateFrom('purchase-overview?type=single');
+    expect(findRoute(state, 'Root_PurchaseOverviewScreen')).toBeDefined();
   });
 
   it('is not handled when the product is not sellable in the app', () => {
@@ -471,10 +488,48 @@ describe('planner web', () => {
     );
   });
 
-  it('does not handle departure details', () => {
-    expect(
-      getStateFrom('/departures/details/ATB:ServiceJourney:1_1'),
-    ).toBeUndefined();
+  describe('departure details', () => {
+    // Links as built by the trip section in planner web
+    const getDetailsItem = (url: string) =>
+      findRoute(getStateFrom(url), 'Departures_DepartureDetailsScreen')?.params
+        .items[0];
+
+    it('decodes the service journey id', () => {
+      expect(
+        getDetailsItem(
+          '/departures/details/ATB%3AServiceJourney%3A1_1?date=2026-11-16&fromStopPosition=3',
+        ),
+      ).toMatchObject({serviceJourneyId: 'ATB:ServiceJourney:1_1'});
+    });
+
+    it('opens from the first stop', () => {
+      expect(
+        getDetailsItem(
+          '/departures/details/ATB:ServiceJourney:1_1?date=2026-11-16&fromStopPosition=0',
+        ),
+      ).toEqual({
+        serviceJourneyId: 'ATB:ServiceJourney:1_1',
+        serviceDate: '2026-11-16',
+        fromStopPosition: 0,
+        toStopPosition: undefined,
+      });
+    });
+
+    it('opens from the first stop with legacy quay params', () => {
+      expect(
+        getDetailsItem(
+          '/departures/details/ATB:ServiceJourney:1_1?date=2026-11-16&fromQuayId=NSR:Quay:71184&toQuayId=NSR:Quay:71185',
+        ),
+      ).toMatchObject({fromStopPosition: 0, toStopPosition: undefined});
+    });
+
+    it('is not handled without a date', () => {
+      expect(
+        getStateFrom(
+          '/departures/details/ATB:ServiceJourney:1_1?fromStopPosition=3',
+        ),
+      ).toBeUndefined();
+    });
   });
 
   it('does not handle ids other than NSR ids', () => {
@@ -522,7 +577,6 @@ describe('widget', () => {
         items: [
           {
             serviceJourneyId: 'ATB:ServiceJourney:1_1',
-            date: '2026-09-03T07:45:00Z',
             serviceDate: '2026-09-03',
             fromStopPosition: 13,
             toStopPosition: undefined,
@@ -530,17 +584,5 @@ describe('widget', () => {
         ],
       },
     });
-  });
-
-  it('falls back to now when the departure has no date', () => {
-    jest.useFakeTimers().setSystemTime(new Date('2026-09-03T07:45:00Z'));
-    const state = getStateFrom(
-      `widgetdetails?${stopParams}&serviceJourneyId=ATB:ServiceJourney:1_1&serviceDate=2026-09-03&fromStopPosition=0`,
-    );
-    jest.useRealTimers();
-
-    const details = findRoute(state, 'Departures_DepartureDetailsScreen');
-    expect(details.params.items[0].date).toBe('2026-09-03T07:45:00.000Z');
-    expect(details.params.items[0].fromStopPosition).toBe(0);
   });
 });
