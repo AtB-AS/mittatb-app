@@ -319,11 +319,29 @@ export async function getSupplementProducts(): Promise<SupplementProduct[]> {
     .filter(isDefined);
 }
 
-export async function getFareContracts(): Promise<FareContractType[]> {
+export type FareContractsResponse = {
+  fareContracts: FareContractType[];
+  lastModified?: string;
+};
+
+/**
+ * Fetches the fare contracts. If a previous response with `lastModified` is
+ * given, it is sent as `If-Modified-Since`, and the previous response is
+ * returned if the backend responds with 304 Not Modified.
+ */
+export async function getFareContracts(
+  previousResponse?: FareContractsResponse,
+): Promise<FareContractsResponse> {
   const url = 'ticket/v4/list';
+  const lastModified = previousResponse?.lastModified;
   const response = await client.get(url, {
     authWithIdToken: true,
+    headers: lastModified ? {'If-Modified-Since': lastModified} : undefined,
+    validateStatus: (status) =>
+      (status >= 200 && status < 300) || status === 304,
   });
+  if (response.status === 304 && previousResponse) return previousResponse;
+
   const fareContracts = response.data.fareContracts.map(
     convertIsoStringFieldsToDate,
   );
@@ -338,7 +356,12 @@ export async function getFareContracts(): Promise<FareContractType[]> {
     notifyBugsnag('Failed to Zod parse fare contracts', {metadata: zodErrors});
   }
 
-  return validFareContracts;
+  const lastModifiedHeader = response.headers['last-modified'];
+  return {
+    fareContracts: validFareContracts,
+    lastModified:
+      typeof lastModifiedHeader === 'string' ? lastModifiedHeader : undefined,
+  };
 }
 
 export async function getRefundOptions(
