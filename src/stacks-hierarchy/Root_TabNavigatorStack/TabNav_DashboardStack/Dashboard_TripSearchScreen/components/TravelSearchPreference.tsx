@@ -18,8 +18,12 @@ export const TravelSearchPreference = ({
 }: Props) => {
   const {language} = useTranslation();
   const styles = useStyles();
-  const selectedIndex = preference.options.findIndex(
-    (o) => preference.selectedOption === o.id,
+  // NOTE: With an override value that doesn't match any of the options, no
+  // option will show as is selected.
+  const selectedIndex = preference.options.findIndex((o) =>
+    preference.overrideValue !== undefined
+      ? preference.overrideValue === o.value
+      : preference.selectedOption === o.id,
   );
 
   return (
@@ -36,7 +40,11 @@ export const TravelSearchPreference = ({
         options={preference.options.map((option) => ({
           text: getTextForLanguage(option.text, language) ?? '',
           onPress: () => {
-            onPreferenceChange({...preference, selectedOption: option.id});
+            onPreferenceChange({
+              ...preference,
+              selectedOption: option.id,
+              overrideValue: undefined,
+            });
           },
         }))}
       />

@@ -10,6 +10,22 @@
                     android:scheme="https"
                     android:host="${appLinkHost}"
                     android:pathPrefix="/departures/" />
+
+                <!--
+                  Disable links with lineFilter or viaId. Groups are evaluated
+                  in order, so the exclusions must come first.
+                -->
+                <uri-relative-filter-group android:allow="false">
+                    <data android:path="/assistant" />
+                    <data android:queryPrefix="lineFilter=" />
+                </uri-relative-filter-group>
+                <uri-relative-filter-group android:allow="false">
+                    <data android:path="/assistant" />
+                    <data android:queryPrefix="viaId=" />
+                </uri-relative-filter-group>
+                <uri-relative-filter-group>
+                    <data android:path="/assistant" />
+                </uri-relative-filter-group>
             </intent-filter>
         </activity>
     </application>
