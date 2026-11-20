@@ -1,6 +1,0 @@
-allowBuilds:
-  appium: true
-  edgedriver: true
-  esbuild: true
-  geckodriver: true
-  sharp: true

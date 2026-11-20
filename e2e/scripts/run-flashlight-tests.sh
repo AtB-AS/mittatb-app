@@ -16,11 +16,10 @@ else
     OTP=$4
 
     echo "Run tests"
-    cd maestro
     /home/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${PHONE_NUMBER} -e OTP=${OTP} --test-output-dir results tests/performance.yaml" --resultsTitle performance_measures --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
     #flashlight test --bundleId no.mittatb.staging --testCommand "maestro test -e APP_ID=no.mittatb.staging -e PHONE_NUMBER=${PHONE_NUMBER} -e OTP=${OTP} --test-output-dir results tests/performance.yaml" --resultsTitle performance_measures --iterationCount ${TEST_ITERATIONS} --maxRetries ${MAX_RETRIES}
     cd ..
-    cp maestro/performance_measures_*.json performance/performance_measures.json
+    cp performance_measures_*.json performance/performance_measures.json
     npx tsx performance/createPerformanceSummary.ts
     cp performance_measures_summary.json performance/performance_measures_summary.json
 fi
