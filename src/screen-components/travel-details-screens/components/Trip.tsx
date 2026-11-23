@@ -7,7 +7,7 @@ import {
 } from '@atb/utils/date';
 import React, {useCallback, useMemo, useRef} from 'react';
 import {View} from 'react-native';
-import {TripSection} from './TripSection';
+import {LegSection} from './LegSection';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '../types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -227,7 +227,7 @@ export const Trip: React.FC<TripProps> = ({
         {tripPattern &&
           filteredLegs.map((leg, index) => {
             return (
-              <TripSection
+              <LegSection
                 key={index}
                 isFirst={index == 0}
                 wait={legWaitDetails(index, filteredLegs)}
