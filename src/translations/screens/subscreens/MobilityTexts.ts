@@ -561,87 +561,15 @@ export const StationTexts = {
     'Det er ingen tilgjengelege køyretøy på denne stasjonen. Prøv ein annan stasjon.',
   ),
   stationLoadingFailed: _(
-    'Klarte ikke å finne denne sykkelstasjonen.',
-    "Couldn't find this bike station.",
-    'Klarte ikkje å finne denne sykkelstasjonen.',
+    'Klarte ikke å finne denne mobilitetsstasjonen.',
+    "Couldn't find this mobility station.",
+    'Klarte ikkje å finne denne mobilitetsstasjonen.',
   ),
-};
-
-export const BicycleTexts = {
-  stations: {
-    numBikesAvailable: (amount: number) =>
-      amount === 1
-        ? _('ledig sykkel', 'available bike', 'ledig sykkel')
-        : _('ledige sykler', 'available bikes', 'ledige syklar'),
-    numDocksAvailable: (amount: number | undefined) => {
-      if (amount === undefined) return _('', '', '');
-      return amount === 1
-        ? _('ledig sykkelplass', 'available dock', 'ledig sykkelplass')
-        : _('ledige sykkelplasser', 'available docks', 'ledige sykkelplassar');
-    },
-    unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
-
-    noBikesAvailable: _(
-      'Det er ingen tilgjengelige sykler på denne stasjonen. Prøv en annen stasjon.',
-      'There are no available bikes at this station. Try another station.',
-      'Det er ingen tilgjengelege syklar på denne stasjonen. Prøv ein annan stasjon.',
-    ),
-  },
-  humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
-  loadingFailed: _(
-    'Klarte ikke å finne denne sykkelen.',
-    "Couldn't find this bike.",
-    'Klarte ikkje å finne denne sykkelen.',
+  loadingFailedVehiclesStations: _(
+    'Feil ved innlasting av kjøretøy på denne stasjonen',
+    'Error loading vehicles at this station',
+    'Feil ved innlasting av køyretøy på denne stasjonen',
   ),
-  loadingFailedBicyclesStations: _(
-    'Feil ved innlasting av sykler på denne stasjonen',
-    'Error loading bikes at this station',
-    'Feil ved innlasting av syklar på denne stasjonen',
-  ),
-};
-
-export const CarSharingTexts = {
-  stations: {
-    carsAvailable: (amount: number, capacity: number) =>
-      _(
-        `${amount} av ${capacity}`,
-        `${amount} of ${capacity}`,
-        `${amount} av ${capacity}`,
-      ),
-    carsAvailableLabel: _('biler ledig', 'cars available', 'bilar ledige'),
-    noCarsAvailable: _(
-      'Ingen ledige biler',
-      'No available cars',
-      'Ingen ledige bilar',
-    ),
-  },
-  loadingFailed: _(
-    'Klarte ikke å finne denne parkeringen.',
-    "Couldn't find this car sharing station.",
-    'Klarte ikkje å finne denne parkeringa.',
-  ),
-  propultionType: (type: PropulsionType) => {
-    switch (type) {
-      case PropulsionType.Electric:
-        return _('Elektrisk', 'Electric', 'Elektrisk');
-      case PropulsionType.CombustionDiesel:
-        return _('Diesel', 'Diesel', 'Diesel');
-      case PropulsionType.Combustion:
-        return _('Bensin', 'Petrol', 'Bensin');
-      case PropulsionType.PlugInHybrid:
-        return _('Plug-in hybrid', 'Plug-in hybrid', 'Plug-in hybrid');
-      case PropulsionType.HydrogenFuelCell:
-        return _('Hydrogen', 'Hydrogen', 'Hydrogen');
-      case PropulsionType.Hybrid:
-        return _('Hybrid', 'Hybrid', 'Hybrid');
-      default:
-        return _(
-          'Ukjent drivstofftype',
-          'Unknown propultion type',
-          'Ukjent drivstofftype',
-        );
-    }
-  },
 };
 
 export const ParkAndRideTexts = {

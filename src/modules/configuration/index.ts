@@ -11,7 +11,6 @@ export type {
   LabelType,
   LanguageAndTextType,
   MobilityOperatorType,
-  OperatorBenefitIdType,
   OperatorBenefitType,
   PointToPointValidity,
   ProductTypeTransportModes,

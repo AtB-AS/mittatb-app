@@ -11,7 +11,6 @@ import {useQueryClient} from '@tanstack/react-query';
 import {formatReopensAt, getTransportModeAndSubMode} from '../../utils';
 import {dictionary, useTranslation} from '@atb/translations';
 import {
-  BicycleTexts,
   MobilityTexts,
   ShmoWarnings,
   StationTexts,
@@ -73,13 +72,14 @@ export const StationSheet = ({
     operatorName,
     operatorId,
     formFactor,
+    propulsionType,
   } = useStation(stationId);
 
   const operator = useOperators().byId(operatorId);
   const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
   const {mode, subMode} = getTransportModeAndSubMode(
     formFactor,
-    station?.vehicleTypesAvailable?.[0]?.vehicleType.propulsionType,
+    propulsionType,
   );
 
   useDoOnceOnItemReceived(onStationReceived, station);
@@ -101,7 +101,7 @@ export const StationSheet = ({
   const isErrorVehicles = vehicleQueries.some((q) => q.isError);
 
   const openingTime = station?.openingHoursStatus?.openingTime
-    ? formatReopensAt(station?.openingHoursStatus?.openingTime, language, t)
+    ? formatReopensAt(station.openingHoursStatus.openingTime, language, t)
     : undefined;
 
   return (
@@ -127,7 +127,7 @@ export const StationSheet = ({
       locationArrowOnPress={locationArrowOnPress}
       navigateToScanQrCode={navigateToScanQrCode}
     >
-      {isLoading && (
+      {(isLoading || isLoadingVehicles) && (
         <View style={styles.loading}>
           <Loading size="large" />
         </View>
@@ -141,145 +141,135 @@ export const StationSheet = ({
         </View>
       )}
 
-      {!isLoading && !isError && !!station && (
-        <>
-          {!isLoadingVehicles && isErrorVehicles && (
-            <View style={styles.error}>
-              <MessageInfoBox
-                type="error"
-                message={t(BicycleTexts.loadingFailedBicyclesStations)}
-              />
-            </View>
+      {!isLoading && !isLoadingVehicles && !isError && !!station && (
+        <View style={styles.vehicleDataContainer}>
+          {isErrorVehicles && (
+            <MessageInfoBox
+              type="error"
+              message={t(StationTexts.loadingFailedVehiclesStations)}
+            />
+          )}
+          {station.openingHoursStatus?.isClosed && (
+            <MessageInfoBox
+              type="info"
+              message={t(
+                ShmoWarnings.operatorClosed(operatorName, openingTime),
+              )}
+            />
+          )}
+          {hasNoAvailableVehicles && (
+            <MessageInfoBox
+              type="warning"
+              message={t(StationTexts.noVehiclesAvailable)}
+            />
+          )}
+          {!!vehicleTypesAvailable?.length && (
+            <Section>
+              {vehicleTypesAvailable.map((e) => {
+                const makeModel = [e.vehicleType.make, e.vehicleType.model]
+                  .filter(Boolean)
+                  .join(' ');
+                const vehicleTypeName =
+                  makeModel ||
+                  t(
+                    MobilityTexts.vehicleName(
+                      e.vehicleType.formFactor,
+                      false,
+                      e.vehicleType.propulsionType,
+                    ),
+                  );
+                const availabilityText = t(
+                  MobilityTexts.availability(e.count.toString()),
+                );
+
+                const image = (
+                  <VehicleImage
+                    uri={e.vehicleType.vehicleImage}
+                    formFactor={e.vehicleType.formFactor}
+                    propulsionType={e.vehicleType.propulsionType}
+                    size="small"
+                  />
+                );
+
+                return e.count === 0 ? (
+                  <GenericSectionItem
+                    key={e.vehicleType.id}
+                    accessibility={{
+                      accessible: true,
+                      accessibilityLabel:
+                        vehicleTypeName + screenReaderPause + availabilityText,
+                    }}
+                  >
+                    <View style={styles.vehicleType}>
+                      {image}
+
+                      <View style={styles.vehicleTypeTexts}>
+                        <ThemeText color={theme.color.surface.neutral.strong}>
+                          {vehicleTypeName}
+                        </ThemeText>
+                        <ThemeText type="secondary" typography="body__s">
+                          {availabilityText}
+                        </ThemeText>
+                      </View>
+                    </View>
+                  </GenericSectionItem>
+                ) : (
+                  <LinkSectionItem
+                    key={e.vehicleType.id}
+                    text={vehicleTypeName}
+                    subtitle={availabilityText}
+                    leftElement={image}
+                    buttonTextRight={t(dictionary.select)}
+                    onPress={() => {
+                      const vehicle =
+                        vehicleQueries[vehicleTypeIds.indexOf(e.vehicleType.id)]
+                          ?.data?.[0];
+                      if (vehicle?.id) {
+                        queryClient.setQueryData(
+                          getVehicleQueryKey(vehicle.id),
+                          vehicle,
+                        );
+                        onVehicleTypeSelected(false, vehicle.id);
+                      } else {
+                        onVehicleTypeSelected(
+                          true,
+                          undefined,
+                          e.vehicleType.id,
+                          station.id,
+                        );
+                      }
+                    }}
+                  />
+                );
+              })}
+            </Section>
+          )}
+          {station.numDocksAvailable != null && (
+            <Section>
+              <GenericSectionItem style={styles.freeParkingSection}>
+                <ThemeIcon svg={ThemedParkingIcon} size="large" />
+                <ThemeText>
+                  {t(
+                    MobilityTexts.freeParkingSpaces(station.numDocksAvailable),
+                  )}
+                </ThemeText>
+              </GenericSectionItem>
+            </Section>
           )}
 
-          <View style={styles.vehicleDataContainer}>
-            {station.openingHoursStatus?.isClosed && (
-              <MessageInfoBox
-                type="info"
-                message={t(
-                  ShmoWarnings.operatorClosed(operatorName, openingTime),
-                )}
-              />
-            )}
-            {hasNoAvailableVehicles && (
-              <MessageInfoBox
-                type="warning"
-                message={t(StationTexts.noVehiclesAvailable)}
-              />
-            )}
-            {!!vehicleTypesAvailable?.length && (
-              <Section>
-                {vehicleTypesAvailable.map((e) => {
-                  const makeModel = [e.vehicleType.make, e.vehicleType.model]
-                    .filter(Boolean)
-                    .join(' ');
-                  const vehicleTypeName =
-                    makeModel ||
-                    t(
-                      MobilityTexts.vehicleName(
-                        e.vehicleType.formFactor,
-                        false,
-                        e.vehicleType.propulsionType,
-                      ),
-                    );
-                  const availabilityText = t(
-                    MobilityTexts.availability(e.count.toString()),
-                  );
-
-                  const image = (
-                    <VehicleImage
-                      uri={e.vehicleType?.vehicleImage}
-                      formFactor={e.vehicleType.formFactor}
-                      propulsionType={e.vehicleType.propulsionType}
-                      size="small"
-                    />
-                  );
-
-                  return e.count === 0 ? (
-                    <GenericSectionItem
-                      key={e.vehicleType.id}
-                      accessibility={{
-                        accessible: true,
-                        accessibilityLabel:
-                          vehicleTypeName +
-                          screenReaderPause +
-                          availabilityText,
-                      }}
-                    >
-                      <View style={styles.vehicleType}>
-                        {image}
-
-                        <View style={styles.vehicleTypeTexts}>
-                          <ThemeText color={theme.color.surface.neutral.strong}>
-                            {vehicleTypeName}
-                          </ThemeText>
-                          <ThemeText type="secondary" typography="body__s">
-                            {availabilityText}
-                          </ThemeText>
-                        </View>
-                      </View>
-                    </GenericSectionItem>
-                  ) : (
-                    <LinkSectionItem
-                      key={e.vehicleType.id}
-                      text={vehicleTypeName}
-                      subtitle={availabilityText}
-                      leftElement={image}
-                      buttonTextRight={t(dictionary.select)}
-                      onPress={() => {
-                        const vehicle =
-                          vehicleQueries[
-                            vehicleTypeIds.indexOf(e.vehicleType.id)
-                          ]?.data?.[0];
-                        if (vehicle?.id) {
-                          queryClient.setQueryData(
-                            getVehicleQueryKey(vehicle.id),
-                            vehicle,
-                          );
-                          onVehicleTypeSelected(false, vehicle.id);
-                        } else {
-                          onVehicleTypeSelected(
-                            true,
-                            undefined,
-                            e.vehicleType.id,
-                            station.id,
-                          );
-                        }
-                      }}
-                    />
-                  );
-                })}
-              </Section>
-            )}
-            {station.numDocksAvailable != null && (
-              <Section>
-                <GenericSectionItem style={styles.freeParkingSection}>
-                  <ThemeIcon svg={ThemedParkingIcon} size="large" />
-                  <ThemeText>
-                    {t(
-                      MobilityTexts.freeParkingSpaces(
-                        station.numDocksAvailable,
-                      ),
-                    )}
-                  </ThemeText>
-                </GenericSectionItem>
-              </Section>
-            )}
-
-            <Section style={styles.supportSection}>
-              <SupportButton
-                navigateToSupport={() => {
-                  navigateSupportCallback({
-                    operatorId: station.system.operator.id ?? '',
-                    stationId: station.id ?? '',
-                    formFactor: formFactor,
-                    systemId: station.system.id,
-                  });
-                }}
-              />
-            </Section>
-          </View>
-        </>
+          <Section style={styles.supportSection}>
+            <SupportButton
+              navigateToSupport={() => {
+                navigateSupportCallback({
+                  operatorId: station.system.operator.id,
+                  stationId: station.id,
+                  formFactor: formFactor,
+                  systemId: station.system.id,
+                });
+              }}
+            />
+          </Section>
+        </View>
       )}
     </MapBottomSheet>
   );
@@ -290,34 +280,14 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     loading: {
       marginBottom: theme.spacing.medium,
     },
-    container: {
-      marginHorizontal: theme.spacing.medium,
-      marginBottom: theme.spacing.medium,
-    },
     vehicleDataContainer: {
       marginHorizontal: theme.spacing.medium,
       marginBottom: theme.spacing.medium,
       gap: theme.spacing.small,
     },
-    stationName: {
-      flex: 1,
-      alignItems: 'center',
-    },
-    stationText: {
-      display: 'flex',
-      flexDirection: 'row',
-      marginTop: theme.spacing.small,
-    },
     footer: {
       marginBottom: theme.spacing.medium,
       marginHorizontal: theme.spacing.medium,
-    },
-    mobilityStatContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    operatorNameAndLogo: {
-      flexDirection: 'row',
     },
     vehicleType: {
       flex: 1,
@@ -332,10 +302,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       gap: theme.spacing.small,
-    },
-    error: {
-      marginBottom: theme.spacing.medium,
-      marginHorizontal: theme.spacing.medium,
     },
     supportSection: {
       paddingTop: theme.spacing.xSmall,
