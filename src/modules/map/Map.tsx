@@ -45,7 +45,6 @@ import {
   isScooter,
   useMapVehicle,
   isStation,
-  isCarStation,
   isBikeStation,
   isVehicle,
   isVirtualStation,
@@ -239,7 +238,7 @@ export const Map = (props: MapProps) => {
     [showSnackbar, getGeofencingZoneContent],
   );
 
-  const showBikeStationParkingSnackbar = useCallback(
+  const showStationParkingSnackbar = useCallback(
     (stationName: string | undefined, parkingSpacesAvailable: number) => {
       // Both come from the map item, which the vector source keeps refreshed, so they are
       // never stale and the count always matches the number rendered on the icon.
@@ -248,7 +247,7 @@ export const Map = (props: MapProps) => {
           iconNode: <ThemeIcon svg={ThemedParkingIcon} size="large" />,
           title: stationName,
           description: t(
-            MobilityTexts.freeBikeParkingSpaces(parkingSpacesAvailable),
+            MobilityTexts.freeParkingSpaces(parkingSpacesAvailable),
           ),
         },
         position: 'top',
@@ -394,7 +393,7 @@ export const Map = (props: MapProps) => {
           if (isActiveBikeTrip && isBikeStation(featureToSelect)) {
             const {name, num_docks_available} = featureToSelect.properties;
             // Matches the fallback used for the icon in useMapSymbolStyles.
-            showBikeStationParkingSnackbar(name, num_docks_available ?? 0);
+            showStationParkingSnackbar(name, num_docks_available ?? 0);
           }
           return;
         }
@@ -402,11 +401,6 @@ export const Map = (props: MapProps) => {
         if (isVehicle(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.Vehicle,
-            feature: featureToSelect,
-          });
-        } else if (isCarStation(featureToSelect)) {
-          dispatchMapState({
-            type: MapStateActionType.CarStation,
             feature: featureToSelect,
           });
         } else if (isParkAndRide(featureToSelect)) {
@@ -417,11 +411,6 @@ export const Map = (props: MapProps) => {
         } else if (isStopPlace(featureToSelect)) {
           dispatchMapState({
             type: MapStateActionType.StopPlace,
-            feature: featureToSelect,
-          });
-        } else if (isBikeStation(featureToSelect)) {
-          dispatchMapState({
-            type: MapStateActionType.BikeStation,
             feature: featureToSelect,
           });
         } else if (isStation(featureToSelect)) {
@@ -435,7 +424,7 @@ export const Map = (props: MapProps) => {
     [
       isActiveTrip,
       isActiveBikeTrip,
-      showBikeStationParkingSnackbar,
+      showStationParkingSnackbar,
       handleBreakFollow,
       paddingBottomMap,
       dispatchMapState,

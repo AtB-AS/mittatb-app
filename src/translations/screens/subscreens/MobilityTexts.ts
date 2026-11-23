@@ -178,14 +178,14 @@ export const MobilityTexts = {
     },
     campaignPrice: _('Kampanjepris', 'Campaign price', 'Kampanjepris'),
   },
-  freeBikes: (amount: string) => {
+  availability: (amount: string) => {
     return _(
       amount + ' tilgjengelig',
       amount + ' available',
       amount + ' tilgjengeleg',
     );
   },
-  freeBikeParkingSpaces: (amount: number) => {
+  freeParkingSpaces: (amount: number) => {
     return _(
       amount === 1 ? `${amount} ledig plass` : `${amount} ledige plasser`,
       amount === 1 ? `${amount} available space` : `${amount} available spaces`,
@@ -554,6 +554,19 @@ export const MobilityTexts = {
   },
 };
 
+export const StationTexts = {
+  noVehiclesAvailable: _(
+    'Det er ingen tilgjengelige kjøretøy på denne stasjonen. Prøv en annen stasjon.',
+    'There are no available vehicles at this station. Try another station.',
+    'Det er ingen tilgjengelege køyretøy på denne stasjonen. Prøv ein annan stasjon.',
+  ),
+  stationLoadingFailed: _(
+    'Klarte ikke å finne denne sykkelstasjonen.',
+    "Couldn't find this bike station.",
+    'Klarte ikkje å finne denne sykkelstasjonen.',
+  ),
+};
+
 export const BicycleTexts = {
   stations: {
     numBikesAvailable: (amount: number) =>
@@ -567,11 +580,7 @@ export const BicycleTexts = {
         : _('ledige sykkelplasser', 'available docks', 'ledige sykkelplassar');
     },
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
-    loadingFailed: _(
-      'Klarte ikke å finne denne sykkelstasjonen.',
-      "Couldn't find this bike station.",
-      'Klarte ikkje å finne denne sykkelstasjonen.',
-    ),
+
     noBikesAvailable: _(
       'Det er ingen tilgjengelige sykler på denne stasjonen. Prøv en annen stasjon.',
       'There are no available bikes at this station. Try another station.',

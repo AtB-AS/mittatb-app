@@ -291,6 +291,7 @@ export const VehicleSheet = ({
               <VehicleImage
                 uri={vehicle.vehicleType.vehicleImage}
                 formFactor={formFactor}
+                propulsionType={vehicle.vehicleType.propulsionType}
                 size="large"
               />
             )}

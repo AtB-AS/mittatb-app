@@ -1,23 +1,42 @@
-import {Image, ImageStyle, View} from 'react-native';
+import {Image, ImageStyle} from 'react-native';
 import React, {useState} from 'react';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {getTransportModeSvg} from '@atb/components/icon-box';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {StyleSheet} from '@atb/theme';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 import {getTransportModeAndSubMode} from '../utils';
 
 type Props = {
   uri: string | null | undefined;
   formFactor: FormFactor;
   size?: 'small' | 'large';
+  propulsionType: PropulsionType;
 };
 
-export const VehicleImage = ({uri, formFactor, size = 'small'}: Props) => {
+export const VehicleImage = ({
+  uri,
+  formFactor,
+  size = 'small',
+  propulsionType,
+}: Props) => {
   const style = useSheetStyle();
   const [largeImageAspectRatio, setLargeImageAspectRatio] = useState(1);
 
   if (!uri) {
-    return <DefaultVehicleImage formFactor={formFactor} size={size} />;
+    const {mode, subMode} = getTransportModeAndSubMode(
+      formFactor,
+      propulsionType,
+    );
+    return (
+      <TransportationIconBox
+        mode={mode}
+        subMode={subMode}
+        rounded={true}
+        iconSize={size}
+      />
+    );
   }
 
   if (size === 'large') {
@@ -38,32 +57,6 @@ export const VehicleImage = ({uri, formFactor, size = 'small'}: Props) => {
   return <Image style={style.smallImage as ImageStyle} source={{uri}} />;
 };
 
-const DefaultVehicleImage = ({
-  formFactor,
-  size,
-}: {
-  formFactor: FormFactor;
-  size: 'small' | 'large';
-}) => {
-  const style = useSheetStyle();
-  return (
-    <View
-      style={[
-        size === 'large' ? style.largeDefaultImage : style.smallImage,
-        style.defaultImage,
-      ]}
-    >
-      <ThemeIcon
-        size="large"
-        color="secondary"
-        svg={
-          getTransportModeSvg(getTransportModeAndSubMode(formFactor).mode).svg
-        }
-      />
-    </View>
-  );
-};
-
 const useSheetStyle = StyleSheet.createThemeHook(() => {
   const imageBase = {
     borderRadius: 8,
@@ -82,17 +75,6 @@ const useSheetStyle = StyleSheet.createThemeHook(() => {
       alignSelf: 'center',
       resizeMode: 'cover',
       ...imageBase,
-    },
-    largeDefaultImage: {
-      height: 150,
-      maxWidth: '100%',
-      alignSelf: 'center',
-      aspectRatio: 16 / 9,
-      ...imageBase,
-    },
-    defaultImage: {
-      justifyContent: 'center',
-      alignItems: 'center',
     },
   };
 });

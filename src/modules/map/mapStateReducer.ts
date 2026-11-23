@@ -4,17 +4,13 @@ import {MapBottomSheetType} from './MapContext';
 export enum MapStateActionType {
   Vehicle = 'VEHICLE',
   VehicleScanned = 'VEHICLE_SCANNED',
-  BikeStation = 'BIKE_STATION',
-  BikeStationScanned = 'BIKE_STATION_SCANNED',
-  CarStation = 'CAR_STATION',
-  CarStationScanned = 'CAR_STATION_SCANNED',
   StopPlace = 'STOP_PLACE',
   ParkAndRideStation = 'PARK_AND_RIDE_STATION',
   Filter = 'FILTER',
   ExternalMap = 'EXTERNAL_MAP',
   FinishedBooking = 'FINISHED_BOOKING',
   Station = 'STATION',
-  //AutoDispatchOnMapFocus = 'AUTO_DISPATCH_ON_MAP_FOCUS',
+  StationScanned = 'STATION_SCANNED',
   None = 'NONE',
 }
 
@@ -48,26 +44,13 @@ export type ReducerMapStateAction =
       stationId?: string;
     }
   | {
-      type: MapStateActionType.BikeStation;
-      feature: Feature<Point>;
-      customZoomLevel?: number;
-    }
-  | {
-      type: MapStateActionType.BikeStationScanned;
-      assetId: string;
-    }
-  | {
-      type: MapStateActionType.CarStation;
-      feature: Feature<Point>;
-      customZoomLevel?: number;
-    }
-  | {
-      type: MapStateActionType.CarStationScanned;
-      assetId: string;
-    }
-  | {
       type: MapStateActionType.Station;
       feature: Feature<Point>;
+      customZoomLevel?: number;
+    }
+  | {
+      type: MapStateActionType.StationScanned;
+      assetId: string;
     }
   | {
       type: MapStateActionType.ExternalMap;
@@ -84,10 +67,6 @@ export type ReducerMapStateAction =
       type: MapStateActionType.ParkAndRideStation;
       feature: Feature<Point>;
     }
-  /*| {
-      type: MapStateActionType.AutoDispatchOnMapFocus;
-      eventToDispatch?: ReducerMapStateAction;
-    }*/
   | {
       type: MapStateActionType.FinishedBooking;
       bookingId: string;
@@ -117,42 +96,18 @@ export const mapStateReducer = (
         vehicleTypeId: action.vehicleTypeId,
         stationId: action.stationId,
       };
-    case MapStateActionType.BikeStation:
-      return {
-        bottomSheetType: MapBottomSheetType.BikeStation,
-        feature: action.feature,
-        customZoomLevel: action?.customZoomLevel,
-      };
-    case MapStateActionType.BikeStationScanned:
-      return {
-        bottomSheetType: MapBottomSheetType.BikeStation,
-        assetId: action.assetId,
-        assetIsScanned: true,
-      };
-    case MapStateActionType.CarStation:
-      return {
-        bottomSheetType: MapBottomSheetType.CarStation,
-        feature: action.feature,
-        customZoomLevel: action?.customZoomLevel,
-      };
-    case MapStateActionType.CarStationScanned:
-      return {
-        bottomSheetType: MapBottomSheetType.CarStation,
-        assetId: action.assetId,
-        assetIsScanned: true,
-      };
     case MapStateActionType.Station:
       return {
         bottomSheetType: MapBottomSheetType.Station,
         feature: action.feature,
+        customZoomLevel: action?.customZoomLevel,
       };
-    /*case MapStateActionType.AutoDispatchOnMapFocus:
+    case MapStateActionType.StationScanned:
       return {
-        mapState: BottomSheetType.AutoDispatchOnMapFocus,
-        eventToDispatch: action.eventToDispatch
-          ? {...action.eventToDispatch, eventToDispatch: undefined} // Setting undefined to avoid infinite loop
-          : mapState,
-      };*/
+        bottomSheetType: MapBottomSheetType.Station,
+        assetId: action.assetId,
+        assetIsScanned: true,
+      };
     case MapStateActionType.ExternalMap:
       return {
         bottomSheetType: MapBottomSheetType.ExternalMap,

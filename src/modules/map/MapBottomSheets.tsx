@@ -1,8 +1,7 @@
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {
   ActiveShmoSheet,
-  BikeStationBottomSheet,
-  CarSharingStationBottomSheet,
+  StationSheet,
   CityBikeStartTripOverlay,
   FinishedShmoSheet,
   FinishingScooterSheet,
@@ -284,10 +283,9 @@ export const MapBottomSheets = ({
             navigateToScanQrCode={navigateToScanQrCode}
           />
         )}
-      {mapState.bottomSheetType === MapBottomSheetType.BikeStation && (
-        <BikeStationBottomSheet
+      {mapState.bottomSheetType === MapBottomSheetType.Station && (
+        <StationSheet
           stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
-          distance={undefined}
           onClose={handleCloseSheet}
           onStationReceived={(station) => {
             if (mapState.assetIsScanned) {
@@ -297,7 +295,7 @@ export const MapBottomSheets = ({
                 });
 
               dispatchMapState({
-                type: MapStateActionType.BikeStation,
+                type: MapStateActionType.Station,
                 feature: feature,
                 customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
               });
@@ -320,29 +318,6 @@ export const MapBottomSheets = ({
               stationId,
             });
           }}
-        />
-      )}
-      {mapState.bottomSheetType === MapBottomSheetType.CarStation && (
-        <CarSharingStationBottomSheet
-          stationId={mapState.feature?.properties?.id ?? mapState.assetId ?? ''}
-          distance={undefined}
-          onClose={handleCloseSheet}
-          onStationReceived={(station) => {
-            if (mapState.assetIsScanned) {
-              const feature: Feature<Point, GeoJsonProperties> =
-                getFeatureFromScan({
-                  station,
-                });
-
-              dispatchMapState({
-                type: MapStateActionType.CarStation,
-                feature: feature,
-                customZoomLevel: CUSTOM_SCAN_ZOOM_LEVEL,
-              });
-            }
-          }}
-          locationArrowOnPress={locationArrowOnPress}
-          navigateToScanQrCode={navigateToScanQrCode}
         />
       )}
 

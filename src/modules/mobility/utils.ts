@@ -42,7 +42,6 @@ import {
   StationFeatureSchema,
   StationsClusteredFeature,
   StationsClusteredFeatureSchema,
-  StationVehicleTypeAvailability,
   VehicleFeature,
   VehicleFeatureSchema,
   VehiclesClusteredFeature,
@@ -155,15 +154,6 @@ export const isActiveBikeTripBooking = (
 ): boolean =>
   isActiveTripBooking(booking) &&
   booking?.asset.formFactor === FormFactor.Bicycle;
-
-export const getAvailableVehicles = (
-  types: StationVehicleTypeAvailability[] | undefined,
-  formFactor: FormFactor,
-) =>
-  types
-    ?.filter((type) => type.vehicleType.formFactor === formFactor)
-    .map((type) => type.count)
-    .reduce((sum, count) => sum + count, 0) ?? 0;
 
 /**
  * Determines if vehicles need to be reloaded, by checking if the

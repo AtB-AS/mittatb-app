@@ -1,22 +1,20 @@
 import {useSystem} from './use-system';
-import {getRentalAppUri} from './utils';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useStationQuery} from './queries/use-station-query';
 
-export const useCarSharingStation = (id: string) => {
+export const useStation = (id: string) => {
   const {data: station, isLoading, isError} = useStationQuery(id);
-  const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
-    useSystem(station);
+  const formFactor =
+    station?.vehicleTypesAvailable?.[0]?.vehicleType.formFactor;
+  const {operatorId, operatorName} = useSystem(station);
 
   return {
     station,
     isLoading,
     isError,
-    appStoreUri,
-    brandLogoUrl,
     operatorId,
     operatorName,
-    rentalAppUri: getRentalAppUri(station),
     stationName: useTextForLanguage(station?.name.translation),
+    formFactor,
   };
 };
