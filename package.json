@@ -33,7 +33,7 @@
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^12.1.0",
-    "@atb-as/generate-assets": "^18.20.0",
+    "@atb-as/generate-assets": "^18.21.0",
     "@atb-as/mapbox-shared": "^1.0.4",
     "@atb-as/theme": "^16.4.0",
     "@atb-as/utils": "^8.0.1",

@@ -124,8 +124,8 @@ importers:
         specifier: ^12.1.0
         version: 12.1.0(zod@4.1.11)
       '@atb-as/generate-assets':
-        specifier: ^18.20.0
-        version: 18.20.0
+        specifier: ^18.21.0
+        version: 18.21.0
       '@atb-as/mapbox-shared':
         specifier: ^1.0.4
         version: 1.0.4(@atb-as/theme@16.4.0)
@@ -620,8 +620,8 @@ packages:
     peerDependencies:
       zod: ^4.1.11
 
-  '@atb-as/generate-assets@18.20.0':
-    resolution: {integrity: sha512-ue9ZN3qUDg9SNsongUEOzlc5uWXbicO84rtm3ekvvnJ0Yko+aXDUtIjEYJP2eFqJobJHnH5W9ICEbQ3YAljl/w==}
+  '@atb-as/generate-assets@18.21.0':
+    resolution: {integrity: sha512-ismiz+b2ahLGdlJGqHs/+QfmknlCMRII3PIAefCYWCxAgU4NPrUEMyOLz7v/VxG/NOSFsktHH5KZP9xC6Z2xJw==}
     hasBin: true
 
   '@atb-as/mapbox-shared@1.0.4':
@@ -7850,7 +7850,7 @@ snapshots:
       yargs: 17.7.2
       zod: 4.1.11
 
-  '@atb-as/generate-assets@18.20.0':
+  '@atb-as/generate-assets@18.21.0':
     dependencies:
       '@atb-as/theme': 14.0.1
       commander: 9.5.0
