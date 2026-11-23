@@ -149,6 +149,12 @@ export const isActiveTripBooking = (
   booking?.state === ShmoBookingState.PAUSED ||
   booking?.state === ShmoBookingState.FINISHING;
 
+/** Treats regular and cargo bicycles as the same kind of vehicle. */
+export const isBicycleFormFactor = (
+  formFactor: FormFactor | undefined | null,
+): boolean =>
+  formFactor === FormFactor.Bicycle || formFactor === FormFactor.CargoBicycle;
+
 export const isActiveBikeTripBooking = (
   booking: ShmoBooking | null | undefined,
 ): boolean =>

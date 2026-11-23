@@ -5,7 +5,7 @@ import {
   MobilityTexts,
   ShmoWarnings,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {formatReopensAt} from '../../utils';
+import {formatReopensAt, isBicycleFormFactor} from '../../utils';
 import {useMapVehicle} from '../../use-map-vehicle';
 import {Linking, View} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -104,8 +104,7 @@ export const VehicleSheet = ({
 
   const formFactor = vehicle?.vehicleType.formFactor ?? FormFactor.Other;
   const propulsionType = vehicle?.vehicleType.propulsionType;
-  const isBicycle =
-    formFactor === FormFactor.Bicycle || formFactor === FormFactor.CargoBicycle;
+  const isBicycle = isBicycleFormFactor(formFactor);
   const isElectric =
     propulsionType === PropulsionType.Electric ||
     propulsionType === PropulsionType.ElectricAssist;

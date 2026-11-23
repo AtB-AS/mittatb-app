@@ -1,5 +1,4 @@
 import {Station} from '@atb/api/types/mobility';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
@@ -9,7 +8,11 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {useVehiclesByVehicleTypeIdsQueries} from '../../queries/use-vehicles-by-vehicle-type-ids-queries';
 import {useQueryClient} from '@tanstack/react-query';
-import {formatReopensAt, getTransportModeAndSubMode} from '../../utils';
+import {
+  formatReopensAt,
+  getTransportModeAndSubMode,
+  isBicycleFormFactor,
+} from '../../utils';
 import {dictionary, useTranslation} from '@atb/translations';
 import {
   MobilityTexts,
@@ -243,7 +246,7 @@ export const StationSheet = ({
               })}
             </Section>
           )}
-          {formFactor === FormFactor.Bicycle &&
+          {isBicycleFormFactor(formFactor) &&
             station.numDocksAvailable != null && (
               <Section>
                 <GenericSectionItem style={styles.freeParkingSection}>
