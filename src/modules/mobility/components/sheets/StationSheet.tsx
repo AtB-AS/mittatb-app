@@ -1,4 +1,5 @@
 import {Station} from '@atb/api/types/mobility';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   BottomSheetHeaderType,
   MapBottomSheet,
@@ -244,18 +245,21 @@ export const StationSheet = ({
               })}
             </Section>
           )}
-          {station.numDocksAvailable != null && (
-            <Section>
-              <GenericSectionItem style={styles.freeParkingSection}>
-                <ThemeIcon svg={ThemedParkingIcon} size="large" />
-                <ThemeText>
-                  {t(
-                    MobilityTexts.freeParkingSpaces(station.numDocksAvailable),
-                  )}
-                </ThemeText>
-              </GenericSectionItem>
-            </Section>
-          )}
+          {formFactor === FormFactor.Bicycle &&
+            station.numDocksAvailable != null && (
+              <Section>
+                <GenericSectionItem style={styles.freeParkingSection}>
+                  <ThemeIcon svg={ThemedParkingIcon} size="large" />
+                  <ThemeText>
+                    {t(
+                      MobilityTexts.freeParkingSpaces(
+                        station.numDocksAvailable,
+                      ),
+                    )}
+                  </ThemeText>
+                </GenericSectionItem>
+              </Section>
+            )}
 
           <Section style={styles.supportSection}>
             <SupportButton

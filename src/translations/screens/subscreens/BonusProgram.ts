@@ -35,13 +35,6 @@ const BonusProgramTexts = {
       ),
   },
 
-  getCampaignPriceAt: (operatorName: string) =>
-    _(
-      `Få kampanjepris hos ${operatorName}`,
-      `Get campaign price at ${operatorName}`,
-      `Få kampanjepris hos ${operatorName}`,
-    ),
-
   notEnoughPoints: _(
     'Du har ikke nok poeng',
     "You don't have enough points",
