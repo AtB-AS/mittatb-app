@@ -32,6 +32,7 @@ import {Root_RefundConfirmationScreen} from '@atb/stacks-hierarchy/Root_RefundCo
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 import {Root_LoginAvailableFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginAvailableFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
+import {Root_LoginOtherMethodsScreen} from '@atb/stacks-hierarchy/Root_LoginOtherMethodsScreen';
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginEmailInputScreen} from '@atb/stacks-hierarchy/Root_LoginEmailInputScreen';
@@ -256,6 +257,11 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_LoginOptionsScreen"
                 component={Root_LoginOptionsScreen}
+              />
+              <Stack.Screen
+                name="Root_LoginOtherMethodsScreen"
+                component={Root_LoginOtherMethodsScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen
                 name="Root_LoginPhoneInputScreen"

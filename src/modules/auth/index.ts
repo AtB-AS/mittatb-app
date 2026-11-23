@@ -29,11 +29,17 @@ export {
   authEmailReset,
   authEmailResetConfirm,
   authEmailStart,
+  authEmailVerifyCode,
 } from './auth-utils';
 export {
-  clearPendingEmailPassword,
+  clearEmailLoginSession,
+  EMAIL_CODE_LENGTH,
+  formatCountdown,
+  getPendingEmailCode,
   getPendingEmailPassword,
   isValidPassword,
   MIN_PASSWORD_LENGTH,
+  sanitizeEmailCode,
+  setPendingEmailCode,
   setPendingEmailPassword,
 } from './email-login-session';

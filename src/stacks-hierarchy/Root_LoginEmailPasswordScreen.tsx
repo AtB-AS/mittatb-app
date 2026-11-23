@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {
   authEmailLogIn,
@@ -7,7 +7,7 @@ import {
   setPendingEmailPassword,
 } from '@atb/modules/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {Section, TextInputSectionItem} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 import {useOnboardingContext} from '@atb/modules/onboarding';
@@ -16,21 +16,25 @@ import {
   EmailLoginLayout,
   EmailLoginLinkButton,
 } from './login-email/EmailLoginLayout';
+import {EmailPasswordInput} from './login-email/EmailPasswordInput';
 
 type Props = RootStackScreenProps<'Root_LoginEmailPasswordScreen'>;
 
 export const Root_LoginEmailPasswordScreen = ({navigation, route}: Props) => {
-  const {email} = route.params;
+  const {email, notice} = route.params;
   const {t, language} = useTranslation();
   const focusRef = useFocusOnLoad(navigation, false);
   const {completeOnboardingSection} = useOnboardingContext();
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<EmailSignInErrorCode>();
+  const [showNotice, setShowNotice] = useState(false);
+  useEffect(() => {
+    if (notice) setShowNotice(true);
+  }, [notice]);
+  // Only log-in is blocked during the lockout. Reset stays available (D17).
   const {isRateLimited, rateLimitIfNeeded} =
-    useRateLimitWhen<EmailSignInErrorCode>(
-      (code) => code === 'too_many_attempts',
-    );
+    useRateLimitWhen<EmailSignInErrorCode>((code) => code === 'login_locked');
 
   const onLogin = async () => {
     if (isRateLimited) return;
@@ -46,6 +50,7 @@ export const Root_LoginEmailPasswordScreen = ({navigation, route}: Props) => {
       navigation.navigate('Root_LoginEmailConfirmCodeScreen', {
         email,
         purpose: 'verify',
+        codeSentAt: Date.now(),
       });
       return;
     }
@@ -60,29 +65,35 @@ export const Root_LoginEmailPasswordScreen = ({navigation, route}: Props) => {
   };
 
   const onForgotPassword = async () => {
-    if (isRateLimited) return;
     setIsLoading(true);
     const errorCode = await authEmailReset(email, language);
     setIsLoading(false);
     if (errorCode) {
-      rateLimitIfNeeded(errorCode);
       setError(errorCode);
       return;
     }
     setError(undefined);
-    navigation.navigate('Root_LoginEmailCreatePasswordScreen', {
+    navigation.navigate('Root_LoginEmailConfirmCodeScreen', {
       email,
       purpose: 'reset',
+      codeSentAt: Date.now(),
     });
   };
 
+  const errorMessage = error
+    ? t(LoginTexts.email.errors[error])
+    : showNotice
+      ? t(LoginTexts.email.errors.password_lost)
+      : undefined;
+
   return (
     <EmailLoginLayout
+      flow="logIn"
       title={t(LoginTexts.email.password.title)}
       description={t(LoginTexts.email.password.description(email))}
       focusRef={focusRef}
       isLoading={isLoading}
-      errorMessage={error ? t(LoginTexts.email.errors[error]) : undefined}
+      errorMessage={errorMessage}
       mainButton={{
         text: t(LoginTexts.email.password.mainButton),
         onPress: onLogin,
@@ -90,30 +101,34 @@ export const Root_LoginEmailPasswordScreen = ({navigation, route}: Props) => {
         testID: 'emailLoginButton',
       }}
       footer={
-        <EmailLoginLinkButton
-          text={t(LoginTexts.email.password.forgotPassword)}
-          onPress={onForgotPassword}
-          disabled={isRateLimited}
-          testID="forgotPasswordButton"
-        />
+        <>
+          <EmailLoginLinkButton
+            text={t(LoginTexts.email.password.forgotPassword)}
+            onPress={onForgotPassword}
+            testID="forgotPasswordButton"
+          />
+          <EmailLoginLinkButton
+            text={t(LoginTexts.email.password.changeEmail)}
+            onPress={() =>
+              navigation.navigate('Root_LoginEmailInputScreen', {})
+            }
+            testID="changeEmailButton"
+          />
+        </>
       }
     >
       <SessionReplayMask>
         <Section>
-          <TextInputSectionItem
+          <EmailPasswordInput
+            kind="current"
             label={t(LoginTexts.email.password.label)}
             placeholder={t(LoginTexts.email.password.placeholder)}
             value={password}
             onChangeText={(text) => {
               setPassword(text);
               setError(undefined);
+              setShowNotice(false);
             }}
-            secureTextEntry={true}
-            autoComplete="current-password"
-            textContentType="password"
-            autoCapitalize="none"
-            autoCorrect={false}
-            inlineLabel={false}
             autoFocus={true}
             testID="loginPasswordInput"
           />

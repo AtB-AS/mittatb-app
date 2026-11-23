@@ -10,6 +10,15 @@ const LoginTexts = {
       'Vel innloggingsmetode',
     ),
     termsOfUse: _('Vilkår for bruk', 'Terms of use', 'Vilkår for bruk'),
+    termsConsent: {
+      prefix: _(
+        'Ved å fortsette godtar du ',
+        'By continuing, you accept the ',
+        'Ved å halde fram godtek du ',
+      ),
+      link: _('vilkårene for bruk', 'terms of use', 'vilkåra for bruk'),
+      suffix: _('.', '.', '.'),
+    },
     options: {
       phoneAndCode: {
         label: _(
@@ -35,9 +44,43 @@ const LoginTexts = {
           'Hald fram med e-post og passord',
         ),
       },
-      moreOptions: {
-        show: _('Flere alternativer', 'More options', 'Fleire alternativ'),
-        hide: _('Færre alternativer', 'Fewer options', 'Færre alternativ'),
+      otherMethods: {
+        hint: {
+          withVipps: _(
+            'Har du brukt Vipps eller telefonnummer før?',
+            'Have you used Vipps or your phone number before?',
+            'Har du brukt Vipps eller telefonnummer før?',
+          ),
+          phoneOnly: _(
+            'Har du brukt telefonnummer før?',
+            'Have you used your phone number before?',
+            'Har du brukt telefonnummer før?',
+          ),
+        },
+        link: {
+          withVipps: _(
+            'Logg inn med Vipps eller telefonnummer',
+            'Log in with Vipps or phone number',
+            'Logg inn med Vipps eller telefonnummer',
+          ),
+          phoneOnly: _(
+            'Logg inn med telefonnummer',
+            'Log in with phone number',
+            'Logg inn med telefonnummer',
+          ),
+        },
+        a11yLabel: {
+          withVipps: _(
+            'Har du brukt Vipps eller telefonnummer før? Logg inn med Vipps eller telefonnummer',
+            'Have you used Vipps or your phone number before? Log in with Vipps or phone number',
+            'Har du brukt Vipps eller telefonnummer før? Logg inn med Vipps eller telefonnummer',
+          ),
+          phoneOnly: _(
+            'Har du brukt telefonnummer før? Logg inn med telefonnummer',
+            'Have you used your phone number before? Log in with phone number',
+            'Har du brukt telefonnummer før? Logg inn med telefonnummer',
+          ),
+        },
       },
       vipps: {
         label: _('Fortsett med ', 'Log in with ', 'Hald fram med '),
@@ -59,6 +102,30 @@ const LoginTexts = {
           'Hald fram utan å logge inn',
         ),
       },
+    },
+  },
+  logInOtherMethods: {
+    title: _(
+      'Andre innloggingsmetoder',
+      'Other login methods',
+      'Andre innloggingsmetodar',
+    ),
+    description: _(
+      'Logg inn på samme måte som før for å beholde billettene og profilen din.',
+      'Log in the same way as before to keep your tickets and profile.',
+      'Logg inn på same måte som før for å behalde billettane og profilen din.',
+    ),
+    phone: {
+      label: _(
+        'Fortsett med telefonnummer',
+        'Continue with phone number',
+        'Hald fram med telefonnummer',
+      ),
+      a11yHint: _(
+        'Logg inn med en engangskode på SMS',
+        'Log in with a one-time code sent by SMS',
+        'Logg inn med ein eingongskode på SMS',
+      ),
     },
   },
   terms: {
@@ -190,11 +257,25 @@ const LoginTexts = {
     },
   },
   email: {
+    headers: {
+      createAccount: _('Opprett konto', 'Create account', 'Opprett konto'),
+      resetPassword: _(
+        'Tilbakestill passord',
+        'Reset password',
+        'Tilbakestill passord',
+      ),
+    },
+    passwordToggle: {
+      show: _('Vis', 'Show', 'Vis'),
+      hide: _('Skjul', 'Hide', 'Skjul'),
+      showA11yLabel: _('Vis passord', 'Show password', 'Vis passord'),
+      hideA11yLabel: _('Skjul passord', 'Hide password', 'Skjul passord'),
+    },
     input: {
       title: _(
-        'Logg inn med e-post',
-        'Log in with e-mail',
-        'Logg inn med e-post',
+        'Logg inn eller opprett konto',
+        'Log in or create account',
+        'Logg inn eller opprett konto',
       ),
       description: _(
         'Skriv inn e-postadressen din. Har du ikke konto, lager vi en til deg.',
@@ -208,12 +289,17 @@ const LoginTexts = {
         'Skriv inn e-postadressa di',
       ),
       mainButton: _('Fortsett', 'Continue', 'Hald fram'),
-      federated: (providers: string) =>
+      federated: (provider: string) =>
         _(
-          `Denne e-postadressen brukes med ${providers}. Logg inn med ${providers}, eller lag et passord.`,
-          `This e-mail address is used with ${providers}. Log in with ${providers}, or create a password.`,
-          `Denne e-postadressa blir brukt med ${providers}. Logg inn med ${providers}, eller lag eit passord.`,
+          `Du har tidligere brukt ${provider} med denne e-postadressen. Lag et passord for å logge inn med e-post.`,
+          `You've previously used ${provider} with this e-mail address. Create a password to log in with e-mail.`,
+          `Du har tidlegare brukt ${provider} med denne e-postadressa. Lag eit passord for å logge inn med e-post.`,
         ),
+      federatedUnknown: _(
+        'Denne e-postadressen er koblet til en annen innloggingsmetode. Lag et passord for å logge inn med e-post.',
+        'This e-mail address is connected to another login method. Create a password to log in with e-mail.',
+        'Denne e-postadressa er kopla til ein annan innloggingsmetode. Lag eit passord for å logge inn med e-post.',
+      ),
       createPasswordButton: _('Lag passord', 'Create password', 'Lag passord'),
     },
     password: {
@@ -236,6 +322,11 @@ const LoginTexts = {
         'Forgot password?',
         'Gløymt passord?',
       ),
+      changeEmail: _(
+        'Ikke deg? Bytt e-post',
+        'Not you? Change e-mail',
+        'Ikkje deg? Byt e-post',
+      ),
     },
     createPassword: {
       signUpTitle: _('Lag et passord', 'Create a password', 'Lag eit passord'),
@@ -244,28 +335,64 @@ const LoginTexts = {
         'Choose a new password',
         'Vel nytt passord',
       ),
-      description: (minLength: number) =>
-        _(
-          `Passordet må ha minst ${minLength} tegn.`,
-          `The password must have at least ${minLength} characters.`,
-          `Passordet må ha minst ${minLength} teikn.`,
-        ),
+      emailLabel: _('E-post', 'E-mail', 'E-post'),
       label: _('Passord', 'Password', 'Passord'),
       placeholder: _('Velg et passord', 'Choose a password', 'Vel eit passord'),
-      mainButton: _('Fortsett', 'Continue', 'Hald fram'),
+      lengthHint: (minLength: number) =>
+        _(
+          `Minst ${minLength} tegn`,
+          `At least ${minLength} characters`,
+          `Minst ${minLength} teikn`,
+        ),
+      lengthHintMet: (minLength: number) =>
+        _(
+          `Minst ${minLength} tegn, oppfylt`,
+          `At least ${minLength} characters, met`,
+          `Minst ${minLength} teikn, oppfylt`,
+        ),
+      signUpButton: _('Opprett konto', 'Create account', 'Opprett konto'),
+      resetButton: _('Lagre passord', 'Save password', 'Lagre passord'),
+      newCodeButton: _(
+        'Send meg en ny kode',
+        'Send me a new code',
+        'Send meg ein ny kode',
+      ),
     },
     confirmCode: {
       description: (email: string) =>
         _(
-          `Skriv inn engangskoden vi sendte til ${email}`,
-          `Enter the one-time code we sent to ${email}`,
-          `Skriv inn eingongskoden vi sende til ${email}`,
+          `Vi sendte en kode til ${email}.`,
+          `We sent a code to ${email}.`,
+          `Vi sende ein kode til ${email}.`,
         ),
       verifyDescription: (email: string) =>
         _(
-          `E-postadressen din er ikke bekreftet. Skriv inn engangskoden vi sendte til ${email}`,
-          `Your e-mail address is not verified. Enter the one-time code we sent to ${email}`,
-          `E-postadressa di er ikkje stadfesta. Skriv inn eingongskoden vi sende til ${email}`,
+          `E-postadressen din er ikke bekreftet. Vi sendte en kode til ${email}.`,
+          `Your e-mail address is not verified. We sent a code to ${email}.`,
+          `E-postadressa di er ikkje stadfesta. Vi sende ein kode til ${email}.`,
+        ),
+      hint: _(
+        'Koden er gyldig i 15 minutter. Finner du den ikke, sjekk søppelpost.',
+        "The code is valid for 15 minutes. If you can't find it, check your spam folder.",
+        'Koden er gyldig i 15 minutt. Finn du han ikkje, sjekk søppelpost.',
+      ),
+      signUpNotice: (email: string) =>
+        _(
+          `Vi fant ingen konto for ${email}, så vi oppretter en ny.`,
+          `We found no account for ${email}, so we'll create a new one.`,
+          `Vi fann ingen konto for ${email}, så vi opprettar ein ny.`,
+        ),
+      changeEmail: _(
+        'Feil e-post? Bytt',
+        'Wrong e-mail? Change',
+        'Feil e-post? Byt',
+      ),
+      resend: _('Send ny kode', 'Send new code', 'Send ny kode'),
+      resendIn: (countdown: string) =>
+        _(
+          `Send ny kode om ${countdown}`,
+          `Send new code in ${countdown}`,
+          `Send ny kode om ${countdown}`,
         ),
     },
     errors: {
@@ -274,11 +401,7 @@ const LoginTexts = {
         'Are you certain the e-mail address is correct?',
         'Er du sikker på at e-postadressa er riktig?',
       ),
-      wrong_credentials: _(
-        'Feil e-post eller passord.',
-        'Wrong e-mail or password.',
-        'Feil e-post eller passord.',
-      ),
+      wrong_credentials: _('Feil passord.', 'Wrong password.', 'Feil passord.'),
       email_not_verified: _(
         'E-postadressen er ikke bekreftet.',
         'The e-mail address is not verified.',
@@ -305,9 +428,29 @@ const LoginTexts = {
         'Det finst allereie ein konto med denne e-postadressa.',
       ),
       too_many_attempts: _(
-        'Du har prøvd for mange ganger. Vennligst vent litt før du prøver igjen.',
-        'You have tried too many times. Please wait a bit before trying again.',
-        'Du har prøvd for mange gonger. Ver venleg og vent litt før du prøver igjen.',
+        'For mange feil forsøk med denne koden. Be om en ny kode.',
+        'Too many wrong attempts with this code. Request a new code.',
+        'For mange feil forsøk med denne koden. Be om ein ny kode.',
+      ),
+      too_many_codes_sent: _(
+        'Du har bedt om for mange koder. Vent noen minutter og prøv igjen.',
+        "You've requested too many codes. Wait a few minutes and try again.",
+        'Du har bede om for mange kodar. Vent nokre minutt og prøv igjen.',
+      ),
+      login_locked: _(
+        'For mange forsøk. Prøv igjen om 15 minutter, eller tilbakestill passordet ditt.',
+        'Too many attempts. Try again in 15 minutes, or reset your password.',
+        'For mange forsøk. Prøv igjen om 15 minutt, eller tilbakestill passordet ditt.',
+      ),
+      session_lost: _(
+        'Noe gikk galt underveis. Vennligst start på nytt.',
+        'Something went wrong along the way. Please start again.',
+        'Noko gjekk gale undervegs. Ver venleg og start på nytt.',
+      ),
+      password_lost: _(
+        'Skriv inn passordet ditt på nytt for å fortsette.',
+        'Enter your password again to continue.',
+        'Skriv inn passordet ditt på nytt for å halde fram.',
       ),
       unknown_error: _(
         'Klarte ikke å logge deg inn. Prøv igjen, eller kontakt kundeservice for hjelp.',

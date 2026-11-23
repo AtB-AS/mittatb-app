@@ -6,16 +6,24 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {Loading} from '@atb/components/loading';
 import {NativeTouchable} from '@atb/components/native-touchable';
-import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {LoginTexts, useTranslation} from '@atb/translations';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
+export type EmailLoginFlow = 'logIn' | 'createAccount' | 'resetPassword';
+
 type Props = PropsWithChildren<{
+  /**
+   * Which flow the screen is part of. Creating an account and resetting the
+   * password are named in the header; log-in screens rely on their title.
+   */
+  flow: EmailLoginFlow;
   title: string;
   description?: string;
+  /** Secondary text below the description, e.g. how long a code is valid. */
+  hint?: string;
   focusRef?: React.Ref<any>;
   isLoading: boolean;
   errorMessage?: string;
@@ -34,8 +42,10 @@ type Props = PropsWithChildren<{
  * screens.
  */
 export const EmailLoginLayout = ({
+  flow,
   title,
   description,
+  hint,
   focusRef,
   isLoading,
   errorMessage,
@@ -53,7 +63,7 @@ export const EmailLoginLayout = ({
       <FullScreenHeader
         showBorder={false}
         leftButton={{type: 'back'}}
-        title={t(LoginTexts.logInOptions.title)}
+        title={flow === 'logIn' ? undefined : t(LoginTexts.email.headers[flow])}
         globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
@@ -73,8 +83,21 @@ export const EmailLoginLayout = ({
             </ThemeText>
           </View>
           {description && (
-            <ThemeText style={styles.description} color={themeColor}>
+            <ThemeText
+              style={[styles.description, hint && styles.descriptionWithHint]}
+              color={themeColor}
+            >
               {description}
+            </ThemeText>
+          )}
+          {hint && (
+            <ThemeText
+              typography="body__s"
+              type="secondary"
+              style={styles.hint}
+              color={themeColor}
+            >
+              {hint}
             </ThemeText>
           )}
           {children}
@@ -96,11 +119,10 @@ export const EmailLoginLayout = ({
                   onPress={mainButton.onPress}
                   text={mainButton.text}
                   disabled={mainButton.disabled}
-                  rightIcon={{svg: ChevronRight}}
                   style={styles.submitButton}
                   testID={mainButton.testID}
                 />
-                {footer}
+                {footer ? <View style={styles.footer}>{footer}</View> : null}
               </>
             )}
           </View>
@@ -170,6 +192,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacing.large,
     textAlign: 'center',
   },
+  descriptionWithHint: {
+    marginBottom: theme.spacing.xSmall,
+  },
+  hint: {
+    marginBottom: theme.spacing.large,
+    textAlign: 'center',
+  },
   loading: {
     marginVertical: theme.spacing.large,
     alignSelf: 'center',
@@ -183,9 +212,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   submitButton: {
     marginTop: theme.spacing.medium,
   },
+  footer: {
+    marginTop: theme.spacing.small,
+  },
   linkButton: {
-    marginTop: theme.spacing.medium,
-    padding: theme.spacing.medium,
+    paddingVertical: theme.spacing.small,
+    paddingHorizontal: theme.spacing.medium,
   },
   linkButtonText: {textAlign: 'center'},
   disabled: {opacity: 0.5},

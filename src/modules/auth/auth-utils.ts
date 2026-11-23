@@ -14,6 +14,7 @@ import {
   emailResetConfirm,
   emailStart,
   EmailStartResponse,
+  emailVerifyCode,
   verifySms,
 } from '@atb/api/identity';
 import {Language} from '@atb/translations';
@@ -91,7 +92,14 @@ export const authConfirmCode = async (
  * Maps identity e-mail endpoint errors to error codes. See the "Step 1 API"
  * section in the identity repo's docs/auth-initiative-poc.md.
  */
-const toEmailSignInErrorCode = (e: unknown): EmailSignInErrorCode => {
+const toEmailSignInErrorCode = (
+  e: unknown,
+  /**
+   * identity answers 429 both for too many codes sent, too many wrong codes
+   * and log-in lockout. Which one it is depends on the endpoint.
+   */
+  tooManyRequests: EmailSignInErrorCode,
+): EmailSignInErrorCode => {
   const error = e as RequestError;
   if (!isErrorResponse(error)) return 'unknown_error';
 
@@ -113,7 +121,7 @@ const toEmailSignInErrorCode = (e: unknown): EmailSignInErrorCode => {
     case 409:
       return 'user_exists';
     case 429:
-      return 'too_many_attempts';
+      return tooManyRequests;
   }
 
   notifyBugsnag('Unexpected response on e-mail login', {
@@ -134,7 +142,7 @@ export const authEmailStart = async (
   try {
     return {data: await emailStart(email, language)};
   } catch (e) {
-    return {error: toEmailSignInErrorCode(e)};
+    return {error: toEmailSignInErrorCode(e, 'too_many_codes_sent')};
   }
 };
 
@@ -145,18 +153,31 @@ export const authEmailReset = async (
   try {
     await emailReset(email, language);
   } catch (e) {
-    return toEmailSignInErrorCode(e);
+    return toEmailSignInErrorCode(e, 'too_many_codes_sent');
+  }
+};
+
+export const authEmailVerifyCode = async (
+  purpose: 'signup' | 'reset',
+  email: string,
+  code: string,
+): Promise<EmailSignInErrorCode | undefined> => {
+  try {
+    await emailVerifyCode(purpose, email, code);
+  } catch (e) {
+    return toEmailSignInErrorCode(e, 'too_many_attempts');
   }
 };
 
 const signInWithEmailToken = async (
   getToken: () => Promise<string>,
+  tooManyRequests: EmailSignInErrorCode,
 ): Promise<EmailSignInErrorCode | undefined> => {
   let token: string;
   try {
     token = await getToken();
   } catch (e) {
-    return toEmailSignInErrorCode(e);
+    return toEmailSignInErrorCode(e, tooManyRequests);
   }
   return authSignInWithCustomToken(token);
 };
@@ -165,20 +186,33 @@ export const authEmailCreate = (
   email: string,
   password: string,
   code: string,
-) => signInWithEmailToken(() => emailCreate(email, password, code));
+) =>
+  signInWithEmailToken(
+    () => emailCreate(email, password, code),
+    'too_many_attempts',
+  );
 
 export const authEmailLogIn = (
   email: string,
   password: string,
   language: Language,
   code?: string,
-) => signInWithEmailToken(() => emailLogIn(email, password, language, code));
+) =>
+  signInWithEmailToken(
+    () => emailLogIn(email, password, language, code),
+    // With a code, 429 means too many wrong codes; without, the lockout
+    code ? 'too_many_attempts' : 'login_locked',
+  );
 
 export const authEmailResetConfirm = (
   email: string,
   code: string,
   newPassword: string,
-) => signInWithEmailToken(() => emailResetConfirm(email, code, newPassword));
+) =>
+  signInWithEmailToken(
+    () => emailResetConfirm(email, code, newPassword),
+    'too_many_attempts',
+  );
 
 export const authSignInWithCustomToken = async (token: string) => {
   try {

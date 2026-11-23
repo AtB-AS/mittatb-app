@@ -126,6 +126,20 @@ export const emailReset = async (email: string, language: Language) => {
   });
 };
 
+/**
+ * Checks a sign-up or reset code without using it up, so the user can choose
+ * a password after proving they own the e-mail. The final create or
+ * reset/confirm call checks the code again and uses it up.
+ */
+export const emailVerifyCode = async (
+  purpose: 'signup' | 'reset',
+  email: string,
+  code: string,
+) => {
+  const path = purpose === 'signup' ? 'sign-up' : 'reset';
+  await client.post(`/identity/v1/email/${path}/verify`, {email, code});
+};
+
 /** Sets a new password and returns a custom token. */
 export const emailResetConfirm = async (
   email: string,

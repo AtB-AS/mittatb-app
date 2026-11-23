@@ -1,5 +1,14 @@
 import {isLoggedInAuthenticationType, mapAuthenticationType} from '../utils';
-import {isValidPassword} from '../email-login-session';
+import {
+  clearEmailLoginSession,
+  formatCountdown,
+  getPendingEmailCode,
+  getPendingEmailPassword,
+  isValidPassword,
+  sanitizeEmailCode,
+  setPendingEmailCode,
+  setPendingEmailPassword,
+} from '../email-login-session';
 
 // utils imports the time module, which pulls in the API client and @env.
 jest.mock('@atb/modules/time', () => ({
@@ -52,5 +61,42 @@ describe('isValidPassword', () => {
   it('counts characters, not UTF-16 units', () => {
     // 4 emoji are 8 UTF-16 units but only 4 characters
     expect(isValidPassword('😀😀😀😀')).toBe(false);
+  });
+});
+
+describe('sanitizeEmailCode', () => {
+  it('keeps pasted codes with spaces or dashes', () => {
+    expect(sanitizeEmailCode('123 456')).toBe('123456');
+    expect(sanitizeEmailCode(' 123-456 ')).toBe('123456');
+  });
+
+  it('limits to six digits', () => {
+    expect(sanitizeEmailCode('1234567')).toBe('123456');
+  });
+
+  it('drops letters', () => {
+    expect(sanitizeEmailCode('12a3')).toBe('123');
+  });
+});
+
+describe('formatCountdown', () => {
+  it('formats seconds as m:ss', () => {
+    expect(formatCountdown(42)).toBe('0:42');
+    expect(formatCountdown(60)).toBe('1:00');
+    expect(formatCountdown(5.2)).toBe('0:06');
+    expect(formatCountdown(-3)).toBe('0:00');
+  });
+});
+
+describe('e-mail login session', () => {
+  it('holds code and password until cleared', () => {
+    setPendingEmailCode('123456');
+    setPendingEmailPassword('secret-password');
+    expect(getPendingEmailCode()).toBe('123456');
+    expect(getPendingEmailPassword()).toBe('secret-password');
+
+    clearEmailLoginSession();
+    expect(getPendingEmailCode()).toBeUndefined();
+    expect(getPendingEmailPassword()).toBeUndefined();
   });
 });

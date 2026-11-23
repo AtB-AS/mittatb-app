@@ -1,46 +1,30 @@
-import {
-  getOrCreateVippsUserCustomToken,
-  VIPPS_CALLBACK_URL,
-} from '@atb/api/identity';
-import {
-  useAuthContext,
-  useAuthenticateVipps,
-  VippsSignInErrorCode,
-} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
-import {storage} from '@atb/modules/storage';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {
   getTextForLanguage,
   LoginTexts,
   useTranslation,
 } from '@atb/translations';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import React, {useEffect, useState} from 'react';
-import {Linking, ScrollView, View} from 'react-native';
-import queryString from 'query-string';
+import React, {useCallback} from 'react';
+import {ScrollView, View} from 'react-native';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {
   ChevronRight,
-  ExpandLess,
-  ExpandMore,
   ExternalLink,
 } from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
-import {useOnboardingContext} from '@atb/modules/onboarding';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
-import {
-  closeInAppBrowseriOS,
-  openInAppBrowser,
-} from '@atb/modules/in-app-browser';
+import {openInAppBrowser} from '@atb/modules/in-app-browser';
 import {Loading} from '@atb/components/loading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {NativeTouchable} from '@atb/components/native-touchable';
+import {useVippsLogin} from './use-vipps-login';
 
 const getThemeColor = (theme: Theme) => theme.color.background.neutral[1];
 
@@ -57,101 +41,20 @@ export const Root_LoginOptionsScreen = ({
   const styles = useStyles();
   const {theme} = useThemeContext();
   const themeColor = getThemeColor(theme);
-  const {signInWithCustomToken} = useAuthContext();
-  const [error, setError] = useState<VippsSignInErrorCode>();
-  const [isLoading, setIsLoading] = useState(false);
-  const appStatus = useAppStateStatus();
-  const [authorizationCode, setAuthorizationCode] = useState<
-    string | undefined
-  >(undefined);
   const {configurableLinks} = useFirestoreConfigurationContext();
-  const {completeOnboardingSection} = useOnboardingContext();
   const {isEmailLoginEnabled} = useFeatureTogglesContext();
   const {enable_vipps_login} = useRemoteConfigContext();
-  const [showMoreOptions, setShowMoreOptions] = useState(false);
-
-  const {mutateAsync: authVipps} = useAuthenticateVipps({
-    onSuccess: (url) => openInAppBrowser(url),
-    onError: () => setError('unknown_error'),
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-  });
-
-  useEffect(
-    () =>
-      navigation.addListener('focus', () => {
-        setIsLoading(false);
-      }),
+  const subscribeToFocus = useCallback(
+    (callback: () => void) => navigation.addListener('focus', callback),
     [navigation],
   );
-
-  useEffect(() => {
-    const signInVippsUser = async (authorizationCode: string) => {
-      try {
-        const customToken =
-          await getOrCreateVippsUserCustomToken(authorizationCode);
-        const errorCode = await signInWithCustomToken(
-          customToken.data as string,
-        );
-        if (errorCode) {
-          setError(errorCode);
-        }
-        completeOnboardingSection('userCreation');
-      } catch {
-        setError('unknown_error');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (authorizationCode) {
-      signInVippsUser(authorizationCode);
-    }
-  }, [authorizationCode, completeOnboardingSection, signInWithCustomToken]);
-
-  useEffect(() => {
-    const vippsCallbackHandler = async (event: any) => {
-      if (event.url.includes(VIPPS_CALLBACK_URL)) {
-        closeInAppBrowseriOS();
-        setIsLoading(true);
-        const code = queryString.parseUrl(event.url).query.code;
-        if (code) {
-          const state = queryString.parseUrl(event.url).query.state;
-          const initialState = await storage.get('vipps_state');
-          if (initialState?.toString() !== state?.toString()) {
-            setError('unknown_error');
-            setIsLoading(false);
-          } else {
-            setAuthorizationCode(code.toString());
-          }
-        } else {
-          const error = queryString.parseUrl(event.url).query.error;
-          if (error) {
-            if (error === 'outdated_app_version' || error === 'access_denied') {
-              setError(error);
-            } else {
-              setError('unknown_error');
-            }
-            setIsLoading(false);
-          }
-        }
-      }
-    };
-    const eventSubscription = Linking.addEventListener(
-      'url',
-      vippsCallbackHandler,
-    );
-    return () => eventSubscription.remove();
-  }, [appStatus]);
+  const {authVipps, error, isLoading} = useVippsLogin(subscribeToFocus);
 
   const phoneButton = (
     <Button
       surfaceColor="accent"
       expanded={true}
-      mode={isEmailLoginEnabled ? 'secondary' : 'primary'}
+      mode="primary"
       onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
       text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
       accessibilityHint={t(
@@ -182,7 +85,10 @@ export const Root_LoginOptionsScreen = ({
             ? {type: 'close'}
             : undefined
         }
-        title={t(LoginTexts.logInOptions.title)}
+        // The large title below names the screen when e-mail login is on
+        title={
+          isEmailLoginEnabled ? undefined : t(LoginTexts.logInOptions.title)
+        }
         globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
@@ -203,9 +109,11 @@ export const Root_LoginOptionsScreen = ({
             message={t(LoginTexts.vipps.errors[error])}
           />
         )}
-        <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.logInOptions.selectLoginMethod)}
-        </ThemeText>
+        {!isEmailLoginEnabled && (
+          <ThemeText style={styles.description} color={themeColor}>
+            {t(LoginTexts.logInOptions.selectLoginMethod)}
+          </ThemeText>
+        )}
 
         <View style={styles.buttonContainer}>
           {isEmailLoginEnabled ? (
@@ -215,41 +123,60 @@ export const Root_LoginOptionsScreen = ({
                 expanded={true}
                 mode="primary"
                 onPress={() =>
-                  navigation.navigate('Root_LoginEmailInputScreen')
+                  navigation.navigate('Root_LoginEmailInputScreen', {})
                 }
                 text={t(LoginTexts.logInOptions.options.email.label)}
                 accessibilityHint={t(
                   LoginTexts.logInOptions.options.email.a11yLabel,
                 )}
                 disabled={isLoading}
-                rightIcon={{svg: ChevronRight}}
                 testID="chooseLoginEmailButton"
               />
-              <Button
-                surfaceColor="accent"
-                expanded={true}
-                mode="tertiary"
-                onPress={() => setShowMoreOptions((show) => !show)}
-                text={t(
-                  showMoreOptions
-                    ? LoginTexts.logInOptions.options.moreOptions.hide
-                    : LoginTexts.logInOptions.options.moreOptions.show,
+              <NativeTouchable
+                variant="borderless"
+                style={styles.otherMethods}
+                onPress={() =>
+                  navigation.navigate('Root_LoginOtherMethodsScreen')
+                }
+                disabled={isLoading}
+                accessibilityRole="button"
+                accessibilityLabel={t(
+                  enable_vipps_login
+                    ? LoginTexts.logInOptions.options.otherMethods.a11yLabel
+                        .withVipps
+                    : LoginTexts.logInOptions.options.otherMethods.a11yLabel
+                        .phoneOnly,
                 )}
-                accessibilityState={{expanded: showMoreOptions}}
-                rightIcon={{svg: showMoreOptions ? ExpandLess : ExpandMore}}
-                testID="moreLoginOptionsButton"
-              />
-              {showMoreOptions && (
-                <>
-                  {enable_vipps_login && (
-                    <VippsLoginButton
-                      onPress={authVipps}
-                      disabled={isLoading}
-                    />
+                testID="otherLoginMethodsButton"
+              >
+                <ThemeText
+                  typography="body__s"
+                  type="secondary"
+                  style={styles.centeredText}
+                  color={themeColor}
+                >
+                  {t(
+                    enable_vipps_login
+                      ? LoginTexts.logInOptions.options.otherMethods.hint
+                          .withVipps
+                      : LoginTexts.logInOptions.options.otherMethods.hint
+                          .phoneOnly,
                   )}
-                  {phoneButton}
-                </>
-              )}
+                </ThemeText>
+                <ThemeText
+                  typography="body__s"
+                  style={[styles.centeredText, styles.underline]}
+                  color={themeColor}
+                >
+                  {t(
+                    enable_vipps_login
+                      ? LoginTexts.logInOptions.options.otherMethods.link
+                          .withVipps
+                      : LoginTexts.logInOptions.options.otherMethods.link
+                          .phoneOnly,
+                  )}
+                </ThemeText>
+              </NativeTouchable>
             </>
           ) : (
             <>
@@ -271,11 +198,34 @@ export const Root_LoginOptionsScreen = ({
               LoginTexts.logInOptions.options.anonymous.a11yLabel,
             )}
             disabled={isLoading}
-            rightIcon={{svg: ChevronRight}}
+            rightIcon={isEmailLoginEnabled ? undefined : {svg: ChevronRight}}
             testID="useAppAnonymouslyButton"
           />
         </View>
-        {termsInfoUrl && (
+        {termsInfoUrl && isEmailLoginEnabled && (
+          <ThemeText
+            typography="body__xs"
+            type="secondary"
+            style={[styles.centeredText, styles.termsConsent]}
+            color={themeColor}
+          >
+            {t(LoginTexts.logInOptions.termsConsent.prefix)}
+            <ThemeText
+              typography="body__xs"
+              type="secondary"
+              style={styles.underline}
+              color={themeColor}
+              accessibilityRole="link"
+              onPress={() =>
+                openInAppBrowser(termsInfoUrl, {dismissButtonStyle: 'done'})
+              }
+            >
+              {t(LoginTexts.logInOptions.termsConsent.link)}
+            </ThemeText>
+            {t(LoginTexts.logInOptions.termsConsent.suffix)}
+          </ThemeText>
+        )}
+        {termsInfoUrl && !isEmailLoginEnabled && (
           <View style={styles.termsOfUseLinkContainer}>
             <Button
               surfaceColor="accent"
@@ -326,16 +276,21 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     buttonContainer: {
       gap: theme.spacing.medium,
     },
+    otherMethods: {
+      paddingVertical: theme.spacing.small,
+      gap: theme.spacing.xSmall,
+    },
+    centeredText: {
+      textAlign: 'center',
+    },
+    underline: {
+      textDecorationLine: 'underline',
+    },
+    termsConsent: {
+      marginTop: theme.spacing.xLarge,
+    },
     termsOfUseLinkContainer: {
       marginVertical: theme.spacing.xLarge - theme.spacing.medium,
-    },
-    termsOfUseButtonContainer: {
-      marginVertical: theme.spacing.xLarge - theme.spacing.medium,
-      flexDirection: 'row',
-      justifyContent: 'center',
-    },
-    termsOfUseText: {
-      padding: theme.spacing.medium / 2,
     },
   };
 });

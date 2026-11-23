@@ -33,7 +33,14 @@ export type EmailSignInErrorCode =
   | 'invalid_code'
   | 'session_expired'
   | 'user_exists'
+  /** Too many wrong guesses on one code; a new code is needed. */
   | 'too_many_attempts'
+  /** Too many codes sent to the address. */
+  | 'too_many_codes_sent'
+  /** Too many failed log-ins; identity blocks the e-mail for 15 minutes. */
+  | 'login_locked'
+  /** In-memory flow state was lost, e.g. the app was killed. */
+  | 'session_lost'
   | 'unknown_error';
 export type VippsSignInErrorCode =
   | 'access_denied'
