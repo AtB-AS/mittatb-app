@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {keepPreviousData, useQuery} from '@tanstack/react-query';
 import qs from 'query-string';
 import {ONE_HOUR_MS} from '@atb/utils/durations';
 import {getNearestStopPlaceNodes} from '@atb/api/bff/departures';
@@ -13,4 +13,5 @@ export const useNearestStopPlaceNodesQuery = (
     queryFn: ({signal}) => getNearestStopPlaceNodes(queryVariables, {signal}),
     staleTime: 1 * ONE_HOUR_MS,
     gcTime: 24 * ONE_HOUR_MS,
+    placeholderData: keepPreviousData,
   });

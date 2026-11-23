@@ -10,10 +10,9 @@ import {
   useStableLocation,
 } from '@atb/modules/geolocation';
 import {StopPlaces} from './components/StopPlaces';
-import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {Ref, useEffect} from 'react';
+import React, {Ref, useEffect, useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -41,7 +40,7 @@ type Props = NearbyStopPlacesScreenParams & {
 };
 
 export const NearbyStopPlacesScreenComponent = ({
-  location,
+  location: selectedLocation,
   showFavoriteChips,
   headerProps,
   onPressLocationSearch,
@@ -51,37 +50,52 @@ export const NearbyStopPlacesScreenComponent = ({
   isLargeTitle,
   focusRef,
 }: Props) => {
-  const {locationIsAvailable, requestLocationPermission} =
-    useGeolocationContext();
-  const geolocation = useStableLocation(75);
+  const {
+    locationIsAvailable,
+    requestLocationPermission,
+    getCurrentCoordinates,
+  } = useGeolocationContext();
+  const stableLocation = useStableLocation(75);
+  const isFocused = useIsFocusedAndActive();
+
+  // Only update the current location while focused, to avoid fetching nearby
+  // stop places in the background
+  const [currentLocation, setCurrentLocation] = useState(stableLocation);
+  const appliedStableLocation = useRef(stableLocation);
+  useEffect(() => {
+    if (isFocused && stableLocation !== appliedStableLocation.current) {
+      appliedStableLocation.current = stableLocation;
+      setCurrentLocation(stableLocation);
+    }
+  }, [isFocused, stableLocation]);
 
   const styles = useStyles();
 
   const {t} = useTranslation();
-  const isFocused = useIsFocusedAndActive();
+
+  // Search/favorite locations live in route params, otherwise use the
+  // current location
+  const isUsingCurrentLocation =
+    !selectedLocation || selectedLocation.resultType === 'geolocation';
+  const location = isUsingCurrentLocation
+    ? locationIsAvailable
+      ? currentLocation
+      : undefined
+    : selectedLocation;
 
   const updatingLocation = !location && locationIsAvailable;
 
-  const {data: nearestStopPlaceNodesData, isLoading} =
-    useNearestStopPlaceNodesQuery(
-      location && {
-        ...location.coordinates,
-        count: 10,
-        distance: 3000,
-      },
-    );
-
-  // Update geolocation on screen focus if no other location is selected
-  useDoOnceWhen(
-    () => {
-      !location &&
-        geolocation &&
-        onUpdateLocation({
-          ...geolocation,
-          resultType: 'geolocation',
-        });
+  const {
+    data: nearestStopPlaceNodesData,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useNearestStopPlaceNodesQuery(
+    location && {
+      ...location.coordinates,
+      count: 10,
+      distance: 3000,
     },
-    Boolean(geolocation) && isFocused,
   );
 
   useEffect(() => {
@@ -114,14 +128,31 @@ export const NearbyStopPlacesScreenComponent = ({
           location.name
         : undefined;
 
+  // Pull-to-refresh fetches fresh coordinates, bypassing the stable location
+  // threshold, so small movements are also picked up
+  const [isRefreshingLocation, setIsRefreshingLocation] = useState(false);
+  const onRefresh = async () => {
+    if (!isUsingCurrentLocation || !currentLocation) return refetch();
+    setIsRefreshingLocation(true);
+    const coordinates = await getCurrentCoordinates();
+    setIsRefreshingLocation(false);
+    if (
+      !coordinates ||
+      (coordinates.latitude === currentLocation.coordinates.latitude &&
+        coordinates.longitude === currentLocation.coordinates.longitude)
+    ) {
+      return refetch();
+    }
+    setCurrentLocation({
+      ...currentLocation,
+      id: `geo-${coordinates.latitude}-${coordinates.longitude}`,
+      coordinates,
+    });
+  };
+
   const refreshControlProps = useManualRefreshControlProps({
-    refreshing: isLoading,
-    onRefresh: () =>
-      onUpdateLocation(
-        location?.resultType === 'geolocation'
-          ? (geolocation ?? undefined)
-          : location,
-      ),
+    refreshing: isRefreshingLocation || isFetching,
+    onRefresh,
   });
 
   return (
@@ -141,9 +172,19 @@ export const NearbyStopPlacesScreenComponent = ({
             showFavoriteChips={showFavoriteChips}
             openLocationSearch={() => onPressLocationSearch(location)}
             setLocation={(location: Location) => {
-              location.resultType === 'search' && location.layer === 'venue'
-                ? onSelectStopPlace(location)
-                : onUpdateLocation(location);
+              if (
+                location.resultType === 'search' &&
+                location.layer === 'venue'
+              ) {
+                onSelectStopPlace(location);
+                return;
+              }
+              // Use the exact coordinates from the location button, bypassing
+              // the stable location threshold
+              if (location.resultType === 'geolocation') {
+                setCurrentLocation(location);
+              }
+              onUpdateLocation(location);
             }}
             onEditFavoritePlaces={onEditFavoritePlaces}
           />
