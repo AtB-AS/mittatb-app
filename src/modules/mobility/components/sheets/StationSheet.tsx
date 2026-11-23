@@ -166,7 +166,7 @@ export const StationSheet = ({
           )}
           {!!vehicleTypesAvailable?.length && (
             <Section>
-              {vehicleTypesAvailable.map((e) => {
+              {vehicleTypesAvailable.map((e, index) => {
                 const makeModel = [e.vehicleType.make, e.vehicleType.model]
                   .filter(Boolean)
                   .join(' ');
@@ -222,9 +222,7 @@ export const StationSheet = ({
                     leftElement={image}
                     buttonTextRight={t(dictionary.select)}
                     onPress={() => {
-                      const vehicle =
-                        vehicleQueries[vehicleTypeIds.indexOf(e.vehicleType.id)]
-                          ?.data?.[0];
+                      const vehicle = vehicleQueries[index]?.data?.[0];
                       if (vehicle?.id) {
                         queryClient.setQueryData(
                           getVehicleQueryKey(vehicle.id),
