@@ -22,7 +22,7 @@ const useIconWidth = (boxed: boolean) => {
     : theme.icon.size.large * fontScale;
 };
 
-type TripIconRowProps = {
+type TransferInfoRowProps = {
   svg: ThemeIconProps['svg'];
   color?: IconColor;
   boxed?: boolean;
@@ -33,7 +33,7 @@ type TripIconRowProps = {
 } & Pick<ViewProps, 'accessible' | 'accessibilityLabel' | 'testID'>;
 
 /** A trip row led by an icon, with spacing.small across to the content. */
-export const TripIconRow = ({
+export const TransferInfoRow = ({
   svg,
   color,
   boxed = false,
@@ -42,7 +42,7 @@ export const TripIconRow = ({
   contentStyle,
   children,
   ...rowProps
-}: TripIconRowProps) => {
+}: TransferInfoRowProps) => {
   const style = useStyles();
   const {theme} = useThemeContext();
   const iconWidth = useIconWidth(boxed);

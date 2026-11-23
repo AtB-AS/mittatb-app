@@ -76,9 +76,9 @@ import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {CancelledDepartureMessage} from './CancelledDepartureMessage';
 import {WalkFill} from '@atb/assets/svg/mono-icons/transportation';
 import {InterchangeSection} from './InterchangeSection';
-import {TripIconRow} from './TripIconRow';
+import {TransferInfoRow} from './TransferInfoRow';
 
-type TripSectionProps = {
+type LegSectionProps = {
   isLast?: boolean;
   wait?: WaitDetails;
   isFirst?: boolean;
@@ -94,7 +94,7 @@ type TripSectionProps = {
   onPressQuay: TripProps['onPressQuay'];
 };
 
-export const TripSection: React.FC<TripSectionProps> = ({
+export const LegSection: React.FC<LegSectionProps> = ({
   isLast,
   isFirst,
   wait,
@@ -237,7 +237,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const sectionOutput = (
     <>
       <InterchangeSection leg={leg} />
-      <View style={style.tripSection} testID={testID}>
+      <View style={style.legSection} testID={testID}>
         {!!step && leg.mode && (
           <AccessibleText
             style={style.a11yHelper}
@@ -879,7 +879,7 @@ const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
   const a11yLabel = useWalkA11yLabel(leg, timeRounding);
 
   return (
-    <TripIconRow
+    <TransferInfoRow
       decorated
       boxed
       svg={WalkFill}
@@ -900,7 +900,7 @@ const WalkSection = ({leg, timeRounding = 'floor'}: WalkSectionProps) => {
             ? t(TripDetailsTexts.trip.leg.walk.label(durationText))
             : t(TripDetailsTexts.trip.leg.shortWalk)}
       </ThemeText>
-    </TripIconRow>
+    </TransferInfoRow>
   );
 };
 
@@ -1008,7 +1008,7 @@ export function mapLegToTimeValues(leg: Leg) {
 }
 
 const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
-  tripSection: {
+  legSection: {
     flex: 1,
   },
   legPath: {
