@@ -41,6 +41,7 @@
     "@bugsnag/react-native": "^8.8.0",
     "@entur-private/abt-mobile-barcode-javascript-lib": "3.4.8",
     "@entur-private/abt-mobile-client-sdk": "3.4.8",
+    "@google/react-native-make-payment": "^0.3.1",
     "@gorhom/bottom-sheet": "^5.2.14",
     "@intercom/intercom-react-native": "9.4.0",
     "@leile/lobo-t": "^1.0.5",
