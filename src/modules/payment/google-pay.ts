@@ -16,8 +16,7 @@ const ALLOWED_AUTH_METHODS = ['CRYPTOGRAM_3DS'];
 
 /**
  * Google Pay is only available on Android, and only when the build has the
- * merchant and gateway configured. Like Apple Pay, an empty merchant id
- * disables it.
+ * merchant and gateway configured.
  */
 export function isGooglePayConfigured(): boolean {
   return (
