@@ -7,8 +7,7 @@ export const useMapVehicle = () => {
 
   let vehicleId = '';
   // Only a vehicle state carries a vehicle id. The station states overload
-  // `assetId` with a *station* id (see mapStateReducer, BikeStationScanned /
-  // CarStationScanned), and a scanned station has no `feature` to fall back
+  // `assetId` with a *station* id (see mapStateReducer, StationScanned), and a scanned station has no `feature` to fall back
   // on -- without this guard we'd request /vehicles/<stationId> and 404.
   if (
     !mapState.isStationBasedBooking &&
