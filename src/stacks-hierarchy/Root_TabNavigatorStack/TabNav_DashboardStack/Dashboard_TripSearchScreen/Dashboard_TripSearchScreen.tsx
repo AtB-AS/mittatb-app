@@ -79,10 +79,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 }) => {
   const {callerRoute} = route.params;
   const styles = useStyles();
-  const [searchTime, setSearchTime] = useState<TripSearchTime>({
-    option: 'now',
-    date: new Date().toISOString(),
-  });
+  const [searchTime, setSearchTime] = useState<TripSearchTime>(
+    () =>
+      route.params.searchTime ?? {
+        option: 'now',
+        date: new Date().toISOString(),
+      },
+  );
   const focusRef = useFocusOnLoad(navigation);
 
   const {language, t} = useTranslation();
@@ -121,7 +124,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const tripSearchEnabled = isValidTripLocations(from, to);
   const hasLocations = !!from && !!to;
 
-  const filtersState = useTravelSearchFiltersState();
+  const filtersState = useTravelSearchFiltersState(route.params.initialFilters);
 
   const arriveBy = searchTime.option === 'arrival';
   const sanitizedSearchTime = useMemo(

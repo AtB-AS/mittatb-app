@@ -421,6 +421,92 @@ describe('trip search', () => {
       ),
     ).toBeUndefined();
   });
+
+  describe('from planner web', () => {
+    // As built by the trip search in planner web
+    const FROM =
+      'fromId=NSR%3AStopPlace%3A337&fromName=Oslo+S&fromLon=10.753276&fromLat=59.910925&fromLayer=venue';
+    const TO =
+      'toId=NSR%3AGroupOfStopPlaces%3A1&toName=Oslo&toLon=10.748128&toLat=59.911076&toLayer=address';
+
+    it('opens trip search with the locations looked up by id', async () => {
+      const state = await getStateAfterLookupFrom(
+        `/assistant?${FROM.replace('Oslo+S', 'Other+name')}&${TO}`,
+      );
+      expect(mockPlace).toHaveBeenCalledWith(['NSR:StopPlace:337']);
+      expect(mockPlace).toHaveBeenCalledWith(['NSR:GroupOfStopPlaces:1']);
+      expect(mockReverse).not.toHaveBeenCalled();
+      expect(tripSearchParams(state).fromLocation).toEqual(
+        PLACES['NSR:StopPlace:337'],
+      );
+      expect(tripSearchParams(state).toLocation).toEqual(
+        PLACES['NSR:GroupOfStopPlaces:1'],
+      );
+    });
+
+    it.each([
+      ['from', `/assistant?${TO}`],
+      ['to', `/assistant?${FROM}`],
+      ['from and to', '/assistant'],
+    ])('is not handled without %s', async (_, url) => {
+      expect(await getStateAfterLookupFrom(url)).toBeUndefined();
+    });
+
+    describe('search time', () => {
+      const getSearchTime = async (query: string) =>
+        tripSearchParams(
+          await getStateAfterLookupFrom(`/assistant?${FROM}&${TO}&${query}`),
+        ).searchTime;
+
+      it.each([
+        ['departBy', 'departure'],
+        ['arriveBy', 'arrival'],
+      ])('opens with %s as %s', async (searchMode, option) => {
+        expect(
+          await getSearchTime(
+            `searchMode=${searchMode}&searchTime=1795089600000`,
+          ),
+        ).toEqual({option, date: '2026-11-19T12:00:00.000Z'});
+      });
+
+      it('keeps search times in the past', async () => {
+        expect(
+          await getSearchTime('searchMode=departBy&searchTime=1577880000000'),
+        ).toEqual({option: 'departure', date: '2020-01-01T12:00:00.000Z'});
+      });
+    });
+
+    describe('filters', () => {
+      const getInitialFilters = async (query: string) =>
+        tripSearchParams(
+          await getStateAfterLookupFrom(`/assistant?${FROM}&${TO}&${query}`),
+        ).initialFilters;
+
+      it('opens with the filters from the link', async () => {
+        expect(
+          await getInitialFilters(
+            'filter=bus%2Crail&walkSpeed=1.5&transferSlack=0',
+          ),
+        ).toEqual({
+          transportModes: ['bus', 'rail'],
+          travelSearchPreferences: {walkSpeed: 1.5, transferSlack: 0},
+        });
+      });
+
+      it.each([
+        'filter=%2C&walkSpeed=fast&transferSlack=',
+        'filter=%2C&walkSpeed=-1&transferSlack=-60',
+      ])(
+        'leaves out filters which are empty or invalid in %p',
+        async (query) => {
+          expect(await getInitialFilters(query)).toEqual({
+            transportModes: [],
+            travelSearchPreferences: {},
+          });
+        },
+      );
+    });
+  });
 });
 
 describe('planner web', () => {
