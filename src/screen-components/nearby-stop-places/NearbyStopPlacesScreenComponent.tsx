@@ -69,7 +69,11 @@ export const NearbyStopPlacesScreenComponent = ({
   // Search/favorite locations live in route params, otherwise use the
   // current location
   const location =
-    selectedLocation ?? (locationIsAvailable ? currentLocation : undefined);
+    selectedLocation && selectedLocation.resultType !== 'geolocation'
+      ? selectedLocation
+      : locationIsAvailable
+        ? currentLocation
+        : undefined;
 
   const updatingLocation = !location && locationIsAvailable;
 
@@ -140,11 +144,7 @@ export const NearbyStopPlacesScreenComponent = ({
             setLocation={(location: Location) => {
               location.resultType === 'search' && location.layer === 'venue'
                 ? onSelectStopPlace(location)
-                : onUpdateLocation(
-                    location.resultType === 'geolocation'
-                      ? undefined
-                      : location,
-                  );
+                : onUpdateLocation(location);
             }}
             onEditFavoritePlaces={onEditFavoritePlaces}
           />
