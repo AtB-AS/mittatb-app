@@ -1,8 +1,10 @@
 {
   "mcpServers": {
-    "webdriverio": {
-      "command": "npx",
-      "args": ["-y", "--package", "@wdio/mcp", "wdio-mcp", "--config", "./conf/android.conf.mcp.ts"]
+    "maestro": {
+      "type": "stdio",
+      "command": "maestro",
+      "args": ["mcp"],
+      "env": {}
     }
   }
 }
