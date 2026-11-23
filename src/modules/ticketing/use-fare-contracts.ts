@@ -3,6 +3,7 @@ import {FareContractType} from '@atb-as/utils';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {useEffect, useState} from 'react';
 import {getFareContracts} from '@atb/modules/ticketing';
+import type {FareContractsResponse} from './api';
 import {useAuthContext} from '@atb/modules/auth';
 import {getAvailabilityStatus, AvailabilityStatus} from '@atb-as/utils';
 import {isDefined} from '@atb/utils/presence';
@@ -101,7 +102,9 @@ export const useGetFareContractsQuery = (props: {enabled: boolean}) => {
   const {abtCustomerId} = useAuthContext();
   return useQuery({
     queryKey: [fareContractsQueryKey, abtCustomerId],
-    queryFn: () => getFareContracts(),
+    queryFn: ({client, queryKey}) =>
+      getFareContracts(client.getQueryData<FareContractsResponse>(queryKey)),
+    select: (data) => data.fareContracts,
     enabled: props.enabled && !!abtCustomerId,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
