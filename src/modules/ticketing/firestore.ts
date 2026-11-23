@@ -24,7 +24,7 @@ type SnapshotListener<T> = {
 export function setupFirestoreListeners(
   abtCustomerId: string,
   listeners: {
-    fareContracts: SnapshotListener<FareContractType[]>;
+    fareContracts?: SnapshotListener<FareContractType[]>;
     sentFareContracts: SnapshotListener<FareContractType[]>;
     reservations: SnapshotListener<Reservation[]>;
     rejectedReservations: SnapshotListener<Reservation[]>;
@@ -89,25 +89,31 @@ export function setupFirestoreListeners(
   const db = getFirestore();
   const customerDoc = doc(collection(db, 'customers'), abtCustomerId);
 
-  const fareContractUnsub = onSnapshot(
-    query(collection(customerDoc, 'fareContracts'), orderBy('created', 'desc')),
-    (snapshot) => {
-      const fareContracts = snapshot.docs
-        .map(mapFareContract)
-        .filter(isDefined);
-      listeners.fareContracts.onSnapshot(fareContracts);
+  const fareContractsListener = listeners.fareContracts;
+  const fareContractUnsub = fareContractsListener
+    ? onSnapshot(
+        query(
+          collection(customerDoc, 'fareContracts'),
+          orderBy('created', 'desc'),
+        ),
+        (snapshot) => {
+          const fareContracts = snapshot.docs
+            .map(mapFareContract)
+            .filter(isDefined);
+          fareContractsListener.onSnapshot(fareContracts);
 
-      Bugsnag.leaveBreadcrumb('farecontract_snapshot', {
-        count: fareContracts.length,
-      });
-    },
-    (err) => {
-      Bugsnag.notify(err, function (event) {
-        event.addMetadata('ticket', {abtCustomerId});
-      });
-      listeners.fareContracts.onError(err);
-    },
-  );
+          Bugsnag.leaveBreadcrumb('farecontract_snapshot', {
+            count: fareContracts.length,
+          });
+        },
+        (err) => {
+          Bugsnag.notify(err, function (event) {
+            event.addMetadata('ticket', {abtCustomerId});
+          });
+          fareContractsListener.onError(err);
+        },
+      )
+    : undefined;
 
   const sentFareContractsUnsub = onSnapshot(
     query(
@@ -194,7 +200,7 @@ export function setupFirestoreListeners(
 
   // Stop listening for updates when no longer required
   return function removeListeners() {
-    fareContractUnsub();
+    fareContractUnsub?.();
     sentFareContractsUnsub();
     reservationsUnsub();
     customerProfileUnsub();
