@@ -12,10 +12,9 @@ import {
 import {StopPlaces} from './components/StopPlaces';
 import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
-import React, {Ref, useEffect, useState} from 'react';
+import React, {Ref, useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {EmptyState} from '@atb/components/empty-state';
 import SharedTexts from '@atb/translations/shared';
@@ -52,15 +51,7 @@ export const NearbyStopPlacesScreenComponent = ({
 }: Props) => {
   const {locationIsAvailable, requestLocationPermission} =
     useGeolocationContext();
-  const stableLocation = useStableLocation(75);
-  const isFocused = useIsFocusedAndActive();
-
-  // Only update the current location while focused, to avoid fetching nearby
-  // stop places in the background
-  const [currentLocation, setCurrentLocation] = useState(stableLocation);
-  useEffect(() => {
-    if (isFocused) setCurrentLocation(stableLocation);
-  }, [isFocused, stableLocation]);
+  const currentLocation = useStableLocation(75);
 
   const styles = useStyles();
 
