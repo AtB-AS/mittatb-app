@@ -523,6 +523,7 @@ function useLocations(
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
+      currentLocation?.name,
     ],
   );
 
@@ -530,75 +531,81 @@ function useLocations(
   const searchedToLocation = route.params?.toLocation;
 
   if (searchedToLocation && !searchedFromLocation) {
-    searchedFromLocation = currentLocation;
+    searchedFromLocation = memoedCurrentLocation;
   }
 
   return useUpdatedLocation(
     searchedFromLocation,
     searchedToLocation,
-    memoedCurrentLocation,
     favorites,
   );
 }
 
+/**
+ * Derives from/to synchronously from the route params (instead of syncing
+ * them into state in an effect), so a param change lands in the same render
+ * as e.g. a search time or filter change, and only triggers one search.
+ */
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationType | undefined,
   searchedToLocation: SelectableLocationType | undefined,
-  currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
-  const [from, setFrom] = useState<Location | undefined>();
-  const [to, setTo] = useState<Location | undefined>();
   const navigation = useNavigation<RootProps['navigation']>();
 
-  const setLocation = useCallback(
-    (direction: 'from' | 'to', searchedLocation?: SelectableLocationType) => {
-      const updater = direction === 'from' ? setFrom : setTo;
-      if (!searchedLocation) return updater(searchedLocation);
+  const journey =
+    searchedFromLocation?.resultType === 'journey'
+      ? searchedFromLocation
+      : searchedToLocation?.resultType === 'journey'
+        ? searchedToLocation
+        : undefined;
 
-      switch (searchedLocation.resultType) {
-        case 'search':
-        case 'geolocation':
-          return updater(searchedLocation);
-        case 'journey': {
-          const toSearch = (i: number): Location => ({
-            ...searchedLocation.journeyData[i],
-            resultType: 'search',
-          });
-
-          // Set both states when journey is passed.
-          navigation.setParams({
-            fromLocation: toSearch(0),
-            toLocation: toSearch(1),
-          });
-          return;
-        }
-        case 'favorite': {
-          const favorite = favorites.find(
-            (f) => f.id === searchedLocation.favoriteId,
-          );
-
-          if (favorite) {
-            return updater(favorite.location);
-          }
-        }
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentLocation, favorites],
+  const from = useMemo(
+    () =>
+      journey
+        ? journeyToSearchLocation(journey, 0)
+        : resolveLocation(searchedFromLocation, favorites),
+    [journey, searchedFromLocation, favorites],
+  );
+  const to = useMemo(
+    () =>
+      journey
+        ? journeyToSearchLocation(journey, 1)
+        : resolveLocation(searchedToLocation, favorites),
+    [journey, searchedToLocation, favorites],
   );
 
-  // Override from state on change
+  // Replace a journey param with explicit from/to params. Passing the same
+  // memoized objects keeps from/to stable, so no extra search runs.
   useEffect(() => {
-    setLocation('from', searchedFromLocation);
-  }, [searchedFromLocation, setLocation]);
-
-  // Override to state on change
-  useEffect(() => {
-    setLocation('to', searchedToLocation);
-  }, [searchedToLocation, setLocation]);
+    if (journey) {
+      navigation.setParams({fromLocation: from, toLocation: to});
+    }
+  }, [journey, from, to, navigation]);
 
   return useMemo(() => ({from, to}), [from, to]);
+}
+
+function resolveLocation(
+  location: SelectableLocationType | undefined,
+  favorites: UserFavorites,
+): Location | undefined {
+  switch (location?.resultType) {
+    case 'search':
+    case 'geolocation':
+      return location;
+    case 'favorite':
+      return favorites.find((f) => f.id === location.favoriteId)?.location;
+    default:
+      return undefined;
+  }
+}
+
+function journeyToSearchLocation(
+  journey: Extract<SelectableLocationType, {resultType: 'journey'}>,
+  index: 0 | 1,
+): Location {
+  return {...journey.journeyData[index], resultType: 'search'};
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
