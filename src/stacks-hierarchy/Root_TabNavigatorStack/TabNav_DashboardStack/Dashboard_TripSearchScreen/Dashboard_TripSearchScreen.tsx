@@ -548,37 +548,33 @@ function useUpdatedLocation(
 ): SearchForLocations {
   const navigation = useNavigation<RootProps['navigation']>();
 
-  const journey =
-    searchedFromLocation?.resultType === 'journey'
-      ? searchedFromLocation
-      : searchedToLocation?.resultType === 'journey'
-        ? searchedToLocation
-        : undefined;
+  const journey = [searchedFromLocation, searchedToLocation].find(isJourney);
 
-  const from = useMemo(
-    () =>
-      journey
-        ? journeyToSearchLocation(journey, 0)
-        : resolveLocation(searchedFromLocation, favorites),
-    [journey, searchedFromLocation, favorites],
-  );
-  const to = useMemo(
-    () =>
-      journey
-        ? journeyToSearchLocation(journey, 1)
-        : resolveLocation(searchedToLocation, favorites),
-    [journey, searchedToLocation, favorites],
-  );
+  const locations = useMemo<SearchForLocations>(() => {
+    if (journey) {
+      return {
+        from: journeyToSearchLocation(journey, TravelDirection.From),
+        to: journeyToSearchLocation(journey, TravelDirection.To),
+      };
+    }
+    return {
+      from: resolveLocation(searchedFromLocation, favorites),
+      to: resolveLocation(searchedToLocation, favorites),
+    };
+  }, [journey, searchedFromLocation, searchedToLocation, favorites]);
 
   // Replace a journey param with explicit from/to params. Passing the same
   // memoized objects keeps from/to stable, so no extra search runs.
   useEffect(() => {
     if (journey) {
-      navigation.setParams({fromLocation: from, toLocation: to});
+      navigation.setParams({
+        fromLocation: locations.from,
+        toLocation: locations.to,
+      });
     }
-  }, [journey, from, to, navigation]);
+  }, [journey, locations, navigation]);
 
-  return useMemo(() => ({from, to}), [from, to]);
+  return locations;
 }
 
 function resolveLocation(
@@ -596,11 +592,30 @@ function resolveLocation(
   }
 }
 
+type JourneyLocation = Extract<SelectableLocationType, {resultType: 'journey'}>;
+
+function isJourney(
+  location: SelectableLocationType | undefined,
+): location is JourneyLocation {
+  return location?.resultType === 'journey';
+}
+
+enum TravelDirection {
+  From = 0,
+  To = 1,
+}
+
+/**
+ * A helper function to convert a journey location into a search location.
+ * @param journey The journey location containing the journey data.
+ * @param direction The direction of the location within the journey (From or To).
+ * @returns The corresponding search location derived from the journey data.
+ */
 function journeyToSearchLocation(
-  journey: Extract<SelectableLocationType, {resultType: 'journey'}>,
-  index: 0 | 1,
+  journey: JourneyLocation,
+  direction: TravelDirection,
 ): Location {
-  return {...journey.journeyData[index], resultType: 'search'};
+  return {...journey.journeyData[direction], resultType: 'search'};
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
