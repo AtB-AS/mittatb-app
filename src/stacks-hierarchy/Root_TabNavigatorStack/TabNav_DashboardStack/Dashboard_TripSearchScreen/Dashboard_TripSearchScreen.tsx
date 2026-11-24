@@ -128,15 +128,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   // Handle if the geolocation params are stale and need to be refreshed (when coming in from map tab)
   useEffect(() => {
-    const refreshed = getRefreshedGeolocationParams();
+    if (isJourney(fromLocationParam) || isJourney(toLocationParam)) return;
 
     const isStale =
-      (!!refreshed.fromLocation &&
-        refreshed.fromLocation !== fromLocationParam) ||
-      (!!refreshed.toLocation && refreshed.toLocation !== toLocationParam);
+      isStaleGeolocation(fromLocationParam, currentLocation) ||
+      isStaleGeolocation(toLocationParam, currentLocation);
 
     if (isStale) {
-      navigation.setParams(refreshed);
+      navigation.setParams(getRefreshedGeolocationParams());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromLocationParam, toLocationParam, navigation]);
@@ -578,8 +577,7 @@ function useUpdatedLocation(
     };
   }, [journey, searchedFromLocation, searchedToLocation, favorites]);
 
-  // Replace a journey param with explicit from/to params. Passing the same
-  // memoized objects keeps from/to stable, so no extra search runs.
+  // Replace a journey param with explicit from/to params.
   useEffect(() => {
     if (journey) {
       navigation.setParams({
@@ -631,6 +629,17 @@ function journeyToSearchLocation(
   direction: TravelDirection,
 ): Location {
   return {...journey.journeyData[direction], resultType: 'search'};
+}
+
+function isStaleGeolocation(
+  location: SelectableLocationType | undefined,
+  currentLocation: GeoLocation | undefined,
+): boolean {
+  return (
+    location?.resultType === 'geolocation' &&
+    !!currentLocation &&
+    !coordinatesAreEqual(location.coordinates, currentLocation.coordinates)
+  );
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
