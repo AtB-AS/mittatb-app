@@ -126,6 +126,21 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     };
   }, [fromLocationParam, toLocationParam, currentLocation]);
 
+  // Handle if the geolocation params are stale and need to be refreshed (when coming in from map tab)
+  useEffect(() => {
+    const refreshed = getRefreshedGeolocationParams();
+
+    const isStale =
+      (!!refreshed.fromLocation &&
+        refreshed.fromLocation !== fromLocationParam) ||
+      (!!refreshed.toLocation && refreshed.toLocation !== toLocationParam);
+
+    if (isStale) {
+      navigation.setParams(refreshed);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromLocationParam, toLocationParam, navigation]);
+
   useEffect(() => {
     if (pendingResult?.key === RESULT_KEY_FROM) {
       navigation.setParams({
