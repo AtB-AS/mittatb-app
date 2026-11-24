@@ -24,4 +24,7 @@ declare module '@env' {
   export const POSTHOG_API_KEY: string | undefined;
   export const POSTHOG_HOST: string | undefined;
   export const APP_LINK_HOST: string | undefined;
+  export const GOOGLE_PAY_MERCHANT_ID: string | undefined;
+  export const GOOGLE_PAY_GATEWAY: string | undefined;
+  export const GOOGLE_PAY_GATEWAY_MERCHANT_ID: string | undefined;
 }
