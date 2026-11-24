@@ -522,6 +522,7 @@ export const getTransportModeAndSubMode = (
   propulsionType?: PropulsionType | undefined | null,
 ): {mode: AnyMode; subMode: AnySubMode | undefined} => {
   switch (formFactor) {
+    case FormFactor.CargoBicycle:
     case FormFactor.Bicycle:
       if (
         propulsionType === PropulsionType.Electric ||
