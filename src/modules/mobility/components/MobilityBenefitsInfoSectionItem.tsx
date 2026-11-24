@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
@@ -8,13 +8,20 @@ import {SectionItemProps, useSectionItem} from '@atb/components/sections';
 import {StyleSheet, useThemeContext} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import type {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
+import {MapFilterType, useEnableFormFactorsInMapFilter} from '@atb/modules/map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {MapPin} from '@atb/assets/svg/mono-icons/tab-bar';
+import {ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = SectionItemProps<{
   benefits: FareProductBenefitType[];
+  onNavigateToMap?: (initialFilters: MapFilterType) => void;
 }>;
 
 export const MobilityBenefitsInfoSectionItem = ({
   benefits,
+  onNavigateToMap,
   ...props
 }: Props) => {
   const {topContainer} = useSectionItem(props);
@@ -39,8 +46,8 @@ export const MobilityBenefitsInfoSectionItem = ({
   return (
     <View
       style={topContainer}
-      accessible={true}
-      accessibilityLabel={accessibilityLabel}
+      accessible={!onNavigateToMap}
+      accessibilityLabel={onNavigateToMap ? undefined : accessibilityLabel}
     >
       <ThemeText typography="body__s" type="secondary">
         {t(MobilityTexts.includedWithTheTicket)}
@@ -52,7 +59,11 @@ export const MobilityBenefitsInfoSectionItem = ({
       >
         <View style={styles.borderedInfoBoxContent}>
           {benefits.map((b) => (
-            <BenefitInfo benefit={b} key={b.operatorId} />
+            <BenefitInfo
+              benefit={b}
+              key={b.operatorId}
+              onNavigateToMap={onNavigateToMap}
+            />
           ))}
         </View>
       </BorderedInfoBox>
@@ -60,19 +71,33 @@ export const MobilityBenefitsInfoSectionItem = ({
   );
 };
 
-const BenefitInfo = ({
-  benefit: {illustrationName, title, description},
+export const BenefitInfo = ({
+  benefit: {illustrationName, title, description, formFactors},
+  onNavigateToMap,
 }: {
   benefit: FareProductBenefitType;
+  onNavigateToMap?: (initialFilters: MapFilterType) => void;
 }) => {
-  const {language} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
+  const enableFormFactorsInMapFilter = useEnableFormFactorsInMapFilter();
   const titleText = getTextForLanguage(title, language);
   const descriptionText = getTextForLanguage(description, language);
+  const showMapButton = !!onNavigateToMap && formFactors.length > 0;
+
+  const handleNavigateToMap = () => {
+    if (!onNavigateToMap) return;
+    const updatedFilter = enableFormFactorsInMapFilter(
+      formFactors as FormFactor[],
+    );
+    if (!updatedFilter) return;
+    onNavigateToMap(updatedFilter);
+  };
+
   return (
     <View style={styles.benefitInfo}>
       <BenefitIllustration illustrationName={illustrationName} />
-      <View style={styles.benefitText}>
+      <View style={styles.benefitText} accessible={!!onNavigateToMap}>
         {!!titleText && (
           <ThemeText typography="body__s__strong">{titleText}</ThemeText>
         )}
@@ -80,6 +105,18 @@ const BenefitInfo = ({
           <ThemeText typography="body__xs">{descriptionText}</ThemeText>
         )}
       </View>
+      {showMapButton && (
+        <Pressable
+          onPress={handleNavigateToMap}
+          style={styles.mapButton}
+          accessibilityRole="button"
+          accessibilityLabel={t(MobilityTexts.showInMap)}
+          accessibilityHint={t(MobilityTexts.showInMapA11yLabel)}
+        >
+          <ThemeIcon svg={MapPin} />
+          <ThemeIcon svg={ChevronRight} />
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -95,5 +132,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       alignItems: 'center',
     },
     benefitText: {flex: 1, gap: theme.spacing.xSmall},
+    mapButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.xSmall,
+    },
   };
 });

@@ -5,7 +5,6 @@ export {BrandingImage} from './components/BrandingImage';
 export {CarSharingStationBottomSheet} from './components/CarSharingStationBottomSheet';
 export {MapFilter} from './components/filter/MapFilter';
 export {MapFilterSheet} from './components/filter/MapFilterSheet';
-export {MobilityBenefitsActionSectionItem} from './components/MobilityBenefitsActionSectionItem';
 export {MobilityBenefitsInfoSectionItem} from './components/MobilityBenefitsInfoSectionItem';
 export {MobilitySingleBenefitInfoSectionItem} from './components/MobilitySingleBenefitInfoSectionItem';
 export {LocationScreenComponent} from './components/onboarding/LocationScreenComponent';

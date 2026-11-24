@@ -39,6 +39,7 @@ import {
   Vehicle,
 } from '@atb/api/types/mobility';
 import {PriceDetailsCard} from '../PriceDetailsCard';
+import {NotEligibleBenefitCard} from '../NotEligibleBenefitCard';
 import {Loading} from '@atb/components/loading';
 import {SupportButton} from '../SupportButton';
 import {AppSwitchActionButton} from '@atb/modules/mobility';
@@ -285,6 +286,11 @@ export const VehicleSheet = ({
                 message={t(
                   ShmoWarnings.operatorClosed(operatorName, openingTime),
                 )}
+              />
+            )}
+            {!!vehicle.notEligibleBenefit && (
+              <NotEligibleBenefitCard
+                notEligibleBenefit={vehicle.notEligibleBenefit}
               />
             )}
             {!!vehicle.vehicleType.vehicleImage && (

@@ -1,45 +1,21 @@
 import {View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {BenefitImageAsset} from './BenefitImage';
 import React from 'react';
 import {SectionItemProps, useSectionItem} from '@atb/components/sections';
-import {toFormFactorEnum} from '../utils';
-import {StyleSheet} from '@atb/theme';
+import type {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
+import {BenefitInfo} from './MobilityBenefitsInfoSectionItem';
 
 type Props = SectionItemProps<{
-  benefit: OperatorBenefitType;
+  benefit: FareProductBenefitType;
 }>;
 
 export const MobilitySingleBenefitInfoSectionItem = ({
   benefit,
   ...props
 }: Props) => {
-  const styles = useStyles();
   const {topContainer} = useSectionItem(props);
-  const {language} = useTranslation();
   return (
-    <View style={topContainer}>
-      <View style={styles.mobilityBenefit}>
-        {benefit.formFactors.map((ff) => (
-          <BenefitImageAsset formFactor={toFormFactorEnum(ff)} key={ff} />
-        ))}
-        <ThemeText typography="body__s" style={styles.mobilityBenefitText}>
-          {getTextForLanguage(benefit.ticketDescription, language)}
-        </ThemeText>
-      </View>
+    <View style={topContainer} accessible={true}>
+      <BenefitInfo benefit={benefit} />
     </View>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  mobilityBenefit: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: theme.spacing.medium,
-  },
-  mobilityBenefitText: {
-    flexShrink: 1,
-  },
-}));

@@ -7,7 +7,7 @@ import {isValidPhoneNumber} from 'libphonenumber-js';
 import {isValidEmail} from '@atb/utils/validation';
 import {Feature, MultiPolygon, Point, Polygon} from 'geojson';
 import {Base64ImageSchema} from '@atb/utils/image';
-import {BenefitSchema} from '@atb/api/types/benefit';
+import {BenefitSchema, NotEligibleBenefitSchema} from '@atb/api/types/benefit';
 import {PriceAdjustmentSchema} from '@atb/api/types/price-adjustment';
 import {LanguageAndTextTypeArray} from '@atb-as/config-specs/lib/common';
 
@@ -319,6 +319,9 @@ export const VehicleSchema = z.object({
   // Tolerant: a malformed/unknown benefit shape degrades to undefined rather
   // than failing the whole vehicle parse.
   benefit: BenefitSchema.nullable().optional().catch(undefined),
+  notEligibleBenefit: NotEligibleBenefitSchema.nullable()
+    .optional()
+    .catch(undefined),
   bonusOffer: BonusOfferSchema.nullable().optional(),
   actionButton: ActionButtonSchema.nullable().optional(),
   maxRentalDuration: z.number().nullish(),

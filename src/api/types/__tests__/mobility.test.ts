@@ -45,6 +45,7 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.benefit).toBeUndefined();
+      expect(result.data.notEligibleBenefit).toBeUndefined();
       expect(result.data.bonusOffer).toBeUndefined();
       expect(result.data.actionButton).toBeUndefined();
     }
@@ -80,6 +81,36 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
         adjustmentType: 'FREE_UNLOCK',
       });
       expect(result.data.benefit).not.toHaveProperty('eligibility');
+    }
+  });
+
+  it('parses a notEligibleBenefit with a null illustrationName', () => {
+    const result = VehicleSchema.safeParse({
+      ...baseVehicle,
+      notEligibleBenefit: {
+        title: [{language: 'en', value: 'Get city bikes included'}],
+        description: [],
+        illustrationName: null,
+      },
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.notEligibleBenefit).toEqual({
+        title: [{language: 'en', value: 'Get city bikes included'}],
+        description: [],
+        illustrationName: undefined,
+      });
+    }
+  });
+
+  it('degrades a malformed notEligibleBenefit to undefined', () => {
+    const result = VehicleSchema.safeParse({
+      ...baseVehicle,
+      notEligibleBenefit: {title: 'not an array'},
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.notEligibleBenefit).toBeUndefined();
     }
   });
 
