@@ -18,11 +18,15 @@ import {
   usePaymentAgreementsQuery,
   useStopPaymentAgreementMutation,
 } from '@atb/modules/ticketing';
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  ProfileTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import PaymentMethodsTexts from '@atb/translations/screens/subscreens/PaymentMethods';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
@@ -69,6 +73,8 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     isGooglePayEnabled,
     isVippsPaymentAgreementEnabled,
   } = useFeatureTogglesContext();
+  const isApplePayAvailable = Platform.OS === 'ios' && isApplePayEnabled;
+  const isGooglePayAvailable = Platform.OS === 'android' && isGooglePayEnabled;
   const {authenticationType} = useAuthContext();
   const isLoggedIn = authenticationType === 'phone';
   const {enable_vipps_login} = useRemoteConfigContext();
@@ -318,11 +324,11 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
             </View>
 
             <MessageInfoBox
-              message={
-                isApplePayEnabled
-                  ? t(PaymentMethodsTexts.vippsAndApplePayInfo)
-                  : t(PaymentMethodsTexts.vippsInfo)
-              }
+              message={getPaymentInfoText(
+                t,
+                isApplePayAvailable,
+                isGooglePayAvailable,
+              )}
               type="info"
             />
           </>
@@ -331,6 +337,16 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
     </FullScreenView>
   );
 };
+
+function getPaymentInfoText(
+  t: TranslateFunction,
+  isApplePayAvailable: boolean,
+  isGooglePayAvailable: boolean,
+) {
+  if (isApplePayAvailable) return t(PaymentMethodsTexts.vippsAndApplePayInfo);
+  if (isGooglePayAvailable) return t(PaymentMethodsTexts.vippsAndGooglePayInfo);
+  return t(PaymentMethodsTexts.vippsInfo);
+}
 
 const Card = (props: {card: RecurringPayment; onDeletePress: () => void}) => {
   const {card, onDeletePress} = props;
