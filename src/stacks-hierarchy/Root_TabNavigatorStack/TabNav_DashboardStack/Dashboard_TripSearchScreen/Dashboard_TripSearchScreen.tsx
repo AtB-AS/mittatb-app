@@ -541,11 +541,6 @@ function useLocations(
   );
 }
 
-/**
- * Derives from/to synchronously from the route params (instead of syncing
- * them into state in an effect), so a param change lands in the same render
- * as e.g. a search time or filter change, and only triggers one search.
- */
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationType | undefined,
   searchedToLocation: SelectableLocationType | undefined,
