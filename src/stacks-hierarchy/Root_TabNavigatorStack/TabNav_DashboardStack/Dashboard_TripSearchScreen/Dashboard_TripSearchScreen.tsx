@@ -110,17 +110,42 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
 
+  const {from, to} = useLocations(currentLocation);
+
+  const fromLocationParam = route.params?.fromLocation;
+  const toLocationParam = route.params?.toLocation;
+  const getRefreshedGeolocationParams = useCallback(() => {
+    if (!currentLocation) return {};
+    return {
+      ...(fromLocationParam?.resultType === 'geolocation' && {
+        fromLocation: currentLocation,
+      }),
+      ...(toLocationParam?.resultType === 'geolocation' && {
+        toLocation: currentLocation,
+      }),
+    };
+  }, [fromLocationParam, toLocationParam, currentLocation]);
+
   useEffect(() => {
     if (pendingResult?.key === RESULT_KEY_FROM) {
-      navigation.setParams({fromLocation: pendingResult.location});
+      navigation.setParams({
+        ...getRefreshedGeolocationParams(),
+        fromLocation: pendingResult.location,
+      });
       clearPendingResult();
     } else if (pendingResult?.key === RESULT_KEY_TO) {
-      navigation.setParams({toLocation: pendingResult.location});
+      navigation.setParams({
+        ...getRefreshedGeolocationParams(),
+        toLocation: pendingResult.location,
+      });
       clearPendingResult();
     }
-  }, [pendingResult, clearPendingResult, navigation]);
-
-  const {from, to} = useLocations(currentLocation);
+  }, [
+    pendingResult,
+    clearPendingResult,
+    navigation,
+    getRefreshedGeolocationParams,
+  ]);
   const tripSearchEnabled = isValidTripLocations(from, to);
   const hasLocations = !!from && !!to;
 
@@ -218,19 +243,40 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   );
 
   function swap() {
+    const {fromLocation: refreshedFrom = from, toLocation: refreshedTo = to} =
+      getRefreshedGeolocationParams();
     log('swap', {
-      newFrom: translateLocation(to),
-      newTo: translateLocation(from),
+      newFrom: translateLocation(refreshedTo),
+      newTo: translateLocation(refreshedFrom),
     });
     analytics.logEvent('Trip search', 'Locations to/from swapped');
     navigation.setParams({
-      fromLocation: to,
-      toLocation: from,
+      fromLocation: refreshedTo,
+      toLocation: refreshedFrom,
     });
   }
 
   const onSearchTimePress = () => {
     timePickerBottomSheetModalRef.current?.present();
+  };
+
+  const refreshGeolocationParams = () => {
+    const refreshedGeolocationParams = getRefreshedGeolocationParams();
+    if (Object.keys(refreshedGeolocationParams).length) {
+      navigation.setParams(refreshedGeolocationParams);
+    }
+  };
+
+  const onSearchTimeSave = (newSearchTime: TripSearchTime) => {
+    setSearchTime(newSearchTime);
+    refreshGeolocationParams();
+  };
+
+  const onFiltersSave = (
+    newFiltersSelection: TravelSearchFiltersSelectionType,
+  ) => {
+    filtersState.setFiltersSelection(newFiltersSelection);
+    refreshGeolocationParams();
   };
 
   const forceRefresh = useCallback(() => {
@@ -444,7 +490,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       {filtersState.filtersSelection && (
         <TravelSearchFiltersBottomSheet
           filtersSelection={filtersState.filtersSelection}
-          onSave={filtersState.setFiltersSelection}
+          onSave={onFiltersSave}
           bottomSheetModalRef={travelSearchBottomSheetModalRef}
           onCloseFocusRef={filterButtonRef}
         />
@@ -452,7 +498,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       <DatePickerSheet
         initialDate={searchTime.date}
         initialOption={searchTime.option}
-        onSave={setSearchTime}
+        onSave={onSearchTimeSave}
         options={TripDateOptions.map((option) => ({
           option,
           text: t(TripSearchTexts.dateInput.options[option]),
