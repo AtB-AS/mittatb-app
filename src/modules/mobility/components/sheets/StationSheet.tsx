@@ -68,27 +68,24 @@ export const StationSheet = ({
   const {theme} = useThemeContext();
   const queryClient = useQueryClient();
 
-  const {
-    isLoading,
-    isError,
-    station,
-    stationName,
-    operatorName,
-    operatorId,
-    formFactor,
-    propulsionType,
-  } = useStation(stationId);
+  const {isLoading, isError, station, stationName, operatorName, operatorId} =
+    useStation(stationId);
 
   const operator = useOperators().byId(operatorId);
   const operatorLogoUrl = operator?.brandAssets?.brandImageUrl;
-  const {mode, subMode} = getTransportModeAndSubMode(
-    formFactor,
-    propulsionType,
-  );
 
   useDoOnceOnItemReceived(onStationReceived, station);
 
   const vehicleTypesAvailable = station?.vehicleTypesAvailable;
+  const firstVehicleType = vehicleTypesAvailable?.[0]?.vehicleType;
+  const hasBicycles =
+    vehicleTypesAvailable?.some((e) =>
+      isBicycleFormFactor(e.vehicleType.formFactor),
+    ) ?? false;
+  const {mode, subMode} = getTransportModeAndSubMode(
+    firstVehicleType?.formFactor,
+    firstVehicleType?.propulsionType,
+  );
   const vehicleTypeIds =
     vehicleTypesAvailable?.map((e) => e.vehicleType.id) ?? [];
 
@@ -246,21 +243,18 @@ export const StationSheet = ({
               })}
             </Section>
           )}
-          {isBicycleFormFactor(formFactor) &&
-            station.numDocksAvailable != null && (
-              <Section>
-                <GenericSectionItem style={styles.freeParkingSection}>
-                  <ThemeIcon svg={ThemedParkingIcon} size="large" />
-                  <ThemeText>
-                    {t(
-                      MobilityTexts.freeParkingSpaces(
-                        station.numDocksAvailable,
-                      ),
-                    )}
-                  </ThemeText>
-                </GenericSectionItem>
-              </Section>
-            )}
+          {hasBicycles && station.numDocksAvailable != null && (
+            <Section>
+              <GenericSectionItem style={styles.freeParkingSection}>
+                <ThemeIcon svg={ThemedParkingIcon} size="large" />
+                <ThemeText>
+                  {t(
+                    MobilityTexts.freeParkingSpaces(station.numDocksAvailable),
+                  )}
+                </ThemeText>
+              </GenericSectionItem>
+            </Section>
+          )}
 
           <Section style={styles.supportSection}>
             <SupportButton
@@ -268,7 +262,7 @@ export const StationSheet = ({
                 navigateSupportCallback({
                   operatorId: station.system.operator.id,
                   stationId: station.id,
-                  formFactor: formFactor,
+                  formFactor: firstVehicleType?.formFactor,
                   systemId: station.system.id,
                 });
               }}

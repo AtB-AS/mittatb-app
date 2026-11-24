@@ -561,9 +561,9 @@ export const StationTexts = {
     'Det er ingen tilgjengelege køyretøy på denne stasjonen. Prøv ein annan stasjon.',
   ),
   stationLoadingFailed: _(
-    'Klarte ikke å finne denne mobilitetsstasjonen.',
+    'Klarte ikke å finne denne stasjonen.',
     "Couldn't find this mobility station.",
-    'Klarte ikkje å finne denne mobilitetsstasjonen.',
+    'Klarte ikkje å finne denne stasjonen.',
   ),
   loadingFailedVehiclesStations: _(
     'Feil ved innlasting av kjøretøy på denne stasjonen',
