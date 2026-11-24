@@ -12,7 +12,7 @@ import {
 import {Platform} from 'react-native';
 
 const ALLOWED_CARD_NETWORKS = ['AMEX', 'MASTERCARD', 'VISA'];
-const ALLOWED_AUTH_METHODS = ['CRYPTOGRAM_3DS'];
+const ALLOWED_AUTH_METHODS = ['PAN_ONLY', 'CRYPTOGRAM_3DS']; // TEMP: PAN_ONLY added to test on emulator
 
 /**
  * Google Pay is only available on Android, and only when the build has the
