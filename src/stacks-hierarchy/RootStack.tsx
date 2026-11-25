@@ -32,8 +32,13 @@ import {Root_RefundConfirmationScreen} from '@atb/stacks-hierarchy/Root_RefundCo
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 import {Root_LoginAvailableFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginAvailableFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
+import {Root_LoginOtherMethodsScreen} from '@atb/stacks-hierarchy/Root_LoginOtherMethodsScreen';
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
+import {Root_LoginEmailInputScreen} from '@atb/stacks-hierarchy/Root_LoginEmailInputScreen';
+import {Root_LoginEmailPasswordScreen} from '@atb/stacks-hierarchy/Root_LoginEmailPasswordScreen';
+import {Root_LoginEmailCreatePasswordScreen} from '@atb/stacks-hierarchy/Root_LoginEmailCreatePasswordScreen';
+import {Root_LoginEmailConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginEmailConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
 import {
@@ -254,6 +259,11 @@ export const RootStack = () => {
                 component={Root_LoginOptionsScreen}
               />
               <Stack.Screen
+                name="Root_LoginOtherMethodsScreen"
+                component={Root_LoginOtherMethodsScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
                 name="Root_LoginPhoneInputScreen"
                 component={Root_LoginPhoneInputScreen}
                 options={screenOptions(TransitionPresets.SlideFromRightIOS)}
@@ -261,6 +271,26 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_LoginConfirmCodeScreen"
                 component={Root_LoginConfirmCodeScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_LoginEmailInputScreen"
+                component={Root_LoginEmailInputScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_LoginEmailPasswordScreen"
+                component={Root_LoginEmailPasswordScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_LoginEmailCreatePasswordScreen"
+                component={Root_LoginEmailCreatePasswordScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
+              />
+              <Stack.Screen
+                name="Root_LoginEmailConfirmCodeScreen"
+                component={Root_LoginEmailConfirmCodeScreen}
                 options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
               <Stack.Screen

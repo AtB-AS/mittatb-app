@@ -1,4 +1,5 @@
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -6,7 +7,6 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {ThemedTicket} from '@atb/theme/ThemedAssets';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,7 +20,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
   navigation,
   route,
 }: Props) => {
-  const {enable_vipps_login} = useRemoteConfigContext();
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {theme} = useThemeContext();
@@ -39,7 +39,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
         transitionOverride: 'slide-from-bottom',
       });
     } else {
-      if (enable_vipps_login) {
+      if (isLoginOptionsScreenEnabled) {
         navigation.navigate('Root_LoginOptionsScreen', {
           showGoBack: true,
           transitionOverride: 'slide-from-right',

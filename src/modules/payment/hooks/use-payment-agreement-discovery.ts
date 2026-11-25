@@ -1,5 +1,5 @@
 import {useCallback, useEffect} from 'react';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {
@@ -38,7 +38,7 @@ export const usePaymentAgreementDiscovery = () => {
     isPaymentAgreementOnboardingDotsEnabled &&
     // The pilots should not overlap, so the checkbox wins if both are enabled
     !isPaymentAgreementOnboardingCheckboxEnabled &&
-    authenticationType === 'phone' &&
+    isLoggedInAuthenticationType(authenticationType) &&
     paymentTypes.some(isPaymentAgreementSupported);
 
   const paymentAgreements = usePaymentAgreementsQuery(isEnabled && !hasSeen)

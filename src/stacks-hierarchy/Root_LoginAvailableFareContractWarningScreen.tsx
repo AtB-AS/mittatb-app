@@ -1,4 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useCallback} from 'react';
@@ -7,7 +8,6 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useFareContracts, useTicketingContext} from '@atb/modules/ticketing';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContext} from '@atb/modules/time';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -26,7 +26,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   navigation,
 }: Props) => {
   const isFocused = useIsFocusedAndActive();
-  const {enable_vipps_login} = useRemoteConfigContext();
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
   const {t} = useTranslation();
   const styles = useStyles();
   const {theme} = useThemeContext();
@@ -42,7 +42,7 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   );
   const firstAvailableFc = availableFareContracts[0];
   const onNext = async () => {
-    if (enable_vipps_login) {
+    if (isLoginOptionsScreenEnabled) {
       navigation.navigate('Root_LoginOptionsScreen', {
         showGoBack: true,
       });

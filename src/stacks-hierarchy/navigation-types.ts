@@ -68,6 +68,34 @@ export type Root_LoginConfirmCodeScreenParams = {
   phoneNumber: string;
 };
 
+export type EmailCodePurpose = 'signup' | 'verify' | 'reset';
+
+export type Root_LoginEmailInputScreenParams = {
+  /** Shown when the flow had to restart, e.g. after the app was killed. */
+  notice?: 'session_lost';
+};
+
+export type Root_LoginEmailPasswordScreenParams = {
+  email: string;
+  /** Shown when the password was lost from memory during verification. */
+  notice?: 'password_lost';
+};
+
+export type Root_LoginEmailCreatePasswordScreenParams = {
+  email: string;
+  purpose: 'signup' | 'reset';
+};
+
+export type Root_LoginEmailConfirmCodeScreenParams = {
+  email: string;
+  purpose: EmailCodePurpose;
+  /**
+   * When the code was sent. A new value (after a resend from another screen)
+   * clears the input and restarts the resend countdown.
+   */
+  codeSentAt: number;
+};
+
 export type Root_LoginRequiredForFareProductScreenParams = {
   title?: string;
   text?: string;
@@ -165,8 +193,13 @@ export type RootStackParamList = StackParams<{
   Root_TicketInformationScreen: TicketInformationScreenParams;
   Root_LoginAvailableFareContractWarningScreen: undefined;
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
+  Root_LoginOtherMethodsScreen: undefined;
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
   Root_LoginPhoneInputScreen: undefined;
+  Root_LoginEmailInputScreen: Root_LoginEmailInputScreenParams;
+  Root_LoginEmailPasswordScreen: Root_LoginEmailPasswordScreenParams;
+  Root_LoginEmailCreatePasswordScreen: Root_LoginEmailCreatePasswordScreenParams;
+  Root_LoginEmailConfirmCodeScreen: Root_LoginEmailConfirmCodeScreenParams;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ParkingViolationsSelectScreen: undefined;
   Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;

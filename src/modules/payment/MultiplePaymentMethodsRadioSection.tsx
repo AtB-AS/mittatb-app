@@ -1,6 +1,6 @@
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {PaymentMethod} from './types';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {StyleSheet} from '@atb/theme';
 import {humanizePaymentType} from '@atb/modules/ticketing';
 import {NativeTouchable} from '@atb/components/native-touchable';
@@ -52,7 +52,7 @@ export const MultiplePaymentMethodsRadioSection = ({
   }
 
   const paymentTexts = getPaymentTexts(paymentMethodsInGroup);
-  const canSaveCard = authenticationType === 'phone';
+  const canSaveCard = isLoggedInAuthenticationType(authenticationType);
 
   const shouldSaveA11yLabel =
     t(SelectPaymentMethodTexts.multiple_payment.text) +

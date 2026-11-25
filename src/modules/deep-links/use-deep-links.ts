@@ -11,7 +11,11 @@ import {
   PartialRoute,
 } from '@react-navigation/native';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
-import {AuthenticationType, useAuthContext} from '@atb/modules/auth';
+import {
+  AuthenticationType,
+  useAuthContext,
+  isLoggedInAuthenticationType,
+} from '@atb/modules/auth';
 import {
   CustomerProfile,
   logPaymentAgreementVippsReturn,
@@ -309,7 +313,7 @@ function routeForPurchaseOverview(
     if (isSellable) {
       const {selection} = purchaseSelectionBuilder.forType(params.type).build();
       if (
-        authenticationType !== 'phone' &&
+        !isLoggedInAuthenticationType(authenticationType) &&
         selection.fareProductTypeConfig.configuration.requiresLogin
       ) {
         return {

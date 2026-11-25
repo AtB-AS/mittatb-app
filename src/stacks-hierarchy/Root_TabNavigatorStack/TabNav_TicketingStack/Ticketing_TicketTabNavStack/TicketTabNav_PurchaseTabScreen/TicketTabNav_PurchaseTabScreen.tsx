@@ -1,4 +1,4 @@
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
 import {StyleSheet} from '@atb/theme';
@@ -62,7 +62,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   };
 
   const onOpenTransferCodeSheet = () => {
-    if (authenticationType !== 'phone') {
+    if (!isLoggedInAuthenticationType(authenticationType)) {
       navigation.navigate('Root_LoginRequiredForFareProductScreen', {
         title: t(TicketingTexts.transferCode.loginRequired.title),
         text: t(TicketingTexts.transferCode.loginRequired.text),
@@ -83,7 +83,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       .build();
 
     if (
-      authenticationType !== 'phone' &&
+      !isLoggedInAuthenticationType(authenticationType) &&
       fareProductTypeConfig.configuration.requiresLogin
     ) {
       navigation.navigate('Root_LoginRequiredForFareProductScreen', {});
@@ -179,7 +179,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         onSelect={onRecentFareContractSelect}
       />
       <View style={styles.container}>
-        {authenticationType !== 'phone' && (
+        {!isLoggedInAuthenticationType(authenticationType) && (
           <AnonymousPurchaseWarning
             onPress={() =>
               navigation.navigate(

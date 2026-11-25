@@ -12,7 +12,7 @@ import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartPar
 import {useState} from 'react';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useAnalyticsContext} from '@atb/modules/analytics';
 import {RootStackScreenProps} from '../navigation-types';
@@ -61,7 +61,7 @@ export const Root_SmartParkAndRideAddScreen = ({navigation}: Props) => {
           </ThemeText>
         </View>
 
-        {authenticationType !== 'phone' && (
+        {!isLoggedInAuthenticationType(authenticationType) && (
           <MessageInfoBox
             type="warning"
             title={t(SmartParkAndRideTexts.notLoggedIn.title)}

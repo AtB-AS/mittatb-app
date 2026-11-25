@@ -1,4 +1,5 @@
 import React, {useCallback} from 'react';
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import {
   MapFilterType,
   Map,
@@ -14,7 +15,6 @@ import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReade
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {ShmoHelpScreenProps} from '@atb/stacks-hierarchy/Root_ShmoHelp/Root_ShmoHelpScreen';
 import type {ReportShmoDamageParams} from '@atb/stacks-hierarchy';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
@@ -126,14 +126,14 @@ export const Map_RootScreen = ({
     navigation.navigate('Root_ScanQrCodeScreen');
   }, [navigation]);
 
-  const {enable_vipps_login} = useRemoteConfigContext();
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
 
   const navigateToLogin = useCallback(() => {
     if (getHasReservationOrAvailableFareContract()) {
       navigation.navigate('Root_LoginAvailableFareContractWarningScreen', {});
-    } else if (enable_vipps_login) {
+    } else if (isLoginOptionsScreenEnabled) {
       navigation.navigate('Root_LoginOptionsScreen', {
         showGoBack: true,
         transitionOverride: 'slide-from-bottom',
@@ -142,7 +142,7 @@ export const Map_RootScreen = ({
       navigation.navigate('Root_LoginPhoneInputScreen', {});
     }
   }, [
-    enable_vipps_login,
+    isLoginOptionsScreenEnabled,
     getHasReservationOrAvailableFareContract,
     navigation,
   ]);

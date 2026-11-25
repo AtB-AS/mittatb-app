@@ -7,9 +7,14 @@ export const mapAuthenticationType = (
   user: User | undefined,
 ): AuthenticationType => {
   if (user?.phoneNumber) return 'phone';
+  else if (user?.email && !user.isAnonymous) return 'email';
   else if (user?.isAnonymous) return 'anonymous';
   else return 'none';
 };
+
+export const isLoggedInAuthenticationType = (
+  authenticationType: AuthenticationType,
+) => authenticationType === 'phone' || authenticationType === 'email';
 
 export const secondsToTokenExpiry = (idTokenExpirationTime: string) =>
   secondsBetween(

@@ -1,4 +1,5 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {NativeTouchable} from '@atb/components/native-touchable';
@@ -41,8 +42,7 @@ import {Loading} from '@atb/components/loading';
 import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {useActiveShmoBookingQuery} from '@atb/modules/mobility';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {useAuthContext} from '@atb/modules/auth';
-import {useRemoteConfigContext} from '@atb/modules/remote-config';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {useGetHasReservationOrAvailableFareContract} from '@atb/modules/ticketing';
 import {Button} from '@atb/components/button';
 import {LogIn} from '@atb/assets/svg/mono-icons/profile';
@@ -67,8 +67,8 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
   const {isApplePayEnabled, isVippsPaymentAgreementEnabled} =
     useFeatureTogglesContext();
   const {authenticationType} = useAuthContext();
-  const isLoggedIn = authenticationType === 'phone';
-  const {enable_vipps_login} = useRemoteConfigContext();
+  const isLoggedIn = isLoggedInAuthenticationType(authenticationType);
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
   const getHasReservationOrAvailableFareContract =
     useGetHasReservationOrAvailableFareContract();
 
@@ -180,7 +180,7 @@ export const Profile_PaymentMethodsScreen = ({navigation}: Props) => {
                     'Root_LoginAvailableFareContractWarningScreen',
                     {},
                   );
-                } else if (enable_vipps_login) {
+                } else if (isLoginOptionsScreenEnabled) {
                   navigation.navigate('Root_LoginOptionsScreen', {
                     showGoBack: true,
                     transitionOverride: 'slide-from-bottom',

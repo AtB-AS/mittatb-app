@@ -1,3 +1,4 @@
+import {useIsLoginOptionsScreenEnabled} from '@atb/stacks-hierarchy/use-is-login-options-screen-enabled';
 import {
   LogIn,
   LogOut,
@@ -8,7 +9,7 @@ import {LoadingOverlay} from '@atb/components/loading-overlay';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {useAuthContext} from '@atb/modules/auth';
+import {useAuthContext, isLoggedInAuthenticationType} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
 import {StyleSheet, Theme, useThemeContext} from '@atb/theme';
@@ -73,7 +74,8 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_ticketing, enable_vipps_login} = useRemoteConfigContext();
+  const {enable_ticketing} = useRemoteConfigContext();
+  const isLoginOptionsScreenEnabled = useIsLoginOptionsScreenEnabled();
   const {clearTokenAtLogout} = useMobileTokenContext();
   const style = useProfileHomeStyle();
   const {t, language} = useTranslation();
@@ -228,7 +230,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       'Root_LoginAvailableFareContractWarningScreen',
                       {},
                     );
-                  } else if (enable_vipps_login) {
+                  } else if (isLoginOptionsScreenEnabled) {
                     navigation.navigate('Root_LoginOptionsScreen', {
                       showGoBack: true,
                       transitionOverride: 'slide-from-bottom',
@@ -267,7 +269,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               }
               testID="ticketHistoryButton"
             />
-            {authenticationType == 'phone' && (
+            {isLoggedInAuthenticationType(authenticationType) && (
               <LinkSectionItem
                 text={t(
                   isVippsPaymentAgreementEnabled
@@ -437,7 +439,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               </Section>
             </View>
           )}
-          {authenticationType === 'phone' && (
+          {isLoggedInAuthenticationType(authenticationType) && (
             <Button
               surfaceColor="accent"
               text={t(
