@@ -110,60 +110,29 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
 
-  const {from, to} = useLocations(currentLocation);
-
-  const fromLocationParam = route.params?.fromLocation;
-  const toLocationParam = route.params?.toLocation;
-  const getRefreshedGeolocationParams = useCallback(() => {
-    if (!currentLocation) return {};
-    return {
-      ...(fromLocationParam?.resultType === 'geolocation' && {
-        fromLocation: currentLocation,
-      }),
-      ...(toLocationParam?.resultType === 'geolocation' && {
-        toLocation: currentLocation,
-      }),
-    };
-  }, [fromLocationParam, toLocationParam, currentLocation]);
-
-  // Handle if the geolocation params are stale and need to be refreshed (when coming in from map tab)
-  useEffect(() => {
-    if (isJourney(fromLocationParam) || isJourney(toLocationParam)) return;
-
-    const isStale =
-      isStaleGeolocation(fromLocationParam, currentLocation) ||
-      isStaleGeolocation(toLocationParam, currentLocation);
-
-    if (isStale) {
-      navigation.setParams(getRefreshedGeolocationParams());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromLocationParam, toLocationParam, navigation]);
-
   useEffect(() => {
     if (pendingResult?.key === RESULT_KEY_FROM) {
-      navigation.setParams({
-        ...getRefreshedGeolocationParams(),
-        fromLocation: pendingResult.location,
-      });
+      navigation.setParams({fromLocation: pendingResult.location});
       clearPendingResult();
     } else if (pendingResult?.key === RESULT_KEY_TO) {
-      navigation.setParams({
-        ...getRefreshedGeolocationParams(),
-        toLocation: pendingResult.location,
-      });
+      navigation.setParams({toLocation: pendingResult.location});
       clearPendingResult();
     }
-  }, [
-    pendingResult,
-    clearPendingResult,
-    navigation,
-    getRefreshedGeolocationParams,
-  ]);
-  const tripSearchEnabled = isValidTripLocations(from, to);
-  const hasLocations = !!from && !!to;
+  }, [pendingResult, clearPendingResult, navigation]);
+
+  const {from: searchedFrom, to: searchedTo} = useLocations(currentLocation);
 
   const filtersState = useTravelSearchFiltersState(route.params.initialFilters);
+
+  const currentLocationSnapshot = useMemo(
+    () => currentLocation,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchedFrom, searchedTo, searchTime, filtersState.filtersSelection],
+  );
+  const from = withCurrentLocation(searchedFrom, currentLocationSnapshot);
+  const to = withCurrentLocation(searchedTo, currentLocationSnapshot);
+  const tripSearchEnabled = isValidTripLocations(from, to);
+  const hasLocations = !!from && !!to;
 
   const arriveBy = searchTime.option === 'arrival';
   const sanitizedSearchTime = useMemo(
@@ -257,40 +226,19 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   );
 
   function swap() {
-    const {fromLocation: refreshedFrom = from, toLocation: refreshedTo = to} =
-      getRefreshedGeolocationParams();
     log('swap', {
-      newFrom: translateLocation(refreshedTo),
-      newTo: translateLocation(refreshedFrom),
+      newFrom: translateLocation(to),
+      newTo: translateLocation(from),
     });
     analytics.logEvent('Trip search', 'Locations to/from swapped');
     navigation.setParams({
-      fromLocation: refreshedTo,
-      toLocation: refreshedFrom,
+      fromLocation: to,
+      toLocation: from,
     });
   }
 
   const onSearchTimePress = () => {
     timePickerBottomSheetModalRef.current?.present();
-  };
-
-  const refreshGeolocationParams = () => {
-    const refreshedGeolocationParams = getRefreshedGeolocationParams();
-    if (Object.keys(refreshedGeolocationParams).length) {
-      navigation.setParams(refreshedGeolocationParams);
-    }
-  };
-
-  const onSearchTimeSave = (newSearchTime: TripSearchTime) => {
-    setSearchTime(newSearchTime);
-    refreshGeolocationParams();
-  };
-
-  const onFiltersSave = (
-    newFiltersSelection: TravelSearchFiltersSelectionType,
-  ) => {
-    filtersState.setFiltersSelection(newFiltersSelection);
-    refreshGeolocationParams();
   };
 
   const forceRefresh = useCallback(() => {
@@ -504,7 +452,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       {filtersState.filtersSelection && (
         <TravelSearchFiltersBottomSheet
           filtersSelection={filtersState.filtersSelection}
-          onSave={onFiltersSave}
+          onSave={filtersState.setFiltersSelection}
           bottomSheetModalRef={travelSearchBottomSheetModalRef}
           onCloseFocusRef={filterButtonRef}
         />
@@ -512,7 +460,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       <DatePickerSheet
         initialDate={searchTime.date}
         initialOption={searchTime.option}
-        onSave={onSearchTimeSave}
+        onSave={setSearchTime}
         options={TripDateOptions.map((option) => ({
           option,
           text: t(TripSearchTexts.dateInput.options[option]),
@@ -537,7 +485,6 @@ function useLocations(
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
-      currentLocation?.name,
     ],
   );
 
@@ -545,12 +492,13 @@ function useLocations(
   const searchedToLocation = route.params?.toLocation;
 
   if (searchedToLocation && !searchedFromLocation) {
-    searchedFromLocation = memoedCurrentLocation;
+    searchedFromLocation = currentLocation;
   }
 
   return useUpdatedLocation(
     searchedFromLocation,
     searchedToLocation,
+    memoedCurrentLocation,
     favorites,
   );
 }
@@ -558,88 +506,69 @@ function useLocations(
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationType | undefined,
   searchedToLocation: SelectableLocationType | undefined,
+  currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
+  const [from, setFrom] = useState<Location | undefined>();
+  const [to, setTo] = useState<Location | undefined>();
   const navigation = useNavigation<RootProps['navigation']>();
 
-  const journey = [searchedFromLocation, searchedToLocation].find(isJourney);
+  const setLocation = useCallback(
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationType) => {
+      const updater = direction === 'from' ? setFrom : setTo;
+      if (!searchedLocation) return updater(searchedLocation);
 
-  const locations = useMemo<SearchForLocations>(() => {
-    if (journey) {
-      return {
-        from: journeyToSearchLocation(journey, TravelDirection.From),
-        to: journeyToSearchLocation(journey, TravelDirection.To),
-      };
-    }
-    return {
-      from: resolveLocation(searchedFromLocation, favorites),
-      to: resolveLocation(searchedToLocation, favorites),
-    };
-  }, [journey, searchedFromLocation, searchedToLocation, favorites]);
+      switch (searchedLocation.resultType) {
+        case 'search':
+        case 'geolocation':
+          return updater(searchedLocation);
+        case 'journey': {
+          const toSearch = (i: number): Location => ({
+            ...searchedLocation.journeyData[i],
+            resultType: 'search',
+          });
 
-  // Replace a journey param with explicit from/to params.
-  useEffect(() => {
-    if (journey) {
-      navigation.setParams({
-        fromLocation: locations.from,
-        toLocation: locations.to,
-      });
-    }
-  }, [journey, locations, navigation]);
+          // Set both states when journey is passed.
+          navigation.setParams({
+            fromLocation: toSearch(0),
+            toLocation: toSearch(1),
+          });
+          return;
+        }
+        case 'favorite': {
+          const favorite = favorites.find(
+            (f) => f.id === searchedLocation.favoriteId,
+          );
 
-  return locations;
-}
-
-function resolveLocation(
-  location: SelectableLocationType | undefined,
-  favorites: UserFavorites,
-): Location | undefined {
-  switch (location?.resultType) {
-    case 'search':
-    case 'geolocation':
-      return location;
-    case 'favorite':
-      return favorites.find((f) => f.id === location.favoriteId)?.location;
-    default:
-      return undefined;
-  }
-}
-
-type JourneyLocation = Extract<SelectableLocationType, {resultType: 'journey'}>;
-
-function isJourney(
-  location: SelectableLocationType | undefined,
-): location is JourneyLocation {
-  return location?.resultType === 'journey';
-}
-
-enum TravelDirection {
-  From = 0,
-  To = 1,
-}
-
-/**
- * A helper function to convert a journey location into a search location.
- * @param journey The journey location containing the journey data.
- * @param direction The direction of the location within the journey (From or To).
- * @returns The corresponding search location derived from the journey data.
- */
-function journeyToSearchLocation(
-  journey: JourneyLocation,
-  direction: TravelDirection,
-): Location {
-  return {...journey.journeyData[direction], resultType: 'search'};
-}
-
-function isStaleGeolocation(
-  location: SelectableLocationType | undefined,
-  currentLocation: GeoLocation | undefined,
-): boolean {
-  return (
-    location?.resultType === 'geolocation' &&
-    !!currentLocation &&
-    !coordinatesAreEqual(location.coordinates, currentLocation.coordinates)
+          if (favorite) {
+            return updater(favorite.location);
+          }
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentLocation, favorites],
   );
+
+  // Override from state on change
+  useEffect(() => {
+    setLocation('from', searchedFromLocation);
+  }, [searchedFromLocation, setLocation]);
+
+  // Override to state on change
+  useEffect(() => {
+    setLocation('to', searchedToLocation);
+  }, [searchedToLocation, setLocation]);
+
+  return useMemo(() => ({from, to}), [from, to]);
+}
+
+function withCurrentLocation(
+  location: Location | undefined,
+  currentLocation: GeoLocation | undefined,
+): Location | undefined {
+  if (location?.resultType !== 'geolocation') return location;
+  return currentLocation ?? location;
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
