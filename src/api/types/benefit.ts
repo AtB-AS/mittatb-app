@@ -17,16 +17,3 @@ export const BenefitSchema = z.object({
 });
 
 export type BenefitType = z.infer<typeof BenefitSchema>;
-
-// Shown to users who are not eligible for any benefit for the vehicle, e.g.
-// "Get city bikes included".
-export const NotEligibleBenefitSchema = z.object({
-  title: LanguageAndTextTypeArray,
-  description: LanguageAndTextTypeArray,
-  illustrationName: z
-    .string()
-    .nullish()
-    .transform((v) => v ?? undefined),
-});
-
-export type NotEligibleBenefitType = z.infer<typeof NotEligibleBenefitSchema>;
