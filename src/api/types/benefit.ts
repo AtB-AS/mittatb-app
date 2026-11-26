@@ -13,7 +13,7 @@ export const BenefitSchema = z.object({
     (v) => v ?? undefined,
   ),
   illustrationName: z.string().optional(),
-  priceAdjustments: z.array(PriceAdjustmentSchema),
+  priceAdjustments: z.array(PriceAdjustmentSchema).optional(),
 });
 
 export type BenefitType = z.infer<typeof BenefitSchema>;
