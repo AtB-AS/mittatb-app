@@ -179,10 +179,12 @@ const flowHorizontallyAndTopAlignVertically: ViewStyle = {
   alignItems: 'flex-start',
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   snackbarContainer: {
     position: 'absolute',
     width: '100%',
+    paddingLeft: left,
+    paddingRight: right,
     display: 'flex',
     alignItems: 'center',
     zIndex: 99, // just beneath LoadingOverlay

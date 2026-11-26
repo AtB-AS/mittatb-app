@@ -17,7 +17,7 @@ export const Ticketing_NotEnabledScreen = () => {
   const bgColor = theme.color.background.accent[0];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScreenHeader
         title={t(TicketingSplashTexts.header.title)}
         color={bgColor}
@@ -45,7 +45,7 @@ export const Ticketing_NotEnabledScreen = () => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
     backgroundColor: theme.color.background.accent[0].background,
@@ -61,7 +61,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   textContent: {
-    paddingHorizontal: theme.spacing.large,
+    paddingLeft: theme.spacing.large + left,
+    paddingRight: theme.spacing.large + right,
     marginBottom: theme.spacing.xLarge,
     boxShadow: 'inset 0',
   },

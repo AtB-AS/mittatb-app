@@ -61,7 +61,7 @@ export const ForceUpdateScreen = () => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     backgroundColor: getThemeColor(theme).background,
     flex: 1,
@@ -71,7 +71,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: theme.spacing.medium,
+    marginLeft: theme.spacing.medium + left,
+    marginRight: theme.spacing.medium + right,
   },
   icon: {
     alignItems: 'center',

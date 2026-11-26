@@ -45,12 +45,14 @@ export const Profile_SortFavoritesScreen = () => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme, {left, right}) => ({
   container: {
     backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   error: {
     margin: theme.spacing.medium,
+    marginLeft: theme.spacing.medium + left,
+    marginRight: theme.spacing.medium + right,
   },
 }));

@@ -459,7 +459,7 @@ const LiveVehicleMarker = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {right}) => ({
   mapView: {
     flex: 1,
   },
@@ -467,7 +467,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   topControls: {
-    right: theme.spacing.medium,
+    right: theme.spacing.medium + right,
     alignItems: 'flex-start',
     gap: theme.spacing.medium,
   },

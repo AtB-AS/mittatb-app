@@ -271,13 +271,15 @@ const TripSavedMessageInfoBox = React.memo(
   },
 );
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
   content: {
     padding: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
     rowGap: theme.spacing.large,
   },
 }));

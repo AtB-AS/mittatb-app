@@ -226,9 +226,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   ) : null;
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     paddingBottom: theme.spacing.medium,
+    paddingLeft: left,
+    paddingRight: right,
   },
   heading: {
     margin: theme.spacing.medium,
@@ -237,7 +239,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   accountWrongMessage: {
     marginTop: theme.spacing.medium,
-    marginHorizontal: theme.spacing.medium,
+    marginLeft: theme.spacing.medium + left,
+    marginRight: theme.spacing.medium + right,
   },
   transferCode: {
     padding: theme.spacing.medium,

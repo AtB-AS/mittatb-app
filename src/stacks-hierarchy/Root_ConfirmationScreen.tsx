@@ -49,11 +49,13 @@ export const Root_ConfirmationScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: left,
+    paddingRight: right,
     backgroundColor: getThemeColor(theme).background,
   },
   circle: {

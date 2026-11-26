@@ -52,11 +52,13 @@ export const SelectFavoriteDeparturesScreenComponent = ({
     return (
       <View style={styles.container}>
         <FullScreenHeader title={stopPlace.name} leftButton={{type: 'back'}} />
-        <MessageInfoBox
-          style={styles.messageBox}
-          type="error"
-          message={t(DeparturesTexts.message.resultNotFound)}
-        />
+        <View style={styles.content}>
+          <MessageInfoBox
+            style={styles.messageBox}
+            type="error"
+            message={t(DeparturesTexts.message.resultNotFound)}
+          />
+        </View>
       </View>
     );
   }
@@ -84,7 +86,7 @@ export const SelectFavoriteDeparturesScreenComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
   },
@@ -96,7 +98,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   stopPlaceAndQuaySelection: {
     paddingBottom: theme.spacing.medium,
   },
-  quayData: {flex: 1},
+  quayData: {flex: 1, paddingLeft: left, paddingRight: right},
+  content: {flex: 1, paddingLeft: left, paddingRight: right},
   messageBox: {
     margin: theme.spacing.medium,
   },

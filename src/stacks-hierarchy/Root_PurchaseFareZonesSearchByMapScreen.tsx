@@ -70,13 +70,15 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
         leftButton={{type: 'back', onPress: onSave}}
       />
 
-      <FareZonesSelectorButtons
-        selection={selection}
-        selectNext={selectNext}
-        onVenueSearchClick={onVenueSearchClick}
-        isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-        style={styles.selectorButtons}
-      />
+      <View style={styles.selectorButtonsContainer}>
+        <FareZonesSelectorButtons
+          selection={selection}
+          selectNext={selectNext}
+          onVenueSearchClick={onVenueSearchClick}
+          isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+          style={styles.selectorButtons}
+        />
+      </View>
 
       <FareZonesSelectorMap
         selection={selection}
@@ -98,12 +100,16 @@ export const Root_PurchaseFareZonesSearchByMapScreen = ({
   );
 };
 
-const useMapStyles = StyleSheet.createThemeHook((theme) => ({
+const useMapStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
   },
   saveButton: {
     marginHorizontal: theme.spacing.medium,
+  },
+  selectorButtonsContainer: {
+    paddingLeft: left,
+    paddingRight: right,
   },
   selectorButtons: {
     margin: theme.spacing.medium,

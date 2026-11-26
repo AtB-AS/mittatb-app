@@ -149,6 +149,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
 
       <ScrollView
         style={styles.innerContainer}
+        contentContainerStyle={styles.scrollContent}
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
@@ -274,7 +275,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     </View>
   );
 };
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
     backgroundColor: getThemeColor(theme).background,
@@ -293,6 +294,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   innerContainer: {
     flex: 1,
     paddingTop: theme.spacing.medium,
+  },
+  scrollContent: {
+    paddingLeft: left,
+    paddingRight: right,
   },
   errorMessageBox: {
     marginHorizontal: theme.spacing.medium,

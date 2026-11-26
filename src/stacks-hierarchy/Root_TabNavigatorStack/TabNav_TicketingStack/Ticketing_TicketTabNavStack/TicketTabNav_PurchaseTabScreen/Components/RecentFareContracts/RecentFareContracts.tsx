@@ -102,18 +102,20 @@ export const RecentFareContracts = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   horizontalScrollView: {
     marginVertical: theme.spacing.medium,
     columnGap: theme.spacing.medium,
   },
   scrollViewContent: {
     flexDirection: 'row',
-    paddingHorizontal: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
     columnGap: theme.spacing.medium,
   },
   header: {
     marginTop: theme.spacing.xLarge,
-    marginLeft: theme.spacing.xLarge,
+    marginLeft: theme.spacing.xLarge + left,
+    marginRight: right,
   },
 }));

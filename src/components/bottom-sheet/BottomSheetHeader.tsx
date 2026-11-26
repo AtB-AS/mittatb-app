@@ -89,9 +89,11 @@ export const BottomSheetHeader = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   headerContainer: {
     flexDirection: 'column',
+    paddingLeft: left,
+    paddingRight: right,
   },
   headerContent: {
     flexDirection: 'row',

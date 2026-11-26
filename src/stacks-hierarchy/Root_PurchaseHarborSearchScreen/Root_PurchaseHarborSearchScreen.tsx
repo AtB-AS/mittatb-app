@@ -130,7 +130,7 @@ export const Root_PurchaseHarborSearchScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom, left, right}) => {
   return {
     container: {
       flex: 1,
@@ -138,9 +138,12 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     },
     withPadding: {
       padding: theme.spacing.medium,
+      paddingLeft: theme.spacing.medium + left,
+      paddingRight: theme.spacing.medium + right,
     },
     contentBlock: {
-      marginHorizontal: theme.spacing.medium,
+      marginLeft: theme.spacing.medium + left,
+      marginRight: theme.spacing.medium + right,
     },
     scroll: {
       flex: 1,

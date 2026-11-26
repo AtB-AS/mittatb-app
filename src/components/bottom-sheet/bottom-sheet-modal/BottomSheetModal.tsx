@@ -73,7 +73,11 @@ export const BottomSheetModal = ({
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
-  const {top: safeAreaTop} = useSafeAreaInsets();
+  const {
+    top: safeAreaTop,
+    left: safeAreaLeft,
+    right: safeAreaRight,
+  } = useSafeAreaInsets();
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
   const focusRef = React.useRef<View>(null);
@@ -118,6 +122,8 @@ export const BottomSheetModal = ({
           style={{
             backgroundColor: theme.color.background.neutral[1].background,
             paddingTop: theme.spacing.large,
+            paddingLeft: safeAreaLeft,
+            paddingRight: safeAreaRight,
           }}
         >
           <View onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}>
@@ -125,7 +131,13 @@ export const BottomSheetModal = ({
           </View>
         </GorhomBottomSheetFooter>
       ),
-    [Footer, theme.color.background.neutral, theme.spacing.large],
+    [
+      Footer,
+      theme.color.background.neutral,
+      theme.spacing.large,
+      safeAreaLeft,
+      safeAreaRight,
+    ],
   );
 
   const canRunCallbacksRef = useRef<boolean>(isOpen);
@@ -215,16 +227,22 @@ const useBottomSheetContent = (
   footerHeight: number,
 ) => {
   const {theme} = useThemeContext();
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+  const {
+    bottom: safeAreaBottom,
+    left: safeAreaLeft,
+    right: safeAreaRight,
+  } = useSafeAreaInsets();
 
   const contentContainerStyle = useMemo(
     () => ({
       paddingTop: theme.spacing.medium,
+      paddingLeft: safeAreaLeft,
+      paddingRight: safeAreaRight,
       paddingBottom:
         Math.max(safeAreaBottom, footerHeight) +
         (footerHeight > 0 ? theme.spacing.large : theme.spacing.medium),
     }),
-    [safeAreaBottom, theme, footerHeight],
+    [safeAreaBottom, safeAreaLeft, safeAreaRight, theme, footerHeight],
   );
 
   return useMemo(

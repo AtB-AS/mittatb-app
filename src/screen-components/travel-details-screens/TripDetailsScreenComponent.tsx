@@ -158,7 +158,7 @@ export const TripDetailsScreenComponent = ({
         )}
       </FullScreenView>
       {purchaseSelection && (
-        <View style={styles.borderTop}>
+        <View style={styles.footer}>
           <Button
             surfaceColor="accent"
             expanded={true}
@@ -456,7 +456,7 @@ function trackScreenshottedTripDetails(
   );
 }
 
-const useStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
@@ -471,8 +471,10 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacing.medium,
     marginVertical: theme.spacing.xSmall,
   },
-  borderTop: {
+  footer: {
     borderTopColor: theme.color.border.primary.background,
     borderTopWidth: theme.border.width.slim,
+    paddingLeft: left,
+    paddingRight: right,
   },
 }));

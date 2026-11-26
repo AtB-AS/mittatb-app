@@ -223,13 +223,14 @@ export const MapBottomSheet = ({
         {enableDynamicSizing ? (
           <BottomSheetScrollView
             style={styles.contentContainer}
+            contentContainerStyle={styles.content}
             keyboardShouldPersistTaps="handled"
             alwaysBounceVertical={false}
           >
             {children}
           </BottomSheetScrollView>
         ) : (
-          children
+          <View style={styles.fixedSizeContent}>{children}</View>
         )}
       </BottomSheetGor>
     </>

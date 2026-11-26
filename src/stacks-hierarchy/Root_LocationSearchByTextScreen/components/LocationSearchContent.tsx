@@ -191,13 +191,17 @@ export function LocationSearchContent({
         )}
       </View>
       {errorMessage && (
-        <View style={styles.withMargin}>
+        <View style={styles.errorMessage}>
           <MessageInfoBox type="warning" message={errorMessage} />
         </View>
       )}
       <ScrollView
         style={{...styles.fullFlex}}
-        contentContainerStyle={[styles.contentBlock, {paddingBottom: bottom}]}
+        contentContainerStyle={[
+          styles.contentBlock,
+          styles.scrollContent,
+          {paddingBottom: bottom},
+        ]}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
         onScroll={onScroll}
@@ -249,10 +253,21 @@ export function LocationSearchContent({
   );
 }
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   header: {
     backgroundColor: getThemeColor(theme).background,
     paddingBottom: theme.spacing.medium,
+    paddingLeft: left,
+    paddingRight: right,
+  },
+  errorMessage: {
+    margin: theme.spacing.medium,
+    marginLeft: theme.spacing.medium + left,
+    marginRight: theme.spacing.medium + right,
+  },
+  scrollContent: {
+    paddingLeft: left,
+    paddingRight: right,
   },
   withMargin: {
     margin: theme.spacing.medium,

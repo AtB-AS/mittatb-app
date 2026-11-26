@@ -164,7 +164,7 @@ export const Root_LoginPhoneInputScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
   },
@@ -178,7 +178,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacing.xLarge,
   },
   contentContainerStyle: {
-    paddingHorizontal: theme.spacing.large,
+    paddingLeft: theme.spacing.large + left,
+    paddingRight: theme.spacing.large + right,
     paddingBottom: theme.spacing.xLarge,
   },
   title: {

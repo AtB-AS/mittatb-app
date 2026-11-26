@@ -216,9 +216,10 @@ const FareZonesSelectorMap = ({
 
 export {FareZonesSelectorMap};
 
-const useMapStyles = StyleSheet.createThemeHook((theme) => ({
+const useMapStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   saveButton: {
-    marginHorizontal: theme.spacing.medium,
+    marginLeft: theme.spacing.medium + left,
+    marginRight: theme.spacing.medium + right,
   },
   bottomControls: {
     position: 'absolute',
@@ -228,7 +229,7 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   mapControls: {
     position: 'absolute',
     bottom: theme.spacing.medium,
-    right: theme.spacing.medium,
+    right: theme.spacing.medium + right,
   },
   waitingForInitialCoords: {
     flex: 1,

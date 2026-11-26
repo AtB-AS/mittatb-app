@@ -28,11 +28,14 @@ export function FullScreenFooter({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme, {bottom}) => {
-  return {
-    container: {
-      paddingBottom: bottom + theme.spacing.medium,
-      paddingHorizontal: theme.spacing.medium,
-    },
-  };
-});
+const useStyles = StyleSheet.createThemeHook(
+  (theme: Theme, {bottom, left, right}) => {
+    return {
+      container: {
+        paddingBottom: bottom + theme.spacing.medium,
+        paddingLeft: theme.spacing.medium + left,
+        paddingRight: theme.spacing.medium + right,
+      },
+    };
+  },
+);

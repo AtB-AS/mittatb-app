@@ -112,7 +112,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         style={[
           styles.buttons,
           {
-            top: theme.spacing.medium + buttonsTopOffset,
+            marginTop: buttonsTopOffset,
             height: buttonsHeight,
           },
         ]}
@@ -130,26 +130,31 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
-    borderBottomWidth: theme.border.width.slim,
-    borderBottomColor: 'transparent',
-  },
-  headerTitle: {alignItems: 'center'},
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    position: 'absolute',
-    left: theme.spacing.medium,
-    width: '100%',
-  },
-  globalMessageBox: {
-    marginBottom: theme.spacing.medium,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme, {top, left, right}) => {
+  const paddingTop = Math.max(top, theme.spacing.medium) + theme.spacing.medium;
+  return {
+    container: {
+      paddingTop,
+      paddingLeft: theme.spacing.medium + left,
+      paddingRight: theme.spacing.medium + right,
+      borderBottomWidth: theme.border.width.slim,
+      borderBottomColor: 'transparent',
+    },
+    headerTitle: {alignItems: 'center'},
+    buttons: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      position: 'absolute',
+      top: paddingTop,
+      left: theme.spacing.medium + left,
+      width: '100%',
+    },
+    globalMessageBox: {
+      marginBottom: theme.spacing.medium,
+    },
+  };
+});
 
 type HeaderLayouts = {
   container?: LayoutRectangle;
