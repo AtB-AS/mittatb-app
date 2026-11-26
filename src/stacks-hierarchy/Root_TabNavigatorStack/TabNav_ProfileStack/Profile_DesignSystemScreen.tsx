@@ -188,7 +188,11 @@ export const Profile_DesignSystemScreen = ({
         }}
       />
 
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16}>
+      <ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        contentContainerStyle={styles.scrollContent}
+      >
         <Section style={styles.section}>
           <HeaderSectionItem
             text={'Current font scale: ' + fontScale.toFixed(3)}
@@ -1313,10 +1317,14 @@ function presser() {
   Alert.alert('Heyo');
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
+  },
+  scrollContent: {
+    paddingLeft: left,
+    paddingRight: right,
   },
   buttonContainer: {
     gap: theme.spacing.small,

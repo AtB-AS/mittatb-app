@@ -172,7 +172,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       scrollEventThrottle={16}
       refreshControl={<RefreshControl {...refreshControlProps} />}
     >
-      <ErrorWithAccountMessage style={styles.accountWrongMessage} />
+      <View style={styles.accountWrongMessageContainer}>
+        <ErrorWithAccountMessage style={styles.accountWrongMessage} />
+      </View>
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
         loading={recentFareContractsLoading}
@@ -226,14 +228,20 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   ) : null;
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     paddingBottom: theme.spacing.medium,
+    paddingLeft: left,
+    paddingRight: right,
   },
   heading: {
     margin: theme.spacing.medium,
     marginLeft: theme.spacing.xLarge,
     marginTop: theme.spacing.large,
+  },
+  accountWrongMessageContainer: {
+    paddingLeft: left,
+    paddingRight: right,
   },
   accountWrongMessage: {
     marginTop: theme.spacing.medium,

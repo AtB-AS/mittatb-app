@@ -143,13 +143,14 @@ const useSectionsByYear = (serverNow: number): YearSection[] => {
   ]);
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
     backgroundColor: theme.color.background.neutral[1].background,
   },
   sectionListContent: {
     gap: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
   },
 }));

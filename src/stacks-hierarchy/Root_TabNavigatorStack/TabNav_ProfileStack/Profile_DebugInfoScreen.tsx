@@ -170,6 +170,7 @@ export const Profile_DebugInfoScreen = () => {
       />
       <ScrollView
         testID="debugInfoScrollView"
+        contentContainerStyle={styles.scrollContent}
         onScroll={onScroll}
         scrollEventThrottle={16}
       >
@@ -792,10 +793,14 @@ function MapEntry({title, value}: {title: string; value: any}) {
   }
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
+  },
+  scrollContent: {
+    paddingLeft: left,
+    paddingRight: right,
   },
   icons: {
     flexDirection: 'row',

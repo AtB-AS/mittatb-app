@@ -182,15 +182,17 @@ export const PlaceScreenComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   stopPlaceAndQuaySelection: {
     marginBottom: theme.spacing.medium,
+    marginLeft: left,
+    marginRight: right,
   },
-  quayData: {flex: 1},
+  quayData: {flex: 1, paddingLeft: left, paddingRight: right},
   messageBox: {
     margin: theme.spacing.medium,
   },

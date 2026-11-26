@@ -182,11 +182,13 @@ function getLocationText(
   };
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
     backgroundColor: getThemeColor(theme).background,
   },
   innerContainer: {

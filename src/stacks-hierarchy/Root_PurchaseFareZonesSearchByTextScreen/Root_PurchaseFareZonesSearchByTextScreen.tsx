@@ -168,7 +168,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
         leftButton={{type: 'back'}}
       />
 
-      <View style={[styles.withPadding, borderStyle]}>
+      <View style={[styles.withPadding, styles.searchBar, borderStyle]}>
         <TextInputSectionItem
           ref={inputRef}
           radius="top-bottom"
@@ -238,7 +238,7 @@ export const Root_PurchaseFareZonesSearchByTextScreen: React.FC<Props> = ({
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useThemeStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
   },
@@ -248,8 +248,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   withPadding: {
     padding: theme.spacing.medium,
   },
+  searchBar: {
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
+  },
   contentBlock: {
     margin: theme.spacing.medium,
+    marginLeft: theme.spacing.medium + left,
+    marginRight: theme.spacing.medium + right,
   },
   scroll: {
     flex: 1,

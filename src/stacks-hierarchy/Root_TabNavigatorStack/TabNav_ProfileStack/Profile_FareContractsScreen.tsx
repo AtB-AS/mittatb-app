@@ -277,13 +277,15 @@ export const Profile_FareContractsScreen = ({navigation}: Props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme, {left, right}) => ({
   container: {
     backgroundColor: theme.color.background.neutral[1].background,
     flex: 1,
   },
   content: {
     padding: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
   },
   contentContainer: {
     rowGap: theme.spacing.large,

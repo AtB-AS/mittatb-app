@@ -107,43 +107,49 @@ export const CameraScreenContainer = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {top, bottom}) => {
-  return {
-    root: {
-      flex: 1,
-      backgroundColor: 'black',
-    },
-    overlay: {
-      ...StyleSheet.absoluteFill,
-    },
-    container: {
-      gap: theme.spacing.medium,
-      backgroundColor: 'black',
-      paddingTop: top + theme.spacing.medium,
-      paddingBottom: theme.spacing.medium,
-    },
-    header: {
-      flexDirection: 'row',
-      gap: theme.spacing.xSmall,
-      paddingHorizontal: theme.spacing.medium,
-    },
-    content: {
-      paddingHorizontal: theme.spacing.medium,
-      gap: theme.spacing.medium,
-    },
-    back: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: theme.spacing.small,
-    },
-    cameraFallback: {
-      flex: 1,
-    },
-    cameraFallbackContent: {
-      flexGrow: 1,
-      justifyContent: 'center',
-      padding: theme.spacing.medium,
-      paddingBottom: bottom + theme.spacing.medium,
-    },
-  };
-});
+const useStyles = StyleSheet.createThemeHook(
+  (theme, {top, bottom, left, right}) => {
+    return {
+      root: {
+        flex: 1,
+        backgroundColor: 'black',
+      },
+      overlay: {
+        ...StyleSheet.absoluteFill,
+      },
+      container: {
+        gap: theme.spacing.medium,
+        backgroundColor: 'black',
+        paddingTop: top + theme.spacing.medium,
+        paddingBottom: theme.spacing.medium,
+        paddingLeft: left,
+        paddingRight: right,
+      },
+      header: {
+        flexDirection: 'row',
+        gap: theme.spacing.xSmall,
+        paddingHorizontal: theme.spacing.medium,
+      },
+      content: {
+        paddingHorizontal: theme.spacing.medium,
+        gap: theme.spacing.medium,
+      },
+      back: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: theme.spacing.small,
+      },
+      cameraFallback: {
+        flex: 1,
+      },
+      cameraFallbackContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        padding: theme.spacing.medium,
+        paddingBottom: bottom + theme.spacing.medium,
+        paddingLeft: left + theme.spacing.medium,
+        paddingRight: right + theme.spacing.medium,
+      },
+    };
+  },
+);

@@ -66,17 +66,21 @@ export function SortableList({
     />
   );
 }
-const useListStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    margin: theme.spacing.medium,
-  },
-  item: {
-    marginBottom: theme.spacing.medium,
-  },
-  moveIcon: {
-    paddingHorizontal: theme.spacing.small,
-  },
-}));
+const useListStyle = StyleSheet.createThemeHook(
+  (theme: Theme, {left, right}) => ({
+    container: {
+      margin: theme.spacing.medium,
+      marginLeft: theme.spacing.medium + left,
+      marginRight: theme.spacing.medium + right,
+    },
+    item: {
+      marginBottom: theme.spacing.medium,
+    },
+    moveIcon: {
+      paddingHorizontal: theme.spacing.small,
+    },
+  }),
+);
 
 const name = (item: LocationFavorite) => item.name ?? item.location.label;
 

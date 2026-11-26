@@ -169,12 +169,14 @@ function translateStateToMessage(
   }
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
   },
   content: {
     padding: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
   },
   section: {
     marginTop: theme.spacing.large,

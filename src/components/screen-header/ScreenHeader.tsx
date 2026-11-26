@@ -6,6 +6,7 @@ import {GlobalMessage} from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {ThemeText} from '@atb/components/text';
 import {ContrastColor} from '@atb/theme/colors';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type LeftButtonProps = HeaderButtonProps & {
   type: 'back';
@@ -58,7 +59,9 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
+  const {top} = useSafeAreaInsets();
   const themeColor = color ?? theme.color.background.neutral[1];
+  const paddingTop = Math.max(top, theme.spacing.medium) + theme.spacing.medium;
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
@@ -80,7 +83,12 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 
   return (
-    <View style={[styles.container, {backgroundColor, borderBottomColor}]}>
+    <View
+      style={[
+        styles.container,
+        {backgroundColor, borderBottomColor, paddingTop},
+      ]}
+    >
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title && !!textOpacity}
@@ -112,7 +120,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         style={[
           styles.buttons,
           {
-            top: theme.spacing.medium + buttonsTopOffset,
+            top: paddingTop + buttonsTopOffset,
             height: buttonsHeight,
           },
         ]}
@@ -130,10 +138,10 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
-    paddingHorizontal: theme.spacing.medium,
-    paddingTop: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
     borderBottomWidth: theme.border.width.slim,
     borderBottomColor: 'transparent',
   },
@@ -143,7 +151,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'absolute',
-    left: theme.spacing.medium,
+    left: theme.spacing.medium + left,
     width: '100%',
   },
   globalMessageBox: {

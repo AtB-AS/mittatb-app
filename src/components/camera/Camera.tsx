@@ -139,40 +139,44 @@ export const Camera = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}, {height}) => {
-  return {
-    container: {
-      flex: 1,
-    },
-    qrFrame: {
-      position: 'absolute',
-      alignSelf: 'center',
-      bottom: height / 2,
-      transform: [{translateY: 100}],
-      width: 200,
-      height: 200,
-      borderColor: 'white',
-      borderWidth: 2,
-    },
-    captureButton: {
-      marginTop: theme.spacing.medium,
-      alignItems: 'center',
-    },
-    flashlightButton: {
-      position: 'absolute',
-      bottom: 0,
-      alignSelf: 'center',
-    },
-    footerWrapper: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      paddingTop: theme.spacing.large,
-      paddingBottom: bottom + theme.spacing.medium,
-      alignItems: 'center',
-      gap: theme.spacing.large,
-      backgroundColor: 'black',
-    },
-  };
-});
+const useStyles = StyleSheet.createThemeHook(
+  (theme, {bottom, left, right}, {height}) => {
+    return {
+      container: {
+        flex: 1,
+      },
+      qrFrame: {
+        position: 'absolute',
+        alignSelf: 'center',
+        bottom: height / 2,
+        transform: [{translateY: 100}],
+        width: 200,
+        height: 200,
+        borderColor: 'white',
+        borderWidth: 2,
+      },
+      captureButton: {
+        marginTop: theme.spacing.medium,
+        alignItems: 'center',
+      },
+      flashlightButton: {
+        position: 'absolute',
+        bottom: 0,
+        alignSelf: 'center',
+      },
+      footerWrapper: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        paddingTop: theme.spacing.large,
+        paddingBottom: bottom + theme.spacing.medium,
+        paddingLeft: left,
+        paddingRight: right,
+        alignItems: 'center',
+        gap: theme.spacing.large,
+        backgroundColor: 'black',
+      },
+    };
+  },
+);

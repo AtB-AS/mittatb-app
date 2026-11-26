@@ -50,7 +50,7 @@ type Props = {
 type PropsWithHeaderContent = Props & Required<Pick<Props, 'headerContent'>>;
 
 export function FullScreenView(props: Props) {
-  const {top, bottom} = useSafeAreaInsets();
+  const {bottom} = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const themeColor =
     props.headerProps.color ?? theme.color.background.neutral[1];
@@ -102,10 +102,7 @@ export function FullScreenView(props: Props) {
   return (
     <>
       <View
-        style={{
-          backgroundColor,
-          paddingTop: top,
-        }}
+        style={{backgroundColor}}
         testID={props.testID ? `${props.testID}` : ''}
       >
         <ScreenHeader
@@ -195,11 +192,16 @@ const ChildrenWithHeaderContent = ({
           </View>
         </View>
         {childrenBackgroundColor ? (
-          <View style={{flex: 1, backgroundColor: childrenBackgroundColor}}>
+          <View
+            style={[
+              styles.childrenContent,
+              {backgroundColor: childrenBackgroundColor},
+            ]}
+          >
             {children}
           </View>
         ) : (
-          children
+          <View style={styles.childrenContent}>{children}</View>
         )}
       </ScrollView>
     </View>
@@ -217,6 +219,7 @@ const ChildrenInNormalScrollView = ({
   onScrolledChange: (isScrolled: boolean) => void;
   bottomInset: number;
 }) => {
+  const styles = useStyles();
   const backgroundColor = contentColor?.background;
   const isScrolledRef = React.useRef(false);
 
@@ -235,7 +238,10 @@ const ChildrenInNormalScrollView = ({
           onScrolledChange(scrolled);
         }
       }}
-      contentContainerStyle={{flexGrow: 1, paddingBottom: bottomInset}}
+      contentContainerStyle={[
+        styles.childrenContent,
+        {paddingBottom: bottomInset},
+      ]}
       style={{backgroundColor}}
     >
       {children}
@@ -243,11 +249,18 @@ const ChildrenInNormalScrollView = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   headerContainer: {
     paddingHorizontal: theme.spacing.medium,
   },
   childrenContainer: {
     paddingBottom: theme.spacing.medium,
+    paddingLeft: left,
+    paddingRight: right,
+  },
+  childrenContent: {
+    flexGrow: 1,
+    paddingLeft: left,
+    paddingRight: right,
   },
 }));

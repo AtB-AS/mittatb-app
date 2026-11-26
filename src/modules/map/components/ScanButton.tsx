@@ -38,12 +38,15 @@ export const ScanButton = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   scanButton: {
     position: 'absolute',
     display: 'flex',
     alignSelf: 'center',
     pointerEvents: 'auto',
     marginBottom: theme.spacing.small,
+    // Center in the area not covered by horizontal safe area insets
+    marginLeft: left,
+    marginRight: right,
   },
 }));

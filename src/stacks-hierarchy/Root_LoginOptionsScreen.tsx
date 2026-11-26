@@ -237,7 +237,7 @@ export const Root_LoginOptionsScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
+const useStyles = StyleSheet.createThemeHook((theme, {bottom, left, right}) => {
   return {
     container: {
       flex: 1,
@@ -248,7 +248,8 @@ const useStyles = StyleSheet.createThemeHook((theme, {bottom}) => {
     scrollView: {
       flexGrow: 1,
       justifyContent: 'center',
-      paddingHorizontal: theme.spacing.xLarge,
+      paddingLeft: theme.spacing.xLarge + left,
+      paddingRight: theme.spacing.xLarge + right,
       paddingBottom: bottom,
     },
     title: {

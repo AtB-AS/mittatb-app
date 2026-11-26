@@ -46,7 +46,7 @@ export const Ticketing_RootScreen = ({navigation}: Props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     flex: 1,
   },
@@ -56,7 +56,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     rowGap: theme.spacing.small,
     paddingBottom: theme.spacing.medium,
-    paddingHorizontal: theme.spacing.medium,
+    paddingLeft: theme.spacing.medium + left,
+    paddingRight: theme.spacing.medium + right,
   },
   bonusBalanceButton: {
     marginLeft: 'auto',

@@ -4,7 +4,7 @@ import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export function useControlPositionsStyle(extraPaddingBottom = false) {
-  const {top, bottom} = useSafeAreaInsets();
+  const {top, bottom, left, right} = useSafeAreaInsets();
   const {theme} = useThemeContext();
 
   return useMemo<{
@@ -18,7 +18,7 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
       backArrowContainer: {
         position: 'absolute',
         top: top + theme.spacing.medium,
-        left: theme.spacing.medium,
+        left: left + theme.spacing.medium,
       },
 
       mapButtonsContainer: {
@@ -27,15 +27,15 @@ export function useControlPositionsStyle(extraPaddingBottom = false) {
       },
 
       mapButtonsContainerRight: {
-        right: theme.spacing.medium,
+        right: right + theme.spacing.medium,
       },
 
       topRightContainer: {
         position: 'absolute',
         top: top + theme.spacing.xSmall,
-        right: theme.spacing.medium,
+        right: right + theme.spacing.medium,
       },
     }),
-    [top, theme.spacing, extraPaddingBottom, bottom],
+    [top, theme.spacing, extraPaddingBottom, bottom, left, right],
   );
 }

@@ -215,16 +215,22 @@ const useBottomSheetContent = (
   footerHeight: number,
 ) => {
   const {theme} = useThemeContext();
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+  const {
+    bottom: safeAreaBottom,
+    left: safeAreaLeft,
+    right: safeAreaRight,
+  } = useSafeAreaInsets();
 
   const contentContainerStyle = useMemo(
     () => ({
       paddingTop: theme.spacing.medium,
+      paddingLeft: safeAreaLeft,
+      paddingRight: safeAreaRight,
       paddingBottom:
         Math.max(safeAreaBottom, footerHeight) +
         (footerHeight > 0 ? theme.spacing.large : theme.spacing.medium),
     }),
-    [safeAreaBottom, theme, footerHeight],
+    [safeAreaBottom, safeAreaLeft, safeAreaRight, theme, footerHeight],
   );
 
   return useMemo(

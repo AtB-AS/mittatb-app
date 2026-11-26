@@ -130,13 +130,15 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, {left, right}) => ({
   container: {
     backgroundColor: getThemeColor(theme).background,
     flex: 1,
   },
   mainView: {
     padding: theme.spacing.large,
+    paddingLeft: theme.spacing.large + left,
+    paddingRight: theme.spacing.large + right,
   },
   title: {
     textAlign: 'center',
