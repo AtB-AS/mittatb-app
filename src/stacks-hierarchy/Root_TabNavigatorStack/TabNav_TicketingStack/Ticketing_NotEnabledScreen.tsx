@@ -18,10 +18,7 @@ export const Ticketing_NotEnabledScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScreenHeader
-        title={t(TicketingSplashTexts.header.title)}
-        color={bgColor}
-      />
+      <ScreenHeader title={t(TicketingSplashTexts.header.title)} />
       <View style={styles.bannerContainer}>
         <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>

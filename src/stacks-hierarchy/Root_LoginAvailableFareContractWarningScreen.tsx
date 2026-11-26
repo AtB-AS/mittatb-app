@@ -71,7 +71,6 @@ export const Root_LoginAvailableFareContractWarningScreen = ({
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
-        color={themeColor}
         showBorder={false}
         title={t(LoginTexts.availableFareContractPrompt.header)}
       />

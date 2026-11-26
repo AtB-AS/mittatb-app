@@ -2,7 +2,7 @@ import {Confirm, Delete} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {TranslateFunction, useTranslation} from '@atb/translations';
 import SmartParkAndRideTexts from '@atb/translations/screens/subscreens/SmartParkAndRide';
 import {useState} from 'react';
@@ -32,7 +32,6 @@ export const Root_SmartParkAndRideEditScreen = ({
   const [licensePlate, setLicensePlate] = useState(
     params.vehicleRegistration.licensePlate,
   );
-  const {theme} = useThemeContext();
   const analytics = useAnalyticsContext();
   const focusRef = useFocusOnLoad(navigation, true);
   const onUpdateSuccess = () => {
@@ -112,7 +111,6 @@ export const Root_SmartParkAndRideEditScreen = ({
       headerProps={{
         title: t(SmartParkAndRideTexts.edit.header.title),
         leftButton: {type: 'back'},
-        color: theme.color.background.neutral[1],
       }}
       headerContent={(focusRef) => (
         <ScreenHeading

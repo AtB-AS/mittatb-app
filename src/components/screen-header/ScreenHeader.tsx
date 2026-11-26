@@ -5,7 +5,6 @@ import {HeaderButton, HeaderButtonProps} from './HeaderButton';
 import {GlobalMessage} from '@atb/modules/global-messages';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {ThemeText} from '@atb/components/text';
-import {ContrastColor} from '@atb/theme/colors';
 
 export type LeftButtonProps = HeaderButtonProps & {
   type: 'back';
@@ -39,14 +38,12 @@ export type ScreenHeaderProps = {
    * header. If no context is specified then no alerts are shown.
    */
   globalMessageContext?: GlobalMessageContextEnum;
-  color?: ContrastColor;
   textOpacity?: number;
   focusRef?: Ref<any>;
   showBorder?: boolean;
 };
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
-  color,
   title,
   titleA11yLabel,
   globalMessageContext,
@@ -58,29 +55,27 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
 }) => {
   const styles = useStyles();
   const {theme} = useThemeContext();
-  const themeColor = color ?? theme.color.background.neutral[1];
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
-  const backgroundColor = themeColor.background;
   const borderBottomColor =
     showBorder && !!textOpacity
       ? theme.color.surface.neutral.subtle.background
       : 'transparent';
 
   const leftIcon = leftButton ? (
-    <HeaderButton color={themeColor} {...leftButton} testID="lhb" />
+    <HeaderButton {...leftButton} testID="lhb" />
   ) : (
     <View />
   );
   const rightIcon = rightButton ? (
-    <HeaderButton color={themeColor} {...rightButton} testID="rhb" />
+    <HeaderButton {...rightButton} testID="rhb" />
   ) : (
     <View />
   );
 
   return (
-    <View style={[styles.container, {backgroundColor, borderBottomColor}]}>
+    <View style={[styles.container, {borderBottomColor}]}>
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title && !!textOpacity}
@@ -101,7 +96,6 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = ({
             accessible={false}
             onLayout={setLayoutFor('title')}
             typography="body__m__strong"
-            color={themeColor}
           >
             {title && textOpacity > 0 ? title : '\u00a0'}
           </ThemeText>

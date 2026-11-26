@@ -14,13 +14,11 @@ import {
   useAnalyticsContext,
 } from '@atb/modules/analytics';
 import {NativeTouchable} from '@atb/components/native-touchable';
-import {ContrastColor} from '@atb/theme/colors';
 
 export type ButtonModes = 'back' | 'cancel' | 'close' | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
-  color?: ContrastColor;
   text?: string;
   testID?: string;
   /** SVG to use when type is 'custom' */
@@ -80,12 +78,12 @@ const useHeaderButton = (
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
+      const {type, onPress, ...accessibilityProps} = buttonProps;
       return {
         children: (
           <View style={styles.headerButtonContainer}>
-            <ThemeIcon svg={ChevronLeft} color={color} />
-            <ThemeText color={color}>
+            <ThemeIcon svg={ChevronLeft} />
+            <ThemeText>
               {t(ScreenHeaderTexts.headerButton[type].text)}
             </ThemeText>
           </View>
@@ -97,14 +95,14 @@ const useHeaderButton = (
     }
     case 'cancel':
     case 'close': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
+      const {type, onPress, ...accessibilityProps} = buttonProps;
       return {
         children: (
           <View style={styles.headerButtonContainer}>
-            <ThemeText color={color}>
+            <ThemeText>
               {t(ScreenHeaderTexts.headerButton[type].text)}
             </ThemeText>
-            <ThemeIcon svg={Close} color={color} />
+            <ThemeIcon svg={Close} />
           </View>
         ),
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
@@ -113,14 +111,12 @@ const useHeaderButton = (
       };
     }
     case 'custom': {
-      const {text, color, onPress, ...accessibilityProps} = buttonProps;
+      const {text, onPress, ...accessibilityProps} = buttonProps;
       return {
         children: (
           <View style={styles.headerButtonContainer}>
-            <ThemeText color={color}>{text}</ThemeText>
-            {buttonProps.svg && (
-              <ThemeIcon svg={buttonProps.svg} color={color} />
-            )}
+            <ThemeText>{text}</ThemeText>
+            {buttonProps.svg && <ThemeIcon svg={buttonProps.svg} />}
           </View>
         ),
         onPress: onPress,

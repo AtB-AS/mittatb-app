@@ -40,7 +40,6 @@ export const ScreenContainer = (props: Props) => {
       headerProps={{
         leftButton: props.leftHeaderButton,
         rightButton: props.rightHeaderButton,
-        color: themeColor,
       }}
       contentColor={themeColor}
     >
