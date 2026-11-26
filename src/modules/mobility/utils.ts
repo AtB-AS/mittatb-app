@@ -332,14 +332,14 @@ export const toFormFactorEnum = (str: string): FormFactor =>
 export const getFreeUnlock = (
   benefit: BenefitType | undefined,
 ): PriceAdjustmentType | undefined =>
-  benefit?.priceAdjustments.find(
+  benefit?.priceAdjustments?.find(
     (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_UNLOCK,
   );
 
 export const getFreeMinutes = (
   benefit: BenefitType | undefined,
 ): PriceAdjustmentType | undefined =>
-  benefit?.priceAdjustments.find(
+  benefit?.priceAdjustments?.find(
     (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
 
