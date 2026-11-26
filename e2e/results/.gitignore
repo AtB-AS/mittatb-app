@@ -1,6 +1,6 @@
-*.xml
 *.json
-*.png
-*.csv
-*.txt
 *.log
+*.html
+*.xml
+*.png
+*.txt

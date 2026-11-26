@@ -69,9 +69,12 @@ export const TravelSearchFiltersBottomSheet = ({
     onSave(selectedFilters);
 
     // Saves only the travel search preferences in storage, while other filters
-    // are reset on the next search.
+    // are reset on the next search. Override values are not saved, so the
+    // selected options are kept instead.
     setFilters({
-      travelSearchPreferences: selectedTravelSearchPreferences,
+      travelSearchPreferences: selectedTravelSearchPreferences.map(
+        ({overrideValue: _overrideValue, ...preference}) => preference,
+      ),
     });
   }, [
     onSave,

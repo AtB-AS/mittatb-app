@@ -1,6 +1,11 @@
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Coordinates} from '@atb/utils/coordinates';
-import type {DepartureSearchTime} from '@atb/components/date-selection';
+import type {
+  DateOptionAndValue,
+  DepartureSearchTime,
+} from '@atb/components/date-selection';
+import type {InitialTravelSearchFilters} from '@atb/modules/travel-search-filters';
+import type {DeepLink} from './parse-deep-link';
 
 /**
  * Parses unknown param data as an integer, or falls back to undefined.
@@ -38,6 +43,52 @@ export const parseParamAsSearchTime = (
   const date = new Date(Number(searchTime));
   if (isNaN(date.getTime()) || date.getTime() <= Date.now()) return undefined;
   return {option: 'departure', date: date.toISOString()};
+};
+
+/**
+ * Parses planner web `searchMode` and `searchTime` (epoch milliseconds) params
+ * as a trip search time, or falls back to undefined (now).
+ */
+export const parseParamsAsTripSearchTime = (
+  searchMode: string | undefined,
+  searchTime: string | undefined,
+): DateOptionAndValue<'departure' | 'arrival'> | undefined => {
+  const option =
+    searchMode === 'departBy'
+      ? 'departure'
+      : searchMode === 'arriveBy'
+        ? 'arrival'
+        : undefined;
+  if (!option || !searchTime?.trim()) return undefined;
+  const date = new Date(Number(searchTime));
+  if (isNaN(date.getTime())) return undefined;
+  return {option, date: date.toISOString()};
+};
+
+/**
+ * Parses planner web `filter`, `walkSpeed` and `transferSlack` params as the
+ * filters to start a trip search with. Missing or invalid params are left out,
+ * so that the user's own selection is used for them.
+ */
+export const parseParamsAsTravelSearchFilters = (
+  params: DeepLink['params'],
+): InitialTravelSearchFilters => ({
+  transportModes: params.filter
+    ?.split(',')
+    .map((id) => id.trim())
+    .filter(Boolean),
+  travelSearchPreferences: {
+    walkSpeed: parseParamAsNonNegativeNumber(params.walkSpeed),
+    transferSlack: parseParamAsNonNegativeNumber(params.transferSlack),
+  },
+});
+
+const parseParamAsNonNegativeNumber = (
+  data: string | undefined,
+): number | undefined => {
+  if (!data?.trim()) return undefined;
+  const value = Number(data);
+  return isFinite(value) && value >= 0 ? value : undefined;
 };
 
 /**

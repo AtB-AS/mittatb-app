@@ -1,5 +1,5 @@
 import {useSubscription} from '@atb/api/use-subscription';
-import {useCallback, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import {WS_API_BASE_URL} from '@env';
 import {
   getIdTokenGlobal,
@@ -23,10 +23,22 @@ export type StreamEventListener<K extends EventKind = EventKind> = {
   callback: (streamEvent: StreamEventOfKind<K>) => void;
 };
 
+export type ReconnectListener = {
+  id: string;
+  callback: () => void;
+};
+
 export const useSetupEventStream = () => {
   const {authStatus} = useAuthContext();
   const {isEventStreamEnabled} = useFeatureTogglesContext();
-  const [listeners, setListeners] = useState<StreamEventListener[]>([]);
+  // Listeners are kept in refs, since changing `onMessage` or `onOpen` would
+  // recreate the websocket.
+  const listeners = useRef<StreamEventListener[]>([]);
+  const reconnectListeners = useRef<ReconnectListener[]>([]);
+  // Set when the connection is closed unexpectedly, so the next open can be
+  // treated as a reconnect. Not set when the websocket is recreated by
+  // `useSubscription` itself, since `onClose` isn't called in that case.
+  const hasBeenDisconnected = useRef(false);
 
   // Keep a list of events to use for debugging. In memory only, so this will be
   // reset when reloading the app.
@@ -60,17 +72,24 @@ export const useSetupEventStream = () => {
       });
 
       addToEventLog({streamEvent});
-      listeners
+      listeners.current
         .filter((listener) => listener.eventKind === streamEvent.event)
         .forEach((listener) => listener.callback(streamEvent));
     },
-    [addToEventLog, listeners],
+    [addToEventLog],
   );
 
   const onOpen = useCallback(
     (ws: WebSocket) => {
       addToEventLog({meta: 'OPEN'});
-      authWhenReady(ws, addToEventLog);
+      authWhenReady(ws, addToEventLog, () => {
+        // Cleared here rather than on open, so a reconnect isn't lost if the
+        // websocket is replaced while waiting for a token.
+        if (!hasBeenDisconnected.current) return;
+        hasBeenDisconnected.current = false;
+        addToEventLog({meta: 'RECONNECTED'});
+        reconnectListeners.current.forEach((listener) => listener.callback());
+      });
     },
     [addToEventLog],
   );
@@ -78,6 +97,7 @@ export const useSetupEventStream = () => {
   const onClose = useCallback(
     (event: WebSocketCloseEvent) => {
       addToEventLog({meta: `CLOSE: ${event.code} ${event.message}`});
+      hasBeenDisconnected.current = true;
     },
     [addToEventLog],
   );
@@ -95,19 +115,47 @@ export const useSetupEventStream = () => {
       addToEventLog({
         meta: `SUBSCRIBE: ${listener.id}`,
       });
-      setListeners((prev) => [...prev, listener] as StreamEventListener[]);
+      listeners.current = [
+        ...listeners.current,
+        listener,
+      ] as StreamEventListener[];
     },
     [addToEventLog],
   );
   const unsubscribe = useCallback(
     (id: string) => {
       addToEventLog({meta: `UNSUBSCRIBE: ${id}`});
-      setListeners((prev) => prev.filter((listener) => listener.id !== id));
+      listeners.current = listeners.current.filter(
+        (listener) => listener.id !== id,
+      );
     },
     [addToEventLog],
   );
 
-  return {eventLog, subscribe, unsubscribe};
+  const subscribeToReconnect = useCallback(
+    (listener: ReconnectListener) => {
+      addToEventLog({meta: `SUBSCRIBE RECONNECT: ${listener.id}`});
+      reconnectListeners.current = [...reconnectListeners.current, listener];
+    },
+    [addToEventLog],
+  );
+  const unsubscribeFromReconnect = useCallback(
+    (id: string) => {
+      addToEventLog({meta: `UNSUBSCRIBE RECONNECT: ${id}`});
+      reconnectListeners.current = reconnectListeners.current.filter(
+        (listener) => listener.id !== id,
+      );
+    },
+    [addToEventLog],
+  );
+
+  return {
+    eventLog,
+    subscribe,
+    unsubscribe,
+    subscribeToReconnect,
+    unsubscribeFromReconnect,
+  };
 };
 
 /**
@@ -117,13 +165,15 @@ export const useSetupEventStream = () => {
 function authWhenReady(
   ws: WebSocket,
   addToEventLog: ({meta}: {meta?: string | undefined}) => void,
+  onAuth: () => void,
 ) {
   if (ws.readyState !== WebSocket.OPEN) return;
   const token = getIdTokenGlobal();
   if (token) {
     addToEventLog({meta: 'AUTH'});
     ws.send(`AUTH ${token}`);
+    onAuth();
   } else {
-    setTimeout(() => authWhenReady(ws, addToEventLog), 1000);
+    setTimeout(() => authWhenReady(ws, addToEventLog, onAuth), 1000);
   }
 }

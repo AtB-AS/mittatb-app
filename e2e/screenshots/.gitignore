@@ -1,3 +1,1 @@
-*.json
-*.png
-!visualTests/baseline/*.png
+*_diff.png

@@ -5,7 +5,7 @@ import {compareVersion} from '@atb/utils/compare-version';
 import {
   expectNumber,
   expectStringEqual,
-} from '../e2e/test/utils/jestAssertions';
+} from '../e2e/utils/jestAssertions';
 import {
   formatToClock,
   formatToClockOrRelativeMinutes,

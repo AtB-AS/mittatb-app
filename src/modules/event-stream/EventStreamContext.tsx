@@ -12,11 +12,18 @@ interface EventStreamContextValue {
     eventKind: K,
     callback: (streamEvent: StreamEventOfKind<K>) => void,
   ) => void;
+  /**
+   * Calls the provided callback when the event stream reconnects after being
+   * disconnected. Events may have been missed while disconnected, so this can
+   * be used to refetch data that would otherwise be updated by events.
+   */
+  useStreamReconnectListener: (callback: () => void) => void;
 }
 
 export const EventStreamContext = createContext<EventStreamContextValue>({
   eventLog: [],
   useStreamEventListener: () => {},
+  useStreamReconnectListener: () => {},
 });
 
 export function useEventStreamContext() {
@@ -34,7 +41,13 @@ type Props = {
 };
 
 export const EventStreamContextProvider = ({children}: Props) => {
-  const {eventLog, subscribe, unsubscribe} = useSetupEventStream();
+  const {
+    eventLog,
+    subscribe,
+    unsubscribe,
+    subscribeToReconnect,
+    unsubscribeFromReconnect,
+  } = useSetupEventStream();
 
   function useStreamEventListener<K extends EventKind>(
     eventKind: K,
@@ -65,11 +78,33 @@ export const EventStreamContextProvider = ({children}: Props) => {
     }, [eventKind, id]);
   }
 
+  function useStreamReconnectListener(callback: () => void) {
+    const id = useId();
+
+    // Keep the callback in a ref to avoid resubscribes on rerenders.
+    const callbackRef = useRef(callback);
+    useEffect(() => {
+      callbackRef.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+      const listenerId = `reconnect-${id}`;
+      subscribeToReconnect({
+        id: listenerId,
+        callback: () => callbackRef.current(),
+      });
+      return () => {
+        unsubscribeFromReconnect(listenerId);
+      };
+    }, [id]);
+  }
+
   return (
     <EventStreamContext.Provider
       value={{
         eventLog,
         useStreamEventListener,
+        useStreamReconnectListener,
       }}
     >
       {children}

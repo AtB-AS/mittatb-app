@@ -13,7 +13,7 @@ import {TransferRisk} from '@atb-as/utils';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
-import {TripIconRow} from './TripIconRow';
+import {TransferInfoRow} from './TransferInfoRow';
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;
@@ -24,7 +24,7 @@ export type WaitDetails = {
 const ONE_MINUTE_IN_SECONDS = 60;
 
 type WaitMessage = {
-  icon: React.ComponentProps<typeof TripIconRow>['svg'];
+  icon: React.ComponentProps<typeof TransferInfoRow>['svg'];
   title?: string;
   message: string;
   /** Draws the icon and title in the named emphasis colour. */
@@ -93,7 +93,7 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
     : undefined;
 
   return (
-    <TripIconRow
+    <TransferInfoRow
       boxed={!emphasisColor}
       svg={icon}
       color={emphasisColor ?? theme.color.transport.walk}
@@ -107,7 +107,7 @@ const WaitMessageRow = ({icon, title, message, emphasis}: WaitMessage) => {
       <ThemeText typography="body__m" type="secondary">
         {message}
       </ThemeText>
-    </TripIconRow>
+    </TransferInfoRow>
   );
 };
 

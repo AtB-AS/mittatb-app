@@ -1,59 +1,32 @@
-# E2E-tests app
+# E2E-tests with Maestro
 
-The e2e-tests are run on an Android emulator with the test automation protocol [WebdriverIO](https://webdriver.io/docs/gettingstarted/)
-as the underlying protocol for mobile automation with [Appium](http://appium.io/). The WebdriverIO interaction is
-through APIs defined in [WebdriverIO API](https://webdriver.io/docs/api). It's also possible to use Claude Code with a [WebdriverIO MCP server](https://github.com/webdriverio/mcp).
-See below for how to add.
-
-In order to measure the app's performance, there is also added a script for this that relies on [Flashlight](https://docs.flashlight.dev/). 
-Flashlight is a stand-alone command line tool that will measure FPS, CPU, CPU per thread and memory usage while the app
-is used. It supports either manual start and stop while the app is used, or it can be started with a testscript like
-WebdriverIO/Appium. Read more about it [here](#flashlight-performance-measure).
+Maestro is an open-source UI automation framework for mobile and web with built-in tolerance, zero-wait intelligence,
+and declarative YAML syntax. Read more on [meastro.dev](https://docs.maestro.dev/get-started/what-is-maestro).
 
 ## Install
 
 ```bash
-## install WebdriverIO and dependencies
-e2e$ pnpm install
+e2e$ curl -fsSL "https://get.maestro.mobile.dev" | bash
 ```
 
-## Explore and make test script with MCP
+## Tests
 
-Start to explore using Claude Code and the WebdriverIO MCP with
-```bash
-# Terminal 1 — start Appium (no tests run)
-$ cd e2e && pnpm appium:start
+All tests are located in `/maestro/tests` with `/maestro/tests/run.yaml` to run all. Common flows are located in
+`/maestro/common`. Most of the tests use test ids from the app. All test ids used are mapped in
+`/maestro/elements`, where `/maestro/elements/loadElements.yaml` is run from each test script so that these
+test ids are available at run time for a test.
 
-# Terminal 2 — open Claude Code from e2e dir
-$ cd e2e && claude
-```
-The MCP server will use `android.conf.mcp.ts` which has the correct debug APK capabilities, headless off, and specs: [] so nothing
-executes automatically. Claude can then drive the app interactively via the WebdriverIO MCP tools. Read more on https://github.com/webdriverio/mcp.
-
-## Test on GH action
-
-The GH action described in `test-e2e-android.yml` downloads the latest Android staging build from 
-Firebase App Distribution and run tests against it. The Android APK will be downloaded to 
-`e2e/apk/app-staging.apk`.
-```bash
-## run tests
-e2e$ APP_PATH=<absolute-path-to-root> pnpm test:android
-```
+_NB!_ The native date/time picker renders without any children in the accessibility tree.
+Maestro therefor `swipe` based on raw screen coordinates rather than elements. This might therefore be a bit 
+flaky if tested on other emulators.
 
 ## Test locally
 
 Two alternatives.
 
-0) Pre-requisite: Android emulator with a ready to go AVD
-1) As for the GH action, an Android APK can be downloaded from Firebase App Distribution to `e2e/apk/app-staging.apk`
-```bash
-## start emulator (name of the AVD is here 'Pixel_5_API_30')
-$ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
+0. Pre-requisite: Android emulator with a ready to go AVD
+1. Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced (see `e2e/index_noLogs/index.js`)
 
-## run tests
-e2e$ pnpm test:android:local:firebase
-```
-2) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced
 ```bash
 ## remove error messages in the app
 $ ./e2e/scripts/removeLogsFromDevApp.sh
@@ -67,54 +40,27 @@ $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 ## start app locally
 $ pnpm android
 
-## run tests
-e2e$ pnpm test:android:local:dev
+## run all tests
+e2e$ maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=<phoneNumber> -e OTP=<otp> tests/runAll.yaml
+## run smoke tests
+e2e$ maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=<phoneNumber> -e OTP=<otp> tests/smoke.yaml
 ```
-
-## Test with Wiremock
-
-The Appium plugin appium-interceptor intercepts HTTPS traffic from the emulator. WireMock runs in browser-proxy 
-mode: matched stubs are served from disk, unmatched requests (Mapbox, Firebase, etc.) pass through to their real 
-hosts. No `--proxy-all` is used, so non-ATB traffic is not accidentally routed to the ATB backend.
-```
-Android app → appium-interceptor (MITM) → WireMock (forward proxy, port 8080) → real server (unmatched)
-```
-
-### Running locally
-
-_NB!_ Currently only a simple travel search case is implemented as a PoC. This script is already set in 
-`pnpm test:android:local:proxy`.
-
-```bash
-# Start WireMock
-docker run -it --rm -p 8080:8080 --name wiremock \
-  -e "JAVA_OPTS=--add-opens java.base/sun.security.x509=ALL-UNNAMED" \
-  -v "$PWD/e2e/wiremock/mappings:/home/wiremock/mappings" \
-  -v "$PWD/e2e/wiremock/__files:/home/wiremock/__files" \
-  wiremock/wiremock:3.13.2 \
-  --enable-browser-proxying
-
-# Run tests (emulator with Android <= 13 must be started with -writable-system -wipe-data)
-cd e2e && ./scripts/add-emulator-certificate.sh
-cd e2e && pnpm test:android:local:proxy
-```
-
 
 ## Errors and reporting
 
-The test results are stored as JUnit XML-files and as a Mochawesome JSON-file in `e2e/results/`. Also, any if any errors
-happens, a screenshot is taken of the app at the time of failure. This is stored as PNG-files with the name of the test in
-`e2e/screenshots/`.
+Add outputs and debug
+
+```bash
+-e APP_ID=no.mittatb.debug --debug-output=results --format junit --output results/results.xml
+```
 
 ## Flashlight performance measure
 
-Created a test script that can be run along with Flashlight (`./test/flashlight/performanceMeasures.e2e.ts`):
+Created a test script that can be run along with Flashlight (`./tests/performance.yaml`):
 - do a simple travel search and open the first result
 - open the map
 - open departures and open the first departure
-- open the ticket overview
-- open profile
-- put the app in the background for x seconds and activate it again
+- open the ticket purchase history
 
 ### Commands
 
@@ -129,19 +75,13 @@ $ curl https://get.flashlight.dev | bash
 $ flashlight measure
 
 ## Start measurements with test script
-$ flashlight test --bundleId no.mittatb.debug --testCommand "pnpm test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1
-
-## Start measurements with pnpm
-$ pnpm test:android:local:perfMeasure
+$ flashlight test --bundleId no.mittatb.debug --testCommand "maestro test -e APP_ID=no.mittatb.debug -e PHONE_NUMBER=${PHONE_NUMBER} -e OTP=${OTP} --test-output-dir results tests/performance.yaml" --resultsTitle performance_measures --iterationCount 1 --maxRetries 1
 
 ## Generate HTML-report after test
 $ flashlight report <path-to-file>/<test-results>.json
 ```
 
+
 ## Resources
 
-* [WebdriverIO](https://webdriver.io)
-* [WebdriverIO API](https://webdriver.io/docs/api)
-* [Appium](http://appium.io/)
-* [Flashlight](https://docs.flashlight.dev)
-
+- [Maestro CLI](https://docs.maestro.dev/maestro-cli)

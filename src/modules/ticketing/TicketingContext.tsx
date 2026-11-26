@@ -11,7 +11,6 @@ import {
   invalidateFareContractsQuery,
   useGetFareContractsQuery,
 } from './use-fare-contracts';
-import Bugsnag from '@bugsnag/react-native';
 import {useFeatureTogglesContext} from '../feature-toggles';
 import {isDefined} from '@atb/utils/presence';
 import {EventKind, useEventStreamContext} from '../event-stream';
@@ -150,10 +149,20 @@ export const TicketingContextProvider = ({children}: Props) => {
   const {enable_ticketing} = useRemoteConfigContext();
   const {isEventStreamEnabled, isEventStreamFareContractsEnabled} =
     useFeatureTogglesContext();
-  const {useStreamEventListener} = useEventStreamContext();
+  const {useStreamEventListener, useStreamReconnectListener} =
+    useEventStreamContext();
   const queryClient = useQueryClient();
 
   useStreamEventListener(EventKind.FareContract, () => {
+    if (isEventStreamFareContractsEnabled) {
+      invalidateFareContractsQuery(queryClient);
+    }
+  });
+
+  // Fare contract events may have been missed while disconnected. Always
+  // refetched, since fetches done before the stream reconnected may also have
+  // missed them.
+  useStreamReconnectListener(() => {
     if (isEventStreamFareContractsEnabled) {
       invalidateFareContractsQuery(queryClient);
     }
@@ -178,24 +187,20 @@ export const TicketingContextProvider = ({children}: Props) => {
         `Setting up ticketing Firestore listeners for user ${userId}`,
       );
       const removeListeners = setupFirestoreListeners(userId, {
-        fareContracts: {
-          onSnapshot: (fareContracts) => {
-            if (isEventStreamEnabled && isEventStreamFareContractsEnabled) {
-              Bugsnag.leaveBreadcrumb(
-                `Got Firestore snapshot with ${fareContracts.length} fare contracts, but not updating state since event stream is enabled.`,
-              );
-            } else {
-              dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts});
-            }
-          },
-          onError: (err) =>
-            notifyBugsnag(err, {
-              metadata: {
-                description:
-                  'Error setting up Firestore listener for fare contracts',
+        fareContracts:
+          isEventStreamEnabled && isEventStreamFareContractsEnabled
+            ? undefined
+            : {
+                onSnapshot: (fareContracts) =>
+                  dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
+                onError: (err) =>
+                  notifyBugsnag(err, {
+                    metadata: {
+                      description:
+                        'Error setting up Firestore listener for fare contracts',
+                    },
+                  }),
               },
-            }),
-        },
         sentFareContracts: {
           onSnapshot: (fareContracts) =>
             dispatch({type: 'UPDATE_SENT_FARE_CONTRACTS', fareContracts}),

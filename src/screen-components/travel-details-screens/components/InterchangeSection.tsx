@@ -8,7 +8,7 @@ import {
 } from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
-import {TripIconRow} from './TripIconRow';
+import {TransferInfoRow} from './TransferInfoRow';
 import {Connection, StaySeated} from '@atb/assets/svg/mono-icons/miscellaneous';
 import {ThemeText} from '@atb/components/text';
 
@@ -24,7 +24,7 @@ export const InterchangeSection = ({leg}: {leg: Leg}) => {
   const interchangeTexts = getInterchangeTexts(interchange, t, language);
 
   return (
-    <TripIconRow
+    <TransferInfoRow
       boxed={isStaySeated}
       svg={isStaySeated ? StaySeated : Connection}
       contentStyle={style.message}
@@ -35,7 +35,7 @@ export const InterchangeSection = ({leg}: {leg: Leg}) => {
       <ThemeText typography="body__s" type="secondary">
         {interchangeTexts.body}
       </ThemeText>
-    </TripIconRow>
+    </TransferInfoRow>
   );
 };
 
