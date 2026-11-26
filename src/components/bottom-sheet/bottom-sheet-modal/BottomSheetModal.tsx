@@ -73,7 +73,11 @@ export const BottomSheetModal = ({
 }: BottomSheetModalProps) => {
   const styles = useBottomSheetStyles();
   const {height: screenHeight} = useWindowDimensions();
-  const {top: safeAreaTop} = useSafeAreaInsets();
+  const {
+    top: safeAreaTop,
+    left: safeAreaLeft,
+    right: safeAreaRight,
+  } = useSafeAreaInsets();
   const [footerHeight, setFooterHeight] = useState(0);
   const {theme} = useThemeContext();
   const focusRef = React.useRef<View>(null);
@@ -118,6 +122,8 @@ export const BottomSheetModal = ({
           style={{
             backgroundColor: theme.color.background.neutral[1].background,
             paddingTop: theme.spacing.large,
+            paddingLeft: safeAreaLeft,
+            paddingRight: safeAreaRight,
           }}
         >
           <View onLayout={(e) => setFooterHeight(e.nativeEvent.layout.height)}>
@@ -125,7 +131,13 @@ export const BottomSheetModal = ({
           </View>
         </GorhomBottomSheetFooter>
       ),
-    [Footer, theme.color.background.neutral, theme.spacing.large],
+    [
+      Footer,
+      theme.color.background.neutral,
+      theme.spacing.large,
+      safeAreaLeft,
+      safeAreaRight,
+    ],
   );
 
   const canRunCallbacksRef = useRef<boolean>(isOpen);

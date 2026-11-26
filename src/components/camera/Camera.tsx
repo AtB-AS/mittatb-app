@@ -148,6 +148,8 @@ const useStyles = StyleSheet.createThemeHook(
       qrFrame: {
         position: 'absolute',
         alignSelf: 'center',
+        marginLeft: left,
+        marginRight: right,
         bottom: height / 2,
         transform: [{translateY: 100}],
         width: 200,
@@ -163,6 +165,8 @@ const useStyles = StyleSheet.createThemeHook(
         position: 'absolute',
         bottom: 0,
         alignSelf: 'center',
+        marginLeft: left,
+        marginRight: right,
       },
       footerWrapper: {
         position: 'absolute',
