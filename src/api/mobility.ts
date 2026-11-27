@@ -161,7 +161,6 @@ export const getVehicles = (
   return client
     .get(url, {
       params: filteredParams,
-      authWithIdToken: true,
       ...opts,
     })
     .then((response) => VehicleSchema.array().parse(response.data));
