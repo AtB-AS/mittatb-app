@@ -15,15 +15,8 @@ import {Alert, View} from 'react-native';
 import {NativeTouchable} from '@atb/components/native-touchable';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
-import {useGetSignedTokenQuery} from '@atb/modules/mobile-token';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {
-  beginInspection,
-  endInspection,
-  RNBarcodeInspectionView,
-} from '@entur-private/abt-token-state-react-native-lib';
-import {CONTEXT_ID} from '@atb/modules/mobile-token';
-import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {AbtBarcodeInspectionView} from '@entur-private/react-native-abt';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {
   BottomSheetHeaderType,
@@ -33,6 +26,7 @@ import {
 import {Loading} from '@atb/components/loading';
 import {useScreenshotAware} from 'react-native-screenshot-aware';
 import {SessionReplayMask} from '@atb/modules/analytics';
+import {useBarcodeInspection} from './use-barcode-inspection';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -41,7 +35,6 @@ type Props = {
 
 export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
   const {t} = useTranslation();
-  const {enable_new_token_barcode} = useRemoteConfigContext();
   const isFocusedAndActive = useIsFocusedAndActive();
   const styles = useStyles();
 
@@ -60,21 +53,12 @@ export function Barcode({validityStatus, fc}: Props): React.JSX.Element | null {
 
   return (
     <SessionReplayMask style={styles.sessionReplayMask}>
-      <BarcodeContent
-        fc={fc}
-        enableNewTokenBarcode={enable_new_token_barcode}
-      />
+      <BarcodeContent fc={fc} />
     </SessionReplayMask>
   );
 }
 
-const BarcodeContent = ({
-  fc,
-  enableNewTokenBarcode,
-}: {
-  fc: FareContractType;
-  enableNewTokenBarcode: boolean;
-}) => {
+const BarcodeContent = ({fc}: {fc: FareContractType}) => {
   const {mobileTokenStatus} = useMobileTokenContext();
 
   switch (mobileTokenStatus) {
@@ -85,11 +69,7 @@ const BarcodeContent = ({
     case 'staticQr':
       return <StaticQrCode fc={fc} />;
     case 'success-and-inspectable':
-      if (enableNewTokenBarcode) {
-        return <BarcodeInspectionView />;
-      } else {
-        return <MobileTokenAztec fc={fc} />;
-      }
+      return <BarcodeInspectionView fc={fc} />;
     case 'success-not-inspectable':
       return <DeviceNotInspectable />;
     case 'error':
@@ -130,90 +110,31 @@ function useScreenBrightnessIncrease() {
   );
 }
 
-const BarcodeInspectionView = () => {
+const BarcodeInspectionView = ({fc}: {fc: FareContractType}) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   const {enable_new_token_barcode_base64} = useRemoteConfigContext();
   const isFocusedAndActive = useIsFocusedAndActive();
+  const hasInspectionError = useBarcodeInspection(
+    isFocusedAndActive,
+    enable_new_token_barcode_base64,
+  );
 
-  useEffect(() => {
-    // Only run inspection while the screen is focused and the app is in the
-    // foreground. Re-running when the app becomes active again (e.g. after the
-    // phone is unlocked) forces an immediate barcode refresh: the native ~30s
-    // update timer is suspended while backgrounded, so the displayed barcode
-    // would otherwise stay frozen and expire until the next tick fires.
-    if (!isFocusedAndActive) return;
-
-    // Prepare data for RNBarcodeInspectionView
-    beginInspection(CONTEXT_ID, {
-      visualInspectionNonces: undefined,
-      includeCertificate: false,
-      base64EncodedBarcode: enable_new_token_barcode_base64,
-
-      // Exclude some data to make the barcode more readable for scanners. This
-      // is the same configuration as in the Entur app as of October 2025.
-      deviceDetails: {
-        application: false,
-        os: false,
-      },
-    }).catch((error) => {
-      notifyBugsnag('Error beginning inspection', {metadata: {error}});
-    });
-    return () => {
-      // Stop updating data for RNBarcodeInspectionView when backgrounded,
-      // navigated away, or unmounted.
-      endInspection();
-    };
-  }, [enable_new_token_barcode_base64, isFocusedAndActive]);
+  // Without an inspection the view shows no barcode, so show the static one
+  if (hasInspectionError) return <StaticAztec fc={fc} />;
 
   return (
     <View style={styles.barcodeInspectionContainer}>
-      <View style={styles.barcodeInspection} testID="mobileTokenBarcode">
+      <View
+        style={styles.barcodeInspection}
+        accessible={true}
+        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+        testID="mobileTokenBarcode"
+      >
         <SecureView>
-          <RNBarcodeInspectionView sizeInCm={3.5} />
+          <AbtBarcodeInspectionView sizeInCm={3.5} />
         </SecureView>
       </View>
-    </View>
-  );
-};
-
-/**
- * Show aztec code for mobile token. This can also fall back to static aztec if
- * anything goes wrong when getting the signed mobile token.
- *
- * @deprecated Use BarcodeInspectionView instead
- */
-const MobileTokenAztec = ({fc}: {fc: FareContractType}) => {
-  const styles = useStyles();
-  const {t} = useTranslation();
-  const {data: signedToken} = useGetSignedTokenQuery();
-  const [aztecCodeError, setAztecCodeError] = useState(false);
-  const [aztecXml, setAztecXml] = useState<string>();
-
-  useEffect(() => {
-    if (!signedToken) {
-      setAztecCodeError(true);
-    } else {
-      setAztecCodeError(false);
-      setAztecXml(renderAztec(signedToken));
-    }
-  }, [signedToken]);
-
-  if (aztecCodeError) {
-    return <StaticAztec fc={fc} />;
-  } else if (!aztecXml) {
-    return <LoadingBarcode />;
-  }
-
-  return (
-    <View
-      style={styles.aztecCode}
-      accessible={true}
-      accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-      testID="mobileTokenBarcode"
-    >
-      <SecureView style={styles.secureViewFill}>
-        <SvgXml xml={aztecXml} width="100%" height="100%" />
-      </SecureView>
     </View>
   );
 };
@@ -373,7 +294,10 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     aspectRatio: 1,
     backgroundColor: '#FFFFFF',
     padding: 20,
-    maxHeight: 275,
+    // Limit the width, not the height, so the box stays square and the code
+    // fills it, centered
+    maxWidth: 275,
+    alignSelf: 'center',
   },
   barcodeInspection: {
     backgroundColor: 'white',

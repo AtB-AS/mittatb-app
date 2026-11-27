@@ -1,7 +1,7 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {AttestationSabotage} from '@entur-private/abt-token-state-react-native-lib';
+import {AttestationSabotage} from '@entur-private/react-native-abt';
 import {Platform, View} from 'react-native';
 
 type SabotageProps = {

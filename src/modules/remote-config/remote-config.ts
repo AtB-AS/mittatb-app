@@ -38,7 +38,6 @@ export type RemoteConfig = {
   enable_map_tile_preloading: boolean;
   enable_non_transit_trip_search: boolean;
   enable_nynorsk: boolean;
-  enable_new_token_barcode: boolean;
   enable_new_token_barcode_base64: boolean;
   enable_on_behalf_of: boolean;
   enable_onboarding_login: boolean;
@@ -120,7 +119,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_map_pitch: false,
   enable_map_tile_preloading: false,
   enable_non_transit_trip_search: true,
-  enable_new_token_barcode: false,
   enable_new_token_barcode_base64: false,
   enable_nynorsk: true,
   enable_on_behalf_of: false,
@@ -248,9 +246,6 @@ export function getConfig(): RemoteConfig {
   const enable_non_transit_trip_search =
     values['enable_non_transit_trip_search']?.asBoolean() ??
     defaultRemoteConfig.enable_non_transit_trip_search;
-  const enable_new_token_barcode =
-    values['enable_new_token_barcode']?.asBoolean() ??
-    defaultRemoteConfig.enable_new_token_barcode;
   const enable_new_token_barcode_base64 =
     values['enable_new_token_barcode_base64']?.asBoolean() ??
     defaultRemoteConfig.enable_new_token_barcode_base64;
@@ -429,7 +424,6 @@ export function getConfig(): RemoteConfig {
     enable_map_pitch,
     enable_map_tile_preloading,
     enable_non_transit_trip_search,
-    enable_new_token_barcode,
     enable_new_token_barcode_base64,
     enable_nynorsk,
     enable_on_behalf_of,

@@ -203,6 +203,8 @@ android {
         pickFirst "lib/arm64-v8a/libc++_shared.so"
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
+        // Duplicated by the BouncyCastle jars from the ABT SDK
+        exclude "META-INF/LICENSE.md"
     }
 }
 

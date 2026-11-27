@@ -144,9 +144,12 @@ importers:
       '@entur-private/abt-mobile-barcode-javascript-lib':
         specifier: 3.4.8
         version: 3.4.8
-      '@entur-private/abt-mobile-client-sdk':
-        specifier: 3.4.8
-        version: 3.4.8(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      '@entur-private/abt-token-server-javascript-interface':
+        specifier: 4.0.1
+        version: 4.0.1
+      '@entur-private/react-native-abt':
+        specifier: 4.0.1
+        version: 4.0.1(2214da44bdc79ade59eca47d8e165e8f)
       '@gorhom/bottom-sheet':
         specifier: ^5.2.14
         version: 5.2.14(87ebf1b684d401f2b679e354e64f4044)
@@ -337,8 +340,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-get-random-values:
-        specifier: ^1.11.0
-        version: 1.11.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))
+        specifier: ^2.0.0
+        version: 2.0.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))
       react-native-image-picker:
         specifier: ^8.3.0
         version: 8.3.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
@@ -351,6 +354,9 @@ importers:
       react-native-localize:
         specifier: ^3.2.1
         version: 3.5.2(@expo/config-plugins@10.1.2(supports-color@8.1.1))(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      react-native-nitro-modules:
+        specifier: 0.36.1
+        version: 0.36.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       react-native-pager-view:
         specifier: ^6.3.3
         version: 6.9.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
@@ -418,9 +424,6 @@ importers:
       '@babel/types':
         specifier: ^7.28.4
         version: 7.29.0
-      '@entur-private/abt-token-state-react-native-lib':
-        specifier: 3.4.8
-        version: 3.4.8(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       '@react-native-community/cli':
         specifier: ^20.1.0
         version: 20.2.0(supports-color@8.1.1)(typescript@5.9.3)
@@ -1537,32 +1540,21 @@ packages:
   '@emnapi/wasi-threads@1.2.2':
     resolution: {integrity: sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA==}
 
-  '@entur-private/abt-log-javascript-lib@3.4.8':
-    resolution: {integrity: sha512-U0vsa/e16gJjiaEZwrPaZgQjBGrLkSjSIjKSnLoUiPJ/nINU+YUveMCayd7Yxu2cEdj7wnw6H8GqSL6NjbyEtw==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-log-javascript-lib/-/@entur-private/abt-log-javascript-lib-3.4.8.tgz}
+  '@entur-private/abt-log-javascript-lib@4.0.1':
+    resolution: {integrity: sha512-1Q0iGTFAajYOJRotHtBY+eCnhYwt9y059PTD7x6jMRzoXspJmTN68J6Eq1CkZCo3A2fBZzSjs8zo53ITPnXs3w==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-log-javascript-lib/-/@entur-private/abt-log-javascript-lib-4.0.1.tgz}
 
   '@entur-private/abt-mobile-barcode-javascript-lib@3.4.8':
     resolution: {integrity: sha512-756MHylr0RQLUrTDulsyVyYofH3IFcOr6ursG8vT91tOxeTxWia8ekm2Oy0HYdXBOJR8ceNUacAbB/NP/iTMtg==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-barcode-javascript-lib/-/@entur-private/abt-mobile-barcode-javascript-lib-3.4.8.tgz}
 
-  '@entur-private/abt-mobile-client-sdk@3.4.8':
-    resolution: {integrity: sha512-Bvn+mmEhEOoBy3kbyIcE8tL3LNsM+PthAhoOpP0sVubkcyfUn+VQ9W+4b+GihP30LTFYD0V07SCZzQAZ+W/EyQ==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-client-sdk/-/@entur-private/abt-mobile-client-sdk-3.4.8.tgz}
+  '@entur-private/abt-token-server-javascript-interface@4.0.1':
+    resolution: {integrity: sha512-Ks5nErDxRprDndFYuavwAjoI66y31UNJf0Wf802I+7c6KTxEOFlLxQxLwVSdRfNOkfHEg6mAy8bQiVnuUC0Fkg==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-4.0.1.tgz}
+
+  '@entur-private/react-native-abt@4.0.1':
+    resolution: {integrity: sha512-/DwYPMo1pi9KOIVNaIVr/sHmp9b/tKi+8Y88OhmvKWnVlsKcGmHn/H67xiH0I3FK0JvG30+kOsbMWW9hDG+f1w==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/react-native-abt/-/@entur-private/react-native-abt-4.0.1.tgz}
     peerDependencies:
-      react: '>=19'
-      react-native: '>=0.81.1'
-
-  '@entur-private/abt-time-javascript-lib@3.4.8':
-    resolution: {integrity: sha512-DGz1xX0iL/bk9ivWi8IR2zptg3HwfXpqpGisSarYm0aQcQlujSBXtZWqcEFTit6tMMW4PqwQQGghXrxoFLAM9Q==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-3.4.8.tgz}
-
-  '@entur-private/abt-token-core-javascript-lib@3.4.8':
-    resolution: {integrity: sha512-ZrHBsA+l1OTxf8BLbgLlaY1miNUuVmEdxqn/3OiVgnhBNDvQDwe1XIkuAFspBcW6mDTB/pC9kAr3U5OqYISb2Q==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-3.4.8.tgz}
-
-  '@entur-private/abt-token-server-javascript-interface@3.4.8':
-    resolution: {integrity: sha512-i1kaZ4eCI8PXbSpMjo2ollt5/3mB3dXj8NQjbaoILEWZmybSwfNWw+4sp6QhXsOok47Y8F4bkKtCB6Xku8pxkQ==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-3.4.8.tgz}
-
-  '@entur-private/abt-token-state-react-native-lib@3.4.8':
-    resolution: {integrity: sha512-q/Lt0kd8ejsXeXFTrvl3K3hwHr/AgpHLHcajGf7EOKRnzmst2yYSbVcAqa4R82WZ+FuROtgorzoBmCmpRfi6fg==, tarball: https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-state-react-native-lib/-/@entur-private/abt-token-state-react-native-lib-3.4.8.tgz}
-    peerDependencies:
-      react: '>=19'
-      react-native: '>=0.81.1'
+      react: '>=19.2.0'
+      react-native: '>=0.83.4'
+      react-native-nitro-modules: ^0.36.1
 
   '@esbuild/aix-ppc64@0.27.7':
     resolution: {integrity: sha512-EKX3Qwmhz1eMdEJokhALr0YiD0lhQNwDqkPYyPhiSwKrh7/4KRjQc04sZ8db+5DVVnZ1LmbNDI1uAMPEUBnQPg==}
@@ -6500,10 +6492,10 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-get-random-values@1.11.0:
-    resolution: {integrity: sha512-4BTbDbRmS7iPdhYLRcz3PGFIpFJBwNZg9g42iwa2P6FOv9vZj/xJc678RZXnLNZzd0qd7Q3CCF6Yd+CU2eoXKQ==}
+  react-native-get-random-values@2.0.0:
+    resolution: {integrity: sha512-wx7/aPqsUIiWsG35D+MsUJd8ij96e3JKddklSdrdZUrheTx89gPtz3Q2yl9knBArj5u26Cl23T88ai+Q0vypdQ==}
     peerDependencies:
-      react-native: '>=0.56'
+      react-native: '>=0.81'
 
   react-native-image-picker@8.3.0:
     resolution: {integrity: sha512-f45QERBBWAFS8BEIKeQ9bcuBQFr3myWaNlkTnG4bY8BtsYJa/ChM0jzN6V9xBKzNPjMo9uFyUuNKjQWddNKZ9w==}
@@ -6549,6 +6541,12 @@ packages:
     peerDependencies:
       '@react-native-community/datetimepicker': '>=6.7.0'
       react-native: '>=0.65.0'
+
+  react-native-nitro-modules@0.36.1:
+    resolution: {integrity: sha512-kBv/VvKqAmkXAvP1DxJMC9b/fRhh7JdSO4EUnPP46hJjrIFeFR8AwKm8mYaKZEuF014M/TVdv2vomVUW0umsQQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
 
   react-native-pager-view@6.9.1:
     resolution: {integrity: sha512-uUT0MMMbNtoSbxe9pRvdJJKEi9snjuJ3fXlZhG8F2vVMOBJVt/AFtqMPUHu9yMflmqOr08PewKzj9EPl/Yj+Gw==}
@@ -7530,11 +7528,6 @@ packages:
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
-    hasBin: true
-
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
@@ -8990,34 +8983,21 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@entur-private/abt-log-javascript-lib@3.4.8': {}
+  '@entur-private/abt-log-javascript-lib@4.0.1': {}
 
   '@entur-private/abt-mobile-barcode-javascript-lib@3.4.8': {}
 
-  '@entur-private/abt-mobile-client-sdk@3.4.8(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)':
+  '@entur-private/abt-token-server-javascript-interface@4.0.1': {}
+
+  '@entur-private/react-native-abt@4.0.1(2214da44bdc79ade59eca47d8e165e8f)':
     dependencies:
-      '@entur-private/abt-log-javascript-lib': 3.4.8
-      '@entur-private/abt-token-core-javascript-lib': 3.4.8
-      '@entur-private/abt-token-server-javascript-interface': 3.4.8
-      '@entur-private/abt-token-state-react-native-lib': 3.4.8(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      '@entur-private/abt-log-javascript-lib': 4.0.1
+      '@entur-private/abt-token-server-javascript-interface': 4.0.1
       react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
-
-  '@entur-private/abt-time-javascript-lib@3.4.8': {}
-
-  '@entur-private/abt-token-core-javascript-lib@3.4.8': {}
-
-  '@entur-private/abt-token-server-javascript-interface@3.4.8': {}
-
-  '@entur-private/abt-token-state-react-native-lib@3.4.8(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)':
-    dependencies:
-      '@entur-private/abt-log-javascript-lib': 3.4.8
-      '@entur-private/abt-time-javascript-lib': 3.4.8
-      '@entur-private/abt-token-core-javascript-lib': 3.4.8
-      '@entur-private/abt-token-server-javascript-interface': 3.4.8
-      react: 19.2.3
-      react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
-      uuid: 9.0.1
+      react-native-get-random-values: 2.0.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))
+      react-native-nitro-modules: 0.36.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
+      uuid: 13.0.0
 
   '@esbuild/aix-ppc64@0.27.7':
     optional: true
@@ -15016,7 +14996,7 @@ snapshots:
       react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
 
-  react-native-get-random-values@1.11.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)):
+  react-native-get-random-values@2.0.0(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)):
     dependencies:
       fast-base64-decode: 1.0.0
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
@@ -15055,6 +15035,11 @@ snapshots:
     dependencies:
       '@react-native-community/datetimepicker': 8.4.5(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3)
       prop-types: 15.8.1
+      react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
+
+  react-native-nitro-modules@0.36.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
       react-native: 0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1)
 
   react-native-pager-view@6.9.1(react-native@0.86.3(patch_hash=b5d06b4d5ea8148ee766d5471b992abf32de5f765c940636e4baacd463a4cd24)(@babel/core@7.29.0(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/jest-preset@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@react-native/metro-config@0.86.3(@babel/core@7.29.0(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.7)(react@19.2.3)(supports-color@8.1.1))(react@19.2.3):
@@ -16087,8 +16072,6 @@ snapshots:
   uuid@7.0.3: {}
 
   uuid@8.3.2: {}
-
-  uuid@9.0.1: {}
 
   v8-to-istanbul@9.0.1:
     dependencies:

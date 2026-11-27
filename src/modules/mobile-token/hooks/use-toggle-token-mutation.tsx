@@ -13,7 +13,7 @@ type Args = {
 export const useToggleTokenMutation = () => {
   const queryClient = useQueryClient();
   const {userId} = useAuthContext();
-  const {nativeToken, secureContainer} = useMobileTokenContext();
+  const {tokenDetails} = useMobileTokenContext();
   return useMutation({
     mutationFn: ({tokenId}: Args) => tokenService.toggle(tokenId, uuid()),
     onSuccess: (tokens) => {
@@ -22,14 +22,15 @@ export const useToggleTokenMutation = () => {
           MOBILE_TOKEN_QUERY_KEY,
           LIST_REMOTE_TOKENS_QUERY_KEY,
           userId,
-          nativeToken?.tokenId,
-          secureContainer,
+          tokenDetails?.tokenId,
         ],
         tokens,
       );
       queryClient.invalidateQueries({
         queryKey: [MOBILE_TOKEN_QUERY_KEY, GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY],
       });
+      // No need to refresh the SDK's token details here: MobileTokenContext
+      // does it when the new list and the token details disagree
     },
   });
 };

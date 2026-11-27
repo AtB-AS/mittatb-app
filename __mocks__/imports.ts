@@ -1,7 +1,7 @@
 import {LoadingParams} from '@atb/screen-components/loading-screen';
 
 jest.mock('@bugsnag/react-native', () => {});
-jest.mock('@entur-private/abt-mobile-client-sdk', () => {});
+jest.mock('@entur-private/react-native-abt', () => {});
 jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
 jest.mock('@react-native-async-storage/async-storage', () => ({}));
 jest.mock('@react-native-firebase/auth', () => {});

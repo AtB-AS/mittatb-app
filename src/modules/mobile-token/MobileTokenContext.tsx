@@ -8,73 +8,53 @@ import React, {
 } from 'react';
 import {useAuthContext} from '@atb/modules/auth';
 import {useRemoteConfigContext} from '@atb/modules/remote-config';
-import {
-  MobileTokenStatus,
-  RemoteToken,
-  Token,
-  TokenLimitResponse,
-} from './types';
+import {MobileTokenStatus, Token, TokenLimitResponse} from './types';
 
 import {v4 as uuid} from 'uuid';
 import Bugsnag from '@bugsnag/react-native';
-import {mobileTokenClient} from './mobileTokenClient';
 import {
-  ActivatedToken,
-  AttestationSabotage,
-} from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable, MOBILE_TOKEN_QUERY_KEY, wipeToken} from './utils';
+  AbtErrorDetails,
+  AbtTokenDetails,
+  useAbtMobileClient,
+} from '@entur-private/react-native-abt';
+import {AbtMobileClient, CONTEXT_ID} from './mobileTokenClient';
+import {MOBILE_TOKEN_QUERY_KEY} from './utils';
 import {tokenService} from './tokenService';
 import {QueryStatus, useQueryClient} from '@tanstack/react-query';
-import {useInterval} from '@atb/utils/use-interval';
 import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
   useListRemoteTokensQuery,
 } from './hooks/use-list-remote-tokens-query';
-import {usePreemptiveRenewTokenMutation} from './hooks/use-preemptive-renew-token-mutation';
 import {
-  LOAD_NATIVE_TOKEN_QUERY_KEY,
-  useLoadNativeTokenQuery,
-} from './hooks/use-load-native-token-query';
-import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {ONE_HOUR_MS} from '@atb/utils/durations';
+  errorToMetadata,
+  logToBugsnag,
+  notifyBugsnag,
+} from '@atb/utils/bugsnag-utils';
 import {useIntercomMetadata} from '@atb/modules/chat';
-import {useValidateToken} from './hooks/use-validate-token';
-
-const SIX_HOURS_MS = ONE_HOUR_MS * 6;
+import {removeTokenAndLogout} from './remove-token-and-logout';
+import {setAttestationRequirementReporter} from './attestation-requirement';
+import {LifecycleStatus, useTokenLifecycle} from './use-token-lifecycle';
+import {isTokenLoading} from './is-token-loading';
+import {useSaveLastTokenUser} from './use-save-last-token-user';
 
 let cancelTimeoutHandler: (() => void) | undefined = undefined;
 
 type MobileTokenContextState = {
   tokens: Token[];
-  /**
-   * The status of the whole mobile token process.
-   */
   mobileTokenStatus: MobileTokenStatus;
-  /**
-   * Will return true if the phone is inspectable, whether it is with mobile token
-   * or static barcode.
-   */
   isInspectable: boolean;
   retry: () => void;
   clearTokenAtLogout: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
-  nativeToken?: ActivatedToken;
-  secureContainer?: string;
-  /**
-   * Low level debug details and functions of the mobile token process, for the
-   * debug screen
-   */
+  refreshTokenDetails: () => Promise<void>;
+  tokenDetails: AbtTokenDetails | null;
   debug: {
-    nativeTokenStatus: QueryStatus;
+    errorDetails: AbtErrorDetails | null;
     remoteTokensStatus: QueryStatus;
-    createToken: () => void;
-    removeRemoteToken: (tokenId: string) => void;
-    renewToken: () => void;
-    wipeToken: () => void;
-    nativeTokenError: any;
     remoteTokenError: any;
-    setSabotage: (attestationSabotage?: AttestationSabotage) => void;
-    sabotage: AttestationSabotage | undefined;
+    removeRemoteToken: (tokenId: string) => void;
+    createToken: () => Promise<void>;
+    wipeToken: () => Promise<void>;
     setAlwaysFallback: (alwaysFallback: boolean) => void;
     alwaysFallback: boolean;
     setAllTokenInspectable: (inspectable?: boolean) => void;
@@ -94,18 +74,17 @@ export const MobileTokenContextProvider = ({children}: Props) => {
   const {userId, authStatus} = useAuthContext();
   const queryClient = useQueryClient();
   const {updateMetadata} = useIntercomMetadata();
+  const {tokenDetails, errorDetails} = useAbtMobileClient(CONTEXT_ID);
 
   const {token_timeout_in_seconds} = useRemoteConfigContext();
 
   const [isTimeout, setIsTimeout] = useState(false);
-
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [sabotage, setSabotage] = useState<AttestationSabotage | undefined>();
+  const [retryCount, setRetryCount] = useState(0);
   const [alwaysFallback, setAlwaysFallback] = useState<boolean>(false);
   const [allTokenInspectable, setAllTokenInspectable] = useState<
     boolean | undefined
   >();
-  const [secureContainer, setSecureContainer] = useState<string>();
 
   const traceId = useRef<string>(uuid());
 
@@ -113,45 +92,74 @@ export const MobileTokenContextProvider = ({children}: Props) => {
 
   const enabled = !!userId && authStatus === 'authenticated' && !isLoggingOut;
 
+  const tokenId = tokenDetails?.tokenId;
+
   /**
-   * Fetch the local token (if available), if there are no local token,
-   * we request a new token from remote in here as well.
+   * The latest token id, kept after the SDK clears its token details at
+   * logout. Used to remove a token created while logging out, and to tell
+   * whether a login gave the device a new token.
+   */
+  const latestTokenId = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (tokenId) latestTokenId.current = tokenId;
+  }, [tokenId]);
+
+  const saveLastTokenUser = useSaveLastTokenUser(tokenId);
+
+  const {lifecycleStatus, isStartFailed, resetRun} = useTokenLifecycle({
+    enabled,
+    userId,
+    retryCount,
+    latestTokenId,
+    onLogin: saveLastTokenUser,
+  });
+
+  /**
+   * Fetch the list of remote tokens, this is the list of tokens you see in the
+   * token toggle screen. It can also give this device's token the inspection
+   * right.
    */
   const {
-    data: nativeToken,
-    status: nativeTokenStatus,
-    error: nativeTokenError,
-  } = useLoadNativeTokenQuery(enabled, userId, traceId.current);
+    data: remoteTokens,
+    status: remoteTokensStatus,
+    error: remoteTokenError,
+  } = useListRemoteTokensQuery(
+    enabled && lifecycleStatus === 'done' && !!tokenDetails,
+    tokenDetails?.tokenId,
+    allTokenInspectable,
+  );
 
   /**
-   * Send the token statistics (success/error) to backend to update
-   * also process the secure container so we can fetch the token list.
+   * Only signed calls through the token list can report Entur's reattestation
+   * requirement to the SDK, so fetch the list again when a details call got
+   * one.
    */
   useEffect(() => {
-    setSecureContainer(undefined);
+    setAttestationRequirementReporter(() =>
+      queryClient.invalidateQueries({
+        queryKey: [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY],
+      }),
+    );
+    return () => setAttestationRequirementReporter(undefined);
+  }, [queryClient]);
 
-    const loadSecureContainer = async () => {
-      if (nativeToken) {
-        await mobileTokenClient.encode(nativeToken).then((secureContainer) => {
-          setSecureContainer(secureContainer);
-        });
-      }
-    };
+  const isAttested = tokenDetails?.attested;
+  const hasError = !!errorDetails;
 
-    loadSecureContainer();
-
-    if (nativeTokenStatus === 'success') {
-      const tokenStatus = nativeToken.isAttested()
-        ? 'attested'
-        : 'non-attested';
-
+  /**
+   * Send the token statistics (success/error) to backend and Intercom.
+   */
+  useEffect(() => {
+    if (lifecycleStatus !== 'done') return;
+    if (tokenId) {
+      const tokenStatus = isAttested ? 'attested' : 'non-attested';
       updateMetadata({
-        'AtB-Mobile-Token-Id': nativeToken.tokenId,
+        'AtB-Mobile-Token-Id': tokenId,
         'AtB-Mobile-Token-Status': tokenStatus,
         'AtB-Mobile-Token-Error-Correlation-Id': undefined,
       });
-      tokenService.postTokenStatus(nativeToken.tokenId, tokenStatus, undefined);
-    } else if (nativeTokenStatus === 'error') {
+      tokenService.postTokenStatus(tokenId, tokenStatus, undefined);
+    } else if (hasError || isStartFailed) {
       updateMetadata({
         'AtB-Mobile-Token-Id': undefined,
         'AtB-Mobile-Token-Status': 'error',
@@ -159,74 +167,57 @@ export const MobileTokenContextProvider = ({children}: Props) => {
       });
       tokenService.postTokenStatus(undefined, 'error', traceId.current);
     }
-  }, [nativeToken, nativeTokenStatus, updateMetadata]);
+  }, [
+    lifecycleStatus,
+    tokenId,
+    isAttested,
+    hasError,
+    isStartFailed,
+    updateMetadata,
+  ]);
 
   /**
-   * fetch the list of remote token, this is the list of tokens you see
-   * in the token toggle screen.
-   */
-  const {
-    data: remoteTokens,
-    status: remoteTokensStatus,
-    error: remoteTokenError,
-  } = useListRemoteTokensQuery(
-    enabled && nativeToken !== undefined && secureContainer !== undefined,
-    nativeToken?.tokenId,
-    secureContainer,
-    allTokenInspectable,
-  );
-
-  /**
-   * Try to pre-emptively renew the token if it is about to expire
-   */
-  const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
-
-  /**
-   * Invalidates the list of mobile tokens in the query cache whenever relevant dependencies change.
-   *
-   * - Logs a breadcrumb to Bugsnag for traceability.
-   * - Calls `invalidateQueries` on the query client to refresh the token list.
-   * - Ensures that the UI and data remain in sync after changes to the native token, user, or secure container.
-   *
-   * Dependencies:
-   * - `queryClient`: The React Query client instance.
-   * - `userId`: The current user's ID.
-   * - `nativeToken?.tokenId`: The ID of the loaded native token.
-   * - `secureContainer`: The encoded secure container string.
+   * Leave a breadcrumb for SDK errors. The error itself is already reported to
+   * Bugsnag by the SDK logger (see abtClientLogger).
    */
   useEffect(() => {
-    logToBugsnag('Invalidating list tokens query after token change', {
-      tokenId: nativeToken?.tokenId,
+    if (!errorDetails) return;
+    logToBugsnag(`Mobile token SDK error: ${errorDetails.message}`, {
+      type: errorDetails.type,
+      resolution: errorDetails.resolution,
+      stack: errorDetails.stack?.join(' <- '),
+      traceId: traceId.current,
     });
-    queryClient.invalidateQueries({
-      queryKey: [
-        MOBILE_TOKEN_QUERY_KEY,
-        LIST_REMOTE_TOKENS_QUERY_KEY,
-        userId,
-        nativeToken?.tokenId,
-        secureContainer,
-      ],
-    });
-  }, [queryClient, userId, nativeToken?.tokenId, secureContainer]);
+  }, [errorDetails]);
+
+  const isWaitingForTokenList =
+    !!tokenDetails &&
+    !tokenDetails.hasInspectionRight &&
+    allTokenInspectable === undefined &&
+    remoteTokensStatus === 'pending';
 
   /**
-   * Handles timeout logic for loading the native token.
-   *
-   * - When the native token status is 'loading', starts a timeout using `timeoutHandler`.
-   *   If the timeout elapses before the token loads, sets the `isTimeout` state to true
-   *   and reports the timeout error to Bugsnag.
-   * - If the native token status changes to anything other than 'loading', cancels any
-   *   existing timeout and resets the `isTimeout` state to false.
-   *
-   * Dependencies:
-   * - `nativeTokenStatus`: Triggers effect when the loading status changes.
-   * - `token_timeout_in_seconds`: Timeout duration from remote config.
+   * The list failed while the local token doesn't have the inspection right.
+   * The list could have given it, so we don't know if this device is
+   * inspectable.
    */
+  const isTokenListFailed =
+    !!tokenDetails &&
+    !tokenDetails.hasInspectionRight &&
+    allTokenInspectable === undefined &&
+    remoteTokensStatus === 'error';
+
+  const isLoading = isTokenLoading({
+    lifecycleStatus,
+    hasTokenDetails: !!tokenDetails,
+    hasError,
+    isStartFailed,
+    isWaitingForTokenList,
+  });
+
   useEffect(() => {
-    if (nativeTokenStatus === 'pending') {
+    if (isLoading) {
       cancelTimeoutHandler = timeoutHandler(() => {
-        // When timeout has occured, we notify errors in Bugsnag
-        // and set state that indicates timeout.
         setIsTimeout(true);
 
         notifyBugsnag(
@@ -236,53 +227,77 @@ export const MobileTokenContextProvider = ({children}: Props) => {
           {
             errorGroupHash: 'TokenLoadingTimeoutError',
             metadata: {
-              description: 'Native and remote tokens took too long to load.',
+              description: 'Mobile token took too long to load.',
             },
           },
         );
       }, token_timeout_in_seconds);
     } else {
-      // We've finished with remote tokens. Cancel timeout notification.
       cancelTimeoutHandler?.();
       setIsTimeout(false);
     }
-  }, [nativeTokenStatus, token_timeout_in_seconds]);
+  }, [isLoading, token_timeout_in_seconds]);
 
   /**
-   * `isRenewingOrResetting` to show/hide the loading status
-   * checks token to see if we need to renew/reset, returns
-   * for the users
+   * The remote list can grant or show a moved inspection right before the SDK's local token details know about it, so
+   * prefer it when deciding whether this device has the inspection right.
    */
-  const {isRenewingOrResetting, isRenewOrResetError} = useValidateToken(
-    nativeToken,
-    remoteTokens,
-    traceId.current,
-  );
+  const thisDeviceRemoteToken = remoteTokens?.find((t) => t.isThisDevice);
 
   /**
-   * Periodically checks if the native token should be preemptively renewed.
-   * Ensures that the token remains valid and up-to-date without user intervention.
-   *
+   * The list doesn't have this device's token, so it was probably removed on
+   * the server. Don't trust the local inspection right then.
    */
-  useInterval(
-    () => checkRenewMutate({token: nativeToken, traceId: uuid()}),
-    [checkRenewMutate, nativeToken],
-    SIX_HOURS_MS,
-    false,
-    true,
-  );
+  const isMissingFromTokenList =
+    remoteTokensStatus === 'success' && !thisDeviceRemoteToken;
+
+  const deviceInspectable = thisDeviceRemoteToken
+    ? thisDeviceRemoteToken.isInspectable
+    : (allTokenInspectable ??
+      (!isMissingFromTokenList && !!tokenDetails?.hasInspectionRight));
+
+  /**
+   * Refresh the token details when the token is missing from the list. If the
+   * token was removed on the server, the SDK finds out and creates a new one.
+   */
+  useEffect(() => {
+    if (isMissingFromTokenList) refreshTokenDetails();
+  }, [isMissingFromTokenList, tokenId]);
+
+  const remoteInspectable = thisDeviceRemoteToken?.isInspectable;
+  const localInspectable = tokenDetails?.hasInspectionRight;
+  useEffect(() => {
+    if (allTokenInspectable !== undefined) return;
+    if (remoteInspectable === undefined || localInspectable === undefined)
+      return;
+    if (remoteInspectable !== localInspectable) refreshTokenDetails();
+  }, [remoteInspectable, localInspectable, allTokenInspectable]);
 
   const mobileTokenStatus = useMobileTokenStatus(
-    nativeTokenStatus,
-    remoteTokensStatus,
-    nativeToken,
-    remoteTokens,
-    isRenewingOrResetting,
-    isRenewOrResetError || alwaysFallback,
+    lifecycleStatus,
+    isWaitingForTokenList,
+    isTokenListFailed,
+    tokenDetails,
+    hasError || isStartFailed,
+    deviceInspectable,
+    alwaysFallback,
     isTimeout,
   );
 
   const isInspectable = getIsInspectableFromStatus(mobileTokenStatus);
+
+  /**
+   * Remove the token from the account, log out of the SDK and reset the token
+   * state. Used at logout and by the debug wipe.
+   */
+  const tearDownToken = useCallback(
+    async (description: string) => {
+      await removeTokenAndLogout({tokenId, latestTokenId, description});
+      resetRun();
+      await queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]});
+    },
+    [queryClient, tokenId, resetRun],
+  );
 
   return (
     <MobileTokenContext.Provider
@@ -293,68 +308,42 @@ export const MobileTokenContextProvider = ({children}: Props) => {
         retry: useCallback(() => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]});
+          setRetryCount((count) => count + 1);
         }, [queryClient]),
-        clearTokenAtLogout: useCallback(() => {
+        clearTokenAtLogout: useCallback(async () => {
           setIsLoggingOut(true);
-          return wipeToken(
-            nativeToken ? [nativeToken.tokenId] : [],
-            uuid(),
-          ).then(() =>
-            queryClient.resetQueries({queryKey: [MOBILE_TOKEN_QUERY_KEY]}),
-          );
-        }, [queryClient, nativeToken]),
+          await tearDownToken('Error removing token at logout');
+        }, [tearDownToken]),
         getTokenToggleDetails,
-        nativeToken,
-        secureContainer,
+        refreshTokenDetails,
+        tokenDetails,
         debug: {
-          nativeTokenStatus,
+          errorDetails,
           remoteTokensStatus,
-          createToken: () => mobileTokenClient.create(uuid()),
+          remoteTokenError,
           removeRemoteToken: async (tokenId) => {
-            const removed = await tokenService.removeToken(tokenId, uuid());
-            if (removed) {
-              queryClient.setQueryData(
-                [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY],
-                remoteTokens?.filter(({id}) => id !== tokenId),
+            // token-service answers with an empty body, so `removed` is never
+            // set. The call throws if the removal fails.
+            await tokenService.removeToken(tokenId, uuid());
+            queryClient.invalidateQueries({
+              queryKey: [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY],
+            });
+          },
+          createToken: async () => {
+            try {
+              await AbtMobileClient.login(CONTEXT_ID);
+            } catch (err: any) {
+              logToBugsnag(
+                'Error creating token from debug',
+                errorToMetadata(err),
               );
             }
           },
-          renewToken: () =>
-            mobileTokenClient
-              .renew(nativeToken!, uuid())
-              .then((renewedToken) => {
-                queryClient.setQueryData(
-                  [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
-                  renewedToken,
-                );
-              }),
-          wipeToken: useCallback(
-            () =>
-              wipeToken(nativeToken ? [nativeToken.tokenId] : [], uuid()).then(
-                () =>
-                  queryClient.resetQueries({
-                    queryKey: [MOBILE_TOKEN_QUERY_KEY],
-                  }),
-              ),
-            [queryClient, nativeToken],
-          ),
-          nativeTokenError: nativeTokenError,
-          remoteTokenError: remoteTokenError,
-          setSabotage: (attestationSabotage?: AttestationSabotage) => {
-            setSabotage(attestationSabotage);
-            if (attestationSabotage) {
-              mobileTokenClient.setDebugSabotage(attestationSabotage);
-            } else {
-              mobileTokenClient.clearDebugSabotage();
-            }
-          },
-          sabotage: sabotage,
+          wipeToken: () => tearDownToken('Error removing token from debug'),
           setAlwaysFallback,
-          alwaysFallback: alwaysFallback,
-          setAllTokenInspectable: (inspectable?: boolean) => {
-            setAllTokenInspectable(inspectable);
-          },
-          allTokenInspectable: allTokenInspectable,
+          alwaysFallback,
+          setAllTokenInspectable,
+          allTokenInspectable,
         },
       }}
     >
@@ -373,14 +362,6 @@ export function useMobileTokenContext() {
   return context;
 }
 
-/**
- * Call and cancel an action with a specific timeout.
- * If timeoutInSeconds is 0 the timeout is deactivated.
- *
- * @param fn handle to call on time
- * @param timeoutInSeconds timeout in seconds
- * @returns cancellable timeout
- */
 function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
   if (timeoutInSeconds <= 0) {
     // Do nothing, as timeout is deactivated
@@ -395,34 +376,27 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
 }
 
 /**
- * Determines the overall status of the mobile token process based on various factors.
- *
- * Considers the loading and error status of both the native token and remote tokens.
- * Takes into account whether the token is currently being renewed or reset, or if a timeout has occurred.
- * Supports fallback modes based on remote config flags, including static QR code fallback.
+ * Determines the overall status of the mobile token process.
  *
  * Logic:
- * - If a timeout has occurred, returns a fallback status or 'loading' based on config.
- * - If a renewal or reset is in progress, returns 'loading'.
- * - If the native token is loading or has errored, returns 'loading' or a fallback/error status.
- * - If the native token is loaded successfully, checks the remote tokens status:
- *   - If remote tokens are loading or errored, returns 'loading' or a fallback/error status.
- *   - If both are successful, determines if the device is inspectable and returns the appropriate status.
- *
- * @param loadNativeTokenStatus Status of loading the native token (React Query).
- * @param remoteTokensStatus Status of loading the remote tokens (React Query).
- * @param nativeToken The loaded native token, if available.
- * @param remoteTokens The list of remote tokens, if available.
- * @param isRenewingOrResetting Whether a renewal or reset operation is in progress. (from `useValidateToken`)
- * @param isTimeout Whether a timeout has occurred while loading tokens.
- * @returns The computed MobileTokenStatus string.
+ * - If a timeout has occurred (or fallback is forced), returns a fallback
+ *   status or 'loading' based on config.
+ * - While the SDK is starting, or a token without the inspection right waits
+ *   for the token list, returns 'loading'.
+ * - If the SDK has no token after starting and reports an error, returns a
+ *   fallback/error status.
+ * - If the token list failed for a token without the inspection right,
+ *   returns a fallback/error status.
+ * - Otherwise determines if the device is inspectable and returns the
+ *   appropriate status.
  */
 const useMobileTokenStatus = (
-  loadNativeTokenStatus: QueryStatus,
-  remoteTokensStatus: QueryStatus,
-  nativeToken: ActivatedToken | undefined,
-  remoteTokens: RemoteToken[] | undefined,
-  isRenewingOrResetting: boolean,
+  lifecycleStatus: LifecycleStatus,
+  isWaitingForTokenList: boolean,
+  isTokenListFailed: boolean,
+  tokenDetails: AbtTokenDetails | null,
+  hasError: boolean,
+  deviceInspectable: boolean,
   shouldFallback: boolean,
   isTimeout: boolean,
 ): MobileTokenStatus => {
@@ -437,50 +411,28 @@ const useMobileTokenStatus = (
   if (isTimeout || shouldFallback)
     return enable_token_fallback_on_timeout ? fallbackStatus : 'loading';
 
-  if (isRenewingOrResetting) return 'loading';
+  if (lifecycleStatus !== 'done' || isWaitingForTokenList) return 'loading';
 
-  switch (loadNativeTokenStatus) {
-    case 'pending':
-      return 'loading';
-    case 'error':
-      return enable_token_fallback ? fallbackStatus : 'error';
-    case 'success':
-      switch (remoteTokensStatus) {
-        case 'pending':
-          return 'loading';
-        case 'error':
-          return enable_token_fallback ? fallbackStatus : 'error';
-        case 'success':
-          return deviceInspectable(nativeToken, remoteTokens)
-            ? use_trygg_overgang_qr_code
-              ? 'staticQr'
-              : 'success-and-inspectable'
-            : 'success-not-inspectable';
-      }
+  if (!tokenDetails) {
+    // The token details may arrive shortly after `start` resolves
+    if (!hasError) return 'loading';
+    return enable_token_fallback ? fallbackStatus : 'error';
   }
-};
 
-/**
- * Whether this device is inspectable or not. It is inspectable if:
- * - A mobile token for this device exists
- * - A remote token is found matching the id of the mobile token for this device
- * - The found remote token has the inspectable action
- */
-const deviceInspectable = (
-  token?: ActivatedToken,
-  remoteTokens?: RemoteToken[],
-  debugInspectable?: boolean,
-): boolean => {
-  if (!token || !remoteTokens) return false;
-  const matchingRemoteToken = remoteTokens.find((r) => r.id === token.tokenId);
-  if (!matchingRemoteToken) return false;
-  return debugInspectable ?? isInspectable(matchingRemoteToken);
+  if (isTokenListFailed)
+    return enable_token_fallback ? fallbackStatus : 'error';
+
+  return deviceInspectable
+    ? use_trygg_overgang_qr_code
+      ? 'staticQr'
+      : 'success-and-inspectable'
+    : 'success-not-inspectable';
 };
 
 /**
  * Determines if a mobile token status is inspectable.
  *
- * Inspectable means that the token has the `TICKET_INSPECTION` right on the backoffice.
+ * Inspectable means that the token has the `TICKET_INSPECTION` right on the backoffice.
  *
  * @param mobileTokenStatus - The current status of the mobile token.
  *   - `'success-and-inspectable'`: The token is successfully generated and can be inspected.
@@ -511,5 +463,14 @@ const getTokenToggleDetails = async () => {
     return await tokenService.getTokenToggleDetails();
   } catch {
     return undefined;
+  }
+};
+
+const refreshTokenDetails = async () => {
+  try {
+    await AbtMobileClient.updateLocalTokenFromRemote(CONTEXT_ID);
+  } catch (err: any) {
+    // Only a breadcrumb: the SDK logger already sends the error to Bugsnag
+    logToBugsnag('Error refreshing token details', errorToMetadata(err));
   }
 };

@@ -3,55 +3,52 @@ import {
   logToBugsnag,
   notifyBugsnag,
 } from '@atb/utils/bugsnag-utils';
-import {ClientLogger} from '@entur-private/abt-log-javascript-lib';
-import {RemoteLogger} from '@entur-private/abt-mobile-client-sdk/lib/logger';
+import {
+  ClientLogger,
+  ClientNetworkError,
+} from '@entur-private/react-native-abt';
 
+/**
+ * Only SDK errors are sent to Bugsnag as events. Warnings are usually followed
+ * by an error for the same failure, so they are kept as breadcrumbs. Network
+ * errors are kept as breadcrumbs too, as they only mean the device is offline.
+ */
 export const localLogger: ClientLogger = {
-  debug: (msg, metadata?) => {
-    logToBugsnag('Mobiletoken sdk debug message: ' + msg, {metadata: metadata});
+  debug: (name, message) => {
+    logToBugsnag(`Mobiletoken sdk debug message: ${name}: ${message}`);
   },
-  info: (msg, metadata?) => {
-    logToBugsnag('Mobiletoken sdk info message: ' + msg, {metadata: metadata});
+  info: (name, message) => {
+    logToBugsnag(`Mobiletoken sdk info message: ${name}: ${message}`);
   },
-  warn: (msg, err, metadata?) => {
-    logToBugsnag(`Mobiletoken sdk warn message: ${msg} ${err}`, {
-      name: metadata?.name,
-      message: metadata?.message,
-      stack: metadata?.stack,
-    });
-    const onError = toOnErrorCallback('warning', msg, metadata);
-    if (err) notifyBugsnag(err, {errorGroupHash: 'token', metadata: onError});
+  warn: (name, message, error) => {
+    logToBugsnag(
+      `Mobiletoken sdk warn message: ${name}: ${message}`,
+      toMetadata('warning', name, message, error),
+    );
   },
-  error: (msg, err, metadata?) => {
-    logToBugsnag(`Mobiletoken sdk error message: ${msg} ${err}`, {
-      name: metadata?.name,
-      message: metadata?.message,
-      stack: metadata?.stack,
-    });
-    const onError = toOnErrorCallback('error', msg, metadata);
-    if (err) notifyBugsnag(err, {errorGroupHash: 'token', metadata: onError});
-  },
-};
-
-export const remoteLogger: RemoteLogger = {
-  message: (message, level) => {
-    logToBugsnag(`Mobiletoken sdk remote logger ${level} message: ${message}`);
-  },
-  error: (err) => {
-    notifyBugsnag(err, {
+  error: (name, message, error) => {
+    const metadata = toMetadata('error', name, message, error);
+    logToBugsnag(
+      `Mobiletoken sdk error message: ${name}: ${message}`,
+      metadata,
+    );
+    if (error instanceof ClientNetworkError) return;
+    notifyBugsnag(error ?? new Error(`${name}: ${message}`), {
       errorGroupHash: 'token',
-      metadata: {
-        error: 'Mobiletoken sdk remote logger caught an error',
-        ...errorToMetadata(err),
-      },
+      metadata,
     });
   },
 };
 
-const toOnErrorCallback = (logLevel: string, msg: string, metadata?: Error) => {
-  return {
-    logLevel: logLevel,
-    originalMessage: msg,
-    ...(errorToMetadata(metadata) || {}),
-  };
-};
+const toMetadata = (
+  logLevel: string,
+  name: string,
+  message: string,
+  error?: Error,
+) => ({
+  logLevel,
+  originalName: name,
+  originalMessage: message,
+  stack: error?.stack,
+  ...(errorToMetadata(error) || {}),
+});

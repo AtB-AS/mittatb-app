@@ -1,8 +1,3 @@
-import {
-  PendingTokenDetails,
-  ActiveTokenDetails,
-} from '@entur-private/abt-token-server-javascript-interface';
-
 export type KeyValue = {
   key: string;
   value: string;
@@ -48,51 +43,38 @@ export type RemoveResponse = {
   removed: boolean;
 };
 
-export type PendingToken = {
-  tokenId: string;
-  attestation: string;
-  attestationType: string;
-  encryptionCertificateChain?: string[];
-  signatureCertificateChain?: string[];
-};
-
 export type InitRequest = {
   name: string;
   preferRequireAttestation?: boolean;
   deviceInfo?: string[];
   deviceInfoType?: string;
-};
-
-export type RemoveRequestParams = {
-  tokenId: string;
+  discardableTokenIds?: string[];
 };
 
 export type RemoveTokenResponse = {
   removed: boolean;
 };
 
-export type RemoveTokensResponse = {
-  allRemoved: boolean;
-};
-
 export type InitiateTokenResponse = {
-  pendingTokenDetails: PendingTokenDetails;
+  pendingTokenDetails: {
+    tokenId: string;
+    initializationData: string;
+  };
 };
 
-export type CompleteTokenInitializationResponse = {
-  activeTokenDetails: ActiveTokenDetails;
+export type RenewTokenResponse = InitiateTokenResponse;
+
+export type ActiveTokenResponse = {
+  activeTokenDetails: {
+    tokenId: string;
+    tokenDetails: string;
+  };
 };
 
-export type GetTokenDetailsResponse = {
-  activeTokenDetails: ActiveTokenDetails;
-};
-
-export type CompleteTokenRenawalResponse = {
-  activeTokenDetails: ActiveTokenDetails;
-};
-
-export type InitiateTokenRenewalResponse = {
-  pendingTokenDetails: PendingTokenDetails;
+export type ActivateTokenRequest = {
+  tokenId: string;
+  attestationType: string;
+  attestation: string;
 };
 
 export type Token = RemoteToken & {
