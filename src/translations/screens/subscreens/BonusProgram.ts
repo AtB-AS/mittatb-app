@@ -176,15 +176,54 @@ const BonusProgramTexts = {
       faqs: [
         {
           question: _(
-            'Hvordan bruker jeg poengene mine?',
-            'How do I use my points?',
-            'Korleis brukar eg poenga mine?',
+            'Hvordan får jeg kampanjepris på enkeltbilletter?',
+            'How do I get a campaign price on single tickets?',
+            'Korleis får eg kampanjepris på enkeltbillettar?',
           ),
           answer: () =>
             _(
-              'Når du er inne på et transportmiddel som støtter poeng, kan du velge å bruke poengene dine og få kampanjepris.',
-              'When you are on a mode of transportation that supports points, you can choose to use your points and get campaign price.',
-              'Når du er inne på eit transportmiddel som støttar poeng, kan du velja å bruka poenga dine og få kampanjepris.',
+              'Følg den vanlige kjøpsflyten for enkeltbillett. På billettsammendraget kan du huke av for å bruke poeng for å få kampanjepris før du gjennomfører betalingen.',
+              'Follow the regular purchase flow for single tickets. On the ticket summary, you can tick the box to use points and get a campaign price before you complete the payment.',
+              'Følg den vanlege kjøpsflyten for enkeltbillett. På billettsamandraget kan du hake av for å bruka poeng for å få kampanjepris før du gjennomfører betalinga.',
+            ),
+        },
+        {
+          question: _(
+            'Hvordan får jeg kampanjepris på  elektrisk sparkesykkel, bysykkel eller leiebil?',
+            'How do I get a campaign price on e-scooters, city bikes or rental cars?',
+            'Korleis får eg kampanjepris på elektrisk sparkesykkel, bysykkel eller leigebil?',
+          ),
+          answer: () =>
+            _(
+              'Finn en bysykkelstasjon, elsparkesykkel eller Hyre-bilstasjon i kartet. Velg transportmiddelet du ønsker å bruke, og huk av for å bruke poeng for å få kampanjepris før du starter turen. \nTurer med Ryde gjennomføres direkte i AtB-appen. For Trondheim Bysykkel og Hyre blir du sendt videre til deres apper. Husk å laste ned appene og logge inn på forhånd, slik at kampanjekoden legges til automatisk.',
+              'Find a city bike station, e-scooter or Hyre car station in the map. Select the mode of transport you want to use, and tick the box to use points to get a campaign price before you start your trip. \nTrips with Ryde are completed directly in the AtB app. For Trondheim Bysykkel and Hyre, you will be redirected to their apps. Remember to download the apps and log in beforehand, so that the campaign code is added automatically.',
+              'Finn ein bysykkelstasjon, elsparkesykkel eller Hyre-bilstasjon i kartet. Vel transportmiddelet du ønskjer å bruka, og hak av for å bruka poeng for å få kampanjepris før du startar turen. \nTurar med Ryde blir gjennomførte direkte i AtB-appen. For Trondheim Bysykkel og Hyre blir du send vidare til appane deira. Hugs å lasta ned appane og logga inn på førehand, slik at kampanjekoden blir lagd til automatisk.',
+            ),
+        },
+        {
+          question: _(
+            'Hva gjør jeg dersom jeg ikke ser elektriske sparkesykler, bysykler eller leiebiler i kartet?',
+            "What do I do if I can't see e-scooters, city bikes or rental cars in the map?",
+            'Kva gjer eg dersom eg ikkje ser elektriske sparkesyklar, bysyklar eller leigebilar i kartet?',
+          ),
+          answer: () =>
+            _(
+              'Du kan velge hvilke transportmidler som skal vises i kartet ved å trykke på filterikonet. Der kan du slå av eller på visningen av elsparkesykler, bysykler og leiebiler.',
+              'You can choose which modes of transport are shown in the map by tapping the filter icon. There you can turn the display of e-scooters, city bikes and rental cars on or off.',
+              'Du kan velja kva transportmiddel som skal visast i kartet ved å trykkja på filterikonet. Der kan du slå av eller på visinga av elsparkesyklar, bysyklar og leigebilar.',
+            ),
+        },
+        {
+          question: _(
+            'Hvordan vet jeg at jeg har nok poeng?',
+            'How do I know if I have enough points?',
+            'Korleis veit eg at eg har nok poeng?',
+          ),
+          answer: () =>
+            _(
+              'Du kan se hvor mange poeng du må bruke for å få de ulike kampanjeprisene i oversikten på denne siden eller i kjøpsflyten for de aktuelle transportmidlene. \nDin nåværende poengsaldo finner du på denne siden, øverst til høyre i kartet og på billettsiden.',
+              'You can see how many points you need to use to get the different campaign prices in the overview on this page, or in the purchase flow for the relevant modes of transport. \nYou can find your current points balance on this page, in the top right corner of the map and on the tickets page.',
+              'Du kan sjå kor mange poeng du må bruka for å få dei ulike kampanjeprisane i oversikta på denne sida eller i kjøpsflyten for dei aktuelle transportmidla. \nDin noverande poengsaldo finn du på denne sida, øvst til høgre i kartet og på billettsida.',
             ),
         },
         {
@@ -195,9 +234,9 @@ const BonusProgramTexts = {
           ),
           answer: () =>
             _(
-              `Prøveprosjektet varer frem til slutten av året. Etter dette slettes resten av poengene dine.`,
-              `The pilot project lasts until the end of the year. After this, your remaining points will be deleted.`,
-              `Prøveprosjektet varer fram til slutten av året. Etter dette slettes resten av poenga dine.`,
+              'Prøveprosjektet varer ut 2026.',
+              'The pilot project lasts until the end of 2026.',
+              'Prøveprosjektet varer ut 2026.',
             ),
         },
       ],
