@@ -25,7 +25,10 @@ import {AccessibilityContextProvider} from '@atb/modules/accessibility';
 import {AppLanguageContextProvider} from '@atb/translations/LanguageContext';
 import {LocaleContextProvider} from '@atb/modules/locale';
 import {setupConfig} from '@atb/setup';
-import {MobileTokenContextProvider} from '@atb/modules/mobile-token';
+import {
+  AbtMobileClientProvider,
+  MobileTokenContextProvider,
+} from '@atb/modules/mobile-token';
 import {FirestoreConfigurationContextProvider} from '@atb/modules/configuration';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
@@ -102,27 +105,29 @@ export const App = () => {
                                       <FirestoreConfigurationContextProvider>
                                         <TicketingContextProvider>
                                           <StoredTripPatternsContextProvider>
-                                            <MobileTokenContextProvider>
-                                              <AppLanguageContextProvider>
-                                                <GeolocationContextProvider>
-                                                  <MapContextProvider>
-                                                    <GlobalMessagesContextProvider>
-                                                      <AnnouncementsContextProvider>
-                                                        <NotificationContextProvider>
-                                                          <BottomSheetModalProvider>
-                                                            <BottomSheetContextProvider>
-                                                              <OnboardingContextProvider>
-                                                                <RootStack />
-                                                              </OnboardingContextProvider>
-                                                            </BottomSheetContextProvider>
-                                                          </BottomSheetModalProvider>
-                                                        </NotificationContextProvider>
-                                                      </AnnouncementsContextProvider>
-                                                    </GlobalMessagesContextProvider>
-                                                  </MapContextProvider>
-                                                </GeolocationContextProvider>
-                                              </AppLanguageContextProvider>
-                                            </MobileTokenContextProvider>
+                                            <AbtMobileClientProvider>
+                                              <MobileTokenContextProvider>
+                                                <AppLanguageContextProvider>
+                                                  <GeolocationContextProvider>
+                                                    <MapContextProvider>
+                                                      <GlobalMessagesContextProvider>
+                                                        <AnnouncementsContextProvider>
+                                                          <NotificationContextProvider>
+                                                            <BottomSheetModalProvider>
+                                                              <BottomSheetContextProvider>
+                                                                <OnboardingContextProvider>
+                                                                  <RootStack />
+                                                                </OnboardingContextProvider>
+                                                              </BottomSheetContextProvider>
+                                                            </BottomSheetModalProvider>
+                                                          </NotificationContextProvider>
+                                                        </AnnouncementsContextProvider>
+                                                      </GlobalMessagesContextProvider>
+                                                    </MapContextProvider>
+                                                  </GeolocationContextProvider>
+                                                </AppLanguageContextProvider>
+                                              </MobileTokenContextProvider>
+                                            </AbtMobileClientProvider>
                                           </StoredTripPatternsContextProvider>
                                         </TicketingContextProvider>
                                       </FirestoreConfigurationContextProvider>

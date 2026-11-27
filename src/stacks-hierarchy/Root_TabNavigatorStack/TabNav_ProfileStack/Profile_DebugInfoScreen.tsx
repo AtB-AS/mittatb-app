@@ -43,6 +43,7 @@ import {
   DebugSabotage,
   DebugTokenServerAddress,
 } from '@atb/modules/mobile-token';
+import {useAbtSabotage} from '@entur-private/react-native-abt';
 import {useMapContext} from '@atb/modules/map';
 import {useEventStreamContext} from '@atb/modules/event-stream';
 import {format} from 'date-fns';
@@ -94,24 +95,22 @@ export const Profile_DebugInfoScreen = () => {
     retry,
     mobileTokenStatus,
     isInspectable,
-    nativeToken,
+    tokenDetails,
+    refreshTokenDetails,
     debug: {
-      nativeTokenStatus,
+      errorDetails,
       remoteTokensStatus,
-      createToken: initToken,
       removeRemoteToken,
-      renewToken,
+      createToken,
       wipeToken,
-      nativeTokenError,
       remoteTokenError,
-      setSabotage,
-      sabotage,
       setAlwaysFallback,
       alwaysFallback,
       setAllTokenInspectable,
       allTokenInspectable,
     },
   } = useMobileTokenContext();
+  const {attestationSabotage, setAttestationSabotage} = useAbtSabotage();
   const {serverNow} = useTimeContext();
   const serverTimeOffset = useMemo(() => Date.now() - serverNow, [serverNow]);
   const {setGivenScooterConsent, setGivenBicycleConsent} = useMapContext();
@@ -546,24 +545,19 @@ export const Profile_DebugInfoScreen = () => {
             testID="mobileTokenDebug"
             expandContent={
               <View>
-                {nativeToken && (
+                {tokenDetails && (
                   <View>
-                    <ThemeText testID="tokenId">{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
-                    <ThemeText>{`Token start: ${new Date(
-                      nativeToken.getValidityStart(),
-                    ).toISOString()}`}</ThemeText>
-                    <ThemeText>{`Token end: ${new Date(
-                      nativeToken.getValidityEnd(),
-                    ).toISOString()}`}</ThemeText>
-                    <ThemeText>{`Is native token attested: ${nativeToken.isAttested()}`}</ThemeText>
-                    <ThemeText>{`Is attestation required: ${nativeToken.isAttestRequired()}`}</ThemeText>
+                    <ThemeText testID="tokenId">{`Token id: ${tokenDetails.tokenId}`}</ThemeText>
+                    <ThemeText>{`Token start: ${tokenDetails.validityStart.toISOString()}`}</ThemeText>
+                    <ThemeText>{`Token end: ${tokenDetails.validityEnd.toISOString()}`}</ThemeText>
+                    <ThemeText>{`Is token attested: ${tokenDetails.attested}`}</ThemeText>
+                    <ThemeText>{`Has inspection right: ${tokenDetails.hasInspectionRight}`}</ThemeText>
                   </View>
                 )}
                 <ThemeText testID="tokenStatus">{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
                 <ThemeText>{`Override remote token inspectable: ${allTokenInspectable}`}</ThemeText>
-                <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
-                <ThemeText>{`Native token error: ${nativeTokenError}`}</ThemeText>
+                <ThemeText>{`SDK error: ${errorDetails ? `${errorDetails.type} / ${errorDetails.resolution}: ${errorDetails.message}` : 'none'}`}</ThemeText>
                 <ThemeText>{`Remote tokens status: ${remoteTokensStatus}`}</ThemeText>
                 <ThemeText>{`Remote tokens error: ${remoteTokenError}`}</ThemeText>
                 <ThemeText>{`Now: ${new Date(
@@ -574,7 +568,7 @@ export const Profile_DebugInfoScreen = () => {
                   expanded={true}
                   style={styles.button}
                   text="Create new token"
-                  onPress={initToken}
+                  onPress={createToken}
                 />
                 <Button
                   surfaceColor="accent"
@@ -583,7 +577,7 @@ export const Profile_DebugInfoScreen = () => {
                   text="Reload token(s)"
                   onPress={retry}
                 />
-                {nativeToken && (
+                {tokenDetails && (
                   <Button
                     surfaceColor="accent"
                     expanded={true}
@@ -592,13 +586,13 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={wipeToken}
                   />
                 )}
-                {nativeToken && (
+                {tokenDetails && (
                   <Button
                     surfaceColor="accent"
                     expanded={true}
                     style={styles.button}
-                    text="Renew token"
-                    onPress={renewToken}
+                    text="Update token from remote"
+                    onPress={refreshTokenDetails}
                   />
                 )}
                 <ToggleSectionItem
@@ -635,8 +629,8 @@ export const Profile_DebugInfoScreen = () => {
                   expandContent={
                     <View>
                       <DebugSabotage
-                        sabotage={sabotage}
-                        setSabotage={setSabotage}
+                        sabotage={attestationSabotage}
+                        setSabotage={setAttestationSabotage}
                       />
                     </View>
                   }
