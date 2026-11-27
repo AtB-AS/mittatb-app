@@ -16,6 +16,7 @@ export const SelectionPin = ({coordinates, id}: Props) => {
     <MapboxGL.PointAnnotation
       id={id ?? ''}
       coordinate={[coordinates.longitude, coordinates.latitude]}
+      anchor={{x: 0.5, y: 1}}
     >
       <View style={shadows}>
         <SelectionPinConfirm width={40} height={40} />
