@@ -29,7 +29,7 @@ import {
   parseParamsAsTripSearchTime,
 } from './utils';
 import {initialUrl} from './initial-url';
-import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from './prefixes';
+import {APP_LINK_PREFIXES, APP_SCHEME_PREFIX} from './prefixes';
 import type {DepartureSearchTime} from '@atb/components/date-selection';
 import {
   resolveTripSearchLocations,
@@ -61,9 +61,10 @@ export function useDeepLinks() {
    * Asynchronous work that happends before getStateFromPath is called.
    */
   const prepare = useCallback(async (url: string) => {
-    let pathAndQuery = url.replace(APP_SCHEME_PREFIX, '');
-    if (APP_LINK_PREFIX)
-      pathAndQuery = pathAndQuery.replace(APP_LINK_PREFIX, '');
+    const pathAndQuery = [APP_SCHEME_PREFIX, ...APP_LINK_PREFIXES].reduce(
+      (rest, prefix) => rest.replace(prefix, ''),
+      url,
+    );
     const {path, params} = parseDeepLink(pathAndQuery);
 
     if (path === 'trip-search' || path === 'assistant') {
@@ -85,10 +86,7 @@ export function useDeepLinks() {
   );
 
   const linkingOptions: LinkingOptions<RootStackParamList> = {
-    prefixes: [
-      APP_SCHEME_PREFIX,
-      ...(APP_LINK_PREFIX ? [APP_LINK_PREFIX] : []),
-    ],
+    prefixes: [APP_SCHEME_PREFIX, ...APP_LINK_PREFIXES],
     getInitialURL: async () => {
       const url = await initialUrl;
       if (url) await prepare(url);
@@ -241,6 +239,7 @@ function routeForPrivacy(): ResultState | undefined {
 
 /**
  * `atb://payment-methods`
+ * `https://{APP_SITE_HOST}/payment-methods`
  */
 function routeForPaymentMethods(): ResultState | undefined {
   return {

@@ -237,13 +237,12 @@ platform :ios do
 
   desc 'Enable associated domains entitlement'
   lane :enable_associated_domains_entitlement do
-    ensure_env_vars(
-      env_vars: ['APP_LINK_HOST']
-    )
+    hosts = [ENV['APP_LINK_HOST'], ENV['APP_SITE_HOST']].reject { |host| host.to_s.empty? }
+    UI.user_error!("APP_LINK_HOST or APP_SITE_HOST must be set") if hosts.empty?
     update_plist(
       plist_path: "./ios/atb/AtB.entitlements",
       block: proc do |plist|
-        plist['com.apple.developer.associated-domains'] = ["applinks:#{ENV['APP_LINK_HOST']}"]
+        plist['com.apple.developer.associated-domains'] = hosts.map { |host| "applinks:#{host}" }
       end
     )
   end

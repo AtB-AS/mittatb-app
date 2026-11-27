@@ -2,7 +2,7 @@ import {renderHook} from '@testing-library/react-native';
 import {Linking} from 'react-native';
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useDeepLinks} from '../use-deep-links';
-import {APP_LINK_PREFIX, APP_SCHEME_PREFIX} from '../prefixes';
+import {APP_LINK_PREFIXES, APP_SCHEME_PREFIX} from '../prefixes';
 
 let mockIsBonusEnabled = false;
 let mockPreassignedFareProducts: PreassignedFareProduct[] = [];
@@ -56,7 +56,7 @@ jest.mock('@atb/modules/map', () => ({
 jest.mock('@atb/modules/fare-zones-selector', () => ({}));
 jest.mock('../prefixes', () => ({
   APP_SCHEME_PREFIX: 'atb://',
-  APP_LINK_PREFIX: 'https://app.example',
+  APP_LINK_PREFIXES: ['https://app.example', 'https://site.example'],
 }));
 
 const TEST_PRODUCT = {
@@ -125,7 +125,7 @@ describe('prefixes', () => {
 
   it('handles app links', () => {
     const {result} = renderHook(() => useDeepLinks());
-    expect(result.current.prefixes!.slice(1)).toEqual([APP_LINK_PREFIX]);
+    expect(result.current.prefixes!.slice(1)).toEqual(APP_LINK_PREFIXES);
   });
 });
 

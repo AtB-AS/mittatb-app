@@ -24,4 +24,5 @@ declare module '@env' {
   export const POSTHOG_API_KEY: string | undefined;
   export const POSTHOG_HOST: string | undefined;
   export const APP_LINK_HOST: string | undefined;
+  export const APP_SITE_HOST: string | undefined;
 }

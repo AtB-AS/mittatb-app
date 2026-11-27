@@ -107,6 +107,7 @@ if (appScheme == null) {
 }
 
 def appLinkHost = System.getProperty('APP_LINK_HOST')
+def appSiteHost = System.getProperty('APP_SITE_HOST')
 
 def appVersionCode = '1'
 
@@ -212,6 +213,10 @@ androidComponents {
         if (appLinkHost) {
             variant.sources.manifests.addStaticManifestFile("src/appLink/AndroidManifest.xml")
             variant.manifestPlaceholders.put("appLinkHost", appLinkHost)
+        }
+        if (appSiteHost) {
+            variant.sources.manifests.addStaticManifestFile("src/appSiteLink/AndroidManifest.xml")
+            variant.manifestPlaceholders.put("appSiteHost", appSiteHost)
         }
     })
 }
