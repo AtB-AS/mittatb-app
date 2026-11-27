@@ -46,6 +46,7 @@ import {ReportShmoDamageParams, ShmoHelpParams} from '@atb/stacks-hierarchy';
 type MapBottomSheetsProps = {
   mapViewRef: RefObject<MapboxGL.MapView | null>;
   mapCameraRef: RefObject<MapboxGL.Camera | null>;
+  lastMapIdleAt?: number;
   mapProps: MapProps;
   locationArrowOnPress: () => void;
   tabBarHeight: number;
@@ -63,6 +64,7 @@ type MapBottomSheetsProps = {
 export const MapBottomSheets = ({
   mapViewRef,
   mapCameraRef,
+  lastMapIdleAt,
   mapProps,
   locationArrowOnPress,
   tabBarHeight,
@@ -253,6 +255,7 @@ export const MapBottomSheets = ({
         activeBooking?.state === ShmoBookingState.PAUSED) && (
         <ActiveShmoSheet
           mapViewRef={mapViewRef}
+          lastMapIdleAt={lastMapIdleAt}
           onForceClose={handleCloseSheet}
           navigateSupportCallback={() => {
             navigateToShmoSupport({

@@ -118,6 +118,7 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapView>(null);
   const mapStateRef = useRef<MapState | null>(null);
   const [initMapLoaded, setInitMapLoaded] = useState(false);
+  const [lastMapIdleAt, setLastMapIdleAt] = useState<number>();
   const {bottomSheetMapRef} = useBottomSheetContext();
   const onPressStartRef = useRef<boolean>(false);
 
@@ -461,6 +462,11 @@ export const Map = (props: MapProps) => {
           onDidFinishLoadingMap={() => {
             setInitMapLoaded(true);
           }}
+          onMapIdle={
+            activeShmoBooking?.bookingId
+              ? () => setLastMapIdleAt(Date.now())
+              : undefined
+          }
         >
           <Viewport
             onStatusChanged={(status) => {
@@ -566,6 +572,7 @@ export const Map = (props: MapProps) => {
       <MapBottomSheets
         mapViewRef={mapViewRef}
         mapCameraRef={mapCameraRef}
+        lastMapIdleAt={lastMapIdleAt}
         mapProps={props}
         tabBarHeight={tabBarHeight}
         navigateToShmoSupport={navigateToShmoSupport}
