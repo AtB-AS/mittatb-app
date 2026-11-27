@@ -4,8 +4,6 @@ export {StationSheet} from './components/sheets/StationSheet';
 export {BrandingImage} from './components/BrandingImage';
 export {MapFilter} from './components/filter/MapFilter';
 export {MapFilterSheet} from './components/filter/MapFilterSheet';
-export {MobilityBenefitsActionSectionItem} from './components/MobilityBenefitsActionSectionItem';
-export {MobilityBenefitsInfoSectionItem} from './components/MobilityBenefitsInfoSectionItem';
 export {MobilitySingleBenefitInfoSectionItem} from './components/MobilitySingleBenefitInfoSectionItem';
 export {LocationScreenComponent} from './components/onboarding/LocationScreenComponent';
 export {AgeVerificationScreenComponent} from './components/onboarding/AgeVerificationScreenComponent';

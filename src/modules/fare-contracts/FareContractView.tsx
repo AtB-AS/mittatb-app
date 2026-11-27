@@ -4,7 +4,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {MobilityBenefitsInfoSectionItem} from '@atb/modules/mobility';
+import {MobilitySingleBenefitInfoSectionItem} from '@atb/modules/mobility';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthContext} from '@atb/modules/auth';
 import {useMobileTokenContext} from '@atb/modules/mobile-token';
@@ -35,6 +35,7 @@ import {useFareContractBookingSegments} from './use-fare-contract-booking-segmen
 import {BookingSummary} from '@atb/components/booking-summary';
 import {CarnetFooter} from './carnet/CarnetFooter';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import type {MapFilterType} from '@atb/modules/map';
 
 type Props = {
   now: number;
@@ -45,6 +46,7 @@ type Props = {
   onNavigateToPurchaseFlow?: (
     supplementProductSelection: PurchaseSelectionType,
   ) => void;
+  onNavigateToMap?: (initialFilters: MapFilterType) => void;
   testID?: string;
 };
 
@@ -55,6 +57,7 @@ export const FareContractView: React.FC<Props> = ({
   onPressDetails,
   onNavigateToBonusScreen,
   onNavigateToPurchaseFlow,
+  onNavigateToMap,
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthContext();
@@ -157,9 +160,14 @@ export const FareContractView: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {shouldShowBundlingInfo && (
-        <MobilityBenefitsInfoSectionItem benefits={benefits} />
-      )}
+      {shouldShowBundlingInfo &&
+        benefits.map((b) => (
+          <MobilitySingleBenefitInfoSectionItem
+            benefit={b}
+            key={b.operatorId}
+            onNavigateToMap={onNavigateToMap}
+          />
+        ))}
 
       {shouldGetBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem

@@ -18,7 +18,6 @@ import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {dictionary, Language, TranslateFunction} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {ShmoHelpTexts} from '@atb/translations/screens/ShmoHelp';
-import {enumFromString} from '@atb/utils/enum-from-string';
 import {capitalizeFirstLetter} from '@atb/utils/text';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {PriceAdjustmentEnum} from '@atb-as/config-specs/lib/mobility';
@@ -323,9 +322,6 @@ export const isShowAll = (
   filter: MobilityMapFilterType,
   formFactor: FormFactor,
 ) => !!filter[formFactor]?.showAll;
-
-export const toFormFactorEnum = (str: string): FormFactor =>
-  enumFromString(FormFactor, str) || FormFactor.Other;
 
 // The benefit is already resolved and system-filtered server-side, so the app
 // just reads the relevant price adjustment off it.

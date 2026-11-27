@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/modules/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useFeatureTogglesContext} from '@atb/modules/feature-toggles';
 import {Section} from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {FormFactorFilterSectionItem} from './FormFactorFilterSectionItem';
+import {useMapFilterFormFactors} from './use-map-filter-form-factors';
 
 type Props = {
   filter: MobilityMapFilterType;
@@ -17,11 +17,6 @@ type Props = {
 export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
-  const {
-    isCarSharingInMapEnabled,
-    isCityBikesInMapEnabled,
-    isVehiclesInMapEnabled,
-  } = useFeatureTogglesContext();
   const [mobilityFilter, setMobilityFilter] =
     useState<MobilityMapFilterType>(filter);
 
@@ -35,22 +30,7 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
       onFilterChanged(newFilter);
     };
 
-  const listedFormFactors: FormFactor[] = [
-    {
-      shouldShow: isVehiclesInMapEnabled,
-      formFactor: FormFactor.Scooter,
-    },
-    {
-      shouldShow: isCityBikesInMapEnabled,
-      formFactor: FormFactor.Bicycle,
-    },
-    {
-      shouldShow: isCarSharingInMapEnabled,
-      formFactor: FormFactor.Car,
-    },
-  ]
-    .filter((f) => f.shouldShow)
-    .map((f) => f.formFactor);
+  const listedFormFactors = useMapFilterFormFactors();
 
   return (
     <>

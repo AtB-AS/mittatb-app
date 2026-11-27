@@ -456,12 +456,7 @@ export const MobilityTexts = {
       `omlag ${range} rekkjevidde`,
     ),
   rangeLabel: _('rekkevidde', 'range', 'rekkjevidde'),
-  includedWithTheTicket: _(
-    'Inkludert i billetten',
-    'Included with the ticket',
-    'Inkludert i billetten',
-  ),
-  showInMap: _('Se i kart', 'Show in map', 'Sjå i kart'),
+  showInMap: _('Vis i kart', 'Show in map', 'Vis i kart'),
   showInMapA11yLabel: _(
     'Aktiver for å se i kart',
     'Activate to show in map',
