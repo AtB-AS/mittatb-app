@@ -106,6 +106,11 @@ const PaymentMethodsTexts = {
     'When you buy a ticket you can also pay with Vipps or Apple Pay',
     'Når du kjøper billettar kan du også betale med Vipps eller Apple Pay',
   ),
+  vippsAndGooglePayInfo: _(
+    'Når du kjøper billetter kan du også betale med Vipps eller Google Pay',
+    'When you buy a ticket you can also pay with Vipps or Google Pay',
+    'Når du kjøper billettar kan du også betale med Vipps eller Google Pay',
+  ),
   agreements: {
     heading: _('Avtaler', 'Agreements', 'Avtaler'),
     vipps: {

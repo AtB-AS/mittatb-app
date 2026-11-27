@@ -529,6 +529,8 @@ function mapPaymentTypeStringToEnum(
       return PaymentType.Vipps;
     case 'applePay':
       return PaymentType.ApplePay;
+    case 'googlePay':
+      return PaymentType.GooglePay;
   }
 }
 

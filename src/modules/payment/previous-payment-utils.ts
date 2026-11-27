@@ -10,6 +10,7 @@ import {PaymentType, listRecurringPayments} from '@atb/modules/ticketing';
 import {onlyUniques} from '@atb/utils/only-uniques';
 import {isNonRecurringPaymentType} from './utils';
 import {useFeatureTogglesContext} from '../feature-toggles';
+import {useIsGooglePayReadyQuery} from './hooks/use-is-google-pay-ready-query';
 
 export function usePreviousPaymentMethods(enabled: boolean = true): {
   recurringPaymentMethods: PaymentMethod[] | undefined;
@@ -20,7 +21,8 @@ export function usePreviousPaymentMethods(enabled: boolean = true): {
   const [previousPaymentMethod, setPreviousPaymentMethod] =
     useState<PaymentMethod>();
   const {paymentTypes} = useFirestoreConfigurationContext();
-  const {isApplePayEnabled} = useFeatureTogglesContext();
+  const {isApplePayEnabled, isGooglePayEnabled} = useFeatureTogglesContext();
+  const isGooglePayReady = useIsGooglePayReadyQuery();
 
   const isValidPaymentMethod = useCallback(
     (paymentMethod: PaymentMethod | undefined) => {
@@ -55,6 +57,14 @@ export function usePreviousPaymentMethods(enabled: boolean = true): {
         return false;
       }
 
+      // Google Pay is disabled or not available on this device
+      if (
+        paymentMethod.paymentType === PaymentType.GooglePay &&
+        (!isGooglePayEnabled || !isGooglePayReady)
+      ) {
+        return false;
+      }
+
       if (paymentMethod.recurringPayment) {
         const now = Date.now();
         // Card registration has expired
@@ -69,7 +79,13 @@ export function usePreviousPaymentMethods(enabled: boolean = true): {
 
       return true;
     },
-    [recurringPayments, paymentTypes, isApplePayEnabled],
+    [
+      recurringPayments,
+      paymentTypes,
+      isApplePayEnabled,
+      isGooglePayEnabled,
+      isGooglePayReady,
+    ],
   );
 
   useEffect(() => {

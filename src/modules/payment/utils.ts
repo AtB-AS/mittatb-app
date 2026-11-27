@@ -17,3 +17,16 @@ export function isNonRecurringPaymentType(
     paymentType === PaymentType.GooglePay
   );
 }
+
+/**
+ * Wallet payments send the payment data with reserve, so the card may be
+ * charged as part of the reserve call.
+ */
+export function isWalletPaymentType(
+  paymentType: PaymentType | undefined,
+): boolean {
+  return (
+    paymentType === PaymentType.ApplePay ||
+    paymentType === PaymentType.GooglePay
+  );
+}

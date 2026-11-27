@@ -10,6 +10,7 @@ import {ThemeText} from '@atb/components/text';
 import {PaymentBrand} from './PaymentBrand';
 import {ExpiryMessage, getExpiryMessageText} from './ExpiryMessage';
 import {useFeatureTogglesContext} from '../feature-toggles';
+import {useIsGooglePayReadyQuery} from './hooks/use-is-google-pay-ready-query';
 
 type SinglePaymentMethodProps = {
   paymentMethod: PaymentMethod;
@@ -25,7 +26,9 @@ export const SinglePaymentMethod = ({
   index,
 }: SinglePaymentMethodProps) => {
   const {t, language} = useTranslation();
-  const {isApplePayEnabled} = useFeatureTogglesContext();
+  const {isApplePayEnabled, isGooglePayEnabled} = useFeatureTogglesContext();
+  const isGooglePayReady = useIsGooglePayReadyQuery();
+
   const styles = useStyles();
 
   function getPaymentTexts(method: PaymentMethod): {
@@ -74,6 +77,13 @@ export const SinglePaymentMethod = ({
     (Platform.OS !== 'ios' ||
       !isApplePayEnabled ||
       !NativeApplePayHandler.canMakePayments())
+  ) {
+    return null;
+  }
+
+  if (
+    paymentMethod.paymentType === PaymentType.GooglePay &&
+    (Platform.OS !== 'android' || !isGooglePayEnabled || !isGooglePayReady)
   ) {
     return null;
   }

@@ -61,7 +61,10 @@ import {ScreenHeading} from '@atb/components/heading';
 import {BottomSheetModalMethods} from '@atb/components/bottom-sheet';
 import {useProductAlternatives} from '@atb/modules/ticketing';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {isNonRecurringPaymentType} from '@atb/modules/payment';
+import {
+  isNonRecurringPaymentType,
+  isWalletPaymentType,
+} from '@atb/modules/payment';
 import {
   PayWithBonusPointsCheckbox,
   useRelevantTicketBonusProduct,
@@ -81,6 +84,7 @@ import {ONE_SECOND_MS} from '@atb/utils/durations';
 import queryString from 'query-string';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreventRemove} from '@react-navigation/native';
+import {startGooglePayPayment} from './start-google-pay';
 
 type Props = RootStackScreenProps<'Root_PurchaseConfirmationScreen'>;
 
@@ -384,18 +388,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     analytics,
   ]);
 
-  // Call reserve when payment data is received from the Apple Pay payment sheet
+  // Call reserve when payment data is received from the Apple Pay or Google Pay payment sheet
   useDoOnceWhen(() => paymentData && reserve(), !!paymentData, false);
 
-  // Apple Pay payment data is sent with reserve, so money may be withdrawn
+  // Wallet payment data is sent with reserve, so money may be withdrawn
   // when reserve fails with an unknown result.
-  const isApplePayResultUnknown =
-    paymentMethod?.paymentType === PaymentType.ApplePay &&
+  const isWalletPaymentResultUnknown =
+    isWalletPaymentType(paymentMethod?.paymentType) &&
     reserveMutation.isError &&
     !['BAD_REQUEST', 'PROFILE_ERROR'].includes(reserveMutation.error.kind);
+
   useDoOnceWhen(
     () => navigateToTickets({refreshTickets: true}),
-    isApplePayResultUnknown,
+    isWalletPaymentResultUnknown,
     false,
   );
 
@@ -451,6 +456,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         setPaymentData,
         language,
       });
+    } else if (paymentMethod?.paymentType === PaymentType.GooglePay) {
+      setPaymentData(undefined);
+      analytics.logEvent('Ticketing', 'Google Pay selected', {
+        paymentMethod: paymentMethod?.paymentType,
+      });
+      startGooglePayPayment({totalPrice, setPaymentData});
     } else {
       analytics.logEvent('Ticketing', 'Pay with card selected', {
         paymentMethod: paymentMethod?.paymentType,

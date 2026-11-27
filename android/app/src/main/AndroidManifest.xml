@@ -49,5 +49,9 @@
             android:name="no.mittatb.releaseStage"
             android:value="${releaseStage}"
             tools:node="merge" />
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true"
+            tools:node="merge" />
     </application>
 </manifest>

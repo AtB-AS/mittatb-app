@@ -7,6 +7,7 @@ import {
   MasterCard,
   Vipps,
   Visa,
+  GooglePay,
 } from '@atb/assets/svg/color/icons/ticketing';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Card} from '@atb/assets/svg/mono-icons/ticketing';
@@ -52,6 +53,8 @@ const Logo = ({
       return <Amex height="100%" width="100%" />;
     case PaymentType.ApplePay:
       return <ApplePay height="100%" width="100%" />;
+    case PaymentType.GooglePay:
+      return <GooglePay height="100%" width="100%" />;
     default:
       return <ThemeIcon svg={Card} />;
   }
