@@ -189,7 +189,7 @@ const BonusProgramTexts = {
         },
         {
           question: _(
-            'Hvordan får jeg kampanjepris på  elektrisk sparkesykkel, bysykkel eller leiebil?',
+            'Hvordan får jeg kampanjepris på elektrisk sparkesykkel, bysykkel eller leiebil?',
             'How do I get a campaign price on e-scooters, city bikes or rental cars?',
             'Korleis får eg kampanjepris på elektrisk sparkesykkel, bysykkel eller leigebil?',
           ),
