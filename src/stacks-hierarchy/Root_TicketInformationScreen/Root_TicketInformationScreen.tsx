@@ -102,7 +102,10 @@ export const Root_TicketInformationScreen = ({navigation, route}: Props) => {
                 </View>
               </GenericSectionItem>
               {benefits?.map((b) => (
-                <MobilitySingleBenefitInfoSectionItem benefit={b} key={b.id} />
+                <MobilitySingleBenefitInfoSectionItem
+                  benefit={b}
+                  key={b.operatorId}
+                />
               ))}
             </Section>
           </>

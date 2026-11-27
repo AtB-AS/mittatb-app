@@ -9,6 +9,7 @@ import {View} from 'react-native';
 import type {EmptyStateProps} from '@atb/components/empty-state';
 import {FareContractType} from '@atb-as/utils';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import type {MapFilterType} from '@atb/modules/map';
 import {PreReservationCard} from './PreReservationCard';
 import {ONE_MINUTE_MS} from '@atb/utils/durations';
 
@@ -20,6 +21,7 @@ type Props = {
   onPressFareContract: (orderId: string) => void;
   onNavigateToBonusScreen: () => void;
   onNavigateToPurchaseFlow: (newSelection: PurchaseSelectionType) => void;
+  onNavigateToMap: (initialFilters: MapFilterType) => void;
   emptyStateConfig: Pick<
     EmptyStateProps,
     'title' | 'details' | 'illustrationComponent'
@@ -34,6 +36,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   onPressFareContract,
   onNavigateToBonusScreen,
   onNavigateToPurchaseFlow,
+  onNavigateToMap,
   emptyStateConfig,
 }) => {
   const styles = useStyles();
@@ -71,6 +74,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           }}
           onNavigateToBonusScreen={onNavigateToBonusScreen}
           onNavigateToPurchaseFlow={onNavigateToPurchaseFlow}
+          onNavigateToMap={onNavigateToMap}
           key={
             'id' in fcOrReservation
               ? fcOrReservation.id

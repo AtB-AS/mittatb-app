@@ -25,6 +25,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {SCHOOL_CARNET_QUERY_KEY} from '@atb/modules/ticketing';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 import type {PurchaseSelectionType} from '@atb/modules/purchase-selection';
+import type {MapFilterType} from '@atb/modules/map';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ONE_SECOND_MS} from '@atb/utils/durations';
 import {useManualRefreshControlProps} from '@atb/utils/use-manual-refresh-props';
@@ -80,6 +81,19 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
       if (selection) {
         navigation.navigate('Root_PurchaseOverviewScreen', {selection});
       }
+    },
+    [navigation],
+  );
+
+  const navigateToMap = useCallback(
+    (initialFilters: MapFilterType) => {
+      navigation.navigate('Root_TabNavigatorStack', {
+        screen: 'TabNav_MapStack',
+        params: {
+          screen: 'Map_RootScreen',
+          params: {initialFilters},
+        },
+      });
     },
     [navigation],
   );
@@ -213,6 +227,7 @@ export const TicketTabNav_AvailableFareContractsTabScreen = ({
           now={serverNow}
           onNavigateToBonusScreen={navigateToBonusScreen}
           onNavigateToPurchaseFlow={navigateToBookingPurchaseFlow}
+          onNavigateToMap={navigateToMap}
           onPressFareContract={(fareContractId) =>
             navigation.navigate('Root_FareContractDetailsScreen', {
               fareContractId,

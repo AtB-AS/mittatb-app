@@ -41,7 +41,7 @@ import {MapFilterType} from '@atb/modules/map';
 import {useAuthContext} from '@atb/modules/auth';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {
-  MobilityBenefitsInfoSectionItem,
+  MobilitySingleBenefitInfoSectionItem,
   useGetOperatorsQuery,
 } from '@atb/modules/mobility';
 import {useOperatorBenefitsForFareProduct} from '@atb/modules/mobility';
@@ -254,12 +254,14 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
       )}
 
-      {shouldShowBundlingInfo && (
-        <MobilityBenefitsInfoSectionItem
-          benefits={benefits}
-          onNavigateToMap={onNavigateToMap}
-        />
-      )}
+      {shouldShowBundlingInfo &&
+        benefits.map((b) => (
+          <MobilitySingleBenefitInfoSectionItem
+            benefit={b}
+            key={b.operatorId}
+            onNavigateToMap={onNavigateToMap}
+          />
+        ))}
 
       {shouldShowBonusAmountEarned && !!bonusAmountEarned?.amount && (
         <EarnedBonusPointsSectionItem

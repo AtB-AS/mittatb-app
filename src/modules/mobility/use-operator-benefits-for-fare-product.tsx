@@ -1,27 +1,19 @@
 import type {PreassignedFareProduct} from '@atb/modules/ticketing';
 import {useFareProductBenefitsQuery} from './queries/use-fare-product-benefits-query';
 import {useOperators} from './use-operators';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility';
-import {LanguageAndTextType} from '@atb-as/config-specs';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility';
 import {UseQueryResult} from '@tanstack/react-query';
-import {isDefined} from '@atb/utils/presence';
 import type {VoucherBenefitType} from './api/api';
 
-export type FormFactorTicketDescriptionPair = {
-  formFactor: FormFactor;
-  ticketDescription: LanguageAndTextType[] | undefined;
-};
-
-// Operator config supplies the form-factor image and the detail-screen fields
-// (callToAction, descriptionWhenActive, ...). The fare-contract card text
-// (title/description) now comes from the benefit service instead of config.
+// The benefit texts come from the benefit service. Operator config only
+// supplies the operator name and logo.
 export type FareProductBenefitType = {
   operatorId: string;
+  operatorName: string | undefined;
+  brandAssets: MobilityOperatorType['brandAssets'];
   title: VoucherBenefitType['title'];
   description: VoucherBenefitType['description'];
-  illustrationName: VoucherBenefitType['illustrationName'];
-} & OperatorBenefitType;
+};
 
 export const useOperatorBenefitsForFareProduct = (
   productId: PreassignedFareProduct['id'] | undefined,
@@ -31,27 +23,19 @@ export const useOperatorBenefitsForFareProduct = (
 } => {
   const {data: fareProductBenefits, status} =
     useFareProductBenefitsQuery(productId);
-  const {mobilityOperators} = useOperators();
+  const {byId} = useOperators();
 
-  const benefits: FareProductBenefitType[] | undefined = fareProductBenefits
-    ?.map((fareProductBenefit) => {
-      const operator = mobilityOperators?.find(
-        (mobilityOperator) =>
-          mobilityOperator.id === fareProductBenefit.operatorId,
-      );
-      const operatorBenefit = operator?.benefits.find((mobilityBenefit) =>
-        fareProductBenefit.benefitTypes.includes(mobilityBenefit.id),
-      );
-      if (!operatorBenefit) return;
+  const benefits: FareProductBenefitType[] | undefined =
+    fareProductBenefits?.map((fareProductBenefit) => {
+      const operator = byId(fareProductBenefit.operatorId);
       return {
-        ...operatorBenefit,
         operatorId: fareProductBenefit.operatorId,
+        operatorName: operator?.name,
+        brandAssets: operator?.brandAssets,
         title: fareProductBenefit.title,
         description: fareProductBenefit.description,
-        illustrationName: fareProductBenefit.illustrationName,
       };
-    })
-    .filter(isDefined);
+    });
 
   return {status, benefits};
 };
