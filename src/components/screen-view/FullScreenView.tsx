@@ -52,9 +52,9 @@ type PropsWithHeaderContent = Props & Required<Pick<Props, 'headerContent'>>;
 export function FullScreenView(props: Props) {
   const {top, bottom} = useSafeAreaInsets();
   const {theme} = useThemeContext();
-  const themeColor =
-    props.headerProps.color ?? theme.color.background.neutral[1];
-  const backgroundColor = themeColor.background;
+  const backgroundColor = (
+    props.contentColor ?? theme.color.background.neutral[1]
+  ).background;
 
   const {isScreenReaderEnabled} = useAccessibilityContext();
 

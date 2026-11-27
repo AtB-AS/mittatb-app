@@ -102,7 +102,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     usePaymentAgreementAnalyticsProperties();
   const {theme} = useThemeContext();
   const {enable_intercom} = useRemoteConfigContext();
-  const neutralContrastColor = theme.color.background.neutral[1];
 
   const isBonusActiveForUser = useIsBonusActiveForUser();
   const isBonusEnrollable = useIsBonusEnrollable();
@@ -189,7 +188,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         focusRef={focusRef}
         headerProps={{
           title: t(ProfileTexts.header.title),
-          color: neutralContrastColor,
         }}
         headerContent={(focusRef) => (
           <ScreenHeading

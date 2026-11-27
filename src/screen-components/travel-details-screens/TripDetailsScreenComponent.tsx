@@ -83,7 +83,6 @@ export const TripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
   const {theme} = useThemeContext();
-  const themeColor = theme.color.background.neutral[1];
 
   const {data, error, isFetching, refetch} = useRefreshTripQuery(
     tripPattern,
@@ -117,7 +116,6 @@ export const TripDetailsScreenComponent = ({
         headerProps={{
           leftButton: {type: 'back'},
           title: headerTitle,
-          color: themeColor,
         }}
         refreshControlProps={refreshControlProps}
         contentColor={theme.color.background.neutral[1]}

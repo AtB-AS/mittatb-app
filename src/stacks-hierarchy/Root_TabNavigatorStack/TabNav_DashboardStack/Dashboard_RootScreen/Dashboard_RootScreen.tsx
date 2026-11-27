@@ -13,7 +13,7 @@ import {
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import {SelectableLocationType} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {StyleSheet, useThemeContext} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {
   DashboardTexts,
   TripSearchTexts,
@@ -50,7 +50,6 @@ type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 
 export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
-  const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfigContext();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
@@ -220,7 +219,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
       headerProps={{
         title: t(DashboardTexts.header.title),
         globalMessageContext: GlobalMessageContextEnum.appAssistant,
-        color: theme.color.background.neutral[1],
       }}
       headerContent={(focusRef) => (
         <ScreenHeading

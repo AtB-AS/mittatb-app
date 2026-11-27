@@ -9,7 +9,6 @@ import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/screen-components/nearby-stop-places';
 import {GlobalMessageContextEnum} from '@atb/modules/global-messages';
 import SharedTexts from '@atb/translations/shared';
-import {useThemeContext} from '@atb/theme';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useNestedProfileScreenParams} from '@atb/utils/use-nested-profile-screen-params';
 
@@ -23,7 +22,6 @@ export const Departures_NearbyStopPlacesScreen = ({
 }: Props) => {
   const fromLocation = toSingleLocation(route.params?.location);
   const {t} = useTranslation();
-  const {theme} = useThemeContext();
   const focusRef = useFocusOnLoad(navigation);
   const {pendingResult, clearPendingResult} = usePendingLocationSearchStore();
   const favoriteListScreenParams = useNestedProfileScreenParams(
@@ -49,7 +47,6 @@ export const Departures_NearbyStopPlacesScreen = ({
       headerProps={{
         title: t(DeparturesTexts.header.title),
         globalMessageContext: GlobalMessageContextEnum.appDepartures,
-        color: theme.color.background.neutral[1],
       }}
       isLargeTitle={true}
       onPressLocationSearch={(location) => {
