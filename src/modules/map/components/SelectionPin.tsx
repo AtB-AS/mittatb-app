@@ -5,7 +5,6 @@ import {
   SelectionPinConfirm,
   SelectionPinShadow,
 } from '@atb/assets/svg/color/map';
-import {shadows} from './shadows';
 
 type Props = {
   coordinates: Coordinates;
@@ -16,8 +15,9 @@ export const SelectionPin = ({coordinates, id}: Props) => {
     <MapboxGL.PointAnnotation
       id={id ?? ''}
       coordinate={[coordinates.longitude, coordinates.latitude]}
+      anchor={{x: 0.5, y: 1}}
     >
-      <View style={shadows}>
+      <View>
         <SelectionPinConfirm width={40} height={40} />
         <SelectionPinShadow width={40} height={4} />
       </View>
