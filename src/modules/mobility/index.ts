@@ -1,8 +1,7 @@
 export {AppSwitchActionButton} from './components/AppSwitchActionButton';
 export {CityBikeStartTripOverlay} from './components/CityBikeStartTripOverlay';
-export {BikeStationBottomSheet} from './components/sheets/BikeStationBottomSheet';
+export {StationSheet} from './components/sheets/StationSheet';
 export {BrandingImage} from './components/BrandingImage';
-export {CarSharingStationBottomSheet} from './components/CarSharingStationBottomSheet';
 export {MapFilter} from './components/filter/MapFilter';
 export {MapFilterSheet} from './components/filter/MapFilterSheet';
 export {MobilityBenefitsActionSectionItem} from './components/MobilityBenefitsActionSectionItem';
@@ -48,7 +47,6 @@ export {
   formatMinuteBoundaryWithUnit,
   formatMinuteRange,
   formatOpeningHoursSchedule,
-  getAvailableVehicles,
   getFormFactorsFromTransportMode,
   getFreeMinutes,
   getFreeUnlock,

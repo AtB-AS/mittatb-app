@@ -7,7 +7,6 @@ import {
   MobilityOperator,
   FareProductGroup,
   FareProductGroupType,
-  OperatorBenefitId,
   ShmoFaq,
   ConsentLine,
 } from './types';
@@ -203,28 +202,6 @@ export function mapToConsentLines(consentLines?: any) {
       if (!parseResult.success) {
         console.warn(
           `mapToConsentLines with id ${consentLine?.id} failed safeParsing:\n`,
-          parseResult.error,
-        );
-        return;
-      }
-      return parseResult.data;
-    })
-    .filter(isDefined);
-}
-
-export function mapToBenefitIdsRequiringValueCode(
-  benefitIdsRequiringValueCode?: any,
-) {
-  if (!benefitIdsRequiringValueCode) return;
-  if (!Array.isArray(benefitIdsRequiringValueCode)) return;
-  return benefitIdsRequiringValueCode
-    .map((benefitIdRequiringValueCode) => {
-      const parseResult = OperatorBenefitId.safeParse(
-        benefitIdRequiringValueCode,
-      );
-      if (!parseResult.success) {
-        console.warn(
-          `mapToBenefitIdsRequiringValueCode with id ${benefitIdRequiringValueCode} failed safeParsing:\n`,
           parseResult.error,
         );
         return;

@@ -138,10 +138,6 @@ export const toggleSpecifications = [
     remoteConfigKey: 'enable_server_time',
   },
   {
-    name: 'isShmoDeepIntegrationCitybikeEnabled',
-    remoteConfigKey: 'enable_shmo_deep_integration_citybike',
-  },
-  {
     name: 'isShmoPauseButtonEnabled',
     remoteConfigKey: 'enable_shmo_pause_button',
   },

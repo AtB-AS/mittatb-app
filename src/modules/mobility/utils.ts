@@ -42,7 +42,6 @@ import {
   StationFeatureSchema,
   StationsClusteredFeature,
   StationsClusteredFeatureSchema,
-  StationVehicleTypeAvailability,
   VehicleFeature,
   VehicleFeatureSchema,
   VehiclesClusteredFeature,
@@ -150,20 +149,17 @@ export const isActiveTripBooking = (
   booking?.state === ShmoBookingState.PAUSED ||
   booking?.state === ShmoBookingState.FINISHING;
 
+/** Treats regular and cargo bicycles as the same kind of vehicle. */
+export const isBicycleFormFactor = (
+  formFactor: FormFactor | undefined | null,
+): boolean =>
+  formFactor === FormFactor.Bicycle || formFactor === FormFactor.CargoBicycle;
+
 export const isActiveBikeTripBooking = (
   booking: ShmoBooking | null | undefined,
 ): boolean =>
   isActiveTripBooking(booking) &&
   booking?.asset.formFactor === FormFactor.Bicycle;
-
-export const getAvailableVehicles = (
-  types: StationVehicleTypeAvailability[] | undefined,
-  formFactor: FormFactor,
-) =>
-  types
-    ?.filter((type) => type.vehicleType.formFactor === formFactor)
-    .map((type) => type.count)
-    .reduce((sum, count) => sum + count, 0) ?? 0;
 
 /**
  * Determines if vehicles need to be reloaded, by checking if the
@@ -336,14 +332,14 @@ export const toFormFactorEnum = (str: string): FormFactor =>
 export const getFreeUnlock = (
   benefit: BenefitType | undefined,
 ): PriceAdjustmentType | undefined =>
-  benefit?.priceAdjustments.find(
+  benefit?.priceAdjustments?.find(
     (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_UNLOCK,
   );
 
 export const getFreeMinutes = (
   benefit: BenefitType | undefined,
 ): PriceAdjustmentType | undefined =>
-  benefit?.priceAdjustments.find(
+  benefit?.priceAdjustments?.find(
     (e) => e.adjustmentType === PriceAdjustmentEnum.enum.FREE_MINUTES,
   );
 
@@ -526,6 +522,7 @@ export const getTransportModeAndSubMode = (
   propulsionType?: PropulsionType | undefined | null,
 ): {mode: AnyMode; subMode: AnySubMode | undefined} => {
   switch (formFactor) {
+    case FormFactor.CargoBicycle:
     case FormFactor.Bicycle:
       if (
         propulsionType === PropulsionType.Electric ||

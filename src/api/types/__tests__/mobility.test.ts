@@ -75,7 +75,7 @@ describe('VehicleSchema (shmo vehicle contract v2)', () => {
       // an undefined description on the wire is normalized to undefined
       expect(result.data.benefit?.description).toBeUndefined();
       expect(result.data.benefit?.illustrationName).toBe('TicketValid');
-      expect(result.data.benefit?.priceAdjustments[0]).toEqual({
+      expect(result.data.benefit?.priceAdjustments?.[0]).toEqual({
         amount: 0,
         adjustmentType: 'FREE_UNLOCK',
       });

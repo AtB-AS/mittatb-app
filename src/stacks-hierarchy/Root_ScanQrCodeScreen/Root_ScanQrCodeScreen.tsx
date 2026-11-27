@@ -21,7 +21,6 @@ import {
 import {AssetFromQrCodeResponse} from '@atb/api/types/mobility';
 import {getCurrentCoordinatesGlobal} from '@atb/modules/geolocation';
 import {tGlobal} from '@atb/modules/locale';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useFirestoreConfigurationContext} from '@atb/modules/configuration';
 import {useAnalyticsContext} from '@atb/modules/analytics';
@@ -119,15 +118,7 @@ export const Root_ScanQrCodeScreen: React.FC<Props> = ({navigation}) => {
         type = MapStateActionType.VehicleScanned;
       } else if (assetFromQrCode.stationId && assetFromQrCode.formFactor) {
         id = assetFromQrCode.stationId;
-        if (
-          [FormFactor.Bicycle, FormFactor.CargoBicycle].includes(
-            assetFromQrCode.formFactor,
-          )
-        ) {
-          type = MapStateActionType.BikeStationScanned;
-        } else if ([FormFactor.Car].includes(assetFromQrCode.formFactor)) {
-          type = MapStateActionType.CarStationScanned;
-        }
+        type = MapStateActionType.StationScanned;
       }
 
       if (!!type && !!id) {
