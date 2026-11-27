@@ -21,7 +21,7 @@ export const useVehiclesByVehicleTypeIdsQueries = (
       queryFn: ({signal}: {signal: AbortSignal}) =>
         getVehicles(
           {vehicleTypeIds: [vehicleTypeId], stationId, sort, maxCount},
-          {signal},
+          {signal, authWithIdToken: true},
         ),
       gcTime: ONE_MINUTE_MS,
       staleTime: 5000,
