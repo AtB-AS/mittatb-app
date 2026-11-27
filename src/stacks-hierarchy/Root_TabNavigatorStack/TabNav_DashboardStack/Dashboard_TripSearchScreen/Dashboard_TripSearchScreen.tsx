@@ -120,11 +120,19 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     }
   }, [pendingResult, clearPendingResult, navigation]);
 
-  const {from, to} = useLocations(currentLocation);
-  const tripSearchEnabled = isValidTripLocations(from, to);
-  const hasLocations = !!from && !!to;
+  const {from: searchedFrom, to: searchedTo} = useLocations(currentLocation);
 
   const filtersState = useTravelSearchFiltersState(route.params.initialFilters);
+
+  const currentLocationSnapshot = useMemo(
+    () => currentLocation,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchedFrom, searchedTo, searchTime, filtersState.filtersSelection],
+  );
+  const from = withCurrentLocation(searchedFrom, currentLocationSnapshot);
+  const to = withCurrentLocation(searchedTo, currentLocationSnapshot);
+  const tripSearchEnabled = isValidTripLocations(from, to);
+  const hasLocations = !!from && !!to;
 
   const arriveBy = searchTime.option === 'arrival';
   const sanitizedSearchTime = useMemo(
@@ -553,6 +561,14 @@ function useUpdatedLocation(
   }, [searchedToLocation, setLocation]);
 
   return useMemo(() => ({from, to}), [from, to]);
+}
+
+function withCurrentLocation(
+  location: Location | undefined,
+  currentLocation: GeoLocation | undefined,
+): Location | undefined {
+  if (location?.resultType !== 'geolocation') return location;
+  return currentLocation ?? location;
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
